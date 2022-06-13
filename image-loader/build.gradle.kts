@@ -30,7 +30,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("androidx.annotation:annotation:1.3.0")
+                api("androidx.annotation:annotation:1.3.0")
                 implementation("androidx.core:core-ktx:1.8.0")
                 implementation("androidx.compose.ui:ui-graphics:1.1.1")
                 implementation("androidx.exifinterface:exifinterface:1.3.3")

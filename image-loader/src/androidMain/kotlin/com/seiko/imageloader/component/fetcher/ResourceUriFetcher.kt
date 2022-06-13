@@ -58,7 +58,7 @@ internal class ResourceUriFetcher(
             }
 
             val isVector = drawable.isVector
-            PainterResult(
+            FetchPainterResult(
                 painter = if (isVector) {
                     DrawableUtils.convertToBitmap(
                         drawable = drawable,

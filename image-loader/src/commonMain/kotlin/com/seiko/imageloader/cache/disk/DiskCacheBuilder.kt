@@ -1,6 +1,6 @@
 package com.seiko.imageloader.cache.disk
 
-import androidx.annotation.FloatRange
+// import androidx.annotation.FloatRange
 import com.seiko.imageloader.util.directorySize
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ class DiskCacheBuilder {
     /**
      * Set the maximum size of the disk cache as a percentage of the device's free disk space.
      */
-    fun maxSizePercent(@FloatRange(from = 0.0, to = 1.0) percent: Double) = apply {
+    fun maxSizePercent(percent: Double) = apply {
         require(percent in 0.0..1.0) { "size must be in the range [0.0, 1.0]." }
         this.maxSizeBytes = 0
         this.maxSizePercent = percent

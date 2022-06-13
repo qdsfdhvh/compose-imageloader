@@ -9,7 +9,7 @@ class BitmapFetcher(
     private val data: Bitmap,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return PainterResult(
+        return FetchPainterResult(
             painter = data.toPainter()
         )
     }

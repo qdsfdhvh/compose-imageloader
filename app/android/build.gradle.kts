@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":image-loader"))
+    implementation(projects.app.common)
     implementation("androidx.compose.material3:material3:1.0.0-alpha13")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     implementation("androidx.compose.ui:ui-tooling-preview:1.1.1")

@@ -2,8 +2,10 @@ package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.component.ComponentRegistry
+import com.seiko.imageloader.component.decoder.DecoderResult
+import com.seiko.imageloader.component.decoder.PainterResult
+import com.seiko.imageloader.component.fetcher.FetchPainterResult
 import com.seiko.imageloader.component.fetcher.FetchResult
-import com.seiko.imageloader.component.fetcher.PainterResult
 import com.seiko.imageloader.component.fetcher.SourceResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
@@ -22,8 +24,15 @@ class EngineInterceptor(
         val mappedData = components.map(data, options)
 
         return when (val fetchResult = fetch(components, mappedData, options)) {
-            is SourceResult -> decode(components, fetchResult, options)
-            is PainterResult -> SuccessResult(
+            is SourceResult -> {
+                when (val decodeResult = decode(components, fetchResult, options)) {
+                    is PainterResult -> SuccessResult(
+                        request = request,
+                        painter = decodeResult.painter,
+                    )
+                }
+            }
+            is FetchPainterResult -> SuccessResult(
                 request = request,
                 painter = fetchResult.painter,
             )
@@ -54,9 +63,9 @@ class EngineInterceptor(
         components: ComponentRegistry,
         sourceResult: SourceResult,
         options: Options,
-    ): ImageResult {
+    ): DecoderResult {
         var searchIndex = 0
-        val decodeResult: ImageResult
+        val decodeResult: DecoderResult
         while (true) {
             val (decoder, index) = components.decode(sourceResult, options, imageLoader, searchIndex)
             searchIndex = index + 1

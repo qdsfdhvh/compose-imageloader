@@ -17,5 +17,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "compose-imageLoader"
-include(":app")
+include(":app:common", ":app:android", ":app:desktop")
 include(":image-loader")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

@@ -11,6 +11,6 @@ class SourceResult(
     val metadata: Any? = null,
 ) : FetchResult
 
-class PainterResult(
+class FetchPainterResult(
     val painter: Painter,
 ) : FetchResult
