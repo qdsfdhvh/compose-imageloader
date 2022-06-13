@@ -17,18 +17,29 @@ kotlin {
         publishLibraryVariants("release", "debug")
     }
     jvm()
-    ios()
+    // ios()
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDir("src/commonMain/actual")
+            kotlin.srcDir("src/commonMain/compose")
             dependencies {
                 implementation(compose.foundation)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
+                implementation("com.squareup.okio:okio:3.1.0")
+                implementation("io.ktor:ktor-client-core:2.0.2")
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation("androidx.annotation:annotation:1.3.0")
+                implementation("androidx.core:core-ktx:1.8.0")
+                implementation("androidx.compose.ui:ui-graphics:1.1.1")
+                implementation("androidx.exifinterface:exifinterface:1.3.3")
+                implementation("com.google.accompanist:accompanist-drawablepainter:0.23.1")
+                implementation("androidx.appcompat:appcompat-resources:1.4.2")
+            }
+        }
         val jvmMain by sourceSets.getting
-        val iosMain by sourceSets.getting
+        // val iosMain by sourceSets.getting
     }
 }
 
