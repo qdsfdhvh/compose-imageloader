@@ -1,10 +1,11 @@
 import org.jetbrains.compose.compose
-import java.util.Properties
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization").version(Versions.Kotlin.lang)
     id("org.jetbrains.compose").version(Versions.compose_jb)
     id("com.android.library")
+    id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
 }
 
 kotlin {
@@ -16,10 +17,17 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
                 api(projects.imageLoader)
-                api("io.github.aakira:napier:2.6.1")
+                api("io.github.aakira:napier:${Versions.napier}")
+                api("dev.icerock.moko:resources:${Versions.multiplatformResources}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}")
+
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation("androidx.compose.foundation:foundation:${Versions.compose}")
+            }
+        }
         val jvmMain by sourceSets.getting
     }
 }
@@ -36,4 +44,8 @@ android {
         sourceCompatibility = Versions.Java.java
         targetCompatibility = Versions.Java.java
     }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.seiko.imageloader.demo"
 }

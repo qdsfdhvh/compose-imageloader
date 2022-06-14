@@ -23,7 +23,7 @@ kotlin {
             kotlin.srcDir("src/commonMain/compose")
             dependencies {
                 api(compose.foundation)
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
                 api("com.squareup.okio:okio:3.1.0")
                 api("io.ktor:ktor-client-core:2.0.2")
                 api("io.ktor:ktor-client-cio:2.0.2")
@@ -32,18 +32,18 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.annotation:annotation:1.3.0")
+                // api("androidx.annotation:annotation:1.3.0")
                 implementation("androidx.core:core-ktx:1.8.0")
-                implementation("androidx.compose.ui:ui-graphics:1.1.1")
+                // implementation("androidx.compose.ui:ui-graphics:1.1.1")
                 implementation("androidx.exifinterface:exifinterface:1.3.3")
-                implementation("com.google.accompanist:accompanist-drawablepainter:0.23.1")
                 implementation("androidx.appcompat:appcompat-resources:1.4.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
+                implementation("com.google.accompanist:accompanist-drawablepainter:0.23.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
             }
         }
         val jvmMain by sourceSets.getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }
         // val iosMain by sourceSets.getting

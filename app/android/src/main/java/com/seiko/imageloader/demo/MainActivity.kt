@@ -16,7 +16,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CompositionLocalProvider(
-                LocalImageLoader provides generateImageLoader()
+                LocalImageLoader provides generateImageLoader(),
+                LocalResLoader provides ResLoader { this },
             ) {
                 App()
             }

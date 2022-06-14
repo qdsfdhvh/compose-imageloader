@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.request.ErrorResult
 import com.seiko.imageloader.request.ImageRequest
+import com.seiko.imageloader.request.ImageRequestBuilder
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SuccessResult
 import com.seiko.imageloader.size.Dimension
@@ -36,6 +37,20 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.roundToInt
 import com.seiko.imageloader.size.Size as ImageLoaderSize
+
+@Composable
+fun rememberAsyncImagePainter(
+    url: String,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+): AsyncImagePainter {
+    val request = remember(url) { ImageRequestBuilder().data(url).build() }
+    return rememberAsyncImagePainter(
+        request = request,
+        imageLoader = imageLoader,
+        contentScale = contentScale,
+    )
+}
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -149,6 +164,7 @@ class AsyncImagePainter(
             is SuccessResult -> {
                 painter = BitmapPainter(input.image)
             }
+
             is ErrorResult -> {
                 Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error" }
             }
@@ -162,6 +178,7 @@ private fun Size.toSizeOrNull() = when {
         width = if (width.isFinite()) Dimension(width.roundToInt()) else Dimension.Undefined,
         height = if (height.isFinite()) Dimension(height.roundToInt()) else Dimension.Undefined
     )
+
     else -> null
 }
 

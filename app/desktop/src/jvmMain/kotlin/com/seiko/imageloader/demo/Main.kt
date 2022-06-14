@@ -25,6 +25,7 @@ fun main() {
         ) {
             CompositionLocalProvider(
                 LocalImageLoader provides generateImageLoader(),
+                LocalResLoader provides ResLoader(),
             ) {
                 App()
             }
