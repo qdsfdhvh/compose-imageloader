@@ -34,17 +34,15 @@ class DiskCacheInterceptor(
         when (result) {
             is SourceResult -> {
                 diskCache.edit(cacheKey)?.let { edit ->
-                    runInterruptible {
-                        diskCache.fileSystem.write(edit.data) {
-                            result.source.readAll(this)
-                        }
-                        edit.commitAndGet()?.let {
-                            SourceResult(
-                                request = request,
-                                source = diskCache.fileSystem.source(it.data).buffer(),
-                                metadata = result.metadata,
-                            )
-                        }
+                    diskCache.fileSystem.write(edit.data) {
+                        result.source.readAll(this)
+                    }
+                    edit.commitAndGet()?.let {
+                        SourceResult(
+                            request = request,
+                            source = diskCache.fileSystem.source(it.data).buffer(),
+                            metadata = result.metadata,
+                        )
                     }
                 }
             }
