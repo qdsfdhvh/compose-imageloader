@@ -1,5 +1,7 @@
 package com.seiko.imageloader.cache.memory
 
+import com.seiko.imageloader.Image
+
 interface MemoryCache {
 
     /** The current size of the cache in bytes. */
@@ -9,27 +11,31 @@ interface MemoryCache {
     val maxSize: Int
 
     /** The keys present in the cache. */
-    val keys: Set<Key>
+    val keys: Set<MemoryKey>
 
-    /** Get the [Value] associated with [key]. */
-    operator fun get(key: Key): Value?
+    /** Get the [MemoryValue] associated with [MemoryKey]. */
+    operator fun get(key: MemoryKey): MemoryValue?
 
-    /** Set the [Value] associated with [key]. */
-    operator fun set(key: Key, value: Value)
+    /** Set the [MemoryValue] associated with [MemoryKey]. */
+    operator fun set(key: MemoryKey, value: MemoryValue)
 
     /**
-     * Remove the [Value] referenced by [key].
+     * Remove the [MemoryValue] referenced by [MemoryKey].
      *
-     * @return 'true' if [key] was present in the cache. Else, return 'false'.
+     * @return 'true' if [MemoryKey] was present in the cache. Else, return 'false'.
      */
-    fun remove(key: Key): Boolean
+    fun remove(key: MemoryKey): Boolean
 
     /** Remove all values from the memory cache. */
     fun clear()
-
-    @JvmInline
-    value class Key(val key: String)
-
-    @JvmInline
-    value class Value(val byteArray: ByteArray)
 }
+
+data class MemoryKey(
+    val key: String,
+    val extras: Map<String, String> = emptyMap(),
+)
+
+data class MemoryValue(
+    val image: Image,
+    val extras: Map<String, Any> = emptyMap(),
+)

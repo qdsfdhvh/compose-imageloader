@@ -1,11 +1,13 @@
 package com.seiko.imageloader
 
 import androidx.compose.runtime.Immutable
+import com.seiko.imageloader.cache.disk.DiskCache
+import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.intercept.CacheInterceptor
 import com.seiko.imageloader.intercept.EngineInterceptor
 import com.seiko.imageloader.intercept.Interceptor
-import com.seiko.imageloader.intercept.MapDataInterceptor
+import com.seiko.imageloader.intercept.MappedInterceptor
 import com.seiko.imageloader.intercept.RealInterceptorChain
 import com.seiko.imageloader.request.ErrorResult
 import com.seiko.imageloader.request.ImageRequest
@@ -26,13 +28,15 @@ class RealImageLoader(
     private val options: Options,
     private val requestDispatcher: CoroutineDispatcher,
     interceptors: List<Interceptor>,
+    memoryCache: Lazy<MemoryCache>,
+    diskCache: Lazy<DiskCache>,
 ) : ImageLoader {
 
-    private val interceptors = listOf(
-        MapDataInterceptor(),
-        CacheInterceptor(),
+    private val interceptors = interceptors + listOf(
+        MappedInterceptor(this),
+        CacheInterceptor(memoryCache, diskCache),
         EngineInterceptor(this),
-    ) + interceptors
+    )
 
     override suspend fun execute(request: ImageRequest): ImageResult {
         return withContext(requestDispatcher) {

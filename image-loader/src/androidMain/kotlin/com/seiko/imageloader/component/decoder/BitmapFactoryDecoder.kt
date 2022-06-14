@@ -4,10 +4,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
+import androidx.compose.ui.graphics.asImageBitmap
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.component.fetcher.ResourceMetadata
-import com.seiko.imageloader.component.fetcher.SourceResult
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.size.heightPx
 import com.seiko.imageloader.size.isOriginal
 import com.seiko.imageloader.size.widthPx
@@ -17,10 +18,8 @@ import com.seiko.imageloader.util.ExifUtils
 import com.seiko.imageloader.util.isRotated
 import com.seiko.imageloader.util.isSwapped
 import com.seiko.imageloader.util.toBitmapConfig
-import com.seiko.imageloader.util.toPainter
 import com.seiko.imageloader.util.toSoftware
 import io.ktor.utils.io.jvm.javaio.toInputStream
-import kotlin.math.roundToInt
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -29,6 +28,7 @@ import okio.ForwardingSource
 import okio.Source
 import okio.buffer
 import okio.source
+import kotlin.math.roundToInt
 
 /** The base [Decoder] that uses [BitmapFactory] to decode a given [ImageSource]. */
 class BitmapFactoryDecoder constructor(
@@ -84,8 +84,8 @@ class BitmapFactoryDecoder constructor(
         // Reverse the EXIF transformations to get the original image.
         val bitmap = ExifUtils.reverseTransformations(outBitmap, exifData)
 
-        return PainterResult(
-            painter = bitmap.toPainter(),
+        return DecodeImageResult(
+            image = bitmap.asImageBitmap(),
         )
     }
 
@@ -184,11 +184,11 @@ class BitmapFactoryDecoder constructor(
         private val parallelismLock = Semaphore(maxParallelism)
 
         override fun create(
-            result: SourceResult,
+            source: SourceResult,
             options: Options,
             imageLoader: ImageLoader
         ): Decoder {
-            return BitmapFactoryDecoder(context, result, options, parallelismLock)
+            return BitmapFactoryDecoder(context, source, options, parallelismLock)
         }
 
         override fun equals(other: Any?) = other is Factory

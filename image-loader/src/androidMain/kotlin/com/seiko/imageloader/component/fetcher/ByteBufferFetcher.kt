@@ -9,7 +9,7 @@ class ByteBufferFetcher(
     private val data: ByteBuffer,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return SourceResult(
+        return FetchSourceResult(
             source = ByteReadChannel(data),
             mimeType = null,
         )

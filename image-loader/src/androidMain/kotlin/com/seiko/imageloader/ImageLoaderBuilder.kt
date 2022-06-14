@@ -1,6 +1,10 @@
 package com.seiko.imageloader
 
 import android.content.Context
+import com.seiko.imageloader.cache.disk.DiskCache
+import com.seiko.imageloader.cache.disk.DiskCacheBuilder
+import com.seiko.imageloader.cache.memory.MemoryCache
+import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.component.decoder.BitmapFactoryDecoder
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
@@ -12,6 +16,7 @@ import com.seiko.imageloader.component.fetcher.FileFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.component.keyer.FileKeyer
+import com.seiko.imageloader.component.keyer.KtorUlKeyer
 import com.seiko.imageloader.component.keyer.UriKeyer
 import com.seiko.imageloader.component.mapper.ByteArrayMapper
 import com.seiko.imageloader.component.mapper.FileUriMapper
@@ -35,10 +40,20 @@ actual class ImageLoaderBuilder constructor(context: Context) {
     private var options: Options? = null
 
     private var httpClient: Lazy<HttpClient> = lazy { HttpClient(CIO) }
+    private var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder().build() }
+    private var diskCache: Lazy<DiskCache> = lazy { DiskCacheBuilder().build() }
     private var requestDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     actual fun httpClient(initializer: () -> HttpClient) = apply {
         httpClient = lazy(initializer)
+    }
+
+    actual fun memoryCache(initializer: () -> MemoryCache) = apply {
+        memoryCache = lazy(initializer)
+    }
+
+    actual fun diskCache(initializer: () -> DiskCache) = apply {
+        diskCache = lazy(initializer)
     }
 
     actual fun components(builder: ComponentRegistryBuilder.() -> Unit) = apply {
@@ -67,6 +82,7 @@ actual class ImageLoaderBuilder constructor(context: Context) {
             .add(ResourceIntMapper(context))
             .add(ByteArrayMapper())
             // Keyers
+            .add(KtorUlKeyer())
             .add(FileKeyer(true))
             .add(UriKeyer(context))
             // Fetchers
@@ -87,6 +103,8 @@ actual class ImageLoaderBuilder constructor(context: Context) {
             options = options ?: Options(),
             interceptors = interceptors,
             requestDispatcher = requestDispatcher,
+            memoryCache = memoryCache,
+            diskCache = diskCache,
         )
     }
 }

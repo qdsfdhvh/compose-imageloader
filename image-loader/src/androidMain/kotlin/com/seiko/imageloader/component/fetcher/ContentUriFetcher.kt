@@ -42,7 +42,7 @@ internal class ContentUriFetcher(
             checkNotNull(stream) { "Unable to open '$data'." }
         }
 
-        return SourceResult(
+        return FetchSourceResult(
             source = inputStream.toByteReadChannel(),
             mimeType = contentResolver.getType(data),
             // dataSource = DataSource.DISK

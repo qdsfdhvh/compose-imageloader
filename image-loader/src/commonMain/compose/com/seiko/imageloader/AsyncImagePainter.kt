@@ -1,6 +1,5 @@
 package com.seiko.imageloader
 
-import com.seiko.imageloader.size.Size as ImageLoaderSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.getValue
@@ -13,6 +12,7 @@ import androidx.compose.ui.geometry.isUnspecified
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.request.ErrorResult
@@ -23,7 +23,6 @@ import com.seiko.imageloader.size.Dimension
 import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
 import io.github.aakira.napier.Napier
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,6 +34,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
+import kotlin.math.roundToInt
+import com.seiko.imageloader.size.Size as ImageLoaderSize
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -146,7 +147,7 @@ class AsyncImagePainter(
     private fun updateImage(input: ImageResult) {
         when (input) {
             is SuccessResult -> {
-                painter = input.painter
+                painter = BitmapPainter(input.image)
             }
             is ErrorResult -> {
                 Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error" }

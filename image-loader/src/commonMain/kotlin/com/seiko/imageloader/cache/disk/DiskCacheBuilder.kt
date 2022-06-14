@@ -1,6 +1,5 @@
 package com.seiko.imageloader.cache.disk
 
-// import androidx.annotation.FloatRange
 import com.seiko.imageloader.util.directorySize
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

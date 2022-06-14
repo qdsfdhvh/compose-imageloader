@@ -1,8 +1,14 @@
 package com.seiko.imageloader
 
+import com.seiko.imageloader.cache.disk.DiskCache
+import com.seiko.imageloader.cache.disk.DiskCacheBuilder
+import com.seiko.imageloader.cache.memory.MemoryCache
+import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.component.decoder.ImageIODecoder
+import com.seiko.imageloader.component.fetcher.FileFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
+import com.seiko.imageloader.component.keyer.KtorUlKeyer
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.request.Options
@@ -18,10 +24,20 @@ actual class ImageLoaderBuilder {
     private var options: Options? = null
 
     private var httpClient: Lazy<HttpClient> = lazy { HttpClient(CIO) }
+    private var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder().build() }
+    private var diskCache: Lazy<DiskCache> = lazy { DiskCacheBuilder().build() }
     private var requestDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     actual fun httpClient(initializer: () -> HttpClient) = apply {
         httpClient = lazy(initializer)
+    }
+
+    actual fun memoryCache(initializer: () -> MemoryCache) = apply {
+        memoryCache = lazy(initializer)
+    }
+
+    actual fun diskCache(initializer: () -> DiskCache) = apply {
+        diskCache = lazy(initializer)
     }
 
     actual fun components(builder: ComponentRegistryBuilder.() -> Unit) = apply {
@@ -45,9 +61,10 @@ actual class ImageLoaderBuilder {
             // Mappers
             .add(KtorUrlMapper())
             // Keyers
-            // ...
+            .add(KtorUlKeyer())
             // Fetchers
             .add(KtorUrlFetcher.Factory(httpClient))
+            .add(FileFetcher.Factory())
             // Decoders
             .add(ImageIODecoder.Factory())
             .build()
@@ -57,6 +74,8 @@ actual class ImageLoaderBuilder {
             options = options ?: Options(),
             interceptors = interceptors,
             requestDispatcher = requestDispatcher,
+            memoryCache = memoryCache,
+            diskCache = diskCache,
         )
     }
 }

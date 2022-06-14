@@ -1,5 +1,7 @@
 package com.seiko.imageloader.cache.memory
 
+import androidx.compose.ui.graphics.painter.Painter
+
 class MemoryCacheBuilder {
 
     private var maxSizePercent = STANDARD_MEMORY_MULTIPLIER
@@ -36,7 +38,7 @@ class MemoryCacheBuilder {
     /**
      * Enables/disables weak reference tracking of values added to this memory cache.
      * Weak references do not contribute to the current size of the memory cache.
-     * This ensures that if a [Bitmap] hasn't been garbage collected yet it will be
+     * This ensures that if a [Image] hasn't been garbage collected yet it will be
      * returned from the memory cache.
      */
     fun weakReferencesEnabled(enable: Boolean) = apply {
@@ -46,28 +48,28 @@ class MemoryCacheBuilder {
     /**
      * Create a new [MemoryCache] instance.
      */
-    // fun build(): MemoryCache {
-    //     val weakMemoryCache = if (weakReferencesEnabled) {
-    //         RealWeakMemoryCache()
-    //     } else {
-    //         EmptyWeakMemoryCache
-    //     }
-    //     val strongMemoryCache = if (strongReferencesEnabled) {
-    //         val maxSize = if (maxSizePercent > 0) {
-    //             calculateMemoryCacheSize(maxSizePercent)
-    //         } else {
-    //             maxSizeBytes
-    //         }
-    //         if (maxSize > 0) {
-    //             RealStrongMemoryCache(maxSize, weakMemoryCache)
-    //         } else {
-    //             EmptyStrongMemoryCache(weakMemoryCache)
-    //         }
-    //     } else {
-    //         EmptyStrongMemoryCache(weakMemoryCache)
-    //     }
-    //     return RealMemoryCache(strongMemoryCache, weakMemoryCache)
-    // }
+    fun build(): MemoryCache {
+        val weakMemoryCache = if (weakReferencesEnabled) {
+            RealWeakMemoryCache()
+        } else {
+            EmptyWeakMemoryCache
+        }
+        val strongMemoryCache = if (strongReferencesEnabled) {
+            val maxSize = if (maxSizePercent > 0) {
+                calculateMemoryCacheSize(maxSizePercent)
+            } else {
+                maxSizeBytes
+            }
+            if (maxSize > 0) {
+                RealStrongMemoryCache(maxSize, weakMemoryCache)
+            } else {
+                EmptyStrongMemoryCache(weakMemoryCache)
+            }
+        } else {
+            EmptyStrongMemoryCache(weakMemoryCache)
+        }
+        return RealMemoryCache(strongMemoryCache, weakMemoryCache)
+    }
 }
 
 private fun calculateMemoryCacheSize(percent: Double): Int {

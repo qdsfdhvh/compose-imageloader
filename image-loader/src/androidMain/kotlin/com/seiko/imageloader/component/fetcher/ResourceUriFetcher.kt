@@ -13,7 +13,9 @@ import android.webkit.MimeTypeMap
 import androidx.annotation.DrawableRes
 import androidx.annotation.XmlRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
@@ -59,7 +61,7 @@ internal class ResourceUriFetcher(
 
             val isVector = drawable.isVector
             FetchPainterResult(
-                painter = if (isVector) {
+                image = if (isVector) {
                     DrawableUtils.convertToBitmap(
                         drawable = drawable,
                         config = options.config.toBitmapConfig(),
@@ -69,12 +71,12 @@ internal class ResourceUriFetcher(
                     ).toDrawable(context.resources)
                 } else {
                     drawable
-                }.toPainter(),
+                }.toBitmap().asImageBitmap(),
             )
         } else {
             val typedValue = TypedValue()
             val inputStream = resources.openRawResource(resId, typedValue)
-            SourceResult(
+            FetchSourceResult(
                 source = inputStream.toByteReadChannel(),
                 mimeType = mimeType,
                 metadata = ResourceMetadata(packageName, resId, typedValue.density),

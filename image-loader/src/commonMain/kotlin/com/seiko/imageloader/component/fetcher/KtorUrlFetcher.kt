@@ -21,7 +21,7 @@ class KtorUrlFetcher(
         }
         val mimeType = response.contentType()?.toString()
         Napier.d { "mineType= $mimeType" }
-        return SourceResult(
+        return FetchSourceResult(
             source = response.bodyAsChannel(),
             mimeType = mimeType,
         )

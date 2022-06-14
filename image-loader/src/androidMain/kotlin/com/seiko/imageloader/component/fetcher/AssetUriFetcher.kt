@@ -17,7 +17,7 @@ internal class AssetUriFetcher(
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun fetch(): FetchResult {
         val path = data.pathSegments.drop(1).joinToString("/")
-        return SourceResult(
+        return FetchSourceResult(
             source = context.assets.open(path).toByteReadChannel(),
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromUrl(path),
         )
