@@ -2,7 +2,6 @@ package com.seiko.imageloader.component.fetcher
 
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
 
 class BitmapFetcher(
@@ -15,7 +14,7 @@ class BitmapFetcher(
     }
 
     class Factory : Fetcher.Factory {
-        override fun create(data: Any, options: Options, imageLoader: ImageLoader): Fetcher? {
+        override fun create(data: Any, options: Options): Fetcher? {
             if (data !is Bitmap) return null
             return BitmapFetcher(data)
         }

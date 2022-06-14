@@ -1,9 +1,8 @@
 package com.seiko.imageloader.component.fetcher
 
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
-import java.nio.ByteBuffer
 import okio.Buffer
+import java.nio.ByteBuffer
 
 class ByteBufferFetcher(
     private val data: ByteBuffer,
@@ -22,7 +21,7 @@ class ByteBufferFetcher(
     }
 
     class Factory : Fetcher.Factory {
-        override fun create(data: Any, options: Options, imageLoader: ImageLoader): Fetcher? {
+        override fun create(data: Any, options: Options): Fetcher? {
             if (data !is ByteBuffer) return null
             return ByteBufferFetcher(data)
         }

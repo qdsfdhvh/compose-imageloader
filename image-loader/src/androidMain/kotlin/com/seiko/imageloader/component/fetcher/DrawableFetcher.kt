@@ -3,7 +3,6 @@ package com.seiko.imageloader.component.fetcher
 import android.graphics.drawable.Drawable
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
 
 class DrawableFetcher(
@@ -16,7 +15,7 @@ class DrawableFetcher(
     }
 
     class Factory : Fetcher.Factory {
-        override fun create(data: Any, options: Options, imageLoader: ImageLoader): Fetcher? {
+        override fun create(data: Any, options: Options): Fetcher? {
             if (data !is Drawable) return null
             return DrawableFetcher(data)
         }

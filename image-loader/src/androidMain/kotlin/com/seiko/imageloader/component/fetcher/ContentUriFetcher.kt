@@ -12,7 +12,6 @@ import android.provider.ContactsContract
 import android.provider.ContactsContract.Contacts
 import android.provider.MediaStore
 import androidx.annotation.VisibleForTesting
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.size.Dimension
 import okio.buffer
@@ -83,7 +82,7 @@ internal class ContentUriFetcher(
         private val context: Context,
     ) : Fetcher.Factory {
 
-        override fun create(data: Any, options: Options, imageLoader: ImageLoader): Fetcher? {
+        override fun create(data: Any, options: Options): Fetcher? {
             if (data !is Uri) return null
             if (!isApplicable(data)) return null
             return ContentUriFetcher(context, data, options)

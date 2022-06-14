@@ -1,6 +1,5 @@
 package com.seiko.imageloader.component
 
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.component.decoder.Decoder
 import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.component.keyer.Keyer
@@ -33,12 +32,11 @@ class ComponentRegistry internal constructor(
     fun fetch(
         data: Any,
         options: Options,
-        imageLoader: ImageLoader,
         startIndex: Int = 0,
     ): Pair<Fetcher, Int> {
         for (index in startIndex until fetcherFactories.size) {
             val factory = fetcherFactories[index]
-            factory.create(data, options, imageLoader)?.let { return it to index }
+            factory.create(data, options)?.let { return it to index }
         }
         error { "Unable to create a fetcher that supports: $data" }
     }

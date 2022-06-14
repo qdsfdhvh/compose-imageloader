@@ -3,7 +3,6 @@ package com.seiko.imageloader.component.fetcher
 import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.isAssetUri
@@ -24,7 +23,7 @@ internal class AssetUriFetcher(
     }
 
     class Factory(private val context: Context) : Fetcher.Factory {
-        override fun create(data: Any, options: Options, imageLoader: ImageLoader): Fetcher? {
+        override fun create(data: Any, options: Options): Fetcher? {
             if (data !is Uri) return null
             if (!isAssetUri(data)) return null
             return AssetUriFetcher(context, data)
