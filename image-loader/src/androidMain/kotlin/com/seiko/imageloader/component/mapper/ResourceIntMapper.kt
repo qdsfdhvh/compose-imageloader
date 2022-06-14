@@ -7,9 +7,10 @@ import android.net.Uri
 import androidx.annotation.DrawableRes
 import com.seiko.imageloader.request.Options
 
-internal class ResourceIntMapper(private val context: Context): Mapper<Int, Uri> {
+internal class ResourceIntMapper(private val context: Context) : Mapper<Uri> {
 
-    override fun map(@DrawableRes data: Int, options: Options): Uri? {
+    override fun map(data: Any, options: Options): Uri? {
+        if (data !is Int) return null
         if (!isApplicable(data, context)) return null
         return Uri.parse("$SCHEME_ANDROID_RESOURCE://${context.packageName}/$data")
     }

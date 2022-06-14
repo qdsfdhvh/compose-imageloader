@@ -6,6 +6,11 @@ interface ImageResult {
     val request: ImageRequest
 }
 
+// data class SourceResult(
+//     override val result: ImageResult,
+//
+// ) : ImageResult
+
 data class SuccessResult(
     override val request: ImageRequest,
     val painter: Painter,

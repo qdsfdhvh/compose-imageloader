@@ -7,8 +7,9 @@ import com.seiko.imageloader.util.firstPathSegment
 import com.seiko.imageloader.util.isAssetUri
 import java.io.File
 
-class FileUriMapper : Mapper<Uri, File> {
-    override fun map(data: Uri, options: Options): File? {
+class FileUriMapper : Mapper<File> {
+    override fun map(data: Any, options: Options): File? {
+        if (data !is Uri) return null
         if (!isApplicable(data)) return null
         return File(data.path!!)
     }

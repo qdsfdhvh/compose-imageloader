@@ -6,15 +6,15 @@ import com.seiko.imageloader.component.fetcher.SourceResult
 import com.seiko.imageloader.request.Options
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import javax.imageio.ImageIO
+import kotlinx.coroutines.runInterruptible
 
 class ImageIODecoder(
     private val source: SourceResult,
 ) : Decoder {
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun decode(): DecoderResult {
+    override suspend fun decode(): DecoderResult = runInterruptible {
         val painter = ImageIO.read(source.source.toInputStream()).toPainter()
-        return PainterResult(
+        PainterResult(
             painter = painter,
         )
     }

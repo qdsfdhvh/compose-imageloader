@@ -9,24 +9,23 @@ import com.seiko.imageloader.component.mapper.Mapper
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.util.forEachIndices
 
-@Suppress("UNCHECKED_CAST")
 class ComponentRegistry internal constructor(
-    private val mappers: List<Mapper<out Any, out Any>>,
-    private val keyers: List<Keyer<out Any>>,
+    private val mappers: List<Mapper<out Any>>,
+    private val keyers: List<Keyer>,
     private val fetcherFactories: List<Fetcher.Factory>,
     private val decoderFactories: List<Decoder.Factory>,
 ) {
     fun map(data: Any, options: Options): Any {
         var mappedData = data
         mappers.forEachIndices { mapper ->
-            (mapper as Mapper<Any, *>).tryMap(data, options)?.let { mappedData = it }
+            mapper.map(mappedData, options)?.let { mappedData = it }
         }
         return mappedData
     }
 
     fun key(data: Any, options: Options): String? {
         keyers.forEachIndices { keyer ->
-            (keyer as Keyer<Any>).tryKey(data, options)?.let { return it }
+            keyer.key(data, options)?.let { return it }
         }
         return null
     }

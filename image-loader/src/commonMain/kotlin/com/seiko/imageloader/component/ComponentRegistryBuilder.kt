@@ -7,16 +7,16 @@ import com.seiko.imageloader.component.mapper.Mapper
 
 class ComponentRegistryBuilder {
 
-    private val mappers = mutableListOf<Mapper<out Any, out Any>>()
-    private val keyers = mutableListOf<Keyer<out Any>>()
+    private val mappers = mutableListOf<Mapper<out Any>>()
+    private val keyers = mutableListOf<Keyer>()
     private val fetcherFactories = mutableListOf<Fetcher.Factory>()
     private val decoderFactories = mutableListOf<Decoder.Factory>()
 
-    fun add(mapper: Mapper<out Any, out Any>) = apply {
+    fun add(mapper: Mapper<out Any>) = apply {
         mappers.add(mapper)
     }
 
-    fun add(keyer: Keyer<out Any>) = apply {
+    fun add(keyer: Keyer) = apply {
         keyers.add(keyer)
     }
 

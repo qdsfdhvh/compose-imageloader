@@ -3,8 +3,9 @@ package com.seiko.imageloader.component.mapper
 import com.seiko.imageloader.request.Options
 import io.ktor.http.Url
 
-class KtorUrlMapper : Mapper<String, Url> {
-    override fun map(data: String, options: Options): Url? {
+class KtorUrlMapper : Mapper<Url> {
+    override fun map(data: Any, options: Options): Url? {
+        if (data !is String) return null
         if (!isApplicable(data)) return null
         return Url(data)
     }

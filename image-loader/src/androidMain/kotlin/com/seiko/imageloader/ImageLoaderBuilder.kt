@@ -20,16 +20,22 @@ import com.seiko.imageloader.component.mapper.ResourceIntMapper
 import com.seiko.imageloader.component.mapper.ResourceUriMapper
 import com.seiko.imageloader.component.mapper.StringMapper
 import com.seiko.imageloader.intercept.Interceptor
+import com.seiko.imageloader.request.Options
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 actual class ImageLoaderBuilder constructor(context: Context) {
 
     private val context = context.applicationContext
+
     private val componentBuilder = ComponentRegistryBuilder()
     private val interceptors = mutableListOf<Interceptor>()
+    private var options: Options? = null
 
     private var httpClient: Lazy<HttpClient> = lazy { HttpClient(CIO) }
+    private var requestDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     actual fun httpClient(initializer: () -> HttpClient) = apply {
         httpClient = lazy(initializer)
@@ -41,6 +47,14 @@ actual class ImageLoaderBuilder constructor(context: Context) {
 
     actual fun addInterceptor(interceptor: Interceptor) = apply {
         interceptors.add(interceptor)
+    }
+
+    actual fun options(options: Options) = apply {
+        this.options = options
+    }
+
+    actual fun requestDispatcher(dispatcher: CoroutineDispatcher) = apply {
+        this.requestDispatcher = dispatcher
     }
 
     actual fun build(): ImageLoader {
@@ -70,7 +84,9 @@ actual class ImageLoaderBuilder constructor(context: Context) {
 
         return RealImageLoader(
             components = components,
+            options = options ?: Options(),
             interceptors = interceptors,
+            requestDispatcher = requestDispatcher,
         )
     }
 }

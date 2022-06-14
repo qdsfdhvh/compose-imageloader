@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.seiko.imageloader.demo">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".DemoApp"
         android:allowBackup="true"

@@ -1,17 +1,26 @@
 package com.seiko.imageloader.intercept
 
+import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.size.Size
+import com.seiko.imageloader.request.Options
 
 
 fun interface Interceptor {
 
     suspend fun intercept(chain: Chain): ImageResult
 
+    companion object {
+        inline operator fun invoke(crossinline block: (chain: Chain) -> ImageResult): Interceptor =
+            Interceptor { block(it) }
+    }
+
     interface Chain {
 
+        val initialRequest: ImageRequest
         val request: ImageRequest
+        val options: Options
+        val components: ComponentRegistry
 
         // val size: Size
 

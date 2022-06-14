@@ -10,20 +10,20 @@ import com.seiko.imageloader.component.fetcher.SourceResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SuccessResult
+import io.github.aakira.napier.Napier
 
 class EngineInterceptor(
     private val imageLoader: ImageLoader,
 ) : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
+        Napier.d(tag = "Interceptor") { "intercept EngineInterceptor" }
+
         val request = chain.request
-        val options = Options() // TODO()
-        val components = imageLoader.components
+        val options = chain.options
+        val components = chain.components
 
-        val data = request.data
-        val mappedData = components.map(data, options)
-
-        return when (val fetchResult = fetch(components, mappedData, options)) {
+        return when (val fetchResult = fetch(components, request.data, options)) {
             is SourceResult -> {
                 when (val decodeResult = decode(components, fetchResult, options)) {
                     is PainterResult -> SuccessResult(

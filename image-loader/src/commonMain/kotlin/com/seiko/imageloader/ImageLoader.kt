@@ -2,52 +2,60 @@ package com.seiko.imageloader
 
 import androidx.compose.runtime.Immutable
 import com.seiko.imageloader.component.ComponentRegistry
+import com.seiko.imageloader.intercept.CacheInterceptor
 import com.seiko.imageloader.intercept.EngineInterceptor
 import com.seiko.imageloader.intercept.Interceptor
+import com.seiko.imageloader.intercept.MapDataInterceptor
 import com.seiko.imageloader.intercept.RealInterceptorChain
 import com.seiko.imageloader.request.ErrorResult
 import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.size.Size
+import com.seiko.imageloader.request.Options
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
 @Immutable
 interface ImageLoader {
-    val components: ComponentRegistry
     suspend fun execute(request: ImageRequest): ImageResult
 }
 
 @Immutable
 class RealImageLoader(
-    override val components: ComponentRegistry,
+    private val components: ComponentRegistry,
+    private val options: Options,
+    private val requestDispatcher: CoroutineDispatcher,
     interceptors: List<Interceptor>,
 ) : ImageLoader {
 
     private val interceptors = listOf(
-        EngineInterceptor(this)
+        MapDataInterceptor(),
+        CacheInterceptor(),
+        EngineInterceptor(this),
     ) + interceptors
 
     override suspend fun execute(request: ImageRequest): ImageResult {
-        return executeMain(request)
+        return withContext(requestDispatcher) {
+            executeMain(request)
+        }
     }
 
     private suspend fun executeMain(initialRequest: ImageRequest): ImageResult {
         val request = initialRequest.newBuilder().build()
-        // val size = request.sizeResolver?.size() ?: Size.ORIGINAL
-        try {
-            return RealInterceptorChain(
+        return try {
+            RealInterceptorChain(
                 initialRequest = initialRequest,
-                request = initialRequest,
                 interceptors = interceptors,
                 index = 0,
-                // size = size,
-                isPlaceholderCached = false,
+                components = components,
+                options = options,
+                request = request,
             ).proceed(request)
         } catch (throwable: Throwable) {
             if (throwable is CancellationException) {
                 throw throwable
             } else {
-                return ErrorResult(
+                ErrorResult(
                     request = initialRequest,
                     error = throwable,
                 )
