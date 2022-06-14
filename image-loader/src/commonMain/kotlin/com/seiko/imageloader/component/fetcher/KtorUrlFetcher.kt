@@ -9,6 +9,9 @@ import io.ktor.client.request.url
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.Url
 import io.ktor.http.contentType
+import io.ktor.utils.io.jvm.javaio.toInputStream
+import okio.buffer
+import okio.source
 
 class KtorUrlFetcher(
     private val httpUrl: Url,
@@ -21,8 +24,9 @@ class KtorUrlFetcher(
         }
         val mimeType = response.contentType()?.toString()
         Napier.d { "mineType= $mimeType" }
+
         return FetchSourceResult(
-            source = response.bodyAsChannel(),
+            source =  response.bodyAsChannel().toInputStream().source().buffer(),
             mimeType = mimeType,
         )
     }

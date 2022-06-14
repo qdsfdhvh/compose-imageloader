@@ -25,7 +25,7 @@ actual class ImageLoaderBuilder {
 
     private var httpClient: Lazy<HttpClient> = lazy { HttpClient(CIO) }
     private var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder().build() }
-    private var diskCache: Lazy<DiskCache> = lazy { DiskCacheBuilder().build() }
+    private var diskCache: Lazy<DiskCache>? = null
     private var requestDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     actual fun httpClient(initializer: () -> HttpClient) = apply {

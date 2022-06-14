@@ -13,7 +13,7 @@ class ImageIODecoder(
 ) : Decoder {
 
     override suspend fun decode(): DecoderResult = runInterruptible {
-        val image = ImageIO.read(source.source.toInputStream())
+        val image = ImageIO.read(source.source.inputStream())
         DecodeImageResult(
             image = image.toComposeImageBitmap(),
         )

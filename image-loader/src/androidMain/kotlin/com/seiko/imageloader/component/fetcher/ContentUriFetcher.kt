@@ -15,7 +15,8 @@ import androidx.annotation.VisibleForTesting
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.size.Dimension
-import io.ktor.utils.io.jvm.javaio.toByteReadChannel
+import okio.buffer
+import okio.source
 
 internal class ContentUriFetcher(
     private val context: Context,
@@ -43,9 +44,8 @@ internal class ContentUriFetcher(
         }
 
         return FetchSourceResult(
-            source = inputStream.toByteReadChannel(),
+            source = inputStream.source().buffer(),
             mimeType = contentResolver.getType(data),
-            // dataSource = DataSource.DISK
         )
     }
 

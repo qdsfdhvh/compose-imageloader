@@ -6,8 +6,12 @@ import androidx.compose.ui.window.application
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
+import com.seiko.imageloader.cache.disk.DiskCacheBuilder
+import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import java.io.File
+import okio.Path.Companion.toOkioPath
 
 fun main() {
     Napier.base(DebugAntilog())
@@ -30,5 +34,46 @@ fun main() {
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoaderBuilder()
+        .memoryCache {
+            MemoryCacheBuilder()
+                // Set the max size to 25% of the app's available memory.
+                .maxSizePercent(0.25)
+                .build()
+        }
+        .diskCache {
+            DiskCacheBuilder()
+                .directory(getCacheDir().resolve("image_cache").toOkioPath())
+                .maxSizeBytes(512L * 1024 * 1024) // 512MB
+                .build()
+        }
         .build()
 }
+
+enum class OperatingSystem {
+    Android, iOS, Windows, Linux, MacOS, Unknown,
+}
+
+private val currentOperatingSystem: OperatingSystem
+    get() {
+        val operSys = System.getProperty("os.name").lowercase()
+        return if (operSys.contains("win")) {
+            OperatingSystem.Windows
+        } else if (operSys.contains("nix") || operSys.contains("nux") ||
+            operSys.contains("aix")
+        ) {
+            OperatingSystem.Linux
+        } else if (operSys.contains("mac")) {
+            OperatingSystem.MacOS
+        } else {
+            OperatingSystem.Unknown
+        }
+    }
+
+private fun getCacheDir() = when (currentOperatingSystem) {
+    OperatingSystem.Windows -> File(System.getenv("AppData"), "${ApplicationName}/cache")
+    OperatingSystem.Linux -> File(System.getProperty("user.home"), ".cache/${ApplicationName}")
+    OperatingSystem.MacOS -> File(System.getProperty("user.home"), "Library/Caches/${ApplicationName}")
+    else -> throw IllegalStateException("Unsupported operating system")
+}
+
+private val ApplicationName = "Compose ImageLoader"

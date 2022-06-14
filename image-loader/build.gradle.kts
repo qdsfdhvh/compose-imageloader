@@ -22,13 +22,11 @@ kotlin {
         val commonMain by getting {
             kotlin.srcDir("src/commonMain/compose")
             dependencies {
-                implementation(compose.foundation)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
-                implementation("com.squareup.okio:okio:3.1.0")
-
-                implementation("io.ktor:ktor-client-core:2.0.2")
-                implementation("io.ktor:ktor-client-cio:2.0.2")
-
+                api(compose.foundation)
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
+                api("com.squareup.okio:okio:3.1.0")
+                api("io.ktor:ktor-client-core:2.0.2")
+                api("io.ktor:ktor-client-cio:2.0.2")
                 implementation("io.github.aakira:napier:2.6.1")
             }
         }

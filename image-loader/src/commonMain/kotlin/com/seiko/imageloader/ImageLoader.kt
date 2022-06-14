@@ -29,7 +29,7 @@ class RealImageLoader(
     private val requestDispatcher: CoroutineDispatcher,
     interceptors: List<Interceptor>,
     memoryCache: Lazy<MemoryCache>,
-    diskCache: Lazy<DiskCache>,
+    diskCache: Lazy<DiskCache>?,
 ) : ImageLoader {
 
     private val interceptors = interceptors + listOf(

@@ -7,18 +7,18 @@ import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.isAssetUri
-import io.ktor.utils.io.jvm.javaio.toByteReadChannel
+import okio.buffer
+import okio.source
 
 internal class AssetUriFetcher(
     private val context: Context,
     private val data: Uri,
 ) : Fetcher {
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun fetch(): FetchResult {
         val path = data.pathSegments.drop(1).joinToString("/")
         return FetchSourceResult(
-            source = context.assets.open(path).toByteReadChannel(),
+            source = context.assets.open(path).source().buffer(),
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromUrl(path),
         )
     }
