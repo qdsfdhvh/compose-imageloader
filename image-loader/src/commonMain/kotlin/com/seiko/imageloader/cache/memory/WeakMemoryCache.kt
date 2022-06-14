@@ -6,6 +6,7 @@ import com.seiko.imageloader.util.WeakReference
 import com.seiko.imageloader.util.firstNotNullOfOrNullIndices
 import com.seiko.imageloader.util.identityHashCode
 import com.seiko.imageloader.util.removeIfIndices
+import kotlin.jvm.Synchronized
 
 /**
  * An in-memory cache that holds weak references to [Painter]s.

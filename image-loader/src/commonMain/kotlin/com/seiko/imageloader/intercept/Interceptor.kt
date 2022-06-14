@@ -5,14 +5,9 @@ import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 
-fun interface Interceptor {
+interface Interceptor {
 
     suspend fun intercept(chain: Chain): ImageResult
-
-    companion object {
-        inline operator fun invoke(crossinline block: (chain: Chain) -> ImageResult): Interceptor =
-            Interceptor { block(it) }
-    }
 
     interface Chain {
 

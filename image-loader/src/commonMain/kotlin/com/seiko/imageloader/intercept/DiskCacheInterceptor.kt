@@ -3,8 +3,9 @@ package com.seiko.imageloader.intercept
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.util.copyTo
+import com.seiko.imageloader.util.toByteReadChannel
 import io.github.aakira.napier.Napier
-import okio.buffer
 
 class DiskCacheInterceptor(
     private val diskCache: Lazy<DiskCache>,
@@ -25,7 +26,7 @@ class DiskCacheInterceptor(
             Napier.d(tag = "Interceptor") { "read disk cache data:$data" }
             return SourceResult(
                 request = request,
-                source = diskCache.fileSystem.source(diskCacheValue.data).buffer(),
+                source = diskCache.fileSystem.source(diskCacheValue.data).toByteReadChannel(),
             )
         }
 
@@ -34,12 +35,12 @@ class DiskCacheInterceptor(
             is SourceResult -> {
                 diskCache.edit(cacheKey)?.let { edit ->
                     diskCache.fileSystem.write(edit.data) {
-                        result.source.readAll(this)
+                        result.source.copyTo(this)
                     }
                     edit.commitAndGet()?.let {
                         SourceResult(
                             request = request,
-                            source = diskCache.fileSystem.source(it.data).buffer(),
+                            source = diskCache.fileSystem.source(it.data).toByteReadChannel(),
                             metadata = result.metadata,
                         )
                     }

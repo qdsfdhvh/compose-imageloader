@@ -1,12 +1,12 @@
 package com.seiko.imageloader.component.fetcher
 
 import com.seiko.imageloader.Image
-import okio.BufferedSource
+import io.ktor.utils.io.ByteReadChannel
 
 sealed interface FetchResult
 
 class FetchSourceResult(
-    val source: BufferedSource,
+    val source: ByteReadChannel,
     val mimeType: String?,
     val metadata: Any? = null,
 ) : FetchResult

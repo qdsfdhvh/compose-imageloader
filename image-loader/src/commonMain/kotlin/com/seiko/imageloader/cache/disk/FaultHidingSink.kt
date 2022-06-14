@@ -1,7 +1,7 @@
 package com.seiko.imageloader.cache.disk
 
+import com.seiko.imageloader.util.ForwardingSink
 import okio.Buffer
-import okio.ForwardingSink
 import okio.IOException
 import okio.Sink
 

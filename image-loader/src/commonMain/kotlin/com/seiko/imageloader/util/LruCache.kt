@@ -1,5 +1,7 @@
 package com.seiko.imageloader.util
 
+import kotlin.jvm.Synchronized
+
 internal open class LruCache<K, V>(maxSize: Int) {
 
     private var maxSize = 0
@@ -12,15 +14,17 @@ internal open class LruCache<K, V>(maxSize: Int) {
 
     private val map: LinkedHashMap<K, V>
 
+    private val syncObject = LockObject()
+
     init {
         require(maxSize > 0) { "maxSize <= 0" }
         this.maxSize = maxSize
-        this.map = LinkedHashMap(0, 0.75f, true)
+        this.map = LinkedHashMap(0, 0.75f)
     }
 
     open fun resize(maxSize: Int) {
         require(maxSize > 0) { "maxSize <= 0" }
-        synchronized(this) { this.maxSize = maxSize }
+        synchronized(syncObject) { this.maxSize = maxSize }
         trimToSize(maxSize)
     }
 
@@ -29,8 +33,8 @@ internal open class LruCache<K, V>(maxSize: Int) {
             throw NullPointerException("key == null")
         }
 
-        var mapValue: V?
-        synchronized(this) {
+        var mapValue: V? = null
+        synchronized(syncObject) {
             mapValue = map[key]
             if (mapValue != null) {
                 hitCount++
@@ -46,7 +50,7 @@ internal open class LruCache<K, V>(maxSize: Int) {
          * the map and release the created value.
          */
         val createdValue: V = create(key) ?: return null
-        synchronized(this) {
+        synchronized(syncObject) {
             createCount++
             mapValue = map.put(key, createdValue)
             if (mapValue != null) {
@@ -67,10 +71,10 @@ internal open class LruCache<K, V>(maxSize: Int) {
 
     fun put(key: K, value: V): V? {
         if (key == null || value == null) {
-            throw java.lang.NullPointerException("key == null || value == null")
+            throw NullPointerException("key == null || value == null")
         }
-        var previous: V?
-        synchronized(this) {
+        var previous: V? = null
+        synchronized(syncObject) {
             putCount++
             size += safeSizeOf(key, value)
             previous = map.put(key, value)
@@ -87,12 +91,12 @@ internal open class LruCache<K, V>(maxSize: Int) {
 
     open fun trimToSize(maxSize: Int) {
         while (true) {
-            var key: K
-            var value: V
-            synchronized(this) {
+            var key: K? = null
+            var value: V? = null
+            synchronized(syncObject) {
                 check(!(size < 0 || map.isEmpty() && size != 0)) {
                     (
-                        javaClass.name +
+                        this::class.simpleName +
                             ".sizeOf() is reporting inconsistent results!"
                         )
                 }
@@ -103,19 +107,19 @@ internal open class LruCache<K, V>(maxSize: Int) {
                 key = key1
                 value = value1
                 map.remove(key)
-                size -= safeSizeOf(key, value)
+                size -= safeSizeOf(key!!, value!!)
                 evictionCount++
             }
-            entryRemoved(true, key, value, null)
+            entryRemoved(true, key!!, value!!, null)
         }
     }
 
     fun remove(key: K): V? {
         if (key == null) {
-            throw java.lang.NullPointerException("key == null")
+            throw NullPointerException("key == null")
         }
-        var previous: V?
-        synchronized(this) {
+        var previous: V? = null
+        synchronized(syncObject) {
             previous = map.remove(key)
             previous?.let {
                 size -= safeSizeOf(key, it)

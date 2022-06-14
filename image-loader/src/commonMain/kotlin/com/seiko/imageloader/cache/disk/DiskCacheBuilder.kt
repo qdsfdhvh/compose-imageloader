@@ -1,6 +1,7 @@
 package com.seiko.imageloader.cache.disk
 
 import com.seiko.imageloader.util.directorySize
+import com.seiko.imageloader.util.systemFileSystem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
@@ -9,12 +10,12 @@ import okio.Path
 class DiskCacheBuilder {
 
     private var directory: Path? = null
-    private var fileSystem = FileSystem.SYSTEM
+    private var fileSystem = systemFileSystem
     private var maxSizePercent = 0.02 // 2%
     private var minimumMaxSizeBytes = 10L * 1024 * 1024 // 10MB
     private var maximumMaxSizeBytes = 250L * 1024 * 1024 // 250MB
     private var maxSizeBytes = 0L
-    private var cleanupDispatcher = Dispatchers.IO
+    private var cleanupDispatcher = Dispatchers.Default
 
     /**
      * Set the [directory] where the cache stores its data.

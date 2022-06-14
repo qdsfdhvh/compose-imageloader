@@ -23,6 +23,7 @@ import com.seiko.imageloader.request.SuccessResult
 import com.seiko.imageloader.size.Dimension
 import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.size.SizeResolver
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -147,7 +148,13 @@ class AsyncImagePainter(
         return request.newBuilder()
             .apply {
                 if (request.sizeResolver == null) {
-                    size { drawSize.mapNotNull { it.toSizeOrNull() }.first() }
+                    size(
+                        object : SizeResolver {
+                            override suspend fun size(): ImageLoaderSize {
+                                return drawSize.mapNotNull { it.toSizeOrNull() }.first()
+                            }
+                        }
+                    )
                 }
                 if (request.scale == null) {
                     scale(contentScale.toScale())

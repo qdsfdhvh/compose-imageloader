@@ -1,7 +1,7 @@
 package com.seiko.imageloader.request
 
 import com.seiko.imageloader.Image
-import okio.BufferedSource
+import io.ktor.utils.io.ByteReadChannel
 
 interface ImageResult {
     val request: ImageRequest
@@ -9,7 +9,7 @@ interface ImageResult {
 
 data class SourceResult(
     override val request: ImageRequest,
-    val source: BufferedSource,
+    val source: ByteReadChannel,
     val metadata: Any? = null,
 ) : ImageResult
 

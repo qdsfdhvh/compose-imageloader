@@ -1,6 +1,7 @@
 package com.seiko.imageloader.component.fetcher
 
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.toByteReadChannel
 import okio.Buffer
 import java.nio.ByteBuffer
 
@@ -15,7 +16,7 @@ class ByteBufferFetcher(
             data.position(0)
         }
         return FetchSourceResult(
-            source = source,
+            source = source.toByteReadChannel(),
             mimeType = null,
         )
     }

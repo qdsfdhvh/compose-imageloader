@@ -18,6 +18,7 @@ import com.seiko.imageloader.util.isRotated
 import com.seiko.imageloader.util.isSwapped
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toSoftware
+import com.seiko.imageloader.util.toSource
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -41,7 +42,7 @@ class BitmapFactoryDecoder constructor(
     }
 
     private fun BitmapFactory.Options.decode(): DecoderResult {
-        val safeSource = ExceptionCatchingSource(source.source)
+        val safeSource = ExceptionCatchingSource(source.source.toSource())
         val safeBufferedSource = safeSource.buffer()
 
         // Read the image's dimensions.

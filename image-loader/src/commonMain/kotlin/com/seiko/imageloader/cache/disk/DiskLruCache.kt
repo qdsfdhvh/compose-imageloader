@@ -1,8 +1,11 @@
 package com.seiko.imageloader.cache.disk
 
+import com.seiko.imageloader.cache.disk.DiskLruCache.Editor
+import com.seiko.imageloader.util.LockObject
 import com.seiko.imageloader.util.createFile
 import com.seiko.imageloader.util.deleteContents
 import com.seiko.imageloader.util.forEachIndices
+import com.seiko.imageloader.util.synchronized
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +22,7 @@ import okio.Path
 import okio.Sink
 import okio.blackholeSink
 import okio.buffer
+import kotlin.jvm.Synchronized
 
 /**
  * A cache that uses a bounded amount of space on a filesystem. Each cache entry has a string key
@@ -122,7 +126,7 @@ internal class DiskLruCache(
     private val journalFile = directory / JOURNAL_FILE
     private val journalFileTmp = directory / JOURNAL_FILE_TMP
     private val journalFileBackup = directory / JOURNAL_FILE_BACKUP
-    private val lruEntries = LinkedHashMap<String, Entry>(0, 0.75f, true)
+    private val lruEntries = LinkedHashMap<String, Entry>(0, 0.75f)
     private val cleanupScope = CoroutineScope(SupervisorJob() + cleanupDispatcher.limitedParallelism(1))
     private var size = 0L
     private var operationsSinceRewrite = 0
@@ -132,6 +136,8 @@ internal class DiskLruCache(
     private var closed = false
     private var mostRecentTrimFailed = false
     private var mostRecentRebuildFailed = false
+
+    private val syncObject = LockObject()
 
     private val fileSystem = object : ForwardingFileSystem(fileSystem) {
         override fun sink(file: Path, mustCreate: Boolean): Sink {
@@ -639,7 +645,7 @@ internal class DiskLruCache(
      */
     private fun launchCleanup() {
         cleanupScope.launch {
-            synchronized(this@DiskLruCache) {
+            synchronized(syncObject) {
                 if (!initialized || closed) return@launch
                 try {
                     trimToSize()
@@ -677,7 +683,7 @@ internal class DiskLruCache(
         override fun close() {
             if (!closed) {
                 closed = true
-                synchronized(this@DiskLruCache) {
+                synchronized(syncObject) {
                     entry.lockingSnapshotCount--
                     if (entry.lockingSnapshotCount == 0 && entry.zombie) {
                         removeEntry(entry)
@@ -687,7 +693,7 @@ internal class DiskLruCache(
         }
 
         fun closeAndEdit(): Editor? {
-            synchronized(this@DiskLruCache) {
+            synchronized(syncObject) {
                 close()
                 return edit(entry.key)
             }
@@ -709,7 +715,7 @@ internal class DiskLruCache(
          * This file will become the new value for this index if committed.
          */
         fun file(index: Int): Path {
-            synchronized(this@DiskLruCache) {
+            synchronized(syncObject) {
                 check(!closed) { "editor is closed" }
                 written[index] = true
                 return entry.dirtyFiles[index].also(fileSystem::createFile)
@@ -736,7 +742,7 @@ internal class DiskLruCache(
          * Commit the edit and open a new [Snapshot] atomically.
          */
         fun commitAndGet(): Snapshot? {
-            synchronized(this@DiskLruCache) {
+            synchronized(syncObject) {
                 commit()
                 return get(entry.key)
             }
@@ -752,7 +758,7 @@ internal class DiskLruCache(
          * Complete this edit either successfully or unsuccessfully.
          */
         private fun complete(success: Boolean) {
-            synchronized(this@DiskLruCache) {
+            synchronized(syncObject) {
                 check(!closed) { "editor is closed" }
                 if (entry.currentEditor == this) {
                     completeEdit(this, success)

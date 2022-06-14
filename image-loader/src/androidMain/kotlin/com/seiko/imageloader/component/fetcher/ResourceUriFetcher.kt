@@ -23,8 +23,7 @@ import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.toBitmapConfig
-import okio.buffer
-import okio.source
+import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
@@ -76,7 +75,7 @@ internal class ResourceUriFetcher(
             val typedValue = TypedValue()
             val inputStream = resources.openRawResource(resId, typedValue)
             FetchSourceResult(
-                source = inputStream.source().buffer(),
+                source = inputStream.toByteReadChannel(),
                 mimeType = mimeType,
                 metadata = ResourceMetadata(packageName, resId, typedValue.density),
             )

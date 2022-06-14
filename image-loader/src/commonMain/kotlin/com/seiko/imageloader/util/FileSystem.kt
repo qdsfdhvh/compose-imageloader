@@ -6,6 +6,8 @@ import okio.FileSystem
 import okio.IOException
 import okio.Path
 
+expect val systemFileSystem: FileSystem
+
 /** Create a new empty file if one doesn't already exist. */
 internal fun FileSystem.createFile(file: Path) {
     if (!exists(file)) sink(file).closeQuietly()

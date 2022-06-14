@@ -17,7 +17,7 @@ kotlin {
         publishLibraryVariants("release", "debug")
     }
     jvm()
-    // ios()
+    ios()
     sourceSets {
         val commonMain by getting {
             kotlin.srcDir("src/commonMain/compose")
@@ -45,7 +45,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }
-        // val iosMain by sourceSets.getting
+        val iosMain by sourceSets.getting
     }
 }
 
