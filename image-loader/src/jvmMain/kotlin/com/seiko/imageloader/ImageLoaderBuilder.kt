@@ -1,7 +1,6 @@
 package com.seiko.imageloader
 
 import com.seiko.imageloader.cache.disk.DiskCache
-import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.ComponentRegistryBuilder

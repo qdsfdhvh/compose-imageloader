@@ -5,7 +5,6 @@ import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 
-
 fun interface Interceptor {
 
     suspend fun intercept(chain: Chain): ImageResult

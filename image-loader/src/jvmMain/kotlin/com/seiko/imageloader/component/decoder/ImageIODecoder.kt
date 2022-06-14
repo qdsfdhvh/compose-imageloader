@@ -1,12 +1,10 @@
 package com.seiko.imageloader.component.decoder
 
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import io.ktor.utils.io.jvm.javaio.toInputStream
-import javax.imageio.ImageIO
 import kotlinx.coroutines.runInterruptible
+import javax.imageio.ImageIO
 
 class ImageIODecoder(
     private val source: SourceResult,

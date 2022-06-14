@@ -30,7 +30,7 @@ class MemoryCacheInterceptor(
         }
 
         val result = chain.proceed(request)
-        when(result) {
+        when (result) {
             is SuccessResult -> {
                 memoryCache[memoryCacheKey] = MemoryValue(
                     image = result.image,

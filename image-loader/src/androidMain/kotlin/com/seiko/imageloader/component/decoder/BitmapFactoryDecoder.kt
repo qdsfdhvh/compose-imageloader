@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.ui.graphics.asImageBitmap
-import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.component.fetcher.ResourceMetadata
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
@@ -19,7 +18,6 @@ import com.seiko.imageloader.util.isRotated
 import com.seiko.imageloader.util.isSwapped
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toSoftware
-import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -74,8 +72,8 @@ class BitmapFactoryDecoder constructor(
         safeSource.exception?.let { throw it }
         checkNotNull(outBitmap) {
             "BitmapFactory returned a null bitmap. Often this means BitmapFactory could not " +
-                    "decode the image data read from the input source (e.g. network, disk, or " +
-                    "memory) as it's not encoded as a valid image format."
+                "decode the image data read from the input source (e.g. network, disk, or " +
+                "memory) as it's not encoded as a valid image format."
         }
 
         // Fix the incorrect density created by overloading inDensity/inTargetDensity.

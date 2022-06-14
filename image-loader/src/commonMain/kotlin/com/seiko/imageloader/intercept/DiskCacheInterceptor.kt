@@ -4,7 +4,6 @@ import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SourceResult
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.runInterruptible
 import okio.buffer
 
 class DiskCacheInterceptor(

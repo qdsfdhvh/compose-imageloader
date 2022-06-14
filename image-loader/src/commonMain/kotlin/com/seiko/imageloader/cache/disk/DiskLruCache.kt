@@ -200,8 +200,10 @@ internal class DiskLruCache(
                 valueCount.toString() != valueCountString ||
                 blank.isNotEmpty()
             ) {
-                throw IOException("unexpected journal header: " +
-                    "[$magic, $version, $appVersionString, $valueCountString, $blank]")
+                throw IOException(
+                    "unexpected journal header: " +
+                        "[$magic, $version, $appVersionString, $valueCountString, $blank]"
+                )
             }
 
             var lineCount = 0

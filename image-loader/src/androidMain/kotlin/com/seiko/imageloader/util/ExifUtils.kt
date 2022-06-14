@@ -7,8 +7,8 @@ import android.graphics.RectF
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.exifinterface.media.ExifInterface
-import java.io.InputStream
 import okio.BufferedSource
+import java.io.InputStream
 
 /** Utility methods for interacting with Exchangeable Image File Format data. */
 internal object ExifUtils {

@@ -20,7 +20,6 @@ kotlin {
                 api("io.github.aakira:napier:${Versions.napier}")
                 api("dev.icerock.moko:resources:${Versions.multiplatformResources}")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}")
-
             }
         }
         val androidMain by getting {

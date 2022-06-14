@@ -1,7 +1,5 @@
 package com.seiko.imageloader.cache.memory
 
-import androidx.compose.ui.graphics.painter.Painter
-
 class MemoryCacheBuilder {
 
     private var maxSizePercent = STANDARD_MEMORY_MULTIPLIER

@@ -1,6 +1,5 @@
 package com.seiko.imageloader.util
 
-
 internal open class LruCache<K, V>(maxSize: Int) {
 
     private var maxSize = 0
@@ -92,8 +91,10 @@ internal open class LruCache<K, V>(maxSize: Int) {
             var value: V
             synchronized(this) {
                 check(!(size < 0 || map.isEmpty() && size != 0)) {
-                    (javaClass.name
-                        + ".sizeOf() is reporting inconsistent results!")
+                    (
+                        javaClass.name +
+                            ".sizeOf() is reporting inconsistent results!"
+                        )
                 }
                 if (size <= maxSize || map.isEmpty()) {
                     return

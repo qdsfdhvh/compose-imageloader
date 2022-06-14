@@ -10,8 +10,8 @@ import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
-import java.io.File
 import okio.Path.Companion.toOkioPath
+import java.io.File
 
 fun main() {
     Napier.base(DebugAntilog())
@@ -71,9 +71,9 @@ private val currentOperatingSystem: OperatingSystem
     }
 
 private fun getCacheDir() = when (currentOperatingSystem) {
-    OperatingSystem.Windows -> File(System.getenv("AppData"), "${ApplicationName}/cache")
-    OperatingSystem.Linux -> File(System.getProperty("user.home"), ".cache/${ApplicationName}")
-    OperatingSystem.MacOS -> File(System.getProperty("user.home"), "Library/Caches/${ApplicationName}")
+    OperatingSystem.Windows -> File(System.getenv("AppData"), "$ApplicationName/cache")
+    OperatingSystem.Linux -> File(System.getProperty("user.home"), ".cache/$ApplicationName")
+    OperatingSystem.MacOS -> File(System.getProperty("user.home"), "Library/Caches/$ApplicationName")
     else -> throw IllegalStateException("Unsupported operating system")
 }
 

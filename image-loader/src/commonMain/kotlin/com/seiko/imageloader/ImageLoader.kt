@@ -39,7 +39,7 @@ class RealImageLoader(
         MemoryCacheInterceptor(memoryCache),
         DecodeInterceptor(),
         diskCache?.let { DiskCacheInterceptor(it) },
-        EngineInterceptor(this),
+        EngineInterceptor(),
     )
 
     override suspend fun execute(request: ImageRequest): ImageResult {
