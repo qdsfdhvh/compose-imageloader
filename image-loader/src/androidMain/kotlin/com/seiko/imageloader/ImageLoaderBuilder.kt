@@ -21,6 +21,7 @@ import com.seiko.imageloader.component.mapper.ResourceUriMapper
 import com.seiko.imageloader.component.mapper.StringMapper
 import com.seiko.imageloader.intercept.Interceptor
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
 
 actual class ImageLoaderBuilder constructor(context: Context) {
 
@@ -28,7 +29,7 @@ actual class ImageLoaderBuilder constructor(context: Context) {
     private val componentBuilder = ComponentRegistryBuilder()
     private val interceptors = mutableListOf<Interceptor>()
 
-    private var httpClient: Lazy<HttpClient> = lazy { HttpClient() }
+    private var httpClient: Lazy<HttpClient> = lazy { HttpClient(CIO) }
 
     actual fun httpClient(initializer: () -> HttpClient) = apply {
         httpClient = lazy(initializer)

@@ -25,7 +25,11 @@ kotlin {
                 implementation(compose.foundation)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
                 implementation("com.squareup.okio:okio:3.1.0")
+
                 implementation("io.ktor:ktor-client-core:2.0.2")
+                implementation("io.ktor:ktor-client-cio:2.0.2")
+
+                implementation("io.github.aakira:napier:2.6.1")
             }
         }
         val androidMain by getting {
@@ -36,9 +40,14 @@ kotlin {
                 implementation("androidx.exifinterface:exifinterface:1.3.3")
                 implementation("com.google.accompanist:accompanist-drawablepainter:0.23.1")
                 implementation("androidx.appcompat:appcompat-resources:1.4.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
             }
         }
-        val jvmMain by sourceSets.getting
+        val jvmMain by sourceSets.getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.2")
+            }
+        }
         // val iosMain by sourceSets.getting
     }
 }

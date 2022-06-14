@@ -22,6 +22,7 @@ import com.seiko.imageloader.request.SuccessResult
 import com.seiko.imageloader.size.Dimension
 import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
+import io.github.aakira.napier.Napier
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun rememberAsyncImagePainter(
     request: ImageRequest,
-    imageLoader: ImageLoader,
+    imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
 ): AsyncImagePainter {
     val painter = remember { AsyncImagePainter(request, imageLoader) }
@@ -148,7 +149,7 @@ class AsyncImagePainter(
                 painter = input.painter
             }
             is ErrorResult -> {
-                TODO()
+                Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error" }
             }
         }
     }

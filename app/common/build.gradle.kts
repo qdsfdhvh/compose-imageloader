@@ -14,9 +14,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(compose.foundation)
-                // @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.material)
-                implementation(projects.imageLoader)
+                api(projects.imageLoader)
+                api("io.github.aakira:napier:2.6.1")
             }
         }
         val androidMain by getting

@@ -11,12 +11,12 @@ internal data class RealInterceptorChain(
     val interceptors: List<Interceptor>,
     val index: Int,
     override val request: ImageRequest,
-    override val size: Size,
+    // override val size: Size,
     // val eventListener: EventListener,
     val isPlaceholderCached: Boolean,
 ) : Interceptor.Chain {
 
-    override fun withSize(size: Size) = copy(size = size)
+    // override fun withSize(size: Size) = copy(size = size)
 
     override suspend fun proceed(request: ImageRequest): ImageResult {
         if (index > 0) checkRequest(request, interceptors[index - 1])

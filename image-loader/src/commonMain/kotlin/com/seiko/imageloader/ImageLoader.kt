@@ -33,14 +33,14 @@ class RealImageLoader(
 
     private suspend fun executeMain(initialRequest: ImageRequest): ImageResult {
         val request = initialRequest.newBuilder().build()
-        val size = request.sizeResolver?.size() ?: Size.ORIGINAL
+        // val size = request.sizeResolver?.size() ?: Size.ORIGINAL
         try {
             return RealInterceptorChain(
                 initialRequest = initialRequest,
                 request = initialRequest,
                 interceptors = interceptors,
                 index = 0,
-                size = size,
+                // size = size,
                 isPlaceholderCached = false,
             ).proceed(request)
         } catch (throwable: Throwable) {

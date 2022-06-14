@@ -13,14 +13,14 @@ fun interface Interceptor {
 
         val request: ImageRequest
 
-        val size: Size
+        // val size: Size
 
-        /**
-         * Set the requested [Size] to load the image at.
-         *
-         * @param size The requested size for the image.
-         */
-        fun withSize(size: Size): Chain
+        // /**
+        //  * Set the requested [Size] to load the image at.
+        //  *
+        //  * @param size The requested size for the image.
+        //  */
+        // fun withSize(size: Size): Chain
 
         /**
          * Continue executing the chain.

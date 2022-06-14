@@ -19,14 +19,14 @@ class ComponentRegistry internal constructor(
     fun map(data: Any, options: Options): Any {
         var mappedData = data
         mappers.forEachIndices { mapper ->
-            (mapper as Mapper<Any, *>).map(data, options)?.let { mappedData = it }
+            (mapper as Mapper<Any, *>).tryMap(data, options)?.let { mappedData = it }
         }
         return mappedData
     }
 
     fun key(data: Any, options: Options): String? {
         keyers.forEachIndices { keyer ->
-            (keyer as Keyer<Any>).key(data, options)?.let { return it }
+            (keyer as Keyer<Any>).tryKey(data, options)?.let { return it }
         }
         return null
     }

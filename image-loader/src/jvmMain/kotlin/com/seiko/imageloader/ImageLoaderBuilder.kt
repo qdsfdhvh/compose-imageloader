@@ -6,13 +6,14 @@ import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.intercept.Interceptor
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
 
 actual class ImageLoaderBuilder {
 
     private val componentBuilder = ComponentRegistryBuilder()
     private val interceptors = mutableListOf<Interceptor>()
 
-    private var httpClient: Lazy<HttpClient> = lazy { HttpClient() }
+    private var httpClient: Lazy<HttpClient> = lazy { HttpClient(CIO) }
 
     actual fun httpClient(initializer: () -> HttpClient) = apply {
         httpClient = lazy(initializer)
