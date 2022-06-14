@@ -186,7 +186,6 @@ class BitmapFactoryDecoder constructor(
         override fun create(
             source: SourceResult,
             options: Options,
-            imageLoader: ImageLoader
         ): Decoder {
             return BitmapFactoryDecoder(context, source, options, parallelismLock)
         }

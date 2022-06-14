@@ -4,10 +4,12 @@ import androidx.compose.runtime.Immutable
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.ComponentRegistry
-import com.seiko.imageloader.intercept.CacheInterceptor
+import com.seiko.imageloader.intercept.DecodeInterceptor
+import com.seiko.imageloader.intercept.DiskCacheInterceptor
 import com.seiko.imageloader.intercept.EngineInterceptor
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.intercept.MappedInterceptor
+import com.seiko.imageloader.intercept.MemoryCacheInterceptor
 import com.seiko.imageloader.intercept.RealInterceptorChain
 import com.seiko.imageloader.request.ErrorResult
 import com.seiko.imageloader.request.ImageRequest
@@ -32,9 +34,11 @@ class RealImageLoader(
     diskCache: Lazy<DiskCache>?,
 ) : ImageLoader {
 
-    private val interceptors = interceptors + listOf(
-        MappedInterceptor(this),
-        CacheInterceptor(memoryCache, diskCache),
+    private val interceptors = interceptors + listOfNotNull(
+        MappedInterceptor(),
+        MemoryCacheInterceptor(memoryCache),
+        DecodeInterceptor(),
+        diskCache?.let { DiskCacheInterceptor(it) },
         EngineInterceptor(this),
     )
 

@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberAsyncImagePainter
 
@@ -54,8 +55,11 @@ private fun ImageList(modifier: Modifier = Modifier) {
     LazyVerticalGrid(columns = GridCells.Adaptive(200.dp), modifier = modifier) {
         items(images) { image ->
             Image(
-                rememberAsyncImagePainter(image.url),
+                rememberAsyncImagePainter(
+                    url = image.url,
+                ),
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier.aspectRatio(1f),
             )
         }

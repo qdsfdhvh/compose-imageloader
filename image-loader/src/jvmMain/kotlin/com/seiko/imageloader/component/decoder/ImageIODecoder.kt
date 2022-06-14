@@ -23,7 +23,6 @@ class ImageIODecoder(
         override fun create(
             source: SourceResult,
             options: Options,
-            imageLoader: ImageLoader
         ): Decoder {
             return ImageIODecoder(source)
         }

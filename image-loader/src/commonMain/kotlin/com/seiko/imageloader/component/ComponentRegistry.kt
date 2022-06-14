@@ -46,12 +46,11 @@ class ComponentRegistry internal constructor(
     fun decode(
         source: SourceResult,
         options: Options,
-        imageLoader: ImageLoader,
         startIndex: Int = 0,
     ): Pair<Decoder, Int> {
         for (index in startIndex until decoderFactories.size) {
             val factory = decoderFactories[index]
-            factory.create(source, options, imageLoader)?.let { return it to index }
+            factory.create(source, options)?.let { return it to index }
         }
         error { "Unable to create a decoder that supports: $source" }
     }
