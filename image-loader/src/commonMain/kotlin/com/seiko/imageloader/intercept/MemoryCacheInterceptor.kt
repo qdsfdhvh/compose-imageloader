@@ -11,9 +11,7 @@ class MemoryCacheInterceptor(
     private val memoryCache: Lazy<MemoryCache>,
 ) : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        val request = chain.request
-        val components = chain.components
-        val options = chain.options
+        val (request, options, components) = chain
 
         val data = request.data
         val cacheKey = components.key(data, options) ?: return chain.proceed(request)

@@ -9,7 +9,7 @@ class DrawableFetcher(
     private val data: Drawable,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return FetchPainterResult(
+        return FetchImageResult(
             image = data.toBitmap().asImageBitmap()
         )
     }

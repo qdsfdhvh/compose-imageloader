@@ -11,10 +11,7 @@ import com.seiko.imageloader.request.SuccessResult
 class DecodeInterceptor : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        val request = chain.request
-        val options = chain.options
-        val components = chain.components
-
+        val (request, options, components) = chain
         return when (val result = chain.proceed(request)) {
             is SourceResult -> {
                 when (val decodeResult = decode(components, result, options)) {

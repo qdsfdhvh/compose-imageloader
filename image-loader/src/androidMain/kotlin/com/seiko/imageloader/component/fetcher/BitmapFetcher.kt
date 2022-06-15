@@ -8,7 +8,7 @@ class BitmapFetcher(
     private val data: Bitmap,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return FetchPainterResult(
+        return FetchImageResult(
             image = data.asImageBitmap()
         )
     }

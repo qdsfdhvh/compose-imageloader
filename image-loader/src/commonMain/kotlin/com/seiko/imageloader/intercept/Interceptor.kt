@@ -31,5 +31,11 @@ interface Interceptor {
          * @param request The request to proceed with.
          */
         suspend fun proceed(request: ImageRequest): ImageResult
+
+        operator fun component1() = request
+
+        operator fun component2() = options
+
+        operator fun component3() = components
     }
 }

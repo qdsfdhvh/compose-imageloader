@@ -1,7 +1,7 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.component.ComponentRegistry
-import com.seiko.imageloader.component.fetcher.FetchPainterResult
+import com.seiko.imageloader.component.fetcher.FetchImageResult
 import com.seiko.imageloader.component.fetcher.FetchResult
 import com.seiko.imageloader.component.fetcher.FetchSourceResult
 import com.seiko.imageloader.request.ImageResult
@@ -13,19 +13,14 @@ import io.github.aakira.napier.Napier
 class EngineInterceptor : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        Napier.d(tag = "Interceptor") { "intercept EngineInterceptor" }
-
-        val request = chain.request
-        val options = chain.options
-        val components = chain.components
-
+        val (request, options, components) = chain
         return when (val fetchResult = fetch(components, request.data, options)) {
             is FetchSourceResult -> SourceResult(
                 request = request,
                 source = fetchResult.source,
                 metadata = fetchResult.metadata,
             )
-            is FetchPainterResult -> SuccessResult(
+            is FetchImageResult -> SuccessResult(
                 request = request,
                 image = fetchResult.image,
             )
