@@ -87,7 +87,7 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
                     LocalImageLoader provides generateImageLoader(),
                     LocalResLoader provides ResLoader(),
                 ) {
-                    App()
+                    App2()
                 }
             }
         }

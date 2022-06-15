@@ -22,7 +22,7 @@ object Versions {
 
     const val spotless = "6.7.0"
     const val ktlint = "0.45.2"
-    const val compose_jb = "1.2.0-alpha01-dev713"
+    const val compose_jb =  "1.2.0-alpha01-dev709" //"1.2.0-alpha01-dev713"
     const val compose = "1.2.0-beta03"
     const val multiplatformResources = "0.20.1"
     const val napier = "2.6.1"
