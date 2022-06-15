@@ -18,6 +18,8 @@ kotlin {
     }
     jvm()
     ios()
+    iosArm64()
+    iosX64()
     sourceSets {
         val commonMain by getting {
             kotlin.srcDir("src/commonMain/compose")
@@ -25,13 +27,13 @@ kotlin {
                 api(compose.foundation)
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
                 api("com.squareup.okio:okio:3.1.0")
-                api("io.ktor:ktor-client-core:2.0.2")
-                api("io.ktor:ktor-client-cio:2.0.2")
+                api("io.ktor:ktor-client-core:${Versions.ktor}")
                 implementation("io.github.aakira:napier:2.6.1")
             }
         }
         val androidMain by getting {
             dependencies {
+                implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
                 implementation("androidx.core:core-ktx:1.8.0")
                 implementation("androidx.compose.ui:ui-graphics:${Versions.compose}")
                 implementation("androidx.exifinterface:exifinterface:1.3.3")
@@ -42,10 +44,18 @@ kotlin {
         }
         val jvmMain by sourceSets.getting {
             dependencies {
+                implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }
-        val iosMain by sourceSets.getting
+        val iosMain by sourceSets.getting {
+            dependencies {
+                // why not CIO https://github.com/joreilly/PeopleInSpace/issues/69
+                implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
+            }
+        }
+        val iosArm64Main by sourceSets.getting
+        val iosX64Main by sourceSets.getting
     }
 }
 

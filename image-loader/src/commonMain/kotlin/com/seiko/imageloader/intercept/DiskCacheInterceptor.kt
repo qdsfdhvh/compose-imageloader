@@ -23,7 +23,7 @@ class DiskCacheInterceptor(
             Napier.d(tag = "Interceptor") { "read disk cache data:$data" }
             return SourceResult(
                 request = request,
-                source = diskCache.fileSystem.source(diskCacheValue.data).buffer().toByteReadChannel(),
+                channel = diskCache.fileSystem.source(diskCacheValue.data).buffer().toByteReadChannel(),
             )
         }
 
@@ -31,11 +31,11 @@ class DiskCacheInterceptor(
         when (result) {
             is SourceResult -> {
                 diskCache.edit(cacheKey)?.let { edit ->
-                    result.source.saveTo(edit.data, diskCache.fileSystem)
+                    result.channel.saveTo(edit.data, diskCache.fileSystem)
                     edit.commitAndGet()?.let {
                         SourceResult(
                             request = request,
-                            source = diskCache.fileSystem.source(it.data).buffer().toByteReadChannel(),
+                            channel = diskCache.fileSystem.source(it.data).buffer().toByteReadChannel(),
                             metadata = result.metadata,
                         )
                     }

@@ -8,7 +8,6 @@ import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.request.SuccessResult
-import io.github.aakira.napier.Napier
 
 class EngineInterceptor : Interceptor {
 
@@ -17,7 +16,7 @@ class EngineInterceptor : Interceptor {
         return when (val fetchResult = fetch(components, request.data, options)) {
             is FetchSourceResult -> SourceResult(
                 request = request,
-                source = fetchResult.source,
+                channel = fetchResult.source,
                 metadata = fetchResult.metadata,
             )
             is FetchImageResult -> SuccessResult(

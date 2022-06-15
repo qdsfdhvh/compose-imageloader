@@ -3,17 +3,16 @@ package com.seiko.imageloader.component.decoder
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import io.ktor.utils.io.jvm.javaio.toInputStream
-import kotlinx.coroutines.runInterruptible
-import javax.imageio.ImageIO
+import io.ktor.util.toByteArray
+import org.jetbrains.skia.Image
 
-class ImageIODecoder(
+class SkiaImageDecoder(
     private val source: SourceResult,
 ) : Decoder {
 
-    override suspend fun decode(): DecoderResult = runInterruptible {
-        val image = ImageIO.read(source.channel.toInputStream())
-        DecodeImageResult(
+    override suspend fun decode(): DecoderResult {
+        val image = Image.makeFromEncoded(source.channel.toByteArray())
+        return DecodeImageResult(
             image = image.toComposeImageBitmap(),
         )
     }
@@ -23,7 +22,7 @@ class ImageIODecoder(
             source: SourceResult,
             options: Options,
         ): Decoder {
-            return ImageIODecoder(source)
+            return SkiaImageDecoder(source)
         }
     }
 }

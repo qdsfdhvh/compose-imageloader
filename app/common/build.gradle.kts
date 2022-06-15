@@ -5,17 +5,24 @@ plugins {
     kotlin("plugin.serialization").version(Versions.Kotlin.lang)
     id("org.jetbrains.compose").version(Versions.compose_jb)
     id("com.android.library")
-    id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
+    // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
+    // id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
 }
 
 kotlin {
     android()
     jvm()
+    ios()
+    iosX64()
+    iosArm64()
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(compose.foundation)
-                implementation(compose.material)
+                api(compose.ui)
+                api(compose.foundation)
+                api(compose.material)
+                api(compose.runtime)
+
                 api(projects.imageLoader)
                 api("io.github.aakira:napier:${Versions.napier}")
                 api("dev.icerock.moko:resources:${Versions.multiplatformResources}")
@@ -24,10 +31,13 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("androidx.compose.foundation:foundation:${Versions.compose}")
+                // implementation("androidx.compose.foundation:foundation:${Versions.compose}")
             }
         }
         val jvmMain by sourceSets.getting
+        val iosMain by sourceSets.getting
+        val iosArm64Main by sourceSets.getting
+        val iosX64Main by sourceSets.getting
     }
 }
 
@@ -45,6 +55,9 @@ android {
     }
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = "com.seiko.imageloader.demo"
-}
+// multiplatformResources {
+//     multiplatformResourcesPackage = "com.seiko.imageloader.demo"
+// }
+
+// skip task because it's failed on gradle 7 and we not use results of this processing
+// tasks.getByName("iosArm64ProcessResources").enabled = false

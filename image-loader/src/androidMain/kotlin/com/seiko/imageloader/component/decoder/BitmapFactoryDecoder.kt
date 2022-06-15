@@ -42,7 +42,7 @@ class BitmapFactoryDecoder constructor(
     }
 
     private fun BitmapFactory.Options.decode(): DecoderResult {
-        val safeSource = ExceptionCatchingSource(source.source.toInputStream().source().buffer())
+        val safeSource = ExceptionCatchingSource(source.channel.toInputStream().source().buffer())
         val safeBufferedSource = safeSource.buffer()
 
         // Read the image's dimensions.
