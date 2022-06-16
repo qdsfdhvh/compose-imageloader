@@ -1,7 +1,6 @@
 package com.seiko.imageloader.component.fetcher
 
 import com.seiko.imageloader.request.Options
-import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.request.request
 import io.ktor.client.request.url
@@ -18,12 +17,9 @@ class KtorUrlFetcher(
         val response = httpClient.value.request {
             url(httpUrl)
         }
-        val mimeType = response.contentType()?.toString()
-        Napier.d { "mineType= $mimeType" }
-
         return FetchSourceResult(
             source = response.bodyAsChannel(),
-            mimeType = mimeType,
+            mimeType = response.contentType()?.toString(),
         )
     }
 

@@ -38,7 +38,7 @@ class RealImageLoader(
         MappedInterceptor(),
         MemoryCacheInterceptor(memoryCache),
         DecodeInterceptor(),
-        // diskCache?.let { DiskCacheInterceptor(it) },
+        diskCache?.let { DiskCacheInterceptor(it) },
         EngineInterceptor(),
     )
 
