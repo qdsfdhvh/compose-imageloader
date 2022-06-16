@@ -58,14 +58,14 @@ fun App() {
 private fun ImageList(modifier: Modifier = Modifier) {
     val resLoader = LocalResLoader.current
     val images = remember(resLoader) {
-        imageJsonData.decodeJson<List<Image>>()
+        imageJsonDataSvg.decodeJson<List<Image>>()
         // resLoader.getString(MR.assets.jpgs).decodeJson<List<Image>>()
     }
 
     LazyColumn(modifier = modifier) {
         itemsGridIndexed(images, rowSize = 3) { _, image ->
             val painter = rememberAsyncImagePainter(
-                url = image.url
+                url = image.imageUrl
             )
             Image(
                 painter = painter,

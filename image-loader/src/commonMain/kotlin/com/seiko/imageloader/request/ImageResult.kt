@@ -10,6 +10,7 @@ interface ImageResult {
 data class SourceResult(
     override val request: ImageRequest,
     val channel: ByteReadChannel,
+    val mimeType: String? = null,
     val metadata: Any? = null,
 ) : ImageResult
 

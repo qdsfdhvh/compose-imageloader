@@ -4,10 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Image(
-    val urls: Urls,
-    val color: String,
+    val urls: Urls? = null,
+    val color: String? = "",
     val width: Int,
     val height: Int,
+    val url: String = "",
 ) {
     @Serializable
     data class Urls(
@@ -18,5 +19,5 @@ data class Image(
         val thumb: String,
     )
 
-    val url: String get() = urls.regular
+    val imageUrl: String get() = urls?.regular ?: url
 }

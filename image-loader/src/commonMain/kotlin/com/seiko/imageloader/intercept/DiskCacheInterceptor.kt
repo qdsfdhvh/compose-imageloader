@@ -36,6 +36,7 @@ class DiskCacheInterceptor(
                         SourceResult(
                             request = request,
                             channel = diskCache.fileSystem.source(it.data).buffer().toByteReadChannel(),
+                            mimeType = result.mimeType,
                             metadata = result.metadata,
                         )
                     }

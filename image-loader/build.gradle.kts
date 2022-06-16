@@ -39,6 +39,7 @@ kotlin {
                 implementation("androidx.compose.ui:ui-graphics:${Versions.compose}")
                 implementation("androidx.exifinterface:exifinterface:1.3.3")
                 implementation("androidx.appcompat:appcompat-resources:1.4.2")
+                implementation("com.caverock:androidsvg-aar:1.4")
             }
         }
         val jvmMain by sourceSets.getting {

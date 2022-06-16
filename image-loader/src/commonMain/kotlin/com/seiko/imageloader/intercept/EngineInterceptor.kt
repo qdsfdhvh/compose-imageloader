@@ -17,6 +17,7 @@ class EngineInterceptor : Interceptor {
             is FetchSourceResult -> SourceResult(
                 request = request,
                 channel = fetchResult.source,
+                mimeType = fetchResult.mimeType,
                 metadata = fetchResult.metadata,
             )
             is FetchImageResult -> SuccessResult(
