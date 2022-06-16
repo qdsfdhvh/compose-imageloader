@@ -19,10 +19,7 @@ class ImageIODecoder(
     }
 
     class Factory : Decoder.Factory {
-        override fun create(
-            source: SourceResult,
-            options: Options,
-        ): Decoder {
+        override suspend fun create(source: SourceResult, options: Options): Decoder {
             return ImageIODecoder(source)
         }
     }

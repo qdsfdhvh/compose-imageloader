@@ -182,10 +182,7 @@ class BitmapFactoryDecoder constructor(
 
         private val parallelismLock = Semaphore(maxParallelism)
 
-        override fun create(
-            source: SourceResult,
-            options: Options,
-        ): Decoder {
+        override suspend fun create(source: SourceResult, options: Options): Decoder {
             return BitmapFactoryDecoder(context, source, options, parallelismLock)
         }
 

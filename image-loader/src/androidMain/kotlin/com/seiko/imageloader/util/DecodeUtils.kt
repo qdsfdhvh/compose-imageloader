@@ -3,8 +3,7 @@ package com.seiko.imageloader.util
 import android.graphics.BitmapFactory
 import androidx.annotation.Px
 import com.seiko.imageloader.size.Scale
-import okio.BufferedSource
-import okio.ByteString
+import io.ktor.utils.io.ByteReadChannel
 import okio.ByteString.Companion.encodeUtf8
 import kotlin.math.max
 import kotlin.math.min
@@ -15,26 +14,26 @@ internal object DecodeUtils {
     private val SVG_TAG = "<svg".encodeUtf8()
     private val LEFT_ANGLE_BRACKET = "<".encodeUtf8()
 
-    fun isSvg(source: BufferedSource): Boolean {
-        return source.rangeEquals(0, LEFT_ANGLE_BRACKET) &&
-            source.indexOf(SVG_TAG, 0, 1024) != -1L
+    suspend fun isSvg(channel: ByteReadChannel): Boolean {
+        return channel.rangeEquals(0, LEFT_ANGLE_BRACKET)
+            // && channel.indexOf(SVG_TAG, 0, 1024) != -1L
     }
 
-    private fun BufferedSource.indexOf(bytes: ByteString, fromIndex: Long, toIndex: Long): Long {
-        require(bytes.size > 0) { "bytes is empty" }
-
-        val firstByte = bytes[0]
-        val lastIndex = toIndex - bytes.size
-        var currentIndex = fromIndex
-        while (currentIndex < lastIndex) {
-            currentIndex = indexOf(firstByte, currentIndex, lastIndex)
-            if (currentIndex == -1L || rangeEquals(currentIndex, bytes)) {
-                return currentIndex
-            }
-            currentIndex++
-        }
-        return -1
-    }
+    // private fun BufferedSource.indexOf(bytes: ByteString, fromIndex: Long, toIndex: Long): Long {
+    //     require(bytes.size > 0) { "bytes is empty" }
+    //
+    //     val firstByte = bytes[0]
+    //     val lastIndex = toIndex - bytes.size
+    //     var currentIndex = fromIndex
+    //     while (currentIndex < lastIndex) {
+    //         currentIndex = indexOf(firstByte, currentIndex, lastIndex)
+    //         if (currentIndex == -1L || rangeEquals(currentIndex, bytes)) {
+    //             return currentIndex
+    //         }
+    //         currentIndex++
+    //     }
+    //     return -1
+    // }
 
     /**
      * Calculate the [BitmapFactory.Options.inSampleSize] given the source dimensions of the image

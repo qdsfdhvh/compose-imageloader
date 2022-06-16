@@ -41,7 +41,7 @@ class ComponentRegistry internal constructor(
         error { "Unable to create a fetcher that supports: $data" }
     }
 
-    fun decode(
+    suspend fun decode(
         source: SourceResult,
         options: Options,
         startIndex: Int = 0,

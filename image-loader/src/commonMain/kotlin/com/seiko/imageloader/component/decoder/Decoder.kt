@@ -5,7 +5,7 @@ import com.seiko.imageloader.request.SourceResult
 
 interface Decoder {
     suspend fun decode(): DecoderResult?
-    fun interface Factory {
-        fun create(source: SourceResult, options: Options): Decoder?
+    interface Factory {
+        suspend fun create(source: SourceResult, options: Options): Decoder?
     }
 }
