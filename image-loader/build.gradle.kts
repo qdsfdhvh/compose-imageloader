@@ -39,6 +39,7 @@ kotlin {
                 implementation("androidx.compose.ui:ui-graphics:${Versions.compose}")
                 implementation("androidx.exifinterface:exifinterface:1.3.3")
                 implementation("androidx.appcompat:appcompat-resources:1.4.2")
+                // svg
                 implementation("com.caverock:androidsvg-aar:1.4")
             }
         }
@@ -46,6 +47,9 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
+                // svg
+                implementation("com.twelvemonkeys.imageio:imageio-batik:3.8.2")
+                implementation("org.apache.xmlgraphics:batik-transcoder:1.14")
             }
         }
         val iosMain by sourceSets.getting {
