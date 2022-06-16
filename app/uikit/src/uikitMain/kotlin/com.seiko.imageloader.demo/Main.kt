@@ -30,7 +30,6 @@ import androidx.compose.ui.window.Application
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
-import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier

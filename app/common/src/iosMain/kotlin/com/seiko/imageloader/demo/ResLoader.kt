@@ -1,4 +1,3 @@
 package com.seiko.imageloader.demo
 
-actual class ResLoader {
-}
+actual class ResLoader

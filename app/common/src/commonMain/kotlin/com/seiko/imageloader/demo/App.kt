@@ -58,7 +58,7 @@ fun App() {
 private fun ImageList(modifier: Modifier = Modifier) {
     val resLoader = LocalResLoader.current
     val images = remember(resLoader) {
-        imageJsonDataSvg.decodeJson<List<Image>>()
+        imageJsonData.decodeJson<List<Image>>()
         // resLoader.getString(MR.assets.jpgs).decodeJson<List<Image>>()
     }
 
@@ -76,7 +76,6 @@ private fun ImageList(modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 fun <T> LazyListScope.itemsGridIndexed(
     data: List<T>,

@@ -109,8 +109,8 @@ class SvgDecoder @JvmOverloads constructor(
         }
 
         private fun isApplicable(source: SourceResult): Boolean {
-            return source.mimeType == MIME_TYPE_SVG
-                || DecodeUtils.isSvg(source.channel.toInputStream().source().buffer())
+            return source.mimeType == MIME_TYPE_SVG ||
+                DecodeUtils.isSvg(source.channel.toInputStream().source().buffer())
         }
 
         override fun equals(other: Any?): Boolean {
