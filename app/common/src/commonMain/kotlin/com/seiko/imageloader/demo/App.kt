@@ -69,8 +69,7 @@ private fun ImageList(modifier: Modifier = Modifier) {
             val jpegs = imageJsonData.decodeJson<List<Image>>()
             val gifs = imageJsonDataGif.decodeJson<List<Image>>()
             val svgs = imageJsonDataSvg.decodeJson<List<Image>>()
-            val all = (jpegs + gifs + svgs)
-            List(50) { all.random(Random) }
+            (jpegs + gifs + svgs).shuffled()
         }
     }
 
