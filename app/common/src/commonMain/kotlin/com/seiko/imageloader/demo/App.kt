@@ -23,12 +23,19 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberAsyncImagePainter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
 @Composable
 fun App() {
@@ -56,10 +63,15 @@ fun App() {
 
 @Composable
 private fun ImageList(modifier: Modifier = Modifier) {
-    val resLoader = LocalResLoader.current
-    val images = remember(resLoader) {
-        imageJsonData.decodeJson<List<Image>>()
-        // resLoader.getString(MR.assets.jpgs).decodeJson<List<Image>>()
+    var images by remember { mutableStateOf(emptyList<Image>()) }
+    LaunchedEffect(Unit) {
+        images = withContext(Dispatchers.Default) {
+            val jpegs = imageJsonData.decodeJson<List<Image>>()
+            val gifs = imageJsonDataGif.decodeJson<List<Image>>()
+            val svgs = imageJsonDataSvg.decodeJson<List<Image>>()
+            val all = (jpegs + gifs + svgs)
+            List(50) { all.random(Random) }
+        }
     }
 
     LazyColumn(modifier = modifier) {

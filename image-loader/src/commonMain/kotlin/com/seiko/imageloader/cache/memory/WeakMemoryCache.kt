@@ -2,9 +2,9 @@ package com.seiko.imageloader.cache.memory
 
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Image
+import com.seiko.imageloader.identityHashCode
 import com.seiko.imageloader.util.WeakReference
 import com.seiko.imageloader.util.firstNotNullOfOrNullIndices
-import com.seiko.imageloader.util.identityHashCode
 import com.seiko.imageloader.util.removeIfIndices
 import kotlin.jvm.Synchronized
 

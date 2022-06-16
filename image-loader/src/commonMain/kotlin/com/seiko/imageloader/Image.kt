@@ -5,6 +5,8 @@ import androidx.compose.ui.graphics.ImageBitmapConfig
 
 typealias Image = ImageBitmap
 
+internal expect val Image.identityHashCode: Int
+
 val Image.size: Int
     get() = width * height * config.byteSize
 

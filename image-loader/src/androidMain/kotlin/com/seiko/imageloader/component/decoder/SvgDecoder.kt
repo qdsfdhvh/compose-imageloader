@@ -11,6 +11,7 @@ import com.seiko.imageloader.size.Scale
 import com.seiko.imageloader.size.isOriginal
 import com.seiko.imageloader.size.toPx
 import com.seiko.imageloader.util.DecodeUtils
+import com.seiko.imageloader.util.isSvg
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toPainter
 import com.seiko.imageloader.util.toSoftware
@@ -103,8 +104,7 @@ class SvgDecoder @JvmOverloads constructor(
         }
 
         private suspend fun isApplicable(source: SourceResult): Boolean {
-            return source.mimeType == MIME_TYPE_SVG ||
-                DecodeUtils.isSvg(source.channel)
+            return source.mimeType == MIME_TYPE_SVG || isSvg(source.channel)
         }
 
         override fun equals(other: Any?): Boolean {

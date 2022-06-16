@@ -1,5 +1,6 @@
 package com.seiko.imageloader
 
+import com.seiko.imageloader.component.decoder.GifDecoder
 import com.seiko.imageloader.component.decoder.ImageIODecoder
 import com.seiko.imageloader.component.fetcher.FileFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
@@ -26,6 +27,7 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             .add(KtorUrlFetcher.Factory(httpClient))
             .add(FileFetcher.Factory())
             // Decoders
+            .add(GifDecoder.Factory())
             .add(ImageIODecoder.Factory())
             .build()
 

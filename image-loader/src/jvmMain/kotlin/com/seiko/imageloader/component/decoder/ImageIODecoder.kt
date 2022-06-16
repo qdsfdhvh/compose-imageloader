@@ -4,16 +4,17 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
+import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
-import javax.imageio.ImageIO
 import kotlinx.coroutines.runInterruptible
+import javax.imageio.ImageIO
 
 class ImageIODecoder(
-    private val source: SourceResult,
+    private val channel: ByteReadChannel,
 ) : Decoder {
 
-    override suspend fun decode(): DecoderResult = runInterruptible {
-        val image = ImageIO.read(source.channel.toInputStream())
+    override suspend fun decode() = runInterruptible {
+        val image = ImageIO.read(channel.toInputStream())
         DecodePainterResult(
             painter = BitmapPainter(image.toComposeImageBitmap()),
         )
@@ -21,7 +22,7 @@ class ImageIODecoder(
 
     class Factory : Decoder.Factory {
         override suspend fun create(source: SourceResult, options: Options): Decoder {
-            return ImageIODecoder(source)
+            return ImageIODecoder(source.channel)
         }
     }
 }

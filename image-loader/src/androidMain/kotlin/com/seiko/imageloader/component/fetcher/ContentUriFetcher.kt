@@ -44,6 +44,7 @@ internal class ContentUriFetcher(
         return FetchSourceResult(
             source = inputStream.toByteReadChannel(),
             mimeType = contentResolver.getType(data),
+            metadata = ContentMetadata(data),
         )
     }
 
@@ -90,3 +91,5 @@ internal class ContentUriFetcher(
         private fun isApplicable(data: Uri) = data.scheme == SCHEME_CONTENT
     }
 }
+
+data class ContentMetadata(val uri: Uri)

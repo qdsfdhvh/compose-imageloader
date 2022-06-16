@@ -1,7 +1,10 @@
 package com.seiko.imageloader
 
 import android.content.Context
+import android.os.Build
 import com.seiko.imageloader.component.decoder.BitmapFactoryDecoder
+import com.seiko.imageloader.component.decoder.GifDecoder
+import com.seiko.imageloader.component.decoder.ImageDecoderDecoder
 import com.seiko.imageloader.component.decoder.SvgDecoder
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.BitmapFetcher
@@ -57,6 +60,7 @@ actual class ImageLoaderBuilder constructor(context: Context) : CommonImageLoade
             .add(ByteBufferFetcher.Factory())
             // Decoders
             .add(SvgDecoder.Factory())
+            .add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder.Factory(context) else GifDecoder.Factory())
             .add(BitmapFactoryDecoder.Factory(context))
             .build()
 

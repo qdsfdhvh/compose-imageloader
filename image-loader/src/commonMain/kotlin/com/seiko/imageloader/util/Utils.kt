@@ -14,8 +14,6 @@ import okio.buffer
 import okio.use
 import kotlin.coroutines.CoroutineContext
 
-internal expect val Any.identityHashCode: Int
-
 @OptIn(DelicateCoroutinesApi::class)
 internal fun BufferedSource.toByteReadChannel(
     context: CoroutineContext = Dispatchers.Default,

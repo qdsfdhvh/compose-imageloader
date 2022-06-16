@@ -170,14 +170,24 @@ class AsyncImagePainter(
     private fun updateImage(input: ImageResult) {
         when (input) {
             is ComposePainterResult -> {
-                painter = input.painter
+                updatePainter(input.painter)
             }
             is ComposeImageResult -> {
-                painter = BitmapPainter(input.image)
+                updatePainter(BitmapPainter(input.image))
             }
             is ErrorResult -> {
                 Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error" }
             }
+        }
+    }
+
+    private fun updatePainter(painter: Painter) {
+        val previous = this.painter
+        this.painter = painter
+
+        if (rememberScope != null && previous != painter) {
+            (previous as? RememberObserver)?.onForgotten()
+            (painter as? RememberObserver)?.onRemembered()
         }
     }
 }

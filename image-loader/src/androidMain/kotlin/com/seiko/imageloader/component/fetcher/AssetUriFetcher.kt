@@ -18,6 +18,7 @@ internal class AssetUriFetcher(
         return FetchSourceResult(
             source = context.assets.open(path).toByteReadChannel(),
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromUrl(path),
+            metadata = AssetMetadata(data.lastPathSegment!!),
         )
     }
 
@@ -29,3 +30,5 @@ internal class AssetUriFetcher(
         }
     }
 }
+
+data class AssetMetadata(val fileName: String)

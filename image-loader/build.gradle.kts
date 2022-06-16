@@ -32,6 +32,7 @@ kotlin {
             }
         }
         val androidMain by getting {
+            kotlin.srcDir("src/androidMain/gif")
             dependencies {
                 implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
