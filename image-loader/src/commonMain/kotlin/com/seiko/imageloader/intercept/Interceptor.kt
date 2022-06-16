@@ -16,8 +16,6 @@ interface Interceptor {
         val options: Options
         val components: ComponentRegistry
 
-        // val size: Size
-
         // /**
         //  * Set the requested [Size] to load the image at.
         //  *

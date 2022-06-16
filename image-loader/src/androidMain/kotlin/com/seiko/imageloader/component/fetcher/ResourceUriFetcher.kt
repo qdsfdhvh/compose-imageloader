@@ -13,9 +13,7 @@ import android.webkit.MimeTypeMap
 import androidx.annotation.DrawableRes
 import androidx.annotation.XmlRes
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
@@ -23,6 +21,7 @@ import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.toBitmapConfig
+import com.seiko.imageloader.util.toPainter
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -58,8 +57,8 @@ internal class ResourceUriFetcher(
             }
 
             val isVector = drawable.isVector
-            FetchImageResult(
-                image = if (isVector) {
+            FetchPainterResult(
+                painter = if (isVector) {
                     DrawableUtils.convertToBitmap(
                         drawable = drawable,
                         config = options.config.toBitmapConfig(),
@@ -69,7 +68,7 @@ internal class ResourceUriFetcher(
                     ).toDrawable(context.resources)
                 } else {
                     drawable
-                }.toBitmap().asImageBitmap(),
+                }.toPainter(),
             )
         } else {
             val typedValue = TypedValue()

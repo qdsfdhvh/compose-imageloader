@@ -1,16 +1,15 @@
 package com.seiko.imageloader.component.fetcher
 
 import android.graphics.drawable.Drawable
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.core.graphics.drawable.toBitmap
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.toPainter
 
 class DrawableFetcher(
     private val data: Drawable,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return FetchImageResult(
-            image = data.toBitmap().asImageBitmap()
+        return FetchPainterResult(
+            painter = data.toPainter(),
         )
     }
 

@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.decoder
 
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
@@ -12,8 +13,8 @@ class SkiaImageDecoder(
 
     override suspend fun decode(): DecoderResult {
         val image = Image.makeFromEncoded(source.channel.toByteArray())
-        return DecodeImageResult(
-            image = image.toComposeImageBitmap(),
+        return DecodePainterResult(
+            painter = BitmapPainter(image.toComposeImageBitmap()),
         )
     }
 

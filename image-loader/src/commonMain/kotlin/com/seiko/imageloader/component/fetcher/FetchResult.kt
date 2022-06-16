@@ -1,6 +1,6 @@
 package com.seiko.imageloader.component.fetcher
 
-import com.seiko.imageloader.Image
+import androidx.compose.ui.graphics.painter.Painter
 import io.ktor.utils.io.ByteReadChannel
 
 sealed interface FetchResult
@@ -11,6 +11,6 @@ class FetchSourceResult(
     val metadata: Any? = null,
 ) : FetchResult
 
-class FetchImageResult(
-    val image: Image,
+class FetchPainterResult(
+    val painter: Painter
 ) : FetchResult

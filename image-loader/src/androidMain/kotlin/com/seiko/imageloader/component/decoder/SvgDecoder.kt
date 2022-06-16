@@ -76,8 +76,8 @@ class SvgDecoder @JvmOverloads constructor(
         val renderOptions = RenderOptions()
         svg.renderToCanvas(Canvas(bitmap), renderOptions)
 
-        DecodeImageResult(
-            image = bitmap.asImageBitmap(),
+        DecodePainterResult(
+            painter = bitmap.toPainter(),
             // isSampled = true // SVGs can always be re-decoded at a higher resolution.
         )
     }

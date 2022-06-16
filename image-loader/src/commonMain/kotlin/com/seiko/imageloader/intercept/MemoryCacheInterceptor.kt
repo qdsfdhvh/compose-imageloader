@@ -3,8 +3,8 @@ package com.seiko.imageloader.intercept
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
+import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.SuccessResult
 import io.github.aakira.napier.Napier
 
 class MemoryCacheInterceptor(
@@ -21,7 +21,7 @@ class MemoryCacheInterceptor(
         val memoryCacheValue = memoryCache[memoryCacheKey]
         if (memoryCacheValue != null) {
             Napier.d(tag = "Interceptor") { "read memory cache data:$data" }
-            return SuccessResult(
+            return ComposeImageResult(
                 request = request,
                 image = memoryCacheValue.image,
             )
@@ -29,7 +29,7 @@ class MemoryCacheInterceptor(
 
         val result = chain.proceed(request)
         when (result) {
-            is SuccessResult -> {
+            is ComposeImageResult -> {
                 memoryCache[memoryCacheKey] = MemoryValue(
                     image = result.image,
                 )

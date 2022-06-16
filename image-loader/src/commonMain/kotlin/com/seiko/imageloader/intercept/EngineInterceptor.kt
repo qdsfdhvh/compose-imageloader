@@ -1,13 +1,13 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.component.ComponentRegistry
-import com.seiko.imageloader.component.fetcher.FetchImageResult
+import com.seiko.imageloader.component.fetcher.FetchPainterResult
 import com.seiko.imageloader.component.fetcher.FetchResult
 import com.seiko.imageloader.component.fetcher.FetchSourceResult
+import com.seiko.imageloader.request.ComposePainterResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.request.SuccessResult
 
 class EngineInterceptor : Interceptor {
 
@@ -20,9 +20,9 @@ class EngineInterceptor : Interceptor {
                 mimeType = fetchResult.mimeType,
                 metadata = fetchResult.metadata,
             )
-            is FetchImageResult -> SuccessResult(
+            is FetchPainterResult -> ComposePainterResult(
                 request = request,
-                image = fetchResult.image,
+                painter = fetchResult.painter,
             )
         }
     }

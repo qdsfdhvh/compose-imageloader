@@ -2,11 +2,13 @@ package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.decoder.DecodeImageResult
+import com.seiko.imageloader.component.decoder.DecodePainterResult
 import com.seiko.imageloader.component.decoder.DecoderResult
+import com.seiko.imageloader.request.ComposeImageResult
+import com.seiko.imageloader.request.ComposePainterResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.request.SuccessResult
 
 class DecodeInterceptor : Interceptor {
 
@@ -15,9 +17,13 @@ class DecodeInterceptor : Interceptor {
         return when (val result = chain.proceed(request)) {
             is SourceResult -> {
                 when (val decodeResult = decode(components, result, options)) {
-                    is DecodeImageResult -> SuccessResult(
+                    is DecodeImageResult -> ComposeImageResult(
                         request = request,
                         image = decodeResult.image,
+                    )
+                    is DecodePainterResult -> ComposePainterResult(
+                        request = request,
+                        painter = decodeResult.painter,
                     )
                 }
             }
