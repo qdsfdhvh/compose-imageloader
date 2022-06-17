@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "io.github.qdsfdhvh"
-version = "1.0.3"
+version = "1.0.4"
 
 kotlin {
     android {
