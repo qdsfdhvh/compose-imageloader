@@ -53,6 +53,20 @@ fun rememberAsyncImagePainter(
 
 @Composable
 fun rememberAsyncImagePainter(
+    resId: Int,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+): AsyncImagePainter {
+    val request = remember(resId) { ImageRequestBuilder().data(resId).build() }
+    return rememberAsyncImagePainter(
+        request = request,
+        imageLoader = imageLoader,
+        contentScale = contentScale,
+    )
+}
+
+@Composable
+fun rememberAsyncImagePainter(
     request: ImageRequest,
     imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
