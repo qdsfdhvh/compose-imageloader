@@ -10,12 +10,10 @@ plugins {
 }
 
 group = "io.github.qdsfdhvh"
-version = "1.0.0"
+version = "1.0.1"
 
 kotlin {
-    android {
-        publishLibraryVariants("release", "debug")
-    }
+    android()
     jvm()
     ios()
     iosArm64()
