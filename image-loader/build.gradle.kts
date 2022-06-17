@@ -34,7 +34,7 @@ kotlin {
         val androidMain by getting {
             kotlin.srcDir("src/androidMain/gif")
             dependencies {
-                implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
+                implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
                 implementation("androidx.core:core-ktx:1.8.0")
                 implementation("androidx.compose.ui:ui-graphics:${Versions.compose}")
@@ -47,7 +47,7 @@ kotlin {
         }
         val jvmMain by sourceSets.getting {
             dependencies {
-                implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
+                implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
                 // svg
                 implementation("com.twelvemonkeys.imageio:imageio-batik:3.8.2")

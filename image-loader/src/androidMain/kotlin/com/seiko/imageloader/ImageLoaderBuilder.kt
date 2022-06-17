@@ -25,7 +25,7 @@ import com.seiko.imageloader.component.mapper.ResourceUriMapper
 import com.seiko.imageloader.component.mapper.StringMapper
 import com.seiko.imageloader.request.Options
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.okhttp.OkHttp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -33,7 +33,7 @@ actual class ImageLoaderBuilder constructor(context: Context) : CommonImageLoade
 
     private val context = context.applicationContext
 
-    override var httpClient: Lazy<HttpClient> = lazy { HttpClient(CIO) }
+    override var httpClient: Lazy<HttpClient> = lazy { HttpClient(OkHttp) }
     override var requestDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     actual fun build(): ImageLoader {
