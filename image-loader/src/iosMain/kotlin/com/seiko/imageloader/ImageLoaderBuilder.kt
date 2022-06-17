@@ -31,8 +31,9 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
         return RealImageLoader(
             components = components,
             options = options ?: Options(),
-            interceptors = interceptors,
             requestDispatcher = requestDispatcher,
+            imageScope = imageScope,
+            interceptors = interceptors,
             memoryCache = memoryCache,
             diskCache = diskCache,
         )

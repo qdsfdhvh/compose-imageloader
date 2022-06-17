@@ -17,10 +17,12 @@ import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 
 @Immutable
 interface ImageLoader {
+    val imageScope: CoroutineScope
     suspend fun execute(request: ImageRequest): ImageResult
 }
 
@@ -29,6 +31,7 @@ class RealImageLoader(
     private val components: ComponentRegistry,
     private val options: Options,
     private val requestDispatcher: CoroutineDispatcher,
+    override val imageScope: CoroutineScope,
     interceptors: List<Interceptor>,
     memoryCache: Lazy<MemoryCache>,
     diskCache: Lazy<DiskCache>?,

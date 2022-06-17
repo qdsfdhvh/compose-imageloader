@@ -8,6 +8,9 @@ import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.request.Options
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 expect class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder> {
     fun build(): ImageLoader
@@ -23,6 +26,7 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
     protected var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder().build() }
     protected var diskCache: Lazy<DiskCache>? = null
     protected abstract var requestDispatcher: CoroutineDispatcher
+    protected var imageScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     private inline fun apply(block: () -> Unit): B {
         block()
@@ -56,5 +60,9 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
 
     fun requestDispatcher(dispatcher: CoroutineDispatcher) = apply {
         this.requestDispatcher = dispatcher
+    }
+
+    fun imageScope(scope: CoroutineScope) = apply {
+        this.imageScope = scope
     }
 }

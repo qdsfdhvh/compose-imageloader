@@ -67,8 +67,9 @@ actual class ImageLoaderBuilder constructor(context: Context) : CommonImageLoade
         return RealImageLoader(
             components = components,
             options = options ?: Options(),
-            interceptors = interceptors,
             requestDispatcher = requestDispatcher,
+            imageScope = imageScope,
+            interceptors = interceptors,
             memoryCache = memoryCache,
             diskCache = diskCache,
         )
