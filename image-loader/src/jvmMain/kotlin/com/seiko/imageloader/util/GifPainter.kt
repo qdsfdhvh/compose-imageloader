@@ -8,34 +8,31 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Codec
 
-internal class GifPainter(private val codec: Codec) : Painter(), RememberObserver {
+internal class GifPainter(
+    private val codec: Codec,
+    private val imageScope: CoroutineScope,
+) : Painter(), RememberObserver {
 
     private var frameIndex = mutableStateOf(0)
     private var bitmapCache: Bitmap? = null
 
-    private var rememberScope: CoroutineScope? = null
+    private var rememberJob: Job? = null
 
     override val intrinsicSize: Size
         get() = Size(codec.width.toFloat(), codec.height.toFloat())
 
     override fun onRemembered() {
         // Short circuit if we're already remembered.
-        if (rememberScope != null) return
+        if (rememberJob != null) return
 
-        // Create a new scope to observe state and execute requests while we're remembered.
-        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        rememberScope = scope
-
-        scope.launch {
+        rememberJob = imageScope.launch {
             while (isActive) {
                 for ((index, frame) in codec.framesInfo.withIndex()) {
                     frameIndex.value = index
@@ -54,9 +51,9 @@ internal class GifPainter(private val codec: Codec) : Painter(), RememberObserve
     }
 
     private fun clear() {
-        if (rememberScope == null) return
-        rememberScope?.cancel()
-        rememberScope = null
+        if (rememberJob == null) return
+        rememberJob?.cancel()
+        rememberJob = null
     }
 
     override fun DrawScope.onDraw() {

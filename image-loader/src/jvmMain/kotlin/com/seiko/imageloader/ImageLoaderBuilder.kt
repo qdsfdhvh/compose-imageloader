@@ -27,7 +27,7 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             .add(KtorUrlFetcher.Factory(httpClient))
             .add(FileFetcher.Factory())
             // Decoders
-            .add(GifDecoder.Factory())
+            .add(GifDecoder.Factory(imageScope))
             .add(ImageIODecoder.Factory())
             .build()
 

@@ -26,11 +26,8 @@ import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
 import com.seiko.imageloader.size.SizeResolver
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -73,7 +70,7 @@ class AsyncImagePainter(
     imageLoader: ImageLoader,
 ) : Painter(), RememberObserver {
 
-    private var rememberScope: CoroutineScope? = null
+    private var rememberJob: Job? = null
     private val drawSize = MutableStateFlow(Size.Zero)
 
     private var painter: Painter? by mutableStateOf(null)
@@ -115,19 +112,15 @@ class AsyncImagePainter(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onRemembered() {
         // Short circuit if we're already remembered.
-        if (rememberScope != null) return
-
-        // Create a new scope to observe state and execute requests while we're remembered.
-        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        rememberScope = scope
+        if (rememberJob != null) return
 
         // Manually notify the child painter that we're remembered.
         (painter as? RememberObserver)?.onRemembered()
 
-        snapshotFlow { request }
+        rememberJob = snapshotFlow { request }
             .mapLatest { imageLoader.execute(updateRequest(request)) }
             .onEach(::updateImage)
-            .launchIn(scope)
+            .launchIn(imageLoader.imageScope)
     }
 
     override fun onForgotten() {
@@ -141,8 +134,8 @@ class AsyncImagePainter(
     }
 
     private fun clear() {
-        rememberScope?.cancel()
-        rememberScope = null
+        rememberJob?.cancel()
+        rememberJob = null
     }
 
     private fun updateRequest(request: ImageRequest): ImageRequest {
@@ -185,7 +178,7 @@ class AsyncImagePainter(
         val previous = this.painter
         this.painter = painter
 
-        if (rememberScope != null && previous != painter) {
+        if (rememberJob != null && previous != painter) {
             (previous as? RememberObserver)?.onForgotten()
             (painter as? RememberObserver)?.onRemembered()
         }
