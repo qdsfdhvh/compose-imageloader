@@ -7,6 +7,7 @@ import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ImageResult
 import io.github.aakira.napier.Napier
 
+// TODO support memory cache
 class MemoryCacheInterceptor(
     private val memoryCache: Lazy<MemoryCache>,
 ) : Interceptor {
