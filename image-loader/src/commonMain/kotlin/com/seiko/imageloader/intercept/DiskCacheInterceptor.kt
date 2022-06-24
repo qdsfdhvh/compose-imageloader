@@ -46,6 +46,7 @@ class DiskCacheInterceptor(
                     )
                 }
             }
+            else -> Unit
         }
         return result
     }

@@ -12,7 +12,6 @@ import androidx.compose.ui.geometry.isUnspecified
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.request.ComposeImageResult
@@ -21,6 +20,7 @@ import com.seiko.imageloader.request.ErrorResult
 import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageRequestBuilder
 import com.seiko.imageloader.request.ImageResult
+import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.size.Dimension
 import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
@@ -180,11 +180,12 @@ class AsyncImagePainter(
                 updatePainter(input.painter)
             }
             is ComposeImageResult -> {
-                updatePainter(BitmapPainter(input.image))
+                updatePainter(input.image.toPainter())
             }
             is ErrorResult -> {
                 Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error" }
             }
+            is SourceResult -> Unit
         }
     }
 

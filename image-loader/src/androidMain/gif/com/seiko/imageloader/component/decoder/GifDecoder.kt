@@ -26,7 +26,7 @@ import okio.source
  * @param enforceMinimumFrameDelay If true, rewrite a GIF's frame delay to a default value if
  *  it is below a threshold. See https://github.com/coil-kt/coil/issues/540 for more info.
  */
-class GifDecoder @JvmOverloads constructor(
+internal class GifDecoder @JvmOverloads constructor(
     private val source: SourceResult,
     private val options: Options,
     private val enforceMinimumFrameDelay: Boolean = true

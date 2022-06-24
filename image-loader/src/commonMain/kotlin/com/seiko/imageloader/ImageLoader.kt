@@ -39,7 +39,7 @@ class RealImageLoader(
 
     private val interceptors = interceptors + listOfNotNull(
         MappedInterceptor(),
-        MemoryCacheInterceptor(memoryCache),
+        if (supportImageMemoryCache) MemoryCacheInterceptor(memoryCache) else null,
         DecodeInterceptor(),
         diskCache?.let { DiskCacheInterceptor(it) },
         EngineInterceptor(),

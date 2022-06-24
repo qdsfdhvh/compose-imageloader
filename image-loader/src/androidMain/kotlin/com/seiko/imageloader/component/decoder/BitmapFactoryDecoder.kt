@@ -16,7 +16,6 @@ import com.seiko.imageloader.util.ExifUtils
 import com.seiko.imageloader.util.isRotated
 import com.seiko.imageloader.util.isSwapped
 import com.seiko.imageloader.util.toBitmapConfig
-import com.seiko.imageloader.util.toPainter
 import com.seiko.imageloader.util.toSoftware
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.coroutines.runInterruptible
@@ -83,8 +82,8 @@ class BitmapFactoryDecoder constructor(
         // Reverse the EXIF transformations to get the original image.
         val bitmap = ExifUtils.reverseTransformations(outBitmap, exifData)
 
-        return DecodePainterResult(
-            painter = bitmap.toPainter(),
+        return DecodeImageResult(
+            image = bitmap
         )
     }
 

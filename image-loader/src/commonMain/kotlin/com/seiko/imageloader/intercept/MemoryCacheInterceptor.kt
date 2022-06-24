@@ -35,6 +35,7 @@ class MemoryCacheInterceptor(
                     image = result.image,
                 )
             }
+            else -> Unit
         }
         return result
     }
