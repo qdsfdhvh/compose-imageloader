@@ -1,7 +1,9 @@
 package com.seiko.imageloader
 
+import androidx.compose.ui.unit.Density
 import com.seiko.imageloader.component.decoder.GifDecoder
-import com.seiko.imageloader.component.decoder.ImageIODecoder
+import com.seiko.imageloader.component.decoder.SkiaImageDecoder
+import com.seiko.imageloader.component.decoder.SvgDecoder
 import com.seiko.imageloader.component.fetcher.FileFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.keyer.KtorUlKeyer
@@ -16,6 +18,11 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
 
     override var httpClient: Lazy<HttpClient> = lazy { HttpClient(OkHttp) }
     override var requestDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private var density: Density? = null
+
+    fun density(density: Density) = apply {
+        this.density = density
+    }
 
     actual fun build(): ImageLoader {
         val components = componentBuilder
@@ -27,8 +34,9 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             .add(KtorUrlFetcher.Factory(httpClient))
             .add(FileFetcher.Factory())
             // Decoders
+            .add(SvgDecoder.Factory(density ?: Density(1f)))
             .add(GifDecoder.Factory(imageScope))
-            .add(ImageIODecoder.Factory())
+            .add(SkiaImageDecoder.Factory())
             .build()
 
         return RealImageLoader(
