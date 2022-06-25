@@ -2,7 +2,7 @@ package com.seiko.imageloader.component.fetcher
 
 import android.graphics.Bitmap
 import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.util.toPainter
+import com.seiko.imageloader.toPainter
 
 class BitmapFetcher(
     private val data: Bitmap,
