@@ -8,10 +8,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import okio.BufferedSource
-import okio.FileSystem
-import okio.Path
-import okio.buffer
-import okio.use
 import kotlin.coroutines.CoroutineContext
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -34,25 +30,3 @@ internal fun BufferedSource.toByteReadChannel(
         close()
     }
 }.channel
-
-suspend fun ByteReadChannel.saveTo(
-    path: Path,
-    fileSystem: FileSystem,
-    pool: ObjectPool<ByteArray> = ByteArrayPool,
-) {
-    val buffer = pool.borrow()
-    fileSystem.sink(path).buffer().use { sink ->
-        try {
-            while (true) {
-                val readCount = readAvailable(buffer, 0, buffer.size)
-                if (readCount < 0) break
-                if (readCount == 0) continue
-                sink.write(buffer, 0, readCount)
-            }
-        } catch (cause: Throwable) {
-            cause.printStackTrace()
-        } finally {
-            pool.recycle(buffer)
-        }
-    }
-}

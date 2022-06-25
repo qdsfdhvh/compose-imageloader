@@ -1,6 +1,9 @@
 package com.seiko.imageloader.util
 
 import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlin.native.ref.WeakReference
+
+actual typealias WeakReference<T> = WeakReference<T>
 
 actual typealias LockObject = SynchronizedObject
 
