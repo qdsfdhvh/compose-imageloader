@@ -5,18 +5,17 @@ import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.util.SVGPainter
 import com.seiko.imageloader.util.isSvg
-import io.ktor.util.toByteArray
-import io.ktor.utils.io.ByteReadChannel
+import okio.BufferedSource
 import org.jetbrains.skia.Data
 import org.jetbrains.skia.svg.SVGDOM
 
 class SvgDecoder(
     private val density: Density,
-    private val channel: ByteReadChannel,
+    private val channel: BufferedSource,
 ) : Decoder {
 
     override suspend fun decode(): DecoderResult {
-        val data = Data.makeFromBytes(channel.toByteArray())
+        val data = Data.makeFromBytes(channel.readByteArray())
         return DecodePainterResult(
             painter = SVGPainter(SVGDOM(data), density),
         )

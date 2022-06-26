@@ -1,15 +1,21 @@
 package com.seiko.imageloader.component.fetcher
 
 import com.seiko.imageloader.request.Options
-import io.ktor.utils.io.ByteReadChannel
+import okio.Buffer
 import java.nio.ByteBuffer
 
 class ByteBufferFetcher(
     private val data: ByteBuffer,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
+        val source = try {
+            Buffer().apply { write(data) }
+        } finally {
+            // Reset the position so we can read the byte buffer again.
+            data.position(0)
+        }
         return FetchSourceResult(
-            source = ByteReadChannel(data),
+            source = source,
             mimeType = null,
         )
     }

@@ -1,13 +1,14 @@
 package com.seiko.imageloader.component.fetcher
 
 import com.seiko.imageloader.request.Options
-import io.ktor.utils.io.jvm.javaio.toByteReadChannel
+import okio.buffer
+import okio.source
 import java.io.File
 
 internal class FileFetcher(private val data: File) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return FetchSourceResult(
-            source = data.inputStream().toByteReadChannel(),
+            source = data.source().buffer(),
             mimeType = null,
         )
     }

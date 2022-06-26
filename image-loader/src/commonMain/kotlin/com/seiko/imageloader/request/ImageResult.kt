@@ -2,7 +2,7 @@ package com.seiko.imageloader.request
 
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Image
-import io.ktor.utils.io.ByteReadChannel
+import okio.BufferedSource
 
 sealed interface ImageResult {
     val request: ImageRequest
@@ -10,7 +10,7 @@ sealed interface ImageResult {
 
 data class SourceResult(
     override val request: ImageRequest,
-    val channel: ByteReadChannel,
+    val channel: BufferedSource,
     val mimeType: String? = null,
     val metadata: Any? = null,
 ) : ImageResult

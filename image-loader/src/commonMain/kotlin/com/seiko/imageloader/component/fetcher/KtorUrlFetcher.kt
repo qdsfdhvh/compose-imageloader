@@ -1,6 +1,7 @@
 package com.seiko.imageloader.component.fetcher
 
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.source
 import io.ktor.client.HttpClient
 import io.ktor.client.request.request
 import io.ktor.client.request.url
@@ -18,7 +19,7 @@ class KtorUrlFetcher(
             url(httpUrl)
         }
         return FetchSourceResult(
-            source = response.bodyAsChannel(),
+            source = response.bodyAsChannel().source(),
             mimeType = response.contentType()?.toString(),
         )
     }

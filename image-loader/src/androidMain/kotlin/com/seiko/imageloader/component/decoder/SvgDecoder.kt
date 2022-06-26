@@ -10,12 +10,11 @@ import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.size.Scale
 import com.seiko.imageloader.size.isOriginal
 import com.seiko.imageloader.size.toPx
+import com.seiko.imageloader.toPainter
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.isSvg
 import com.seiko.imageloader.util.toBitmapConfig
-import com.seiko.imageloader.util.toPainter
 import com.seiko.imageloader.util.toSoftware
-import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.coroutines.runInterruptible
 import kotlin.math.roundToInt
 
@@ -33,7 +32,7 @@ class SvgDecoder @JvmOverloads constructor(
 ) : Decoder {
 
     override suspend fun decode() = runInterruptible {
-        val svg = SVG.getFromInputStream(source.channel.toInputStream())
+        val svg = SVG.getFromInputStream(source.channel.inputStream())
 
         val svgWidth: Float
         val svgHeight: Float

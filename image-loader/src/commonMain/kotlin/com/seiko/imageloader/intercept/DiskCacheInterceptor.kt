@@ -4,10 +4,7 @@ import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.util.saveTo
-import com.seiko.imageloader.util.toByteReadChannel
-import io.github.aakira.napier.Napier
-import io.ktor.utils.io.ByteReadChannel
+import okio.BufferedSource
 import okio.buffer
 
 class DiskCacheInterceptor(
@@ -35,12 +32,11 @@ class DiskCacheInterceptor(
         val result = chain.proceed(request)
         when (result) {
             is SourceResult -> {
-                Napier.d { "get image from network" }
-                snapshot = writeToDiskCache(snapshot, cacheKey, result.channel)
-                if (snapshot != null && options.diskCachePolicy.writeEnabled) {
+                snapshot = writeToDiskCache(options, cacheKey, snapshot, result.channel)
+                if (snapshot != null) {
                     return SourceResult(
                         request = request,
-                        channel = snapshot.toByteReadChannel(),
+                        channel = snapshot.source(),
                         mimeType = result.mimeType,
                         metadata = result.metadata,
                     )
@@ -57,14 +53,21 @@ class DiskCacheInterceptor(
         } else null
     }
 
-    private suspend fun writeToDiskCache(
-        snapshot: DiskCache.Snapshot?,
+    private fun writeToDiskCache(
+        options: Options,
         cacheKey: String,
-        channel: ByteReadChannel,
+        snapshot: DiskCache.Snapshot?,
+        source: BufferedSource,
     ): DiskCache.Snapshot? {
+        if (!options.diskCachePolicy.writeEnabled) {
+            snapshot?.close()
+            return null
+        }
         val editor = snapshot?.closeAndEdit() ?: diskCache.value.edit(cacheKey) ?: return null
         try {
-            channel.saveTo(editor.data, fileSystem)
+            fileSystem.write(editor.data) {
+                source
+            }
             return editor.commitAndGet()
         } catch (e: Exception) {
             editor.abortQuietly()
@@ -72,8 +75,8 @@ class DiskCacheInterceptor(
         }
     }
 
-    private fun DiskCache.Snapshot.toByteReadChannel(): ByteReadChannel {
-        return fileSystem.source(data).buffer().toByteReadChannel()
+    private fun DiskCache.Snapshot.source(): BufferedSource {
+        return fileSystem.source(data).buffer()
     }
 }
 
