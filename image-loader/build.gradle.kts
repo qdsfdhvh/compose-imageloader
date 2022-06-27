@@ -45,20 +45,25 @@ kotlin {
                 implementation("com.caverock:androidsvg-aar:1.4")
             }
         }
-        val jvmMain by sourceSets.getting {
+        val skiaMain by creating {
+            dependsOn(commonMain)
+        }
+        val jvmMain by getting {
+            dependsOn(skiaMain)
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }
-        val iosMain by sourceSets.getting {
+        val iosMain by getting {
+            dependsOn(skiaMain)
             dependencies {
                 // why not CIO https://github.com/joreilly/PeopleInSpace/issues/69
                 implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
             }
         }
-        val iosArm64Main by sourceSets.getting
-        val iosX64Main by sourceSets.getting
+        val iosArm64Main by getting
+        val iosX64Main by getting
     }
 }
 
