@@ -27,8 +27,6 @@ import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toPainter
 import io.github.aakira.napier.Napier
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.jvm.javaio.toInputStream
 import okio.BufferedSource
 import okio.buffer
 import okio.source
@@ -92,14 +90,13 @@ class ImageDecoderDecoder @JvmOverloads constructor(
         return DecodePainterResult(wrapDrawable(drawable).toPainter())
     }
 
-    private suspend fun wrapBufferedSource(channel: ByteReadChannel): BufferedSource {
-        val bufferSource = channel.toInputStream().source().buffer()
+    private fun wrapBufferedSource(channel: BufferedSource): BufferedSource {
         return if (enforceMinimumFrameDelay && isGif(channel)) {
             // Wrap the source to rewrite its frame delay as it's read.
-            val rewritingSource = FrameDelayRewritingSource(bufferSource)
+            val rewritingSource = FrameDelayRewritingSource(channel)
             rewritingSource.buffer()
         } else {
-            bufferSource
+            channel
         }
     }
 
@@ -182,7 +179,7 @@ class ImageDecoderDecoder @JvmOverloads constructor(
             return ImageDecoderDecoder(context, source, options, enforceMinimumFrameDelay)
         }
 
-        private suspend fun isApplicable(source: ByteReadChannel): Boolean {
+        private suspend fun isApplicable(source: BufferedSource): Boolean {
             return isGif(source) || isAnimatedWebP(source) || (SDK_INT >= 30 && isAnimatedHeif(source))
         }
 

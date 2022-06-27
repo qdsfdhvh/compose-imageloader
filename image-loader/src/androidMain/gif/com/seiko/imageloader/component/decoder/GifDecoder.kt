@@ -12,7 +12,6 @@ import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toPainter
-import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import okio.buffer
@@ -33,7 +32,7 @@ internal class GifDecoder @JvmOverloads constructor(
 ) : Decoder {
 
     override suspend fun decode() = runInterruptible {
-        val bufferSource = source.channel.toInputStream().source().buffer()
+        val bufferSource = source.channel
         val bufferedSource: BufferedSource = if (enforceMinimumFrameDelay) {
             FrameDelayRewritingSource(bufferSource).buffer()
         } else {
