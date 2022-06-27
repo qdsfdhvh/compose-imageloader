@@ -1,6 +1,7 @@
 package com.seiko.imageloader
 
 import androidx.compose.ui.unit.Density
+import com.seiko.imageloader.component.decoder.GifDecoder
 import com.seiko.imageloader.component.decoder.SkiaImageDecoder
 import com.seiko.imageloader.component.decoder.SvgDecoder
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
@@ -33,6 +34,7 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             // .add(FileFetcher.Factory())
             // Decoders
             .add(SvgDecoder.Factory(density ?: Density(1f)))
+            .add(GifDecoder.Factory(imageScope))
             .add(SkiaImageDecoder.Factory())
             .build()
 

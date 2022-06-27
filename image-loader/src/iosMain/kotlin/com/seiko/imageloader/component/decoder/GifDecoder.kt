@@ -5,7 +5,6 @@ import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.util.GifPainter
 import com.seiko.imageloader.util.isGif
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import org.jetbrains.skia.Codec
 import org.jetbrains.skia.Data
