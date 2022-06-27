@@ -23,7 +23,7 @@ class DiskCacheInterceptor(
         if (snapshot != null) {
             return SourceResult(
                 request = request,
-                channel = snapshot.toByteReadChannel(),
+                channel = snapshot.source(),
                 mimeType = null,
                 metadata = null,
             )
@@ -66,7 +66,7 @@ class DiskCacheInterceptor(
         val editor = snapshot?.closeAndEdit() ?: diskCache.value.edit(cacheKey) ?: return null
         try {
             fileSystem.write(editor.data) {
-                source
+                writeAll(source)
             }
             return editor.commitAndGet()
         } catch (e: Exception) {

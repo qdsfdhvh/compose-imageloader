@@ -23,14 +23,7 @@ class SvgDecoder(
         private val density: Density,
     ) : Decoder.Factory {
         override suspend fun create(source: SourceResult, options: Options): Decoder? {
-            // Napier.d { "check ${source.request.data} is svg?" }
-            if (!isSvg(source.channel.peek())) {
-                Napier.d { "${source.request.data} not svg" }
-                val str = source.channel.peek().readByteString(50)
-                Napier.d { "bad source: ${str.toString()}" }
-                return null
-            }
-            // Napier.d { "${source.request.data} is svg" }
+            if (!isSvg(source.channel)) return null
             return SvgDecoder(density, source.channel)
         }
     }

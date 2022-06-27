@@ -183,7 +183,7 @@ class AsyncImagePainter(
                 updatePainter(input.image.toPainter())
             }
             is ErrorResult -> {
-                Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error" }
+                Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error data: ${input.request.data}" }
             }
             is SourceResult -> Unit
         }
