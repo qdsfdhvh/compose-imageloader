@@ -14,7 +14,7 @@ version = "1.0.5"
 
 kotlin {
     android {
-        publishLibraryVariants("release", "debug")
+        publishLibraryVariants("release")
     }
     jvm()
     ios()
