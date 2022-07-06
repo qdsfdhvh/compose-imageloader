@@ -30,15 +30,20 @@ import androidx.compose.ui.window.Application
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
+import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
-import kotlinx.cinterop.ObjCObjectBase
 import kotlinx.cinterop.autoreleasepool
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.toCValues
+import okio.Path
+import okio.Path.Companion.toPath
+import platform.Foundation.NSCachesDirectory
+import platform.Foundation.NSFileManager
 import platform.Foundation.NSStringFromClass
+import platform.Foundation.NSUserDomainMask
 import platform.UIKit.UIApplication
 import platform.UIKit.UIApplicationDelegateProtocol
 import platform.UIKit.UIApplicationDelegateProtocolMeta
@@ -64,7 +69,7 @@ fun main() {
 class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
     companion object : UIResponderMeta(), UIApplicationDelegateProtocolMeta
 
-    @ObjCObjectBase.OverrideInit
+    @OverrideInit
     constructor() : super()
 
     private var _window: UIWindow? = null
@@ -73,24 +78,22 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
         _window = window
     }
 
-    override fun application(
-        application: UIApplication,
-        didFinishLaunchingWithOptions: Map<Any?, *>?,
-    ): Boolean {
-        window = UIWindow(frame = UIScreen.mainScreen.bounds)
-        window!!.rootViewController = Application("Compose ImageLoader") {
-            Column {
-                // To skip upper part of screen.
-                Spacer(modifier = Modifier.height(30.dp))
-                CompositionLocalProvider(
-                    LocalImageLoader provides generateImageLoader(),
-                    LocalResLoader provides ResLoader(),
-                ) {
-                    App()
+    override fun application(application: UIApplication, didFinishLaunchingWithOptions: Map<Any?, *>?): Boolean {
+        window = UIWindow(frame = UIScreen.mainScreen.bounds).apply {
+            rootViewController = Application("Compose ImageLoader") {
+                Column {
+                    // To skip upper part of screen.
+                    Spacer(modifier = Modifier.height(30.dp))
+                    CompositionLocalProvider(
+                        LocalImageLoader provides generateImageLoader(),
+                        LocalResLoader provides ResLoader(),
+                    ) {
+                        App()
+                    }
                 }
             }
+            makeKeyAndVisible()
         }
-        window!!.makeKeyAndVisible()
         return true
     }
 }
@@ -103,11 +106,17 @@ private fun generateImageLoader(): ImageLoader {
                 .maxSizePercent(0.25)
                 .build()
         }
-        // .diskCache {
-        //     DiskCacheBuilder()
-        //         .directory(getCacheDir().resolve("image_cache").toOkioPath())
-        //         .maxSizeBytes(512L * 1024 * 1024) // 512MB
-        //         .build()
-        // }
+        .diskCache {
+            DiskCacheBuilder()
+                .directory(getCacheDir().resolve("image_cache"))
+                .maxSizeBytes(512L * 1024 * 1024) // 512MB
+                .build()
+        }
         .build()
+}
+
+private fun getCacheDir(): Path {
+    return NSFileManager.defaultManager.URLForDirectory(
+        NSCachesDirectory, NSUserDomainMask, null, true, null
+    )!!.path.orEmpty().toPath()
 }
