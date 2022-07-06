@@ -108,15 +108,15 @@ private fun generateImageLoader(): ImageLoader {
         }
         .diskCache {
             DiskCacheBuilder()
-                .directory(getCacheDir().resolve("image_cache"))
+                .directory(getCacheDir().toPath().resolve("image_cache"))
                 .maxSizeBytes(512L * 1024 * 1024) // 512MB
                 .build()
         }
         .build()
 }
 
-private fun getCacheDir(): Path {
+private fun getCacheDir(): String {
     return NSFileManager.defaultManager.URLForDirectory(
         NSCachesDirectory, NSUserDomainMask, null, true, null
-    )!!.path.orEmpty().toPath()
+    )!!.path.orEmpty()
 }

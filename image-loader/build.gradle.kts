@@ -26,7 +26,7 @@ kotlin {
             dependencies {
                 api(compose.foundation)
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
-                api("com.squareup.okio:okio:3.1.0")
+                api("com.squareup.okio:okio:3.2.0")
                 api("io.ktor:ktor-client-core:${Versions.ktor}")
                 implementation("io.github.aakira:napier:2.6.1")
             }

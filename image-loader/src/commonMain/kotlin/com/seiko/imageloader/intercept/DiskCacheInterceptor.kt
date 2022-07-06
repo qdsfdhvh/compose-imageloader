@@ -4,6 +4,7 @@ import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.util.closeQuietly
 import io.github.aakira.napier.Napier
 import okio.BufferedSource
 import okio.buffer
@@ -74,6 +75,8 @@ class DiskCacheInterceptor(
         } catch (e: Exception) {
             editor.abortQuietly()
             throw e
+        } finally {
+            source.closeQuietly()
         }
     }
 
