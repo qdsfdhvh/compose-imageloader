@@ -1,25 +1,10 @@
-
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose") version Versions.compose_jb
-    // id("com.rickclephas.kmp.nativecoroutines") version "0.12.2-new-mm"
 }
 
 kotlin {
-    iosX64("uikitX64") {
-        binaries {
-            executable {
-                entryPoint = "com.seiko.imageloader.demo.main"
-                freeCompilerArgs = freeCompilerArgs + listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal",
-                    "-linker-option", "-framework", "-linker-option", "CoreText",
-                    "-linker-option", "-framework", "-linker-option", "CoreGraphics"
-                )
-            }
-        }
-    }
-    iosArm64("uikitArm64") {
+    ios("uikit") {
         binaries {
             executable {
                 entryPoint = "com.seiko.imageloader.demo.main"
@@ -34,16 +19,10 @@ kotlin {
         }
     }
     sourceSets {
-        val uikitMain by creating {
+        val uikitMain by getting {
             dependencies {
                 implementation(projects.app.common)
             }
-        }
-        val uikitX64Main by getting {
-            dependsOn(uikitMain)
-        }
-        val uikitArm64Main by getting {
-            dependsOn(uikitMain)
         }
     }
 }
@@ -51,7 +30,13 @@ kotlin {
 compose.experimental {
     uikit.application {
         bundleIdPrefix = "com.seiko.imageloader.demo"
-        projectName = "Compose ImageLoader"
+        projectName = "ComposeImageLoader"
+        // ./gradlew :app:ios:iosDeployIPhone13Debug
+        deployConfigurations {
+            simulator("IPhone13") {
+                device = org.jetbrains.compose.experimental.dsl.IOSDevices.IPHONE_13
+            }
+        }
     }
 }
 
@@ -62,11 +47,4 @@ kotlin {
             freeCompilerArgs = freeCompilerArgs + "-Xdisable-phases=VerifyBitcode"
         }
     }
-}
-
-// TODO: remove when https://youtrack.jetbrains.com/issue/KT-50778 fixed
-project.tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile::class.java).configureEach {
-    kotlinOptions.freeCompilerArgs += listOf(
-        "-Xir-dce-runtime-diagnostic=log"
-    )
 }
