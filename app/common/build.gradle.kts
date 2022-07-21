@@ -12,9 +12,10 @@ plugins {
 kotlin {
     android()
     jvm()
-    ios()
     iosX64()
     iosArm64()
+    macosX64()
+    macosArm64()
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -29,15 +30,21 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}")
             }
         }
-        val androidMain by getting {
-            dependencies {
-                // implementation("androidx.compose.foundation:foundation:${Versions.compose}")
-            }
+        val androidMain by getting
+        val jvmMain by getting
+        val appleMain by creating
+        val iosX64Main by getting {
+            dependsOn(appleMain)
         }
-        val jvmMain by sourceSets.getting
-        val iosMain by sourceSets.getting
-        val iosArm64Main by sourceSets.getting
-        val iosX64Main by sourceSets.getting
+        val iosArm64Main by getting {
+            dependsOn(appleMain)
+        }
+        val macosX64Main by getting {
+            dependsOn(appleMain)
+        }
+        val macosArm64Main by getting {
+            dependsOn(appleMain)
+        }
     }
 }
 

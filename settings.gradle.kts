@@ -23,6 +23,7 @@ include(
     ":app:android",
     ":app:desktop",
     ":app:ios",
+    ":app:macos",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

@@ -14,12 +14,12 @@ version = "1.0.6"
 
 kotlin {
     android {
-        publishLibraryVariants("release")
+        publishLibraryVariants("debug", "release")
     }
     jvm()
     ios()
-    iosArm64()
-    iosX64()
+    macosX64()
+    macosArm64()
     sourceSets {
         val commonMain by getting {
             kotlin.srcDir("src/commonMain/compose")
@@ -55,15 +55,21 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }
-        val iosMain by getting {
+        val appleMain by creating {
             dependsOn(skiaMain)
             dependencies {
-                // why not CIO https://github.com/joreilly/PeopleInSpace/issues/69
                 implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
             }
         }
-        val iosArm64Main by getting
-        val iosX64Main by getting
+        val iosMain by getting {
+            dependsOn(appleMain)
+        }
+        val macosX64Main by getting {
+            dependsOn(appleMain)
+        }
+        val macosArm64Main by getting {
+            dependsOn(appleMain)
+        }
     }
 }
 
