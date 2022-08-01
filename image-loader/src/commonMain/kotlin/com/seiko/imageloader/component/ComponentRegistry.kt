@@ -38,7 +38,7 @@ class ComponentRegistry internal constructor(
             val factory = fetcherFactories[index]
             factory.create(data, options)?.let { return it to index }
         }
-        error { "Unable to create a fetcher that supports: $data" }
+        throw RuntimeException("Unable to create a fetcher that supports: $data")
     }
 
     suspend fun decode(
@@ -50,6 +50,6 @@ class ComponentRegistry internal constructor(
             val factory = decoderFactories[index]
             factory.create(source, options)?.let { return it to index }
         }
-        error { "Unable to create a decoder that supports: $source" }
+        throw RuntimeException("Unable to create a decoder that supports: $source")
     }
 }
