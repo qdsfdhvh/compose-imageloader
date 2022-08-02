@@ -12,7 +12,7 @@ kotlin {
     android {
         publishLibraryVariants("debug", "release")
     }
-    jvm()
+    jvm("desktop")
     ios()
     macosX64()
     macosArm64()
@@ -44,27 +44,27 @@ kotlin {
         val skiaMain by creating {
             dependsOn(commonMain)
         }
-        val jvmMain by getting {
+        val desktopMain by getting {
             dependsOn(skiaMain)
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }
-        val appleMain by creating {
+        val darwinMain by creating {
             dependsOn(skiaMain)
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
             }
         }
         val iosMain by getting {
-            dependsOn(appleMain)
+            dependsOn(darwinMain)
         }
         val macosX64Main by getting {
-            dependsOn(appleMain)
+            dependsOn(darwinMain)
         }
         val macosArm64Main by getting {
-            dependsOn(appleMain)
+            dependsOn(darwinMain)
         }
     }
 }
