@@ -34,7 +34,7 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             .add(KtorUrlFetcher.Factory(httpClient))
             .add(FileFetcher.Factory())
             // Decoders
-            .add(SvgDecoder.Factory(density ?: Density(1f)))
+            .add(SvgDecoder.Factory(density ?: Density(2f)))
             .add(GifDecoder.Factory(imageScope))
             .add(SkiaImageDecoder.Factory())
             .build()
