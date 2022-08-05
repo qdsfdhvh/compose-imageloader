@@ -3,6 +3,7 @@ package com.seiko.imageloader.util
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
@@ -14,14 +15,15 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Codec
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class GifPainter(
     private val codec: Codec,
     private val imageScope: CoroutineScope,
 ) : Painter(), RememberObserver {
 
-    private var frameIndex = mutableStateOf(0)
     private var bitmapCache: Bitmap? = null
+    private var drawImageBitmap = mutableStateOf<ImageBitmap?>(null)
 
     private var rememberJob: Job? = null
 
@@ -32,11 +34,11 @@ internal class GifPainter(
         // Short circuit if we're already remembered.
         if (rememberJob != null) return
 
-        rememberJob = imageScope.launch {
+        rememberJob = imageScope.launch(ioDispatcher) {
             while (isActive) {
                 for ((index, frame) in codec.framesInfo.withIndex()) {
-                    frameIndex.value = index
-                    delay(frame.duration.toLong())
+                    drawImageBitmap.value = getImageBitmap(index)
+                    delay(frame.duration.milliseconds)
                 }
             }
         }
@@ -54,13 +56,21 @@ internal class GifPainter(
         if (rememberJob == null) return
         rememberJob?.cancel()
         rememberJob = null
+        bitmapCache = null
+        drawImageBitmap.value = null
     }
 
     override fun DrawScope.onDraw() {
+        drawImageBitmap.value?.let {
+            val intSize = IntSize(size.width.toInt(), size.height.toInt())
+            drawImage(it, dstSize = intSize)
+        }
+    }
+
+    private fun getImageBitmap(frameIndex: Int): ImageBitmap {
         val bitmap = recycleBitmap(codec)
-        codec.readPixels(bitmap, frameIndex.value)
-        val intSize = IntSize(size.width.toInt(), size.height.toInt())
-        drawImage(bitmap.asComposeImageBitmap(), dstSize = intSize)
+        codec.readPixels(bitmap, frameIndex)
+        return bitmap.asComposeImageBitmap()
     }
 
     private fun recycleBitmap(codec: Codec): Bitmap {

@@ -34,7 +34,6 @@ actual class ImageLoaderBuilder constructor(context: Context) : CommonImageLoade
     private val context = context.applicationContext
 
     override var httpClient: Lazy<HttpClient> = lazy { HttpClient(OkHttp) }
-    override var requestDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     actual fun build(): ImageLoader {
         val components = componentBuilder

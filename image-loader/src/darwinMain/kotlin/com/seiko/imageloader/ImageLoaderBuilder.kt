@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 
     override var httpClient: Lazy<HttpClient> = lazy { HttpClient(Darwin) }
-    override var requestDispatcher: CoroutineDispatcher = Dispatchers.Default
     private var density: Density? = null
 
     fun density(density: Density) = apply {

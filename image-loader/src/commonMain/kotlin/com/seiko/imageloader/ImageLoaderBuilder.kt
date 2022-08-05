@@ -6,6 +6,7 @@ import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.ioDispatcher
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,7 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
     protected abstract var httpClient: Lazy<HttpClient>
     protected var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder().build() }
     protected var diskCache: Lazy<DiskCache>? = null
-    protected abstract var requestDispatcher: CoroutineDispatcher
+    protected var requestDispatcher: CoroutineDispatcher = ioDispatcher
     protected var imageScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     private inline fun apply(block: () -> Unit): B {
