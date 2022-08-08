@@ -11,8 +11,6 @@ import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.request.Options
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 
 actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 
