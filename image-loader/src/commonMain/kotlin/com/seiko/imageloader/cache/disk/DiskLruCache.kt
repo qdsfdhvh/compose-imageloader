@@ -126,7 +126,7 @@ internal class DiskLruCache(
     private val journalFile = directory / JOURNAL_FILE
     private val journalFileTmp = directory / JOURNAL_FILE_TMP
     private val journalFileBackup = directory / JOURNAL_FILE_BACKUP
-    private val lruEntries = LinkedHashMap<String, Entry>(0, 0.75f)
+    private val lruEntries = LinkedHashMap<String, Entry>(5, 0.75f)
     private val cleanupScope = CoroutineScope(SupervisorJob() + cleanupDispatcher.limitedParallelism(1))
     private var size = 0L
     private var operationsSinceRewrite = 0
