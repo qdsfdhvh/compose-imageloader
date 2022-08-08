@@ -1,6 +1,7 @@
 package com.seiko.imageloader.cache.disk
 
 import com.seiko.imageloader.cache.disk.DiskLruCache.Editor
+import com.seiko.imageloader.util.AtomicBoolean
 import com.seiko.imageloader.util.LockObject
 import com.seiko.imageloader.util.createFile
 import com.seiko.imageloader.util.deleteContents
@@ -671,18 +672,17 @@ internal class DiskLruCache(
     }
 
     /** A snapshot of the values for an entry. */
-    inner class Snapshot(val entry: Entry) : Closeable {
+    inner class Snapshot(private val entry: Entry) : Closeable {
 
-        private var closed = false
+        private val closed = AtomicBoolean(false)
 
         fun file(index: Int): Path {
-            check(!closed) { "snapshot is closed" }
+            check(!closed.get()) { "snapshot is closed" }
             return entry.cleanFiles[index]
         }
 
         override fun close() {
-            if (!closed) {
-                closed = true
+            if (closed.compareAndSet(expect = false, update = true)) {
                 synchronized(syncObject) {
                     entry.lockingSnapshotCount--
                     if (entry.lockingSnapshotCount == 0 && entry.zombie) {
@@ -859,6 +859,6 @@ internal class DiskLruCache(
         private const val DIRTY = "DIRTY"
         private const val REMOVE = "REMOVE"
         private const val READ = "READ"
-        private val LEGAL_KEY_PATTERN = "[a-z0-9_-]{1,120}".toRegex()
+        private val LEGAL_KEY_PATTERN = "[a-z\\d_-]{1,120}".toRegex()
     }
 }
