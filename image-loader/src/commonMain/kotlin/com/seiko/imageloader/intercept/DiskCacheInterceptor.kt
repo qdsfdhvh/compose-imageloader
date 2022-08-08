@@ -66,11 +66,16 @@ class DiskCacheInterceptor(
         snapshot: DiskCache.Snapshot?,
         source: BufferedSource,
     ): DiskCache.Snapshot? {
-        if (!options.diskCachePolicy.writeEnabled) {
-            snapshot?.close()
-            return null
-        }
-        val editor = snapshot?.closeAndEdit() ?: diskCache.value.edit(cacheKey) ?: return null
+        val editor = when {
+            snapshot == null -> null
+            !options.diskCachePolicy.writeEnabled -> {
+                snapshot.closeQuietly()
+                null
+            }
+            else -> {
+                snapshot.closeAndEdit() ?: diskCache.value.edit(cacheKey)
+            }
+        } ?: return null
         try {
             fileSystem.write(editor.data) {
                 writeAll(source)
