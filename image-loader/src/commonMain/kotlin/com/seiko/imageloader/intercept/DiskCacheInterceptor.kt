@@ -52,7 +52,11 @@ class DiskCacheInterceptor(
 
     private fun readFromDiskCache(options: Options, cacheKey: String): DiskCache.Snapshot? {
         return if (options.diskCachePolicy.readEnabled) {
-            diskCache.value[cacheKey]
+            runCatching {
+                diskCache.value[cacheKey]
+            }.onFailure {
+                Napier.d(tag = "DiskCacheInterceptor", throwable = it) { "fail read disk cache error:" }
+            }.getOrNull()
         } else null
     }
 
