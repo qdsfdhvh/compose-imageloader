@@ -682,7 +682,7 @@ internal class DiskLruCache(
         }
 
         override fun close() {
-            if (closed.compareAndSet(expect = false, update = true)) {
+            if (closed.compareAndSet(false, true)) {
                 synchronized(syncObject) {
                     entry.lockingSnapshotCount--
                     if (entry.lockingSnapshotCount == 0 && entry.zombie) {
