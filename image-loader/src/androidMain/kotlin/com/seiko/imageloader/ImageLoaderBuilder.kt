@@ -2,6 +2,8 @@ package com.seiko.imageloader
 
 import android.content.Context
 import android.os.Build
+import com.seiko.imageloader.cache.memory.MemoryCache
+import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.decoder.BitmapFactoryDecoder
 import com.seiko.imageloader.component.decoder.GifDecoder
 import com.seiko.imageloader.component.decoder.ImageDecoderDecoder
@@ -27,11 +29,14 @@ import com.seiko.imageloader.request.Options
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 
-actual class ImageLoaderBuilder constructor(context: Context) : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
+actual class ImageLoaderBuilder constructor(
+    context: Context,
+) : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 
     private val context = context.applicationContext
 
     override var httpClient: Lazy<HttpClient> = lazy { HttpClient(OkHttp) }
+    override var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder(context).build() }
 
     actual fun build(): ImageLoader {
         val components = componentBuilder

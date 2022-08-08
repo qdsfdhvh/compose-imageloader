@@ -2,7 +2,6 @@ package com.seiko.imageloader
 
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.cache.memory.MemoryCache
-import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.request.Options
@@ -24,7 +23,7 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
     protected var options: Options? = null
 
     protected abstract var httpClient: Lazy<HttpClient>
-    protected var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder().build() }
+    protected abstract var memoryCache: Lazy<MemoryCache>
     protected var diskCache: Lazy<DiskCache>? = null
     protected var requestDispatcher: CoroutineDispatcher = ioDispatcher
     protected var imageScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)

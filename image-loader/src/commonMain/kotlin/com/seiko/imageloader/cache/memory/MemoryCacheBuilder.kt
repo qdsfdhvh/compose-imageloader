@@ -1,8 +1,13 @@
 package com.seiko.imageloader.cache.memory
 
-class MemoryCacheBuilder {
+expect class MemoryCacheBuilder : CommonMemoryCacheBuilder<MemoryCacheBuilder>
 
-    private var maxSizePercent = STANDARD_MEMORY_MULTIPLIER
+abstract class CommonMemoryCacheBuilder<B : CommonMemoryCacheBuilder<B>> {
+
+    abstract fun defaultMemoryCacheSizePercent(): Double
+    abstract fun calculateMemoryCacheSize(percent: Double): Int
+
+    private var maxSizePercent = defaultMemoryCacheSizePercent()
     private var maxSizeBytes = 0
     private var strongReferencesEnabled = true
     private var weakReferencesEnabled = true
@@ -70,11 +75,6 @@ class MemoryCacheBuilder {
     }
 }
 
-private fun calculateMemoryCacheSize(percent: Double): Int {
-    return (percent * DEFAULT_MEMORY_CLASS_MEGABYTES * 1024 * 1024).toInt()
-}
-
-private const val STANDARD_MEMORY_MULTIPLIER = 0.2
-private const val LOW_MEMORY_MULTIPLIER = 0.15
-
-private const val DEFAULT_MEMORY_CLASS_MEGABYTES = 256
+internal const val STANDARD_MEMORY_MULTIPLIER = 0.2
+internal const val LOW_MEMORY_MULTIPLIER = 0.15
+internal const val DEFAULT_MEMORY_CLASS_MEGABYTES = 256

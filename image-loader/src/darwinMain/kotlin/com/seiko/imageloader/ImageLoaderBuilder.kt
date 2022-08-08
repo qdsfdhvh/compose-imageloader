@@ -1,6 +1,8 @@
 package com.seiko.imageloader
 
 import androidx.compose.ui.unit.Density
+import com.seiko.imageloader.cache.memory.MemoryCache
+import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.decoder.GifDecoder
 import com.seiko.imageloader.component.decoder.SkiaImageDecoder
 import com.seiko.imageloader.component.decoder.SvgDecoder
@@ -14,6 +16,8 @@ import io.ktor.client.engine.darwin.Darwin
 actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 
     override var httpClient: Lazy<HttpClient> = lazy { HttpClient(Darwin) }
+    override var memoryCache: Lazy<MemoryCache> = lazy { MemoryCacheBuilder().build() }
+
     private var density: Density? = null
 
     fun density(density: Density) = apply {
