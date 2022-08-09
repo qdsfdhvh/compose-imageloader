@@ -11,7 +11,9 @@ actual class MemoryCacheBuilder(
 
     private val context = context.applicationContext
 
-    override fun defaultMemoryCacheSizePercent(): Double {
+    override var maxSizePercent: Double = defaultMemoryCacheSizePercent()
+
+    private fun defaultMemoryCacheSizePercent(): Double {
         return runCatching {
             val activityManager: ActivityManager =
                 ContextCompat.getSystemService(context, ActivityManager::class.java)!!

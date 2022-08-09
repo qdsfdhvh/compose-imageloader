@@ -4,13 +4,12 @@ expect class MemoryCacheBuilder : CommonMemoryCacheBuilder<MemoryCacheBuilder>
 
 abstract class CommonMemoryCacheBuilder<B : CommonMemoryCacheBuilder<B>> {
 
-    abstract fun defaultMemoryCacheSizePercent(): Double
-    abstract fun calculateMemoryCacheSize(percent: Double): Int
-
-    private var maxSizePercent = defaultMemoryCacheSizePercent()
+    protected abstract var maxSizePercent: Double
     private var maxSizeBytes = 0
     private var strongReferencesEnabled = true
     private var weakReferencesEnabled = true
+
+    abstract fun calculateMemoryCacheSize(percent: Double): Int
 
     /**
      * Set the maximum size of the memory cache as a percentage of this application's
