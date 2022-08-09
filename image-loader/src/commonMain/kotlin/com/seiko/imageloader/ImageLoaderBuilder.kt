@@ -23,7 +23,8 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
     protected var options: Options? = null
 
     protected abstract var httpClient: Lazy<HttpClient>
-    protected abstract var memoryCache: Lazy<MemoryCache>
+
+    protected var memoryCache: Lazy<MemoryCache>? = null
     protected var diskCache: Lazy<DiskCache>? = null
     protected var requestDispatcher: CoroutineDispatcher = ioDispatcher
     protected var imageScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -38,12 +39,12 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
         httpClient = lazy(initializer)
     }
 
-    fun memoryCache(initializer: () -> MemoryCache) = apply {
-        memoryCache = lazy(initializer)
+    fun memoryCache(initializer: (() -> MemoryCache)?) = apply {
+        memoryCache = initializer?.let { lazy(it) }
     }
 
-    fun diskCache(initializer: () -> DiskCache) = apply {
-        diskCache = lazy(initializer)
+    fun diskCache(initializer: (() -> DiskCache)?) = apply {
+        diskCache = initializer?.let { lazy(it) }
     }
 
     fun components(builder: ComponentRegistryBuilder.() -> Unit) = apply {

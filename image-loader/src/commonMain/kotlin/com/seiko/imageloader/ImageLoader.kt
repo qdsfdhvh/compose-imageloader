@@ -33,13 +33,13 @@ class RealImageLoader(
     private val requestDispatcher: CoroutineDispatcher,
     override val imageScope: CoroutineScope,
     interceptors: List<Interceptor>,
-    memoryCache: Lazy<MemoryCache>,
+    memoryCache: Lazy<MemoryCache>?,
     diskCache: Lazy<DiskCache>?,
 ) : ImageLoader {
 
     private val interceptors = interceptors + listOfNotNull(
         MappedInterceptor(),
-        if (supportImageMemoryCache) MemoryCacheInterceptor(memoryCache) else null,
+        memoryCache?.let { MemoryCacheInterceptor(it) },
         DecodeInterceptor(),
         diskCache?.let { DiskCacheInterceptor(it) },
         EngineInterceptor(),

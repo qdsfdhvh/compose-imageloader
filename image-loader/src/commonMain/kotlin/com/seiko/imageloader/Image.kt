@@ -2,8 +2,6 @@ package com.seiko.imageloader
 
 import androidx.compose.ui.graphics.painter.Painter
 
-internal expect val supportImageMemoryCache: Boolean
-
 expect class Image
 
 internal expect val Image.size: Int
