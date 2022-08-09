@@ -1,7 +1,5 @@
 package com.seiko.imageloader.cache.disk
 
-import com.seiko.imageloader.util.directorySize
-import com.seiko.imageloader.util.systemFileSystem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
@@ -100,3 +98,7 @@ class DiskCacheBuilder {
         )
     }
 }
+
+internal expect val systemFileSystem: FileSystem
+
+internal expect fun directorySize(directory: Path): Long
