@@ -3,9 +3,6 @@ package com.seiko.imageloader.component.fetcher
 import com.seiko.imageloader.component.mapper.Base64Image
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.util.bufferedSource
-import io.ktor.util.*
-import io.ktor.utils.io.core.*
-import okio.BufferedSource
 
 class Base64Fetcher(
     private val data: Base64Image,

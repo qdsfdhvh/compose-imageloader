@@ -1,7 +1,7 @@
 package com.seiko.imageloader.component.mapper
 
 import com.seiko.imageloader.request.Options
-import io.ktor.util.*
+import io.ktor.util.decodeBase64Bytes
 
 class Base64Image(
     val contentType: String?,

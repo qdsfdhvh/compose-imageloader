@@ -6,7 +6,6 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.locks.SynchronizedObject
 import okio.Buffer
 import okio.BufferedSource
-import okio.buffer
 import kotlin.native.ref.WeakReference
 
 actual typealias WeakReference<T> = WeakReference<T>
