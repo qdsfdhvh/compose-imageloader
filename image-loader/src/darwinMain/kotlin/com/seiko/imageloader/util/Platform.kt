@@ -6,6 +6,7 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.locks.SynchronizedObject
 import okio.Buffer
 import okio.BufferedSource
+import okio.buffer
 import kotlin.native.ref.WeakReference
 
 actual typealias WeakReference<T> = WeakReference<T>
@@ -30,4 +31,8 @@ actual inline fun <R> synchronized(lock: LockObject, block: () -> R): R {
 // TODO
 internal actual suspend fun ByteReadChannel.source(): BufferedSource {
     return Buffer().apply { write(toByteArray()) }
+}
+
+internal actual suspend fun ByteArray.bufferedSource(): BufferedSource {
+    return Buffer().apply { write(this@bufferedSource) }
 }

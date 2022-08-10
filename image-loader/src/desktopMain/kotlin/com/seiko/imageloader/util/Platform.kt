@@ -5,6 +5,7 @@ import io.ktor.utils.io.jvm.javaio.toInputStream
 import okio.BufferedSource
 import okio.buffer
 import okio.source
+import java.io.ByteArrayInputStream
 
 actual typealias WeakReference<T> = java.lang.ref.WeakReference<T>
 
@@ -19,3 +20,5 @@ actual inline fun <R> synchronized(lock: LockObject, block: () -> R): R {
 internal actual suspend fun ByteReadChannel.source(): BufferedSource {
     return toInputStream().source().buffer()
 }
+
+internal actual suspend fun ByteArray.bufferedSource() = ByteArrayInputStream(this).source().buffer()

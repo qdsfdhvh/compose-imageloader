@@ -17,3 +17,5 @@ expect class LockObject()
 expect inline fun <R> synchronized(lock: LockObject, block: () -> R): R
 
 internal expect suspend fun ByteReadChannel.source(): BufferedSource
+
+internal expect suspend fun ByteArray.bufferedSource(): BufferedSource
