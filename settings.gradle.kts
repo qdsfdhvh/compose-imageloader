@@ -9,7 +9,8 @@ pluginManagement {
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    // error with js
+    // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -24,6 +25,7 @@ include(
     ":app:desktop",
     ":app:ios",
     ":app:macos",
+    ":app:web",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

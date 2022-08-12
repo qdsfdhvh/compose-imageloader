@@ -16,6 +16,10 @@ kotlin {
     iosArm64()
     macosX64()
     macosArm64()
+    js(IR) {
+        browser()
+        binaries.executable()
+    }
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -45,6 +49,7 @@ kotlin {
         val macosArm64Main by getting {
             dependsOn(appleMain)
         }
+        val jsMain by getting
     }
 }
 

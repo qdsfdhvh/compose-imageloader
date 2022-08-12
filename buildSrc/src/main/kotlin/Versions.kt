@@ -27,4 +27,5 @@ object Versions {
     const val multiplatformResources = "0.20.1"
     const val napier = "2.6.1"
     const val ktor = "2.0.2"
+    const val okio = "3.2.0"
 }

@@ -4,13 +4,27 @@ import kotlin.jvm.Synchronized
 
 internal open class LruCache<K, V>(maxSize: Int) {
 
-    private var maxSize = 0
-    private var size = 0
-    private var putCount = 0
-    private var createCount = 0
-    private var evictionCount = 0
-    private var hitCount = 0
-    private var missCount = 0
+    var maxSize = 0
+        private set
+        @Synchronized get
+    var size = 0
+        private set
+        @Synchronized get
+    var putCount = 0
+        private set
+        @Synchronized get
+    var createCount = 0
+        private set
+        @Synchronized get
+    var evictionCount = 0
+        private set
+        @Synchronized get
+    var hitCount = 0
+        private set
+        @Synchronized get
+    var missCount = 0
+        private set
+        @Synchronized get
 
     private val map: LinkedHashMap<K, V>
 
@@ -146,28 +160,6 @@ internal open class LruCache<K, V>(maxSize: Int) {
     fun evictAll() {
         trimToSize(-1) // -1 will evict 0-sized elements
     }
-
-    @Synchronized
-    fun size(): Int = size
-
-    @Synchronized
-    fun maxSize(): Int = maxSize
-
-    @Synchronized
-    fun hitCount(): Int = hitCount
-
-    @Synchronized
-    fun missCount(): Int = missCount
-
-    @Synchronized
-    fun createCount(): Int = createCount
-
-    @Synchronized
-    fun putCount(): Int = putCount
-
-    @Synchronized
-    fun evictionCount(): Int = evictionCount
-
     @Synchronized
     fun snapshot(): Map<K, V> = LinkedHashMap(map)
 }

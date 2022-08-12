@@ -16,13 +16,17 @@ kotlin {
     ios()
     macosX64()
     macosArm64()
+    js(IR) {
+        browser()
+        binaries.executable()
+    }
     sourceSets {
         val commonMain by getting {
             kotlin.srcDir("src/commonMain/compose")
             dependencies {
                 api(compose.foundation)
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
-                api("com.squareup.okio:okio:3.2.0")
+                api("com.squareup.okio:okio:${Versions.okio}")
                 api("io.ktor:ktor-client-core:${Versions.ktor}")
                 implementation("io.github.aakira:napier:2.6.1")
             }
@@ -65,6 +69,13 @@ kotlin {
         }
         val macosArm64Main by getting {
             dependsOn(darwinMain)
+        }
+        val jsMain by getting {
+            dependsOn(skiaMain)
+            dependencies {
+                implementation("io.ktor:ktor-client-js:${Versions.ktor}")
+                implementation("com.squareup.okio:okio-nodefilesystem:${Versions.okio}")
+            }
         }
     }
 }

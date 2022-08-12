@@ -60,9 +60,9 @@ internal class RealStrongMemoryCache(
         ) = weakMemoryCache.set(key, oldValue.image, oldValue.extras, oldValue.size)
     }
 
-    override val size get() = cache.size()
+    override val size get() = cache.size
 
-    override val maxSize get() = cache.maxSize()
+    override val maxSize get() = cache.maxSize
 
     override val keys get() = cache.snapshot().keys
 
