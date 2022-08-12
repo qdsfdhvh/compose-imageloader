@@ -2,17 +2,18 @@ import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    id("com.android.application").apply(false)
-    id("com.android.library").apply(false)
-    kotlin("android").apply(false)
-    id("com.diffplug.spotless").version(Versions.spotless)
-    id("com.vanniktech.maven.publish").version("0.20.0").apply(false)
+    id("com.android.application") apply false
+    id("com.android.library") apply false
+    kotlin("android") apply false
+    id("org.jetbrains.compose") version Versions.compose_jb apply false
+    id("com.diffplug.spotless") version Versions.spotless
+    id("com.vanniktech.maven.publish") version "0.20.0" apply false
 }
 
 allprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "11"
+            jvmTarget = Versions.Java.jvmTarget
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
                 "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",

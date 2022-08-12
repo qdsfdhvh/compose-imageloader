@@ -3,7 +3,7 @@ import org.jetbrains.compose.compose
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization").version(Versions.Kotlin.lang)
-    id("org.jetbrains.compose").version(Versions.compose_jb)
+    id("org.jetbrains.compose")
     id("com.android.library")
     // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
     // id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)

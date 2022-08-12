@@ -3,7 +3,7 @@ import com.vanniktech.maven.publish.MavenPublishBaseExtension
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose").version(Versions.compose_jb)
+    id("org.jetbrains.compose")
     id("com.android.library")
     id("com.vanniktech.maven.publish.base")
 }
