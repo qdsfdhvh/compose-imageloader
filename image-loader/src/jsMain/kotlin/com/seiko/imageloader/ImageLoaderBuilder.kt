@@ -8,12 +8,8 @@ import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.keyer.KtorUlKeyer
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.request.Options
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.js.Js
 
 actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
-
-    override var httpClient: Lazy<HttpClient> = lazy { HttpClient(Js) }
 
     private var density: Density? = null
 

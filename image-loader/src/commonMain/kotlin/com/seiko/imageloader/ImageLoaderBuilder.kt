@@ -5,6 +5,7 @@ import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.httpEngine
 import com.seiko.imageloader.util.ioDispatcher
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,7 +23,7 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
     protected val interceptors = mutableListOf<Interceptor>()
     protected var options: Options? = null
 
-    protected abstract var httpClient: Lazy<HttpClient>
+    protected var httpClient: Lazy<HttpClient> = lazy { HttpClient(httpEngine) }
 
     protected var memoryCache: Lazy<MemoryCache>? = null
     protected var diskCache: Lazy<DiskCache>? = null

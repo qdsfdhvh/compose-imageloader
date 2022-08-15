@@ -26,16 +26,12 @@ import com.seiko.imageloader.component.mapper.ResourceIntMapper
 import com.seiko.imageloader.component.mapper.ResourceUriMapper
 import com.seiko.imageloader.component.mapper.StringMapper
 import com.seiko.imageloader.request.Options
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 
 actual class ImageLoaderBuilder constructor(
     context: Context,
 ) : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 
     private val context = context.applicationContext
-
-    override var httpClient: Lazy<HttpClient> = lazy { HttpClient(OkHttp) }
 
     actual fun build(): ImageLoader {
         val components = componentBuilder
