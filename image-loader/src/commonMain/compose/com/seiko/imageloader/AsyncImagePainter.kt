@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.isUnspecified
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -21,21 +20,15 @@ import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageRequestBuilder
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.size.Dimension
 import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
-import com.seiko.imageloader.size.SizeResolver
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
-import kotlin.math.roundToInt
-import com.seiko.imageloader.size.Size as ImageLoaderSize
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -155,15 +148,6 @@ class AsyncImagePainter(
     private fun updateRequest(request: ImageRequest): ImageRequest {
         return request.newBuilder()
             .apply {
-                if (request.sizeResolver == null) {
-                    size(
-                        object : SizeResolver {
-                            override suspend fun size(): ImageLoaderSize {
-                                return drawSize.mapNotNull { it.toSizeOrNull() }.first()
-                            }
-                        }
-                    )
-                }
                 if (request.scale == null) {
                     scale(contentScale.toScale())
                 }
@@ -199,18 +183,6 @@ class AsyncImagePainter(
         }
     }
 }
-
-private fun Size.toSizeOrNull() = when {
-    isUnspecified -> ImageLoaderSize.ORIGINAL
-    isPositive -> ImageLoaderSize(
-        width = if (width.isFinite()) Dimension(width.roundToInt()) else Dimension.Undefined,
-        height = if (height.isFinite()) Dimension(height.roundToInt()) else Dimension.Undefined
-    )
-
-    else -> null
-}
-
-private val Size.isPositive get() = width >= 0.5 && height >= 0.5
 
 private fun ContentScale.toScale() = when (this) {
     ContentScale.Fit, ContentScale.Inside -> Scale.FIT
