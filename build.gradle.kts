@@ -17,7 +17,6 @@ allprojects {
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
                 "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
-                "-Xcontext-receivers",
                 "-Xskip-prerelease-check",
             )
         }
