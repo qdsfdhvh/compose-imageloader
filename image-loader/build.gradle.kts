@@ -84,7 +84,6 @@ android {
     namespace = "io.github.qdsfdhvh.imageloader"
     compileSdk = Versions.Android.compile
     buildToolsVersion = Versions.Android.buildTools
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = Versions.Android.min
         targetSdk = Versions.Android.target
