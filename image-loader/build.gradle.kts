@@ -39,8 +39,8 @@ kotlin {
                 implementation("androidx.core:core-ktx:1.8.0")
                 implementation("androidx.compose.ui:ui-graphics:${Versions.compose}")
                 implementation("androidx.exifinterface:exifinterface:1.3.3")
-                implementation("androidx.appcompat:appcompat-resources:1.4.2")
-                implementation("com.google.accompanist:accompanist-drawablepainter:0.23.1")
+                implementation("androidx.appcompat:appcompat-resources:1.5.0")
+                implementation("com.google.accompanist:accompanist-drawablepainter:0.25.1")
                 // svg
                 implementation("com.caverock:androidsvg-aar:1.4")
             }
