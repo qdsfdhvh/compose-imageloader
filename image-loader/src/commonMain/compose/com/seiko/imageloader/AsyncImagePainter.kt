@@ -1,6 +1,7 @@
 package com.seiko.imageloader
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -68,7 +70,6 @@ fun rememberAsyncImagePainter(
     painter.imageLoader = imageLoader
     painter.request = request
     painter.contentScale = contentScale
-    painter.onRemembered()
     return painter
 }
 
@@ -85,13 +86,12 @@ class AsyncImagePainter(
     private var colorFilter: ColorFilter? by mutableStateOf(null)
 
     internal var contentScale = ContentScale.Fit
-    // internal var filterQuality = DefaultFilterQuality
 
-    /** The current [ImageRequest]. */
+    var requestState: ImageRequestState by mutableStateOf(ImageRequestState.Loading)
+
     var request: ImageRequest by mutableStateOf(request)
         internal set
 
-    /** The current [ImageLoader]. */
     var imageLoader: ImageLoader by mutableStateOf(imageLoader)
         internal set
 
@@ -125,6 +125,7 @@ class AsyncImagePainter(
         (painter as? RememberObserver)?.onRemembered()
 
         rememberJob = snapshotFlow { request }
+            .onStart { requestState = ImageRequestState.Loading }
             .mapLatest { imageLoader.execute(updateRequest(request)) }
             .onEach(::updateImage)
             .launchIn(imageLoader.imageScope)
@@ -159,24 +160,26 @@ class AsyncImagePainter(
     }
 
     private fun updateImage(input: ImageResult) {
-        when (input) {
+        requestState = when (input) {
             is ComposePainterResult -> {
                 updatePainter(input.painter)
+                ImageRequestState.Success
             }
             is ComposeImageResult -> {
                 updatePainter(input.image.toPainter())
+                ImageRequestState.Success
             }
             is ErrorResult -> {
                 Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error data: ${input.request.data}" }
+                ImageRequestState.Failure(input.error)
             }
-            is SourceResult -> Unit
+            is SourceResult -> return
         }
     }
 
     private fun updatePainter(painter: Painter) {
         val previous = this.painter
         this.painter = painter
-
         if (rememberJob != null && previous != painter) {
             (previous as? RememberObserver)?.onForgotten()
             (painter as? RememberObserver)?.onRemembered()
@@ -187,4 +190,16 @@ class AsyncImagePainter(
 private fun ContentScale.toScale() = when (this) {
     ContentScale.Fit, ContentScale.Inside -> Scale.FIT
     else -> Scale.FILL
+}
+
+@Immutable
+sealed interface ImageRequestState {
+    @Immutable
+    object Success : ImageRequestState
+
+    @Immutable
+    data class Failure(val error: Throwable) : ImageRequestState
+
+    @Immutable
+    object Loading : ImageRequestState
 }
