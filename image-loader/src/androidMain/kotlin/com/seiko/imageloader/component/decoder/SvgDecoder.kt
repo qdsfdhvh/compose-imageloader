@@ -10,7 +10,6 @@ import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.size.Scale
 import com.seiko.imageloader.size.isOriginal
 import com.seiko.imageloader.size.toPx
-import com.seiko.imageloader.toPainter
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.isSvg
 import com.seiko.imageloader.util.toBitmapConfig
@@ -76,8 +75,8 @@ class SvgDecoder @JvmOverloads constructor(
         val renderOptions = RenderOptions()
         svg.renderToCanvas(Canvas(bitmap), renderOptions)
 
-        DecodePainterResult(
-            painter = bitmap.toPainter(),
+        DecodeImageResult(
+            image = bitmap,
             // isSampled = true // SVGs can always be re-decoded at a higher resolution.
         )
     }
