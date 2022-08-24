@@ -1,9 +1,11 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.component.ComponentRegistry
+import com.seiko.imageloader.component.fetcher.FetchImageResult
 import com.seiko.imageloader.component.fetcher.FetchPainterResult
 import com.seiko.imageloader.component.fetcher.FetchResult
 import com.seiko.imageloader.component.fetcher.FetchSourceResult
+import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ComposePainterResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
@@ -23,6 +25,10 @@ class EngineInterceptor : Interceptor {
             is FetchPainterResult -> ComposePainterResult(
                 request = request,
                 painter = fetchResult.painter,
+            )
+            is FetchImageResult -> ComposeImageResult(
+                request = request,
+                image = fetchResult.image
             )
         }
     }
