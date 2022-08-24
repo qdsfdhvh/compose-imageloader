@@ -1,5 +1,6 @@
 package com.seiko.imageloader
 
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
@@ -12,6 +13,6 @@ internal actual val Image.size: Int
 internal actual inline val Image.identityHashCode: Int
     get() = System.identityHashCode(this)
 
-actual fun Image.toPainter(): Painter {
-    return BitmapPainter(asImageBitmap())
+actual fun Image.toPainter(filterQuality: FilterQuality): Painter {
+    return BitmapPainter(asImageBitmap(), filterQuality = filterQuality)
 }
