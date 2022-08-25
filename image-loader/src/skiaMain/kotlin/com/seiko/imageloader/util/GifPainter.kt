@@ -35,10 +35,18 @@ internal class GifPainter(
         if (rememberJob != null) return
 
         rememberJob = imageScope.launch(ioDispatcher) {
-            while (isActive) {
-                for ((index, frame) in codec.framesInfo.withIndex()) {
-                    drawImageBitmap.value = getImageBitmap(index)
-                    delay(frame.duration.milliseconds)
+            when(codec.framesInfo.size) {
+                0 -> Unit
+                1 -> {
+                    drawImageBitmap.value = getImageBitmap(codec, 0)
+                }
+                else -> {
+                    while (isActive) {
+                        for ((index, frame) in codec.framesInfo.withIndex()) {
+                            drawImageBitmap.value = getImageBitmap(codec, index)
+                            delay(frame.duration.milliseconds)
+                        }
+                    }
                 }
             }
         }
@@ -67,7 +75,7 @@ internal class GifPainter(
         }
     }
 
-    private fun getImageBitmap(frameIndex: Int): ImageBitmap {
+    private fun getImageBitmap(codec: Codec, frameIndex: Int): ImageBitmap {
         val bitmap = recycleBitmap(codec)
         codec.readPixels(bitmap, frameIndex)
         return bitmap.asComposeImageBitmap()
