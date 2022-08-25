@@ -40,7 +40,7 @@ jobs:
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
 
       - name: Publish to Sonatype
-        run: ./gradlew :publish
+        run: ./gradlew build publish --debug --stacktrace
 
       - name: Close and release on Sonatype
         uses: monkeyWie/maven-nexus-release@v1.0.0
