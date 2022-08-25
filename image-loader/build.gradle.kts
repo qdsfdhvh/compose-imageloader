@@ -14,6 +14,7 @@ kotlin {
     }
     jvm("desktop")
     ios()
+    iosSimulatorArm64()
     macosX64()
     macosArm64()
     js(IR) {
@@ -78,6 +79,9 @@ kotlin {
             }
         }
     }
+
+    sourceSets["iosSimulatorArm64Main"].dependsOn(sourceSets["iosMain"])
+    sourceSets["iosSimulatorArm64Test"].dependsOn(sourceSets["iosTest"])
 }
 
 android {
