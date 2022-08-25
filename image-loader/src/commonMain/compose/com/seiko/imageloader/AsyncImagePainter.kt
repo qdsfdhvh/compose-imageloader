@@ -11,7 +11,9 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.request.ComposeImageResult
@@ -37,12 +39,14 @@ fun rememberAsyncImagePainter(
     url: String,
     imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
 ): AsyncImagePainter {
     val request = remember(url) { ImageRequestBuilder().data(url).build() }
     return rememberAsyncImagePainter(
         request = request,
         imageLoader = imageLoader,
         contentScale = contentScale,
+        filterQuality = filterQuality,
     )
 }
 
@@ -51,12 +55,14 @@ fun rememberAsyncImagePainter(
     resId: Int,
     imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
 ): AsyncImagePainter {
     val request = remember(resId) { ImageRequestBuilder().data(resId).build() }
     return rememberAsyncImagePainter(
         request = request,
         imageLoader = imageLoader,
         contentScale = contentScale,
+        filterQuality = filterQuality,
     )
 }
 
@@ -65,11 +71,13 @@ fun rememberAsyncImagePainter(
     request: ImageRequest,
     imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
 ): AsyncImagePainter {
     val painter = remember { AsyncImagePainter(request, imageLoader) }
     painter.imageLoader = imageLoader
     painter.request = request
     painter.contentScale = contentScale
+    painter.filterQuality = filterQuality
     return painter
 }
 
@@ -86,6 +94,8 @@ class AsyncImagePainter(
     private var colorFilter: ColorFilter? by mutableStateOf(null)
 
     internal var contentScale = ContentScale.Fit
+
+    internal var filterQuality = DefaultFilterQuality
 
     var requestState: ImageRequestState by mutableStateOf(ImageRequestState.Loading)
 
@@ -166,7 +176,7 @@ class AsyncImagePainter(
                 ImageRequestState.Success
             }
             is ComposeImageResult -> {
-                updatePainter(input.image.toPainter())
+                updatePainter(input.image.toPainter(filterQuality))
                 ImageRequestState.Success
             }
             is ErrorResult -> {

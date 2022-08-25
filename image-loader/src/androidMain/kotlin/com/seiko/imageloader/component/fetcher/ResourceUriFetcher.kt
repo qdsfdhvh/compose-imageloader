@@ -3,6 +3,7 @@ package com.seiko.imageloader.component.fetcher
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.VectorDrawable
 import android.net.Uri
@@ -58,19 +59,25 @@ internal class ResourceUriFetcher(
             }
 
             val isVector = drawable.isVector
-            FetchPainterResult(
-                painter = if (isVector) {
-                    DrawableUtils.convertToBitmap(
+            if (isVector) {
+                FetchImageResult(
+                    image = DrawableUtils.convertToBitmap(
                         drawable = drawable,
                         config = options.config.toBitmapConfig(),
                         size = options.size,
                         scale = options.scale,
                         allowInexactSize = options.allowInexactSize
-                    ).toDrawable(context.resources)
-                } else {
-                    drawable
-                }.toPainter(),
-            )
+                    )
+                )
+            } else if (drawable is BitmapDrawable) {
+                FetchImageResult(
+                    image = drawable.bitmap
+                )
+            } else {
+                FetchPainterResult(
+                    painter = drawable.toPainter(),
+                )
+            }
         } else {
             val typedValue = TypedValue()
             val inputStream = resources.openRawResource(resId, typedValue)
