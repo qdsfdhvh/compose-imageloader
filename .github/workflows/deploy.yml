@@ -19,17 +19,21 @@ jobs:
         with:
           java-version: 17
 
-      - name: Create gpg key and import into gradle properties
+      - name: Configure GPG Key
         run: |
-          echo $GPG_KEY_ARMOR | base64 --decode > ./release.asc
+          echo -n "$GPG_KEY_ARMOR" | base64 --decode > ./release.asc | gpg --import
           gpg --quiet --output $GITHUB_WORKSPACE/release.gpg --dearmor ./release.asc
+        env:
+          GPG_KEY_ARMOR: ${{ secrets.GPG_KEY_ARMOR }}
+
+      - name: Configure Gradle Properties
+        run: |
           sed -i -e "s,nexusUsername=,nexusUsername=$NEXUS_USERNAME,g" gradle.properties
           sed -i -e "s,nexusPassword=,nexusPassword=$NEXUS_PASSWORD,g" gradle.properties
           sed -i -e "s,signing.keyId=,signing.keyId=$GPG_KEY_ID,g" gradle.properties
           sed -i -e "s,signing.password=,signing.password=$GPG_PASSWORD,g" gradle.properties
           sed -i -e "s,signing.secretKeyRingFile=,signing.secretKeyRingFile=$GITHUB_WORKSPACE/release.gpg,g" gradle.properties
         env:
-          GPG_KEY_ARMOR: "${{ secrets.SIGNING_KEY_ARMOR }}"
           GPG_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           GPG_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
