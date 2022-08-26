@@ -35,7 +35,7 @@ internal class GifPainter(
         if (rememberJob != null) return
 
         rememberJob = imageScope.launch(ioDispatcher) {
-            when(codec.framesInfo.size) {
+            when (codec.framesInfo.size) {
                 0 -> Unit
                 1 -> {
                     drawImageBitmap.value = getImageBitmap(codec, 0)
