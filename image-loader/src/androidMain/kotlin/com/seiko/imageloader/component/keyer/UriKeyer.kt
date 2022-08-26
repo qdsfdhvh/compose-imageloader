@@ -3,7 +3,7 @@ package com.seiko.imageloader.component.keyer
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import android.content.res.Configuration
-import android.net.Uri
+import com.eygraber.uri.Uri
 import com.seiko.imageloader.request.Options
 
 internal class UriKeyer(private val context: Context) : Keyer {

@@ -3,8 +3,8 @@ package com.seiko.imageloader.component.mapper
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import android.content.res.Resources
-import android.net.Uri
 import androidx.annotation.DrawableRes
+import com.eygraber.uri.Uri
 import com.seiko.imageloader.request.Options
 
 internal class ResourceIntMapper(private val context: Context) : Mapper<Uri> {

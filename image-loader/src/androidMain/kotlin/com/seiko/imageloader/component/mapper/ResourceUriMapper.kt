@@ -2,7 +2,7 @@ package com.seiko.imageloader.component.mapper
 
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
-import android.net.Uri
+import com.eygraber.uri.Uri
 import com.seiko.imageloader.request.Options
 
 /**

@@ -5,17 +5,19 @@ import android.content.ContentResolver.EXTRA_SIZE
 import android.content.ContentResolver.SCHEME_CONTENT
 import android.content.Context
 import android.graphics.Point
-import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.ContactsContract.Contacts
 import android.provider.MediaStore
 import androidx.annotation.VisibleForTesting
+import com.eygraber.uri.Uri
+import com.eygraber.uri.toAndroidUri
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.size.Dimension
 import okio.buffer
 import okio.source
+import android.net.Uri as AndroidUri
 
 internal class ContentUriFetcher(
     private val context: Context,
@@ -25,27 +27,28 @@ internal class ContentUriFetcher(
 
     override suspend fun fetch(): FetchResult {
         val contentResolver = context.contentResolver
+        val androidUri = data.toAndroidUri()
         val inputStream = if (isContactPhotoUri(data)) {
             // Modified from ContactsContract.Contacts.openContactPhotoInputStream.
             val stream = contentResolver
-                .openAssetFileDescriptor(data, "r")
+                .openAssetFileDescriptor(androidUri, "r")
                 ?.createInputStream()
             checkNotNull(stream) { "Unable to find a contact photo associated with '$data'." }
         } else if (SDK_INT >= 29 && isMusicThumbnailUri(data)) {
             val bundle = newMusicThumbnailSizeOptions()
             val stream = contentResolver
-                .openTypedAssetFile(data, "image/*", bundle, null)
+                .openTypedAssetFile(androidUri, "image/*", bundle, null)
                 ?.createInputStream()
             checkNotNull(stream) { "Unable to find a music thumbnail associated with '$data'." }
         } else {
-            val stream = contentResolver.openInputStream(data)
+            val stream = contentResolver.openInputStream(androidUri)
             checkNotNull(stream) { "Unable to open '$data'." }
         }
 
         return FetchSourceResult(
             source = inputStream.source().buffer(),
-            mimeType = contentResolver.getType(data),
-            metadata = ContentMetadata(data),
+            mimeType = contentResolver.getType(androidUri),
+            metadata = ContentMetadata(androidUri),
         )
     }
 
@@ -93,4 +96,4 @@ internal class ContentUriFetcher(
     }
 }
 
-data class ContentMetadata(val uri: Uri)
+data class ContentMetadata(val uri: AndroidUri)

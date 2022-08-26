@@ -9,7 +9,9 @@ import com.seiko.imageloader.component.fetcher.FileFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.keyer.KtorUlKeyer
 import com.seiko.imageloader.component.mapper.Base64Mapper
+import com.seiko.imageloader.component.mapper.FileUriMapper
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
+import com.seiko.imageloader.component.mapper.StringUriMapper
 import com.seiko.imageloader.request.Options
 
 actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
@@ -25,6 +27,8 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             // Mappers
             .add(Base64Mapper())
             .add(KtorUrlMapper())
+            .add(StringUriMapper())
+            .add(FileUriMapper())
             // Keyers
             .add(KtorUlKeyer())
             // Fetchers

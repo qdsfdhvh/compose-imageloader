@@ -24,7 +24,7 @@ import com.seiko.imageloader.component.mapper.FileUriMapper
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.component.mapper.ResourceIntMapper
 import com.seiko.imageloader.component.mapper.ResourceUriMapper
-import com.seiko.imageloader.component.mapper.StringMapper
+import com.seiko.imageloader.component.mapper.StringUriMapper
 import com.seiko.imageloader.request.Options
 
 actual class ImageLoaderBuilder constructor(
@@ -38,7 +38,7 @@ actual class ImageLoaderBuilder constructor(
             // Mappers
             .add(Base64Mapper())
             .add(KtorUrlMapper())
-            .add(StringMapper())
+            .add(StringUriMapper())
             .add(FileUriMapper())
             .add(ResourceUriMapper(context))
             .add(ResourceIntMapper(context))
