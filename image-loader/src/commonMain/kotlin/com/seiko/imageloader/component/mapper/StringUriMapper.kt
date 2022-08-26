@@ -1,12 +1,11 @@
 package com.seiko.imageloader.component.mapper
 
-import android.net.Uri
-import androidx.core.net.toUri
+import com.eygraber.uri.Uri
 import com.seiko.imageloader.request.Options
 
-class StringMapper : Mapper<Uri> {
+class StringUriMapper : Mapper<Uri> {
     override fun map(data: Any, options: Options): Uri? {
         if (data !is String) return null
-        return data.toUri()
+        return Uri.parse(data)
     }
 }

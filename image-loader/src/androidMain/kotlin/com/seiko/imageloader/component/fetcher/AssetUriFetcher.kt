@@ -1,8 +1,8 @@
 package com.seiko.imageloader.component.fetcher
 
 import android.content.Context
-import android.net.Uri
 import android.webkit.MimeTypeMap
+import com.eygraber.uri.Uri
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.isAssetUri

@@ -29,6 +29,7 @@ kotlin {
                 api("com.squareup.okio:okio:${Versions.okio}")
                 api("io.ktor:ktor-client-core:${Versions.ktor}")
                 implementation("io.github.aakira:napier:2.6.1")
+                api("com.eygraber:uri-kmp:0.0.6")
             }
         }
         val androidMain by getting {
