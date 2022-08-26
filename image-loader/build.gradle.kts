@@ -24,7 +24,7 @@ kotlin {
         val commonMain by getting {
             kotlin.srcDir("src/commonMain/compose")
             dependencies {
-                api(compose.foundation)
+                api(compose.ui)
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
                 api("com.squareup.okio:okio:${Versions.okio}")
                 api("io.ktor:ktor-client-core:${Versions.ktor}")
@@ -37,8 +37,8 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
-                implementation("androidx.core:core-ktx:1.8.0")
-                implementation("androidx.compose.ui:ui-graphics:${Versions.compose}")
+                implementation("androidx.compose.ui:ui-graphics:1.3.0-beta01")
+                implementation("androidx.core:core-ktx:1.9.0-rc01")
                 implementation("androidx.exifinterface:exifinterface:1.3.3")
                 implementation("androidx.appcompat:appcompat-resources:1.5.0")
                 implementation("com.google.accompanist:accompanist-drawablepainter:0.25.1")
