@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -36,7 +38,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun App() {
+fun App(
+    lazyListScope: LazyListState = rememberLazyListState(),
+) {
     ComposeImageLoaderTheme {
         Scaffold(
             floatingActionButton = {
@@ -53,14 +57,20 @@ fun App() {
             }
         ) { innerPadding ->
             Box(Modifier.padding(innerPadding)) {
-                ImageList(Modifier.fillMaxSize())
+                ImageList(
+                    modifier = Modifier.fillMaxSize(),
+                    lazyListScope = lazyListScope,
+                )
             }
         }
     }
 }
 
 @Composable
-private fun ImageList(modifier: Modifier = Modifier) {
+private fun ImageList(
+    modifier: Modifier = Modifier,
+    lazyListScope: LazyListState = rememberLazyListState(),
+) {
     var images by remember { mutableStateOf(emptyList<Image>()) }
     LaunchedEffect(Unit) {
         images = withContext(Dispatchers.Default) {
@@ -71,7 +81,7 @@ private fun ImageList(modifier: Modifier = Modifier) {
         }
     }
 
-    LazyColumn(modifier) {
+    LazyColumn(modifier, state = lazyListScope) {
         itemsGridIndexed(images, 3) { image ->
             ImageItem(image.imageUrl)
         }
