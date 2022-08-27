@@ -13,10 +13,15 @@ import kotlinx.coroutines.launch
 import org.jetbrains.skiko.wasm.onWasmReady
 import org.w3c.dom.events.WheelEvent
 import androidx.compose.foundation.gestures.scrollBy
+import com.seiko.imageloader.cache.disk.DiskCacheBuilder
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import okio.FileSystem.Companion.SYSTEM_TEMPORARY_DIRECTORY
 
 fun main() {
+    Napier.base(DebugAntilog())
     val scope = CoroutineScope(Dispatchers.Main)
     val lazyListScope = LazyListState()
     window.addEventListener("wheel", { event ->
@@ -49,11 +54,11 @@ private fun generateImageLoader(): ImageLoader {
                 .maxSizePercent(0.25)
                 .build()
         }
-        // .diskCache {
-        //     DiskCacheBuilder()
-        //         .directory(cacheDir.resolve("image_cache").toOkioPath())
-        //         .maxSizeBytes(512L * 1024 * 1024) // 512MB
-        //         .build()
-        // }
+        .diskCache {
+            DiskCacheBuilder()
+                .directory(SYSTEM_TEMPORARY_DIRECTORY.resolve("image_cache"))
+                .maxSizeBytes(512L * 1024 * 1024) // 512MB
+                .build()
+        }
         .build()
 }
