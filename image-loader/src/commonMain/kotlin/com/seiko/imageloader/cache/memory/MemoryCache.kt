@@ -30,12 +30,6 @@ interface MemoryCache {
     fun clear()
 }
 
-data class MemoryKey(
-    val key: String,
-    val extras: Map<String, String> = emptyMap(),
-)
+typealias MemoryKey = String
 
-data class MemoryValue(
-    val image: Image,
-    val extras: Map<String, Any> = emptyMap(),
-)
+typealias MemoryValue = Image

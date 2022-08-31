@@ -23,7 +23,7 @@ class DiskCacheInterceptor(
 
         var snapshot = readFromDiskCache(options, cacheKey)
         if (snapshot != null) {
-            Napier.d(tag = "Interceptor") { "read disk cache, data:$data" }
+            Napier.d(tag = "DiskCacheInterceptor") { "read disk cache, data:$data" }
             return SourceResult(
                 request = request,
                 channel = snapshot.source(),
@@ -66,18 +66,13 @@ class DiskCacheInterceptor(
         snapshot: DiskCache.Snapshot?,
         source: BufferedSource,
     ): DiskCache.Snapshot? {
-        val editor = when {
-            !options.diskCachePolicy.writeEnabled -> {
-                snapshot?.closeQuietly()
-                null
-            }
-            snapshot == null -> {
-                diskCache.value.edit(cacheKey)
-            }
-            else -> {
-                snapshot.closeAndEdit() ?: diskCache.value.edit(cacheKey)
-            }
-        } ?: return null
+        if (!options.diskCachePolicy.writeEnabled) {
+            snapshot?.closeQuietly()
+            return null
+        }
+        val editor = snapshot?.closeAndEdit()
+            ?: diskCache.value.edit(cacheKey)
+            ?: return null
         try {
             fileSystem.write(editor.data) {
                 writeAll(source)
