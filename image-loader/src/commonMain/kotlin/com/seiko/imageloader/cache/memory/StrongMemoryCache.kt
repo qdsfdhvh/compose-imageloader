@@ -67,7 +67,7 @@ internal class RealStrongMemoryCache(
     override val keys get() = cache.snapshot().keys
 
     override fun get(key: MemoryKey): MemoryValue? {
-        return cache[key]?.let { MemoryValue(it.image, it.extras) }
+        return cache[key]?.image
     }
 
     override fun set(key: MemoryKey, image: Image, extras: Map<String, Any>) {

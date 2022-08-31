@@ -18,9 +18,9 @@ internal class RealMemoryCache(
     override fun set(key: MemoryKey, value: MemoryValue) {
         // Ensure that stored keys and values are immutable.
         strongMemoryCache.set(
-            key = key.copy(extras = key.extras.toMap()),
-            image = value.image,
-            extras = value.extras.toMap(),
+            key = key,
+            image = value,
+            extras = emptyMap(),
         )
         // weakMemoryCache.set() is called by strongMemoryCache when
         // a value is evicted from the strong reference cache.

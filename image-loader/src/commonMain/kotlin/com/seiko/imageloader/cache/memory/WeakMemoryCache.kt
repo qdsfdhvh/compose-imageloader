@@ -46,7 +46,7 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
 
         // Find the first bitmap that hasn't been collected.
         val value = values.firstNotNullOfOrNullIndices { value ->
-            value.image.get()?.let { MemoryValue(it, value.extras) }
+            value.image.get()
         }
 
         cleanUpIfNecessary()
