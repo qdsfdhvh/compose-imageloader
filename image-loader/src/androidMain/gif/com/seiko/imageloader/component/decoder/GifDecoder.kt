@@ -67,7 +67,6 @@ internal class GifDecoder @JvmOverloads constructor(
 
         DecodePainterResult(
             painter = drawable.toPainter(),
-            // isSampled = false
         )
     }
 
