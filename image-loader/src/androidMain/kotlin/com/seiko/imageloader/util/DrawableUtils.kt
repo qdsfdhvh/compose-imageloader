@@ -11,9 +11,6 @@ import androidx.core.graphics.component3
 import androidx.core.graphics.component4
 import androidx.core.graphics.createBitmap
 import com.seiko.imageloader.size.Scale
-import com.seiko.imageloader.size.Size
-import com.seiko.imageloader.size.heightPx
-import com.seiko.imageloader.size.widthPx
 import kotlin.math.roundToInt
 
 internal object DrawableUtils {
@@ -33,7 +30,6 @@ internal object DrawableUtils {
     fun convertToBitmap(
         drawable: Drawable,
         config: Bitmap.Config,
-        size: Size,
         scale: Scale,
         allowInexactSize: Boolean
     ): Bitmap {
@@ -43,7 +39,6 @@ internal object DrawableUtils {
             if (isConfigValid(bitmap, config) && isSizeValid(
                     allowInexactSize,
                     bitmap,
-                    size,
                     scale
                 )
             ) {
@@ -58,8 +53,8 @@ internal object DrawableUtils {
         val multiplier = DecodeUtils.computeSizeMultiplier(
             srcWidth = srcWidth,
             srcHeight = srcHeight,
-            dstWidth = size.widthPx(scale) { srcWidth },
-            dstHeight = size.heightPx(scale) { srcHeight },
+            dstWidth = srcWidth,
+            dstHeight = srcHeight,
             scale = scale
         )
         val bitmapWidth = (multiplier * srcWidth).roundToInt()
@@ -82,7 +77,6 @@ internal object DrawableUtils {
     private fun isSizeValid(
         allowInexactSize: Boolean,
         bitmap: Bitmap,
-        size: Size,
         scale: Scale
     ): Boolean {
         return if (allowInexactSize) {
@@ -93,8 +87,8 @@ internal object DrawableUtils {
             DecodeUtils.computeSizeMultiplier(
                 srcWidth = bitmap.width,
                 srcHeight = bitmap.height,
-                dstWidth = size.widthPx(scale) { bitmap.width },
-                dstHeight = size.heightPx(scale) { bitmap.height },
+                dstWidth = bitmap.width,
+                dstHeight = bitmap.height,
                 scale = scale
             ) == 1.0
         }

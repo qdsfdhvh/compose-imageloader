@@ -7,15 +7,11 @@ import com.caverock.androidsvg.RenderOptions
 import com.caverock.androidsvg.SVG
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.size.Scale
-import com.seiko.imageloader.size.isOriginal
-import com.seiko.imageloader.size.toPx
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.isSvg
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toSoftware
 import kotlinx.coroutines.runInterruptible
-import kotlin.math.roundToInt
 
 /**
  * A [Decoder] that uses [AndroidSVG](https://bigbadaboom.github.io/androidsvg/) to decode SVG
@@ -46,20 +42,19 @@ class SvgDecoder @JvmOverloads constructor(
 
         val bitmapWidth: Int
         val bitmapHeight: Int
-        val (dstWidth, dstHeight) = getDstSize(svgWidth, svgHeight, options.scale)
         if (svgWidth > 0 && svgHeight > 0) {
             val multiplier = DecodeUtils.computeSizeMultiplier(
                 srcWidth = svgWidth,
                 srcHeight = svgHeight,
-                dstWidth = dstWidth,
-                dstHeight = dstHeight,
+                dstWidth = svgWidth,
+                dstHeight = svgHeight,
                 scale = options.scale
             )
             bitmapWidth = (multiplier * svgWidth).toInt()
             bitmapHeight = (multiplier * svgHeight).toInt()
         } else {
-            bitmapWidth = dstWidth.roundToInt()
-            bitmapHeight = dstHeight.roundToInt()
+            bitmapWidth = DEFAULT_SIZE
+            bitmapHeight = DEFAULT_SIZE
         }
 
         // Set the SVG's view box to enable scaling if it is not set.
@@ -79,17 +74,6 @@ class SvgDecoder @JvmOverloads constructor(
             image = bitmap,
             // isSampled = true // SVGs can always be re-decoded at a higher resolution.
         )
-    }
-
-    private fun getDstSize(srcWidth: Float, srcHeight: Float, scale: Scale): Pair<Float, Float> {
-        return if (options.size.isOriginal) {
-            val dstWidth = if (srcWidth > 0) srcWidth else DEFAULT_SIZE
-            val dstHeight = if (srcHeight > 0) srcHeight else DEFAULT_SIZE
-            dstWidth to dstHeight
-        } else {
-            val (dstWidth, dstHeight) = options.size
-            dstWidth.toPx(scale).toFloat() to dstHeight.toPx(scale).toFloat()
-        }
     }
 
     class Factory constructor(
@@ -116,7 +100,7 @@ class SvgDecoder @JvmOverloads constructor(
 
     companion object {
         private const val MIME_TYPE_SVG = "image/svg+xml"
-        private const val DEFAULT_SIZE = 512f
+        private const val DEFAULT_SIZE = 512
         // const val CSS_KEY = "coil#css"
     }
 }

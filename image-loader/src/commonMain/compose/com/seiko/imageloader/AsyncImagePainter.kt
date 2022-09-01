@@ -23,7 +23,6 @@ import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageRequestBuilder
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -161,9 +160,6 @@ class AsyncImagePainter(
             .apply {
                 if (request.scale == null) {
                     scale(contentScale.toScale())
-                }
-                if (request.precision != Precision.EXACT) {
-                    precision(Precision.INEXACT)
                 }
             }
             .build()

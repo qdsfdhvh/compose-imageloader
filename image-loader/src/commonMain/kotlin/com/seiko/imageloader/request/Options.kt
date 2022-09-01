@@ -2,13 +2,11 @@ package com.seiko.imageloader.request
 
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.size.Scale
-import com.seiko.imageloader.size.Size
 
 class Options(
     val allowInexactSize: Boolean = false,
     val premultipliedAlpha: Boolean = true,
     val config: ImageConfig = ImageConfig.ARGB_8888,
-    val size: Size = Size.ORIGINAL,
     val scale: Scale = Scale.FIT,
     val memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
     val diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
