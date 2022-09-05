@@ -5,6 +5,7 @@ import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.util.closeQuietly
+import com.seiko.imageloader.util.parseString
 import io.github.aakira.napier.Napier
 import okio.BufferedSource
 import okio.buffer
@@ -23,7 +24,7 @@ class DiskCacheInterceptor(
 
         var snapshot = readFromDiskCache(options, cacheKey)
         if (snapshot != null) {
-            Napier.d(tag = "DiskCacheInterceptor") { "read disk cache, data:$data" }
+            Napier.d(tag = "DiskCacheInterceptor") { "read disk cache, data:${data.parseString()}" }
             return SourceResult(
                 request = request,
                 channel = snapshot.source(),
