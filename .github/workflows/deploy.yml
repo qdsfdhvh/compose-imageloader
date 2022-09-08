@@ -19,21 +19,15 @@ jobs:
         with:
           java-version: 11
 
-      - name: Apply Signing
-        if: ${{ github.event_name != 'pull_request' }}
+      - name: Publish to MavenCentral
+        run: ./gradlew publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
         env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-        run: ./.github/apply_signing.sh
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
 
-      - name: Publish to Sonatype
-        run: ./gradlew :image-loader:publish --stacktrace --no-daemon --no-parallel
-
-#      - name: Close and release on Sonatype
-#        uses: monkeyWie/maven-nexus-release@v1.0.0
-#        with:
-#          maven-repo-server-username: ${{ secrets.NEXUS_USERNAME }}
-#          maven-repo-server-password: ${{ secrets.NEXUS_PASSWORD }}
+      - name: Close and Release
+        run: ./gradlew closeAndReleaseRepository --no-daemon --no-parallel
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PASSWORD }}
