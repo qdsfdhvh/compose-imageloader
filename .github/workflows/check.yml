@@ -18,11 +18,12 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 17
+          java-version: 11
       - name: spotless
-        run: ./gradlew spotlessCheck
+        run: ./gradlew spotlessCheck --stacktrace --no-daemon --no-parallel
 
   build:
+    name: Gradle check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,10 +31,10 @@ jobs:
       - name: set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 17
+          java-version: 11
 
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
+      - name: lint
+        run: ./gradlew :image-loader:lint :image-loader:assemble --stacktrace --no-daemon --no-parallel
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: test
+        run: ./gradlew :image-loader:test --stacktrace --no-daemon --no-parallel

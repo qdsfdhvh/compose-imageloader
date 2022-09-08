@@ -14,38 +14,26 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 17
+          java-version: 11
 
-      - name: Configure GPG Key
-        run: |
-          echo "$NEXUS_USERNAME"
-          echo -n "$GPG_KEY_ARMOR" | base64 --decode > ./release.asc
-          gpg --quiet --output $GITHUB_WORKSPACE/release.gpg --dearmor ./release.asc
+      - name: Apply Signing
+        if: ${{ github.event_name != 'pull_request' }}
         env:
-          GPG_KEY_ARMOR: ${{ secrets.GPG_KEY_ARMOR }}
-          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-
-      - name: Configure Gradle Properties
-        run: |
-          sed -i -e "s,nexusUsername=,nexusUsername=$NEXUS_USERNAME,g" gradle.properties
-          sed -i -e "s,nexusPassword=,nexusPassword=$NEXUS_PASSWORD,g" gradle.properties
-          sed -i -e "s,signing.keyId=,signing.keyId=$GPG_KEY_ID,g" gradle.properties
-          sed -i -e "s,signing.password=,signing.password=$GPG_PASSWORD,g" gradle.properties
-          sed -i -e "s,signing.secretKeyRingFile=,signing.secretKeyRingFile=$GITHUB_WORKSPACE/release.gpg,g" gradle.properties
-        env:
-          GPG_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-          GPG_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+        run: ./.github/apply_signing.sh
 
       - name: Publish to Sonatype
-        run: ./gradlew build publish --debug --stacktrace
+        run: ./gradlew :image-loader:publish --stacktrace --no-daemon --no-parallel
 
-      - name: Close and release on Sonatype
-        uses: monkeyWie/maven-nexus-release@v1.0.0
-        with:
-          maven-repo-server-username: ${{ secrets.NEXUS_USERNAME }}
-          maven-repo-server-password: ${{ secrets.NEXUS_PASSWORD }}
+#      - name: Close and release on Sonatype
+#        uses: monkeyWie/maven-nexus-release@v1.0.0
+#        with:
+#          maven-repo-server-username: ${{ secrets.NEXUS_USERNAME }}
+#          maven-repo-server-password: ${{ secrets.NEXUS_PASSWORD }}
