@@ -4,12 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
-import com.seiko.imageloader.component.fetcher.ResourceMetadata
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.size.heightPx
-import com.seiko.imageloader.size.isOriginal
-import com.seiko.imageloader.size.widthPx
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.ExifData
 import com.seiko.imageloader.util.ExifUtils
@@ -109,17 +105,6 @@ class BitmapFactoryDecoder constructor(
 
     /** Compute and set the scaling properties for [BitmapFactory.Options]. */
     private fun BitmapFactory.Options.configureScale(exifData: ExifData) {
-        // Requests that request original size from a resource source need to be decoded with
-        // respect to their intrinsic density.
-        val metadata = source.metadata
-        if (metadata is ResourceMetadata && options.size.isOriginal) {
-            inSampleSize = 1
-            inScaled = true
-            inDensity = metadata.density
-            inTargetDensity = context.resources.displayMetrics.densityDpi
-            return
-        }
-
         // This occurs if there was an error decoding the image's size.
         if (outWidth <= 0 || outHeight <= 0) {
             inSampleSize = 1
@@ -132,15 +117,12 @@ class BitmapFactoryDecoder constructor(
         val srcWidth = if (exifData.isSwapped) outHeight else outWidth
         val srcHeight = if (exifData.isSwapped) outWidth else outHeight
 
-        val dstWidth = options.size.widthPx(options.scale) { srcWidth }
-        val dstHeight = options.size.heightPx(options.scale) { srcHeight }
-
         // Calculate the image's sample size.
         inSampleSize = DecodeUtils.calculateInSampleSize(
             srcWidth = srcWidth,
             srcHeight = srcHeight,
-            dstWidth = dstWidth,
-            dstHeight = dstHeight,
+            dstWidth = srcWidth,
+            dstHeight = srcHeight,
             scale = options.scale
         )
 
@@ -148,8 +130,8 @@ class BitmapFactoryDecoder constructor(
         var scale = DecodeUtils.computeSizeMultiplier(
             srcWidth = srcWidth / inSampleSize.toDouble(),
             srcHeight = srcHeight / inSampleSize.toDouble(),
-            dstWidth = dstWidth.toDouble(),
-            dstHeight = dstHeight.toDouble(),
+            dstWidth = srcWidth.toDouble(),
+            dstHeight = srcHeight.toDouble(),
             scale = options.scale
         )
 

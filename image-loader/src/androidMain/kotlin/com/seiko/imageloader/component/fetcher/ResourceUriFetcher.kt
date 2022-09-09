@@ -39,7 +39,6 @@ internal class ResourceUriFetcher(
             data.authority?.takeIf { it.isNotBlank() } ?: throwInvalidUriException(data)
         val resId = data.pathSegments.lastOrNull()?.toIntOrNull() ?: throwInvalidUriException(data)
 
-        // val context = options.context
         val resources = if (packageName == context.packageName) {
             context.resources
         } else {
@@ -63,7 +62,6 @@ internal class ResourceUriFetcher(
                     image = DrawableUtils.convertToBitmap(
                         drawable = drawable,
                         config = options.config.toBitmapConfig(),
-                        size = options.size,
                         scale = options.scale,
                         allowInexactSize = options.allowInexactSize
                     )

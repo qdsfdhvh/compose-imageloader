@@ -7,16 +7,11 @@ import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.decodeDrawable
-import androidx.core.util.component1
-import androidx.core.util.component2
 import com.seiko.imageloader.component.fetcher.AssetMetadata
 import com.seiko.imageloader.component.fetcher.ContentMetadata
 import com.seiko.imageloader.component.fetcher.ResourceMetadata
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.size.heightPx
-import com.seiko.imageloader.size.widthPx
-import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable.Companion.REPEAT_INFINITE
 import com.seiko.imageloader.util.ScaleDrawable
@@ -29,9 +24,7 @@ import com.seiko.imageloader.util.toPainter
 import io.github.aakira.napier.Napier
 import okio.BufferedSource
 import okio.buffer
-import okio.source
 import java.nio.ByteBuffer
-import kotlin.math.roundToInt
 
 /**
  * A [Decoder] that uses [ImageDecoder] to decode GIFs, animated WebPs, and animated HEIFs.
@@ -55,31 +48,6 @@ class ImageDecoderDecoder @JvmOverloads constructor(
             source.toImageDecoderSource().decodeDrawable { info, _ ->
                 // Capture the image decoder to manually close it later.
                 imageDecoder = this
-
-                // Configure the output image's size.
-                val (srcWidth, srcHeight) = info.size
-                val dstWidth = options.size.widthPx(options.scale) { srcWidth }
-                val dstHeight = options.size.heightPx(options.scale) { srcHeight }
-                if (srcWidth > 0 && srcHeight > 0 &&
-                    (srcWidth != dstWidth || srcHeight != dstHeight)
-                ) {
-                    val multiplier = DecodeUtils.computeSizeMultiplier(
-                        srcWidth = srcWidth,
-                        srcHeight = srcHeight,
-                        dstWidth = dstWidth,
-                        dstHeight = dstHeight,
-                        scale = options.scale
-                    )
-
-                    // Set the target size if the image is larger than the requested dimensions
-                    // or the request requires exact dimensions.
-                    val isSampled = multiplier < 1
-                    if (isSampled || !options.allowInexactSize) {
-                        val targetWidth = (multiplier * srcWidth).roundToInt()
-                        val targetHeight = (multiplier * srcHeight).roundToInt()
-                        setTargetSize(targetWidth, targetHeight)
-                    }
-                }
 
                 // Configure any other attributes.
                 configureImageDecoderProperties()

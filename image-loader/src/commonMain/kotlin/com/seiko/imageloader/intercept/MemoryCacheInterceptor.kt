@@ -1,10 +1,13 @@
 package com.seiko.imageloader.intercept
 
+import com.seiko.imageloader.Image
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
 import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ImageResult
+import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.parseString
 import io.github.aakira.napier.Napier
 
 class MemoryCacheInterceptor(
@@ -16,26 +19,41 @@ class MemoryCacheInterceptor(
         val data = request.data
         val cacheKey = components.key(data, options) ?: return chain.proceed(request)
 
-        val memoryCache = memoryCache.value
-        val memoryCacheKey = MemoryKey(cacheKey)
-        val memoryCacheValue = memoryCache[memoryCacheKey]
+        val memoryCacheValue = readFromMemoryCache(options, cacheKey)
         if (memoryCacheValue != null) {
-            Napier.d(tag = "Interceptor") { "read memory cache, data:$data" }
+            Napier.d(tag = "MemoryCacheInterceptor") { "read memory cache, data:${data.parseString()}" }
             return ComposeImageResult(
                 request = request,
-                image = memoryCacheValue.image,
+                image = memoryCacheValue,
             )
         }
 
         val result = chain.proceed(request)
         when (result) {
             is ComposeImageResult -> {
-                memoryCache[memoryCacheKey] = MemoryValue(
-                    image = result.image,
-                )
+                writeToMemoryCache(options, cacheKey, result.image)
             }
             else -> Unit
         }
         return result
+    }
+
+    private fun readFromMemoryCache(options: Options, cacheKey: MemoryKey): MemoryValue? {
+        return if (options.memoryCachePolicy.readEnabled) {
+            runCatching {
+                memoryCache.value[cacheKey]
+            }.onFailure {
+                Napier.d(tag = "MemoryCacheInterceptor", throwable = it) { "fail read disk cache error:" }
+            }.getOrNull()
+        } else null
+    }
+
+    private fun writeToMemoryCache(
+        options: Options,
+        cacheKey: MemoryKey,
+        image: Image,
+    ) {
+        if (!options.memoryCachePolicy.writeEnabled) return
+        memoryCache.value[cacheKey] = image
     }
 }

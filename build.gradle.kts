@@ -7,7 +7,7 @@ plugins {
     kotlin("android") apply false
     id("org.jetbrains.compose") version Versions.compose_jb apply false
     id("com.diffplug.spotless") version Versions.spotless
-    id("com.vanniktech.maven.publish") version "0.20.0" apply false
+    id("com.vanniktech.maven.publish") version "0.21.0" apply false
 }
 
 allprojects {
@@ -44,7 +44,7 @@ allprojects {
     }
 
     group = "io.github.qdsfdhvh"
-    version = "1.1.6"
+    version = "1.1.8"
 
     plugins.withId("com.vanniktech.maven.publish.base") {
         @Suppress("UnstableApiUsage")

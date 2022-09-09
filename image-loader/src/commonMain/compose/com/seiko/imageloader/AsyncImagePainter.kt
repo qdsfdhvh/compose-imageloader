@@ -23,8 +23,8 @@ import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageRequestBuilder
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SourceResult
-import com.seiko.imageloader.size.Precision
 import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.util.parseString
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -162,9 +162,6 @@ class AsyncImagePainter(
                 if (request.scale == null) {
                     scale(contentScale.toScale())
                 }
-                if (request.precision != Precision.EXACT) {
-                    precision(Precision.INEXACT)
-                }
             }
             .build()
     }
@@ -180,7 +177,7 @@ class AsyncImagePainter(
                 ImageRequestState.Success
             }
             is ErrorResult -> {
-                Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error data: ${input.request.data}" }
+                Napier.w(tag = "AsyncImagePainter", throwable = input.error) { "load image error data: ${input.request.data.parseString()}" }
                 ImageRequestState.Failure(input.error)
             }
             is SourceResult -> return

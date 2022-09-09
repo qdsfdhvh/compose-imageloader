@@ -1,12 +1,9 @@
 package com.seiko.imageloader.component.fetcher
 
 import android.content.ContentResolver
-import android.content.ContentResolver.EXTRA_SIZE
 import android.content.ContentResolver.SCHEME_CONTENT
 import android.content.Context
-import android.graphics.Point
 import android.os.Build.VERSION.SDK_INT
-import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.ContactsContract.Contacts
 import android.provider.MediaStore
@@ -14,7 +11,6 @@ import androidx.annotation.VisibleForTesting
 import com.eygraber.uri.Uri
 import com.eygraber.uri.toAndroidUri
 import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.size.Dimension
 import okio.buffer
 import okio.source
 import android.net.Uri as AndroidUri
@@ -35,9 +31,8 @@ internal class ContentUriFetcher(
                 ?.createInputStream()
             checkNotNull(stream) { "Unable to find a contact photo associated with '$data'." }
         } else if (SDK_INT >= 29 && isMusicThumbnailUri(data)) {
-            val bundle = newMusicThumbnailSizeOptions()
             val stream = contentResolver
-                .openTypedAssetFile(androidUri, "image/*", bundle, null)
+                .openTypedAssetFile(androidUri, "image/*", null, null)
                 ?.createInputStream()
             checkNotNull(stream) { "Unable to find a music thumbnail associated with '$data'." }
         } else {
@@ -74,12 +69,6 @@ internal class ContentUriFetcher(
         val segments = data.pathSegments
         val size = segments.size
         return size >= 3 && segments[size - 3] == "audio" && segments[size - 2] == "albums"
-    }
-
-    private fun newMusicThumbnailSizeOptions(): Bundle? {
-        val width = (options.size.width as? Dimension.Pixels)?.px ?: return null
-        val height = (options.size.height as? Dimension.Pixels)?.px ?: return null
-        return Bundle(1).apply { putParcelable(EXTRA_SIZE, Point(width, height)) }
     }
 
     class Factory(

@@ -5,6 +5,7 @@ import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.util.closeQuietly
+import com.seiko.imageloader.util.parseString
 import io.github.aakira.napier.Napier
 import okio.BufferedSource
 import okio.buffer
@@ -23,7 +24,7 @@ class DiskCacheInterceptor(
 
         var snapshot = readFromDiskCache(options, cacheKey)
         if (snapshot != null) {
-            Napier.d(tag = "Interceptor") { "read disk cache, data:$data" }
+            Napier.d(tag = "DiskCacheInterceptor") { "read disk cache, data:${data.parseString()}" }
             return SourceResult(
                 request = request,
                 channel = snapshot.source(),
@@ -66,16 +67,13 @@ class DiskCacheInterceptor(
         snapshot: DiskCache.Snapshot?,
         source: BufferedSource,
     ): DiskCache.Snapshot? {
-        val editor = when {
-            snapshot == null -> null
-            !options.diskCachePolicy.writeEnabled -> {
-                snapshot.closeQuietly()
-                null
-            }
-            else -> {
-                snapshot.closeAndEdit() ?: diskCache.value.edit(cacheKey)
-            }
-        } ?: return null
+        if (!options.diskCachePolicy.writeEnabled) {
+            snapshot?.closeQuietly()
+            return null
+        }
+        val editor = snapshot?.closeAndEdit()
+            ?: diskCache.value.edit(cacheKey)
+            ?: return null
         try {
             fileSystem.write(editor.data) {
                 writeAll(source)
