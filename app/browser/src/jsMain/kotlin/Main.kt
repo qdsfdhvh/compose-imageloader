@@ -54,11 +54,11 @@ private fun generateImageLoader(): ImageLoader {
                 .maxSizePercent(0.25)
                 .build()
         }
-        .diskCache {
-            DiskCacheBuilder()
-                .directory(SYSTEM_TEMPORARY_DIRECTORY.resolve("image_cache"))
-                .maxSizeBytes(512L * 1024 * 1024) // 512MB
-                .build()
-        }
+        // .diskCache {
+        //     DiskCacheBuilder()
+        //         .directory(SYSTEM_TEMPORARY_DIRECTORY.resolve("image_cache"))
+        //         .maxSizeBytes(512L * 1024 * 1024) // 512MB
+        //         .build()
+        // }
         .build()
 }

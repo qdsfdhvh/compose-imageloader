@@ -18,13 +18,6 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(npm("path-browserify", "^1.0.1"))
                 implementation(npm("os-browserify", "^0.3.0"))
-
-                implementation(npm("fs-extra", "9.1.0"))
-                implementation(npm("assert", "^2.0.0"))
-                implementation(npm("stream-browserify", "^3.0.0"))
-                implementation(npm("constants-browserify", "^1.0.0"))
-                implementation(npm("buffer", "^6.0.3"))
-                implementation(devNpm("process", "^0.11.10"))
             }
         }
     }
