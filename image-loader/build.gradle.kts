@@ -14,6 +14,7 @@ kotlin {
     }
     jvm("desktop")
     ios()
+    iosSimulatorArm64()
     macosX64()
     macosArm64()
     js(IR) {
@@ -64,6 +65,9 @@ kotlin {
         }
         val iosMain by getting {
             dependsOn(darwinMain)
+        }
+        val iosSimulatorArm64Main by getting {
+            dependsOn(iosMain)
         }
         val macosX64Main by getting {
             dependsOn(darwinMain)

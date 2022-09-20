@@ -1,10 +1,12 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
 }
 
 kotlin {
-    ios("uikit") {
+    fun KotlinNativeTarget.configureIosTarget() {
         binaries {
             executable {
                 entryPoint = "com.seiko.imageloader.demo.main"
@@ -18,11 +20,21 @@ kotlin {
             }
         }
     }
+    ios("uikit") {
+        configureIosTarget()
+    }
+    iosSimulatorArm64("uikitSimulatorArm64") {
+        configureIosTarget()
+    }
+
     sourceSets {
         val uikitMain by getting {
             dependencies {
                 implementation(projects.app.common)
             }
+        }
+        val uikitSimulatorArm64Main by getting {
+            dependsOn(uikitMain)
         }
     }
 }
