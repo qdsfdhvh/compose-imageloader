@@ -14,6 +14,7 @@ kotlin {
     jvm()
     iosX64()
     iosArm64()
+    iosSimulatorArm64()
     macosX64()
     macosArm64()
     js(IR) {
@@ -41,6 +42,9 @@ kotlin {
             dependsOn(appleMain)
         }
         val iosArm64Main by getting {
+            dependsOn(appleMain)
+        }
+        val iosSimulatorArm64Main by getting {
             dependsOn(appleMain)
         }
         val macosX64Main by getting {
