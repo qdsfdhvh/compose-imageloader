@@ -44,7 +44,7 @@ allprojects {
     }
 
     group = "io.github.qdsfdhvh"
-    version = "1.1.9"
+    version = "1.2.0"
 
     plugins.withId("com.vanniktech.maven.publish.base") {
         @Suppress("UnstableApiUsage")
