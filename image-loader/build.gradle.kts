@@ -33,8 +33,20 @@ kotlin {
                 api("com.eygraber:uri-kmp:0.0.6")
             }
         }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+        val svgParserMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                api("org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.Kotlin.serialization}")
+            }
+        }
         val androidMain by getting {
             kotlin.srcDir("src/androidMain/gif")
+            dependsOn(svgParserMain)
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
@@ -48,7 +60,7 @@ kotlin {
             }
         }
         val skiaMain by creating {
-            dependsOn(commonMain)
+            dependsOn(svgParserMain)
         }
         val desktopMain by getting {
             dependsOn(skiaMain)
@@ -59,6 +71,9 @@ kotlin {
                 implementation("com.twelvemonkeys.imageio:imageio-batik:3.8.3")
                 implementation("org.apache.xmlgraphics:batik-transcoder:1.14")
             }
+        }
+        val desktopTest by getting {
+            kotlin.srcDir("src/svgParserTest/kotlin")
         }
         val darwinMain by creating {
             dependsOn(skiaMain)
