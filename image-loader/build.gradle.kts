@@ -3,6 +3,7 @@ import com.vanniktech.maven.publish.MavenPublishBaseExtension
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
     id("org.jetbrains.compose")
     id("com.android.library")
     id("com.vanniktech.maven.publish.base")
@@ -23,7 +24,10 @@ kotlin {
     }
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDir("src/commonMain/compose")
+            kotlin.srcDirs(
+                "src/commonMain/compose",
+                "src/commonMain/svg",
+            )
             dependencies {
                 api(compose.ui)
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
@@ -31,6 +35,9 @@ kotlin {
                 api("io.ktor:ktor-client-core:${Versions.ktor}")
                 implementation("io.github.aakira:napier:2.6.1")
                 api("com.eygraber:uri-kmp:0.0.6")
+                // svg
+                // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}")
+                implementation("io.github.pdvrieze.xmlutil:core:0.84.3")
             }
         }
         val commonTest by getting {
@@ -38,15 +45,8 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val svgParserMain by creating {
-            dependsOn(commonMain)
-            dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.Kotlin.serialization}")
-            }
-        }
         val androidMain by getting {
             kotlin.srcDir("src/androidMain/gif")
-            dependsOn(svgParserMain)
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
@@ -60,7 +60,6 @@ kotlin {
             }
         }
         val skiaMain by creating {
-            dependsOn(svgParserMain)
         }
         val desktopMain by getting {
             dependsOn(skiaMain)
@@ -73,7 +72,8 @@ kotlin {
             }
         }
         val desktopTest by getting {
-            kotlin.srcDir("src/svgParserTest/kotlin")
+            // dependsOn(svgParserTest)
+            // kotlin.srcDir("src/svgParserTest/kotlin")
         }
         val darwinMain by creating {
             dependsOn(skiaMain)
@@ -115,6 +115,11 @@ android {
         sourceCompatibility = Versions.Java.java
         targetCompatibility = Versions.Java.java
     }
+    // sourceSets {
+    //     getByName("androidTest") {
+    //         java.srcDirs("src/svgParserTest/kotlin")
+    //     }
+    // }
 }
 
 @Suppress("UnstableApiUsage")
