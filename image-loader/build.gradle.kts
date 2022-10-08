@@ -19,7 +19,7 @@ kotlin {
     macosArm64()
     js(IR) {
         browser()
-        binaries.executable()
+        nodejs()
     }
     sourceSets {
         val commonMain by getting {

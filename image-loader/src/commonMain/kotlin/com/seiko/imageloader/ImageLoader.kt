@@ -59,7 +59,7 @@ class RealImageLoader(
                 interceptors = interceptors,
                 index = 0,
                 components = components,
-                options = options,
+                options = request.options ?: options,
                 request = request,
             ).proceed(request)
         } catch (throwable: Throwable) {
