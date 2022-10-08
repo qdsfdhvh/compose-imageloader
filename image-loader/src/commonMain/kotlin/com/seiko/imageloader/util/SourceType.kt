@@ -47,7 +47,7 @@ private val HEIF_HEADER_HEVX = "hevx".encodeUtf8()
 /**
  * Return 'true' if the [source] contains a GIF image. The [source] is not consumed.
  */
-internal fun isGif(source: BufferedSource): Boolean {
+fun isGif(source: BufferedSource): Boolean {
     return source.rangeEquals(0, GIF_HEADER_89A) ||
         source.rangeEquals(0, GIF_HEADER_87A)
 }

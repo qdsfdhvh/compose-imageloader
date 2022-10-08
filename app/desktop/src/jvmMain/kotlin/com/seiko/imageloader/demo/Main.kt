@@ -8,6 +8,7 @@ import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
+import com.seiko.imageloader.component.decoder.ImageIODecoder
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import okio.Path.Companion.toOkioPath
@@ -46,6 +47,9 @@ private fun generateImageLoader(): ImageLoader {
                 .directory(getCacheDir().resolve("image_cache").toOkioPath())
                 .maxSizeBytes(512L * 1024 * 1024) // 512MB
                 .build()
+        }
+        .components {
+            add(ImageIODecoder.Factory())
         }
         .build()
 }
