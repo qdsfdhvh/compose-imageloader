@@ -8,6 +8,7 @@ import io.ktor.client.request.url
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.Url
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 
 class KtorUrlFetcher(
     private val httpUrl: Url,
@@ -18,10 +19,13 @@ class KtorUrlFetcher(
         val response = httpClient.value.request {
             url(httpUrl)
         }
-        return FetchSourceResult(
-            source = response.bodyAsChannel().source(),
-            mimeType = response.contentType()?.toString(),
-        )
+        if (response.status.isSuccess()) {
+            return FetchSourceResult(
+                source = response.bodyAsChannel().source(),
+                mimeType = response.contentType()?.toString(),
+            )
+        }
+        throw KtorUrlRequestException("code:${response.status.value}, ${response.status.description}")
     }
 
     class Factory(
@@ -33,3 +37,5 @@ class KtorUrlFetcher(
         }
     }
 }
+
+private class KtorUrlRequestException(msg: String) : RuntimeException(msg)
