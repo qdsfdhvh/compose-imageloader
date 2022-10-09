@@ -29,7 +29,7 @@ class SvgDecoder @JvmOverloads constructor(
     override suspend fun decode() = runInterruptible {
         val svg = SVG.getFromInputStream(source.channel.inputStream())
 
-        if (svg.documentSVGVersion.startsWith("2")) {
+        if (svg.documentSVGVersion != null && svg.documentSVGVersion.startsWith("2")) {
             throw RuntimeException("Un support SVG version '2.0'")
         }
 
