@@ -2,11 +2,11 @@
   "categories": [
     {
       "title": "## 🚀 Features",
-      "labels": ["feature"]
+      "labels": ["enhancement"]
     },
     {
       "title": "## 🐛 Fixes",
-      "labels": ["fix"]
+      "labels": ["bug"]
     },
     {
       "title": "## 🧪 Tests",
@@ -22,21 +22,16 @@
     },
     {
       "title": "## 👋 Deprecated",
-      "labels": ["type: deprecation"]
+      "labels": ["deprecation"]
     },
     {
       "title": "## 📘 Documentation",
-      "labels": ["type: documentation"]
+      "labels": ["documentation"]
     }
   ],
+  "sort": "ASC",
+  "template": "${{CHANGELOG}}",
   "pr_template": "- ${{TITLE}} by @${{AUTHOR}} in #${{NUMBER}}",
-  "empty_template": "- no changes",
-  "transformers": [
-    {
-      "pattern": "[\\-\\*] (\\[(...|TEST|CI|SKIP)\\])( )?(.+?)\n(.+?[\\-\\*] )(.+)",
-      "target": "- $4\n  - $6"
-    }
-  ],
   "max_pull_requests": 1000,
   "max_back_track_time_days": 1000
 }
