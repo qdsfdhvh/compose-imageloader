@@ -11,12 +11,14 @@ kotlin {
         compilations.all {
             kotlinOptions.jvmTarget = Versions.Java.jvmTarget
         }
-        withJava()
+        // error: Both artifact maps contains same key: .../desktop-jvm-1.2.0.jar with different values for kmp: [:app:desktop:jvmMain, :app:desktop:commonMain] and platform: :app:desktop:main
+        // withJava()
     }
     sourceSets {
         val jvmMain by getting {
             dependencies {
                 implementation(projects.app.common)
+                implementation(projects.imageLoaderBatik)
                 implementation(compose.desktop.currentOs)
             }
         }

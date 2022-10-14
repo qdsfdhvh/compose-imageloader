@@ -19,6 +19,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "compose-imageLoader"
 include(":image-loader")
+include(":image-loader-batik")
 include(
     ":app:common",
     ":app:android",

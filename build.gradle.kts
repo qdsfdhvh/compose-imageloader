@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.serialization") version Versions.Kotlin.lang apply false
     id("org.jetbrains.compose") version Versions.compose_jb apply false
     id("com.diffplug.spotless") version Versions.spotless
-    id("com.vanniktech.maven.publish") version "0.21.0" apply false
+    id("com.vanniktech.maven.publish") version "0.22.0" apply false
 }
 
 allprojects {
@@ -16,14 +16,6 @@ allprojects {
         kotlinOptions {
             jvmTarget = Versions.Java.jvmTarget
             freeCompilerArgs = freeCompilerArgs + listOf()
-        }
-    }
-
-    configurations.all {
-        resolutionStrategy.dependencySubstitution {
-            substitute(module("org.jetbrains.compose.compiler:compiler")).apply {
-                using(module("androidx.compose.compiler:compiler:${Versions.composeCompiler}"))
-            }
         }
     }
 
@@ -45,12 +37,12 @@ allprojects {
     }
 
     group = "io.github.qdsfdhvh"
-    version = "1.2.0"
+    version = "1.2.2.1"
 
     plugins.withId("com.vanniktech.maven.publish.base") {
         @Suppress("UnstableApiUsage")
         configure<MavenPublishBaseExtension> {
-            publishToMavenCentral(SonatypeHost.S01)
+            publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
             signAllPublications()
             pom {
                 name.set("compose-imageLoader")

@@ -1,0 +1,31 @@
+name: release
+
+on:
+  push:
+    tags:
+      - '**'
+
+concurrency:
+  group: ${{ github.event.pull_request.number }}-ci
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@main
+        with:
+          configuration: ".github/configs/changelog.json"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.github_release.outputs.changelog }}
