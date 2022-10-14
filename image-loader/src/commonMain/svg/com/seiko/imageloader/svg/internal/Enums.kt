@@ -73,6 +73,12 @@ internal enum class SvgElement {
     use,
     video,
     view;
+
+    companion object {
+        fun parse(value: String): SvgElement {
+            return valueOf(value)
+        }
+    }
 }
 
 // https://www.w3.org/TR/SVG2/attindex.html
@@ -339,4 +345,10 @@ internal enum class SvgAttr {
     yChannelSelector,
     z,
     zoomAndPan;
+
+    companion object {
+        fun parse(value: String): SvgAttr {
+            return SvgAttr.valueOf(value.replace('-', '_'))
+        }
+    }
 }
