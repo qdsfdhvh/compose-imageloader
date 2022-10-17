@@ -23,7 +23,7 @@ data class Length(
     }
 }
 
-data class Svg(
+data class SVG(
     val x: Length,
     val y: Length,
     val width: Length,

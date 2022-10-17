@@ -2,7 +2,7 @@ package com.seiko.imageloader.svg.internal
 
 import nl.adaptivity.xmlutil.XmlEvent
 
-internal fun parseStartElement(
+internal fun SVGBuilder.parseStartElement(
     tag: String,
     attributes: Array<out XmlEvent.Attribute>,
 ) {
@@ -65,9 +65,7 @@ internal fun parseStartElement(
         SvgElement.set -> TODO()
         SvgElement.stop -> TODO()
         SvgElement.style -> TODO()
-        SvgElement.svg -> {
-
-        }
+        SvgElement.svg -> svg(attributes)
         SvgElement.switch -> TODO()
         SvgElement.symbol -> TODO()
         SvgElement.text -> TODO()
@@ -79,4 +77,8 @@ internal fun parseStartElement(
         SvgElement.video -> TODO()
         SvgElement.view -> TODO()
     }
+}
+
+private fun SVGBuilder.svg(attributes: Array<out XmlEvent.Attribute>) {
+    
 }
