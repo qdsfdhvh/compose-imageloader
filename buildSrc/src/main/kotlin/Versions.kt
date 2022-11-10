@@ -10,7 +10,7 @@ object Versions {
     }
 
     object Kotlin {
-        const val lang = "1.7.10"
+        const val lang = "1.7.20"
         const val coroutines = "1.6.3"
         const val serialization = "1.3.3"
     }
