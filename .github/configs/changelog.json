@@ -30,7 +30,7 @@
     }
   ],
   "sort": "ASC",
-  "template": "# What's Changed\n\n${{CHANGELOG}}\n${{RELEASE_DIFF}}",
+  "template": "# What's Changed\n\n${{CHANGELOG}}\n### Full Changelog: [${{FROM_TAG}}...${{TO_TAG}}](${{RELEASE_DIFF}})",
   "pr_template": "- ${{TITLE}} by @${{AUTHOR}} in #${{NUMBER}}",
   "max_pull_requests": 1000,
   "max_back_track_time_days": 1000
