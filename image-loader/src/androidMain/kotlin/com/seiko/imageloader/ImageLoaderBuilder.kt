@@ -29,6 +29,7 @@ import com.seiko.imageloader.request.Options
 
 actual class ImageLoaderBuilder constructor(
     context: Context,
+    private val maxImageSize: Int = 4096
 ) : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 
     private val context = context.applicationContext
@@ -60,7 +61,7 @@ actual class ImageLoaderBuilder constructor(
             // Decoders
             .add(SvgDecoder.Factory())
             .add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder.Factory(context) else GifDecoder.Factory())
-            .add(BitmapFactoryDecoder.Factory(context))
+            .add(BitmapFactoryDecoder.Factory(context, maxImageSize))
             .build()
 
         return RealImageLoader(

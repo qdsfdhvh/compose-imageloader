@@ -20,6 +20,7 @@ import okio.Buffer
 import okio.ForwardingSource
 import okio.Source
 import okio.buffer
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 /** The base [Decoder] that uses [BitmapFactory] to decode a given [ImageSource]. */
@@ -27,7 +28,8 @@ class BitmapFactoryDecoder constructor(
     private val context: Context,
     private val source: SourceResult,
     private val options: Options,
-    private val parallelismLock: Semaphore = Semaphore(Int.MAX_VALUE)
+    private val maxImageSize: Int,
+    private val parallelismLock: Semaphore = Semaphore(Int.MAX_VALUE),
 ) : Decoder {
 
     override suspend fun decode() = parallelismLock.withPermit {
@@ -75,7 +77,6 @@ class BitmapFactoryDecoder constructor(
 
         // Reverse the EXIF transformations to get the original image.
         val bitmap = ExifUtils.reverseTransformations(outBitmap, exifData)
-
         return DecodeImageResult(
             image = bitmap
         )
@@ -116,13 +117,23 @@ class BitmapFactoryDecoder constructor(
         // EXIF transformations (but before sampling).
         val srcWidth = if (exifData.isSwapped) outHeight else outWidth
         val srcHeight = if (exifData.isSwapped) outWidth else outHeight
-
+        var dstWidth = srcWidth
+        var dstHeight = srcHeight
+        if (max(dstWidth, dstHeight) > maxImageSize) {
+            if (dstWidth >= dstHeight) {
+                dstHeight = ((maxImageSize.toFloat() / srcWidth.toFloat()) * dstHeight).toInt()
+                dstWidth = maxImageSize
+            } else {
+                dstWidth = ((maxImageSize.toFloat() / srcWidth.toFloat()) * dstWidth).toInt()
+                dstHeight = maxImageSize
+            }
+        }
         // Calculate the image's sample size.
         inSampleSize = DecodeUtils.calculateInSampleSize(
             srcWidth = srcWidth,
             srcHeight = srcHeight,
-            dstWidth = srcWidth,
-            dstHeight = srcHeight,
+            dstWidth = dstWidth,
+            dstHeight = dstHeight,
             scale = options.scale
         )
 
@@ -130,8 +141,8 @@ class BitmapFactoryDecoder constructor(
         var scale = DecodeUtils.computeSizeMultiplier(
             srcWidth = srcWidth / inSampleSize.toDouble(),
             srcHeight = srcHeight / inSampleSize.toDouble(),
-            dstWidth = srcWidth.toDouble(),
-            dstHeight = srcHeight.toDouble(),
+            dstWidth = dstWidth.toDouble(),
+            dstHeight = dstHeight.toDouble(),
             scale = options.scale
         )
 
@@ -156,13 +167,14 @@ class BitmapFactoryDecoder constructor(
 
     class Factory constructor(
         private val context: Context,
+        private val maxImageSize: Int,
         maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
     ) : Decoder.Factory {
 
         private val parallelismLock = Semaphore(maxParallelism)
 
         override suspend fun create(source: SourceResult, options: Options): Decoder {
-            return BitmapFactoryDecoder(context, source, options, parallelismLock)
+            return BitmapFactoryDecoder(context, source, options, maxImageSize, parallelismLock)
         }
 
         override fun equals(other: Any?) = other is Factory
