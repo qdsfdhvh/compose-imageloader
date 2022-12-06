@@ -59,6 +59,8 @@ fun App() {
     }
 }
 
+private const val overSize = "https://ipfs.io/ipfs/bafybeigk7niz7mzg4lykydiqhq5i7clmy7ybr6y5omn4uqh7ptihlrdtli"
+
 @Composable
 private fun ImageList(modifier: Modifier = Modifier) {
     var images by remember { mutableStateOf(emptyList<Image>()) }
@@ -72,8 +74,11 @@ private fun ImageList(modifier: Modifier = Modifier) {
     }
 
     LazyColumn(modifier) {
+        item{
+            ImageItem(overSize)
+        }
         itemsGridIndexed(images, 3) { image ->
-            ImageItem(image.imageUrl)
+            ImageItem(image.url)
         }
     }
 }
