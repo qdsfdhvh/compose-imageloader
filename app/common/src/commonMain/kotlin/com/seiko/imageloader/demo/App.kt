@@ -74,7 +74,7 @@ private fun ImageList(modifier: Modifier = Modifier) {
     }
 
     LazyColumn(modifier) {
-        item{
+        item {
             ImageItem(overSize)
         }
         itemsGridIndexed(images, 3) { image ->
