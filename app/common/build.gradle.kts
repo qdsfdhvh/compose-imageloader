@@ -22,7 +22,7 @@ kotlin {
         binaries.executable()
     }
     sourceSets {
-        commonMain {
+        val commonMain by getting {
             dependencies {
                 api(compose.ui)
                 api(compose.foundation)
@@ -38,7 +38,7 @@ kotlin {
         val androidMain by getting
         val jvmMain by getting
         val appleMain by creating {
-            dependsOn(commonMain.get())
+            dependsOn(commonMain)
         }
         val iosX64Main by getting {
             dependsOn(appleMain)
