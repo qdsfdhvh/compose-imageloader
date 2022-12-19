@@ -55,6 +55,7 @@ kotlin {
         val macosArm64Main by getting {
             dependsOn(appleMain)
         }
+        val jsMain by getting
     }
 }
 
