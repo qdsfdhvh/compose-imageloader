@@ -9,7 +9,6 @@ import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
-import com.seiko.imageloader.util.DebugLogger
 import okio.Path.Companion.toOkioPath
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +26,7 @@ class MainActivity : ComponentActivity() {
 
     private fun generateImageLoader(): ImageLoader {
         return ImageLoaderBuilder(this)
-            .logger(DebugLogger())
+            .commonConfig()
             .memoryCache {
                 MemoryCacheBuilder(this)
                     // Set the max size to 25% of the app's available memory.

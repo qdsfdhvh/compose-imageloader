@@ -95,6 +95,7 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoaderBuilder()
+        .commonConfig()
         .memoryCache {
             MemoryCacheBuilder()
                 // Set the max size to 25% of the app's available memory.

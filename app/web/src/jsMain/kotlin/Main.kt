@@ -7,7 +7,7 @@ import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.demo.App
 import com.seiko.imageloader.demo.LocalResLoader
 import com.seiko.imageloader.demo.ResLoader
-import com.seiko.imageloader.util.DebugLogger
+import com.seiko.imageloader.demo.commonConfig
 import org.jetbrains.skiko.wasm.onWasmReady
 
 fun main() {
@@ -25,7 +25,7 @@ fun main() {
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoaderBuilder()
-        .logger(DebugLogger())
+        .commonConfig()
         .memoryCache {
             MemoryCacheBuilder()
                 // Set the max size to 25% of the app's available memory.
