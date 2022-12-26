@@ -22,7 +22,7 @@ object Versions {
 
     const val spotless = "6.7.2"
     const val ktlint = "0.45.2"
-    const val compose_jb = "1.2.1"
+    const val compose_jb = "1.2.2"
     const val multiplatformResources = "0.20.1"
     const val ktor = "2.1.3"
     const val okio = "3.2.0"
