@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
 
     private fun generateImageLoader(): ImageLoader {
         return ImageLoaderBuilder(this)
+            .commonConfig()
             .memoryCache {
                 MemoryCacheBuilder(this)
                     // Set the max size to 25% of the app's available memory.

@@ -7,7 +7,7 @@ import com.seiko.imageloader.component.decoder.SvgDecoder
 import com.seiko.imageloader.component.fetcher.Base64Fetcher
 import com.seiko.imageloader.component.fetcher.FileFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
-import com.seiko.imageloader.component.keyer.KtorUlKeyer
+import com.seiko.imageloader.component.keyer.KtorUrlKeyer
 import com.seiko.imageloader.component.mapper.Base64Mapper
 import com.seiko.imageloader.component.mapper.FileUriMapper
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
@@ -30,7 +30,7 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             .add(StringUriMapper())
             .add(FileUriMapper())
             // Keyers
-            .add(KtorUlKeyer())
+            .add(KtorUrlKeyer())
             // Fetchers
             .add(Base64Fetcher.Factory())
             .add(KtorUrlFetcher.Factory(httpClient))

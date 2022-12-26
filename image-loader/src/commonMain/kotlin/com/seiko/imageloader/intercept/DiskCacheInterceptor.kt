@@ -5,8 +5,9 @@ import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.util.closeQuietly
-import com.seiko.imageloader.util.parseString
-import io.github.aakira.napier.Napier
+import com.seiko.imageloader.util.logd
+import com.seiko.imageloader.util.logi
+import com.seiko.imageloader.util.logw
 import okio.BufferedSource
 import okio.buffer
 
@@ -22,9 +23,20 @@ class DiskCacheInterceptor(
         val data = request.data
         val cacheKey = components.key(data, options) ?: return chain.proceed(request)
 
-        var snapshot = readFromDiskCache(options, cacheKey)
+        var snapshot = runCatching {
+            readFromDiskCache(options, cacheKey)
+        }.onFailure {
+            logw(
+                tag = "DiskCacheInterceptor",
+                data = data,
+                throwable = it,
+            ) { "read disk cache error:" }
+        }.getOrNull()
         if (snapshot != null) {
-            Napier.d(tag = "DiskCacheInterceptor") { "read disk cache, data:${data.parseString()}" }
+            logi(
+                tag = "DiskCacheInterceptor",
+                data = data,
+            ) { "read disk cache" }
             return SourceResult(
                 request = request,
                 channel = snapshot.source(),
@@ -36,8 +48,25 @@ class DiskCacheInterceptor(
         val result = chain.proceed(request)
         when (result) {
             is SourceResult -> {
-                snapshot = writeToDiskCache(options, cacheKey, snapshot, result.channel)
+                snapshot = runCatching {
+                    writeToDiskCache(
+                        options,
+                        cacheKey,
+                        snapshot,
+                        result.channel,
+                    )
+                }.onFailure {
+                    logw(
+                        tag = "DiskCacheInterceptor",
+                        data = data,
+                        throwable = it,
+                    ) { "write disk cache error:" }
+                }.getOrNull()
                 if (snapshot != null) {
+                    logd(
+                        tag = "DiskCacheInterceptor",
+                        data = data,
+                    ) { "write disk cache" }
                     return SourceResult(
                         request = request,
                         channel = snapshot.source(),
@@ -51,13 +80,12 @@ class DiskCacheInterceptor(
         return result
     }
 
-    private fun readFromDiskCache(options: Options, cacheKey: String): DiskCache.Snapshot? {
+    private fun readFromDiskCache(
+        options: Options,
+        cacheKey: String,
+    ): DiskCache.Snapshot? {
         return if (options.diskCachePolicy.readEnabled) {
-            runCatching {
-                diskCache.value[cacheKey]
-            }.onFailure {
-                Napier.d(tag = "DiskCacheInterceptor", throwable = it) { "fail read disk cache error:" }
-            }.getOrNull()
+            diskCache.value[cacheKey]
         } else null
     }
 

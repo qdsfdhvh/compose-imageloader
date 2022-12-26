@@ -7,8 +7,9 @@ import com.seiko.imageloader.cache.memory.MemoryValue
 import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.util.parseString
-import io.github.aakira.napier.Napier
+import com.seiko.imageloader.util.logd
+import com.seiko.imageloader.util.logi
+import com.seiko.imageloader.util.logw
 
 class MemoryCacheInterceptor(
     private val memoryCache: Lazy<MemoryCache>,
@@ -19,9 +20,20 @@ class MemoryCacheInterceptor(
         val data = request.data
         val cacheKey = components.key(data, options) ?: return chain.proceed(request)
 
-        val memoryCacheValue = readFromMemoryCache(options, cacheKey)
+        val memoryCacheValue = runCatching {
+            readFromMemoryCache(options, cacheKey)
+        }.onFailure {
+            logw(
+                tag = "MemoryCacheInterceptor",
+                data = data,
+                throwable = it
+            ) { "read memory cache error:" }
+        }.getOrNull()
         if (memoryCacheValue != null) {
-            Napier.d(tag = "MemoryCacheInterceptor") { "read memory cache, data:${data.parseString()}" }
+            logi(
+                tag = "MemoryCacheInterceptor",
+                data = data,
+            ) { "read memory cache." }
             return ComposeImageResult(
                 request = request,
                 image = memoryCacheValue,
@@ -31,7 +43,22 @@ class MemoryCacheInterceptor(
         val result = chain.proceed(request)
         when (result) {
             is ComposeImageResult -> {
-                writeToMemoryCache(options, cacheKey, result.image)
+                runCatching {
+                    writeToMemoryCache(options, cacheKey, result.image)
+                }.onFailure {
+                    logw(
+                        tag = "MemoryCacheInterceptor",
+                        data = data,
+                        throwable = it
+                    ) { "write memory cache error:" }
+                }.onSuccess { success ->
+                    if (success) {
+                        logd(
+                            tag = "MemoryCacheInterceptor",
+                            data = data,
+                        ) { "write memory cache." }
+                    }
+                }
             }
             else -> Unit
         }
@@ -40,11 +67,7 @@ class MemoryCacheInterceptor(
 
     private fun readFromMemoryCache(options: Options, cacheKey: MemoryKey): MemoryValue? {
         return if (options.memoryCachePolicy.readEnabled) {
-            runCatching {
-                memoryCache.value[cacheKey]
-            }.onFailure {
-                Napier.d(tag = "MemoryCacheInterceptor", throwable = it) { "fail read disk cache error:" }
-            }.getOrNull()
+            memoryCache.value[cacheKey]
         } else null
     }
 
@@ -52,8 +75,9 @@ class MemoryCacheInterceptor(
         options: Options,
         cacheKey: MemoryKey,
         image: Image,
-    ) {
-        if (!options.memoryCachePolicy.writeEnabled) return
+    ): Boolean {
+        if (!options.memoryCachePolicy.writeEnabled) return false
         memoryCache.value[cacheKey] = image
+        return true
     }
 }

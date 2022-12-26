@@ -19,9 +19,9 @@ import com.seiko.imageloader.util.isAnimatedHeif
 import com.seiko.imageloader.util.isAnimatedWebP
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
+import com.seiko.imageloader.util.log
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toPainter
-import io.github.aakira.napier.Napier
 import okio.BufferedSource
 import okio.buffer
 import java.nio.ByteBuffer
@@ -119,7 +119,7 @@ class ImageDecoderDecoder @JvmOverloads constructor(
         if (baseDrawable !is AnimatedImageDrawable) {
             return baseDrawable
         }
-        Napier.d { "is anime drawable" }
+        log(tag = "ImageDecoder") { "is anime drawable" }
 
         baseDrawable.repeatCount = REPEAT_INFINITE
 
@@ -147,7 +147,7 @@ class ImageDecoderDecoder @JvmOverloads constructor(
             return ImageDecoderDecoder(context, source, options, enforceMinimumFrameDelay)
         }
 
-        private suspend fun isApplicable(source: BufferedSource): Boolean {
+        private fun isApplicable(source: BufferedSource): Boolean {
             return isGif(source) || isAnimatedWebP(source) || (SDK_INT >= 30 && isAnimatedHeif(source))
         }
 
