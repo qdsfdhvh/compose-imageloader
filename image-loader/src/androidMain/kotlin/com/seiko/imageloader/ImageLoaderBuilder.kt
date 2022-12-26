@@ -16,7 +16,7 @@ import com.seiko.imageloader.component.fetcher.FileFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.component.keyer.FileKeyer
-import com.seiko.imageloader.component.keyer.KtorUlKeyer
+import com.seiko.imageloader.component.keyer.KtorUrlKeyer
 import com.seiko.imageloader.component.keyer.UriKeyer
 import com.seiko.imageloader.component.mapper.Base64Mapper
 import com.seiko.imageloader.component.mapper.ByteArrayMapper
@@ -45,7 +45,7 @@ actual class ImageLoaderBuilder constructor(
             .add(ResourceIntMapper(context))
             .add(ByteArrayMapper())
             // Keyers
-            .add(KtorUlKeyer())
+            .add(KtorUrlKeyer())
             .add(FileKeyer(true))
             .add(UriKeyer(context))
             // Fetchers
