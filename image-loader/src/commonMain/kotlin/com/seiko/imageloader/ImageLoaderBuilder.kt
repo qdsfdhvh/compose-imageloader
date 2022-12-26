@@ -5,6 +5,7 @@ import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.Logger
 import com.seiko.imageloader.util.httpEngine
 import com.seiko.imageloader.util.ioDispatcher
 import io.ktor.client.HttpClient
@@ -54,6 +55,10 @@ abstract class CommonImageLoaderBuilder<B : CommonImageLoaderBuilder<B>> {
 
     fun addInterceptor(interceptor: Interceptor) = apply {
         interceptors.add(interceptor)
+    }
+
+    fun logger(vararg logger: Logger) = apply {
+        Logger.base(*logger)
     }
 
     fun options(options: Options) = apply {

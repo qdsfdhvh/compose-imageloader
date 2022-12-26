@@ -7,8 +7,7 @@ import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
+import com.seiko.imageloader.util.DebugLogger
 import okio.Path.Companion.toPath
 import platform.AppKit.NSApp
 import platform.AppKit.NSApplication
@@ -18,7 +17,6 @@ import platform.Foundation.NSUserDomainMask
 
 fun main() {
     NSApplication.sharedApplication()
-    Napier.base(DebugAntilog())
     Window("ComposeImageLoader") {
         CompositionLocalProvider(
             LocalImageLoader provides generateImageLoader(),
@@ -32,6 +30,7 @@ fun main() {
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoaderBuilder()
+        .logger(DebugLogger())
         .memoryCache {
             MemoryCacheBuilder()
                 // Set the max size to 25% of the app's available memory.

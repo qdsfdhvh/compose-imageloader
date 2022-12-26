@@ -32,8 +32,6 @@ import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
 import kotlinx.cinterop.autoreleasepool
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.memScoped
@@ -53,8 +51,6 @@ import platform.UIKit.UIScreen
 import platform.UIKit.UIWindow
 
 fun main() {
-    Napier.base(DebugAntilog())
-
     val args = emptyArray<String>()
     memScoped {
         val argc = args.size + 1

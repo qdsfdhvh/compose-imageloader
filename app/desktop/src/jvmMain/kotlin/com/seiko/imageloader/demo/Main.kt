@@ -9,14 +9,11 @@ import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.component.decoder.ImageIODecoder
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
-import okio.Path.Companion.toOkioPath
+import com.seiko.imageloader.util.DebugLogger
 import java.io.File
+import okio.Path.Companion.toOkioPath
 
 fun main() {
-    Napier.base(DebugAntilog())
-
     application {
         Window(
             title = "PreCompose Sample",
@@ -36,6 +33,7 @@ fun main() {
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoaderBuilder()
+        .logger(DebugLogger())
         .memoryCache {
             MemoryCacheBuilder()
                 // Set the max size to 25% of the app's available memory.

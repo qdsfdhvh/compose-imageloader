@@ -7,8 +7,8 @@ import com.seiko.imageloader.cache.memory.MemoryValue
 import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.log
 import com.seiko.imageloader.util.parseString
-import io.github.aakira.napier.Napier
 
 class MemoryCacheInterceptor(
     private val memoryCache: Lazy<MemoryCache>,
@@ -21,7 +21,7 @@ class MemoryCacheInterceptor(
 
         val memoryCacheValue = readFromMemoryCache(options, cacheKey)
         if (memoryCacheValue != null) {
-            Napier.d(tag = "MemoryCacheInterceptor") { "read memory cache, data:${data.parseString()}" }
+            log(tag = "MemoryCacheInterceptor") { "read memory cache, data:${data.parseString()}" }
             return ComposeImageResult(
                 request = request,
                 image = memoryCacheValue,
@@ -43,7 +43,7 @@ class MemoryCacheInterceptor(
             runCatching {
                 memoryCache.value[cacheKey]
             }.onFailure {
-                Napier.d(tag = "MemoryCacheInterceptor", throwable = it) { "fail read disk cache error:" }
+                log(tag = "MemoryCacheInterceptor", throwable = it) { "fail read disk cache error:" }
             }.getOrNull()
         } else null
     }
