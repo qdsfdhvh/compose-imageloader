@@ -20,11 +20,19 @@ actual class DebugLogger actual constructor() : Logger {
         LogPriority.ASSERT to "💞 ASSERT"
     )
 
-    override fun log(priority: LogPriority, tag: String, throwable: Throwable?, message: String) {
+    override fun log(priority: LogPriority, tag: String, data: Any?, throwable: Throwable?, message: String) {
+        val fullMessage = buildString {
+            if (data != null) {
+                append("data:")
+                append(data.parseString())
+                append('\n')
+            }
+            append(message)
+        }
         if (priority == LogPriority.ASSERT) {
-            assert(crashAssert) { buildLog(priority, tag, throwable, message) }
+            assert(crashAssert) { buildLog(priority, tag, throwable, fullMessage) }
         } else {
-            println(buildLog(priority, tag, throwable, message))
+            println(buildLog(priority, tag, throwable, fullMessage))
         }
     }
 

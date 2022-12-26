@@ -1,11 +1,18 @@
 package com.seiko.imageloader.util
 
 actual class DebugLogger actual constructor() : Logger {
-    override fun log(priority: LogPriority, tag: String, throwable: Throwable?, message: String) {
-        val fullMessage = if (throwable != null) {
-            "$message\n${throwable.message}"
-        } else {
-            message
+    override fun log(priority: LogPriority, tag: String, data: Any?, throwable: Throwable?, message: String) {
+        val fullMessage = buildString {
+            if (data != null) {
+                append("data:")
+                append(data.parseString())
+                append('\n')
+            }
+            append(message)
+            if (throwable != null) {
+                append('\n')
+                append(throwable.message)
+            }
         }
         when (priority) {
             LogPriority.VERBOSE -> console.log("VERBOSE $tag : $fullMessage")

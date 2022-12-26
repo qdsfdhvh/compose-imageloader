@@ -24,9 +24,7 @@ import com.seiko.imageloader.request.ImageRequestBuilder
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.size.Scale
-import com.seiko.imageloader.util.LogPriority
-import com.seiko.imageloader.util.log
-import com.seiko.imageloader.util.parseString
+import com.seiko.imageloader.util.logw
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -178,11 +176,11 @@ class AsyncImagePainter(
                 ImageRequestState.Success
             }
             is ErrorResult -> {
-                log(
+                logw(
                     tag = "AsyncImagePainter",
-                    priority = LogPriority.WARN,
+                    data = request.data,
                     throwable = input.error,
-                ) { "load image error data: ${input.request.data.parseString()}" }
+                ) { "load image error" }
                 ImageRequestState.Failure(input.error)
             }
             is SourceResult -> return

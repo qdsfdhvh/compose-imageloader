@@ -11,14 +11,20 @@ enum class LogPriority {
 
 interface Logger {
 
-    fun isLoggable(priority: LogPriority) = true
+    fun isLoggable(priority: LogPriority) = priority >= LogPriority.DEBUG
 
     fun log(
         priority: LogPriority,
         tag: String,
+        data: Any?,
         throwable: Throwable?,
         message: String
     )
+
+    fun Any.parseString(maxLength: Int = 100): String {
+        val rawString = if (this is String) this else toString()
+        return if (rawString.length > maxLength) "${rawString.substring(0, maxLength)}..." else rawString
+    }
 
     companion object : Logger {
 
@@ -32,21 +38,71 @@ interface Logger {
             return baseArray.any { it.isLoggable(priority) }
         }
 
-        override fun log(priority: LogPriority, tag: String, throwable: Throwable?, message: String) {
-            baseArray.forEach { it.log(priority, tag, throwable, message) }
+        override fun log(priority: LogPriority, tag: String, data: Any?, throwable: Throwable?, message: String) {
+            baseArray.forEach { it.log(priority, tag, data, throwable, message) }
         }
     }
 }
 
 expect class DebugLogger() : Logger
 
+internal inline fun logv(
+    tag: String,
+    data: Any,
+    noinline message: () -> String
+) = log(
+    tag = tag,
+    data = data,
+    priority = LogPriority.VERBOSE,
+    throwable = null,
+    message = message,
+)
+
+internal inline fun logd(
+    tag: String,
+    data: Any,
+    noinline message: () -> String
+) = log(
+    tag = tag,
+    data = data,
+    priority = LogPriority.DEBUG,
+    throwable = null,
+    message = message,
+)
+
+internal inline fun logi(
+    tag: String,
+    data: Any,
+    noinline message: () -> String
+) = log(
+    tag = tag,
+    data = data,
+    priority = LogPriority.INFO,
+    throwable = null,
+    message = message,
+)
+
+internal inline fun logw(
+    tag: String,
+    data: Any,
+    throwable: Throwable,
+    noinline message: () -> String
+) = log(
+    tag = tag,
+    data = data,
+    priority = LogPriority.WARN,
+    throwable = throwable,
+    message = message,
+)
+
 internal inline fun log(
     tag: String,
-    throwable: Throwable? = null,
+    data: Any? = null,
     priority: LogPriority = LogPriority.DEBUG,
+    throwable: Throwable? = null,
     message: () -> String
 ) {
     if (Logger.isLoggable(priority)) {
-        Logger.log(priority, tag, throwable, message())
+        Logger.log(priority, tag, data, throwable, message())
     }
 }

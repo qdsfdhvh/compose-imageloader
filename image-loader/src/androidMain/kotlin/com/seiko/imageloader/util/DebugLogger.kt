@@ -6,11 +6,18 @@ import java.io.StringWriter
 import java.lang.Integer.min
 
 actual class DebugLogger actual constructor() : Logger {
-    override fun log(priority: LogPriority, tag: String, throwable: Throwable?, message: String) {
-        val fullMessage = if (throwable != null) {
-            "$message\n${throwable.stackTraceString}"
-        } else {
-            message
+    override fun log(priority: LogPriority, tag: String, data: Any?, throwable: Throwable?, message: String) {
+        val fullMessage = buildString {
+            if (data != null) {
+                append("data:")
+                append(data.parseString())
+                append('\n')
+            }
+            append(message)
+            if (throwable != null) {
+                append('\n')
+                append(throwable.stackTraceString)
+            }
         }
 
         val length = fullMessage.length

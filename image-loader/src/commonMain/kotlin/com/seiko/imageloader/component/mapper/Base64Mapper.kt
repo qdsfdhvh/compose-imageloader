@@ -1,6 +1,7 @@
 package com.seiko.imageloader.component.mapper
 
 import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.util.logv
 import io.ktor.util.decodeBase64Bytes
 
 class Base64Image(
@@ -19,6 +20,11 @@ class Base64Mapper : Mapper<Base64Image> {
                 contentType = contentType,
                 content = content.decodeBase64Bytes()
             )
+        }.also {
+            logv(
+                tag = "Base64Mapper",
+                data = data,
+            ) { "mapper to Base64" }
         }
     }
 

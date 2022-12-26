@@ -147,7 +147,7 @@ class ImageDecoderDecoder @JvmOverloads constructor(
             return ImageDecoderDecoder(context, source, options, enforceMinimumFrameDelay)
         }
 
-        private suspend fun isApplicable(source: BufferedSource): Boolean {
+        private fun isApplicable(source: BufferedSource): Boolean {
             return isGif(source) || isAnimatedWebP(source) || (SDK_INT >= 30 && isAnimatedHeif(source))
         }
 
