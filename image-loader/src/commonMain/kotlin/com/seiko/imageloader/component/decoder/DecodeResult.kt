@@ -3,12 +3,12 @@ package com.seiko.imageloader.component.decoder
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Image
 
-sealed interface DecoderResult
+sealed interface DecodeResult
 
 class DecodePainterResult(
     val painter: Painter,
-) : DecoderResult
+) : DecodeResult
 
 class DecodeImageResult(
     val image: Image,
-) : DecoderResult
+) : DecodeResult

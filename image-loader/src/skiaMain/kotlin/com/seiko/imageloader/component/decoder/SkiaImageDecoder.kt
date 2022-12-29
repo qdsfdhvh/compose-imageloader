@@ -12,7 +12,7 @@ class SkiaImageDecoder(
 
     // add this if jvm ./gradlew failed
     // @Suppress("TYPE_MISMATCH")
-    override suspend fun decode(): DecoderResult {
+    override suspend fun decode(): DecodeResult {
         val image = Image.makeFromEncoded(channel.readByteArray())
         return DecodeImageResult(
             image = Bitmap.makeFromImage(image),
