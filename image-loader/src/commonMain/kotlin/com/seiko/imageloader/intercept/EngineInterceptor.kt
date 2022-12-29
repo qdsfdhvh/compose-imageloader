@@ -8,6 +8,7 @@ import com.seiko.imageloader.component.fetcher.FetchSourceResult
 import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ComposePainterResult
 import com.seiko.imageloader.request.DataSource
+import com.seiko.imageloader.request.ErrorResult
 import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
@@ -16,23 +17,37 @@ import com.seiko.imageloader.request.SourceResult
 class EngineInterceptor : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        return when (val fetchResult = fetch(chain.components, chain.request, chain.options)) {
-            is FetchSourceResult -> SourceResult(
-                request = chain.request,
-                channel = fetchResult.source,
-                dataSource = DataSource.Engine,
-                mimeType = fetchResult.mimeType,
-                metadata = fetchResult.metadata,
-            )
-            is FetchPainterResult -> ComposePainterResult(
-                request = chain.request,
-                painter = fetchResult.painter,
-            )
-            is FetchImageResult -> ComposeImageResult(
-                request = chain.request,
-                image = fetchResult.image
-            )
-        }
+        return runCatching {
+            fetch(chain.components, chain.request, chain.options)
+        }.fold(
+            onSuccess = {
+                it.toImageResult(chain.request)
+            },
+            onFailure = {
+                ErrorResult(
+                    request = chain.request,
+                    error = it,
+                )
+            }
+        )
+    }
+
+    private fun FetchResult.toImageResult(request: ImageRequest) = when(this) {
+        is FetchSourceResult -> SourceResult(
+            request = request,
+            channel = source,
+            dataSource = DataSource.Engine,
+            mimeType = mimeType,
+            metadata = metadata,
+        )
+        is FetchPainterResult -> ComposePainterResult(
+            request = request,
+            painter = painter,
+        )
+        is FetchImageResult -> ComposeImageResult(
+            request = request,
+            image = image
+        )
     }
 
     private suspend fun fetch(
