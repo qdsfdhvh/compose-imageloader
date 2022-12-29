@@ -55,11 +55,11 @@ class RealImageLoader(
         val request = initialRequest.newBuilder().build()
         return try {
             RealInterceptorChain(
-                initialRequest = initialRequest,
+                initialRequest = request,
+                initialOptions = request.options ?: options,
                 interceptors = interceptors,
                 index = 0,
                 components = components,
-                options = request.options ?: options,
                 request = request,
             ).proceed(request)
         } catch (throwable: Throwable) {
@@ -67,7 +67,7 @@ class RealImageLoader(
                 throw throwable
             } else {
                 ErrorResult(
-                    request = initialRequest,
+                    request = request,
                     error = throwable,
                 )
             }

@@ -36,7 +36,7 @@ class BitmapFactoryDecoder constructor(
         runInterruptible { BitmapFactory.Options().decode() }
     }
 
-    private fun BitmapFactory.Options.decode(): DecoderResult {
+    private fun BitmapFactory.Options.decode(): DecodeResult {
         val safeSource = ExceptionCatchingSource(source.channel)
         val safeBufferedSource = safeSource.buffer()
 

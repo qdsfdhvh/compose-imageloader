@@ -20,15 +20,14 @@ fun ImageLoaderBuilder.commonConfig(): ImageLoaderBuilder {
 object NullDataInterceptor : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        val (request) = chain
-        val data = request.data
+        val data = chain.request.data
         if (data === NullRequestData || data is String && data.isEmpty()) {
             return ComposePainterResult(
-                request = request,
+                request = chain.request,
                 painter = EmptyPainter,
             )
         }
-        return chain.proceed(request)
+        return chain.proceed(chain.request)
     }
 
     private object EmptyPainter : Painter() {

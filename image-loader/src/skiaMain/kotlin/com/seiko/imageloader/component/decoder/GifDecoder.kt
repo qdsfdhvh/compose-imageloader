@@ -13,7 +13,7 @@ class GifDecoder(
     private val channel: BufferedSource,
     private val imageScope: CoroutineScope,
 ) : Decoder {
-    override suspend fun decode(): DecoderResult {
+    override suspend fun decode(): DecodeResult {
         val codec = Codec.makeFromData(Data.makeFromBytes(channel.readByteArray()))
         return DecodePainterResult(
             painter = GifPainter(codec, imageScope),

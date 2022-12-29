@@ -12,7 +12,7 @@ class ImageIODecoder(
     private val channel: BufferedSource,
 ) : Decoder {
 
-    override suspend fun decode(): DecoderResult {
+    override suspend fun decode(): DecodeResult {
         val image = runInterruptible {
             ImageIO.read(channel.inputStream())
         }

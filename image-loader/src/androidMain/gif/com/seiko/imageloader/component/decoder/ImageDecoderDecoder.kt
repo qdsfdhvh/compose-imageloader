@@ -42,7 +42,7 @@ class ImageDecoderDecoder @JvmOverloads constructor(
     private val enforceMinimumFrameDelay: Boolean = true
 ) : Decoder {
 
-    override suspend fun decode(): DecoderResult {
+    override suspend fun decode(): DecodeResult {
         var imageDecoder: ImageDecoder? = null
         val drawable = try {
             source.toImageDecoderSource().decodeDrawable { info, _ ->

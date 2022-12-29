@@ -11,6 +11,7 @@ sealed interface ImageResult {
 data class SourceResult(
     override val request: ImageRequest,
     val channel: BufferedSource,
+    val dataSource: DataSource,
     val mimeType: String? = null,
     val metadata: Any? = null,
 ) : ImageResult

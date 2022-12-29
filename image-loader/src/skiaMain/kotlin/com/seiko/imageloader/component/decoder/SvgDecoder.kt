@@ -14,7 +14,7 @@ class SvgDecoder(
     private val channel: BufferedSource,
 ) : Decoder {
 
-    override suspend fun decode(): DecoderResult {
+    override suspend fun decode(): DecodeResult {
         val data = Data.makeFromBytes(channel.readByteArray())
         return DecodePainterResult(
             painter = SVGPainter(SVGDOM(data), density),
