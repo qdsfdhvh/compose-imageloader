@@ -32,7 +32,7 @@ class EngineInterceptor : Interceptor {
         )
     }
 
-    private fun FetchResult.toImageResult(request: ImageRequest) = when(this) {
+    private fun FetchResult.toImageResult(request: ImageRequest) = when (this) {
         is FetchSourceResult -> SourceResult(
             request = request,
             channel = source,

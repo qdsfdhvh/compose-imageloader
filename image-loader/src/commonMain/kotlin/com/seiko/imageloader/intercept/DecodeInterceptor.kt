@@ -13,7 +13,6 @@ import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
-import io.ktor.utils.io.CancellationException
 
 class DecodeInterceptor : Interceptor {
 
@@ -31,10 +30,12 @@ class DecodeInterceptor : Interceptor {
                     onFailure = {
                         if (chain.options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
                             val noDiskCacheRequest = chain.request.newBuilder()
-                                .options(chain.options.copy(
-                                    retryIfDiskDecodeError = false,
-                                    diskCachePolicy = CachePolicy.WRITE_ONLY,
-                                ))
+                                .options(
+                                    chain.options.copy(
+                                        retryIfDiskDecodeError = false,
+                                        diskCachePolicy = CachePolicy.WRITE_ONLY,
+                                    )
+                                )
                                 .build()
                             proceed(chain, noDiskCacheRequest)
                         } else {
