@@ -8,6 +8,7 @@ import com.seiko.imageloader.component.decoder.DecodeResult
 import com.seiko.imageloader.request.ComposeImageResult
 import com.seiko.imageloader.request.ComposePainterResult
 import com.seiko.imageloader.request.DataSource
+import com.seiko.imageloader.request.ErrorResult
 import com.seiko.imageloader.request.ImageRequest
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
@@ -23,28 +24,27 @@ class DecodeInterceptor : Interceptor {
     private suspend fun proceed(chain: Interceptor.Chain, request: ImageRequest): ImageResult {
         return when (val result = chain.proceed(request)) {
             is SourceResult -> {
-                if (chain.options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
-                    runCatching {
-                        decode(chain.components, result, chain.options)
-                    }.fold(
-                        onSuccess = { it.toImageResult(request) },
-                        onFailure = {
-                            if (it !is CancellationException) {
-                                val noDiskCacheRequest = chain.request.newBuilder()
-                                    .options(chain.options.copy(
-                                        retryIfDiskDecodeError = false,
-                                        diskCachePolicy = CachePolicy.WRITE_ONLY,
-                                    ))
-                                    .build()
-                                proceed(chain, noDiskCacheRequest)
-                            } else {
-                                throw it
-                            }
+                runCatching {
+                    decode(chain.components, result, chain.options)
+                }.fold(
+                    onSuccess = { it.toImageResult(request) },
+                    onFailure = {
+                        if (chain.options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
+                            val noDiskCacheRequest = chain.request.newBuilder()
+                                .options(chain.options.copy(
+                                    retryIfDiskDecodeError = false,
+                                    diskCachePolicy = CachePolicy.WRITE_ONLY,
+                                ))
+                                .build()
+                            proceed(chain, noDiskCacheRequest)
+                        } else {
+                            ErrorResult(
+                                request = request,
+                                error = it,
+                            )
                         }
-                    )
-                } else {
-                    decode(chain.components, result, chain.options).toImageResult(request)
-                }
+                    }
+                )
             }
             else -> result
         }
