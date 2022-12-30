@@ -11,7 +11,7 @@ enum class LogPriority {
 
 interface Logger {
 
-    fun isLoggable(priority: LogPriority) = priority >= LogPriority.DEBUG
+    fun isLoggable(priority: LogPriority): Boolean
 
     fun log(
         priority: LogPriority,
@@ -20,11 +20,6 @@ interface Logger {
         throwable: Throwable?,
         message: String
     )
-
-    fun Any.parseString(maxLength: Int = 100): String {
-        val rawString = if (this is String) this else toString()
-        return if (rawString.length > maxLength) "${rawString.substring(0, maxLength)}..." else rawString
-    }
 
     companion object : Logger {
 
@@ -43,8 +38,6 @@ interface Logger {
         }
     }
 }
-
-expect class DebugLogger() : Logger
 
 internal inline fun logv(
     tag: String,

@@ -6,7 +6,7 @@ import java.util.logging.ConsoleHandler
 import java.util.logging.Level
 import java.util.logging.SimpleFormatter
 
-actual class DebugLogger actual constructor() : Logger {
+actual abstract class PlatformLogger actual constructor() : Logger {
     private val logger = java.util.logging.Logger.getLogger("DebugAntilog::class.java.name").apply {
         level = Level.ALL
         useParentHandlers = false
@@ -27,20 +27,15 @@ actual class DebugLogger actual constructor() : Logger {
         LogPriority.ASSERT to "[ASSERT]"
     )
 
-    override fun log(priority: LogPriority, tag: String, data: Any?, throwable: Throwable?, message: String) {
-        val fullMessage = buildString {
-            if (data != null) {
-                append("data:")
-                append(data.parseString())
-                append('\n')
-            }
-            append(message)
-            if (throwable != null) {
-                append('\n')
-                append(throwable.stackTraceString)
-            }
-        }
-
+    actual fun log(
+        priority: LogPriority,
+        tag: String,
+        throwable: Throwable?,
+        message: String
+    ) {
+        val fullMessage = if (throwable != null) {
+            "$message\n${throwable.stackTraceString}"
+        } else message
         when (priority) {
             LogPriority.VERBOSE -> logger.finest(buildLog(priority, tag, fullMessage))
             LogPriority.DEBUG -> logger.fine(buildLog(priority, tag, fullMessage))

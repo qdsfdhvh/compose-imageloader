@@ -3,9 +3,7 @@ package com.seiko.imageloader.util
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
 
-actual class DebugLogger actual constructor() : Logger {
-
-    var crashAssert = false
+actual abstract class PlatformLogger actual constructor() : Logger {
 
     private val dateFormatter = NSDateFormatter().apply {
         dateFormat = "MM-dd HH:mm:ss.SSS"
@@ -20,20 +18,13 @@ actual class DebugLogger actual constructor() : Logger {
         LogPriority.ASSERT to "💞 ASSERT"
     )
 
-    override fun log(priority: LogPriority, tag: String, data: Any?, throwable: Throwable?, message: String) {
-        val fullMessage = buildString {
-            if (data != null) {
-                append("data:")
-                append(data.parseString())
-                append('\n')
-            }
-            append(message)
-        }
-        if (priority == LogPriority.ASSERT) {
-            assert(crashAssert) { buildLog(priority, tag, throwable, fullMessage) }
-        } else {
-            println(buildLog(priority, tag, throwable, fullMessage))
-        }
+    actual fun log(
+        priority: LogPriority,
+        tag: String,
+        throwable: Throwable?,
+        message: String
+    ) {
+        println(buildLog(priority, tag, throwable, message))
     }
 
     private fun buildLog(priority: LogPriority, tag: String, throwable: Throwable?, message: String): String {

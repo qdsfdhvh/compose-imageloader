@@ -9,9 +9,10 @@ import com.seiko.imageloader.request.ComposePainterResult
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.NullRequestData
 import com.seiko.imageloader.util.DebugLogger
+import com.seiko.imageloader.util.LogPriority
 
 fun ImageLoaderBuilder.commonConfig(): ImageLoaderBuilder {
-    return logger(DebugLogger()).addInterceptor(NullDataInterceptor)
+    return logger(DebugLogger(LogPriority.VERBOSE)).addInterceptor(NullDataInterceptor)
 }
 
 /**
