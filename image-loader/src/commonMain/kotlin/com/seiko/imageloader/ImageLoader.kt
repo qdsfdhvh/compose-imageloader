@@ -6,7 +6,7 @@ import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.intercept.DecodeInterceptor
 import com.seiko.imageloader.intercept.DiskCacheInterceptor
-import com.seiko.imageloader.intercept.EngineInterceptor
+import com.seiko.imageloader.intercept.FetchInterceptor
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.intercept.MappedInterceptor
 import com.seiko.imageloader.intercept.MemoryCacheInterceptor
@@ -42,7 +42,7 @@ class RealImageLoader(
         memoryCache?.let { MemoryCacheInterceptor(it) },
         DecodeInterceptor(),
         diskCache?.let { DiskCacheInterceptor(it) },
-        EngineInterceptor(),
+        FetchInterceptor(),
     )
 
     override suspend fun execute(request: ImageRequest): ImageResult {

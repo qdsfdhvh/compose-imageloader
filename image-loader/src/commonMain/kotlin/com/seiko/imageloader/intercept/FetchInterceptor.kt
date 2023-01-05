@@ -14,7 +14,7 @@ import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.Options
 import com.seiko.imageloader.request.SourceResult
 
-class EngineInterceptor : Interceptor {
+class FetchInterceptor : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         return runCatching {
