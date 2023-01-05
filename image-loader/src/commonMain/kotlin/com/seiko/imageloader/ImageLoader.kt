@@ -51,15 +51,14 @@ class RealImageLoader(
         }
     }
 
-    private suspend fun executeMain(initialRequest: ImageRequest): ImageResult {
-        val request = initialRequest.newBuilder().build()
+    private suspend fun executeMain(request: ImageRequest): ImageResult {
         return try {
             RealInterceptorChain(
                 initialRequest = request,
                 initialOptions = request.options ?: options,
-                interceptors = interceptors,
+                interceptors = request.interceptors.orEmpty() + interceptors,
                 index = 0,
-                components = components,
+                components = request.components?.merge(components) ?: components,
                 request = request,
             ).proceed(request)
         } catch (throwable: Throwable) {
