@@ -14,6 +14,20 @@ class ComponentRegistry internal constructor(
     private val fetcherFactories: List<Fetcher.Factory>,
     private val decoderFactories: List<Decoder.Factory>,
 ) {
+    internal fun merge(component: ComponentRegistry) = ComponentRegistry(
+        mappers = mappers + component.mappers,
+        keyers = keyers + component.keyers,
+        fetcherFactories = fetcherFactories + component.fetcherFactories,
+        decoderFactories = decoderFactories + component.decoderFactories,
+    )
+
+    internal fun newBuilder() = ComponentRegistryBuilder(
+        mappers = mappers.toMutableList(),
+        keyers = keyers.toMutableList(),
+        fetcherFactories = fetcherFactories.toMutableList(),
+        decoderFactories = decoderFactories.toMutableList(),
+    )
+
     fun map(data: Any, options: Options): Any {
         var mappedData = data
         mappers.forEachIndices { mapper ->
