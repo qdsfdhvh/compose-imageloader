@@ -2,17 +2,12 @@ package com.seiko.imageloader.demo
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -32,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.ImageRequestState
 import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.request.ImageRequestBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -73,11 +69,14 @@ private fun ImageList(modifier: Modifier = Modifier) {
         }
     }
 
-    LazyColumn(modifier) {
+    LazyVerticalGrid(
+        GridCells.Fixed(3),
+        modifier = modifier,
+    ) {
         item {
             ImageItem(overSize)
         }
-        itemsGridIndexed(images, 3) { image ->
+        items(images) { image ->
             ImageItem(image.url)
         }
     }
@@ -86,7 +85,16 @@ private fun ImageList(modifier: Modifier = Modifier) {
 @Composable
 fun ImageItem(url: String) {
     Box(Modifier.aspectRatio(1f), Alignment.Center) {
-        val painter = rememberAsyncImagePainter(url)
+        val request = remember {
+            ImageRequestBuilder()
+                .data(url)
+                .addInterceptor(NullDataInterceptor)
+                .components {
+                    add(CustomKtorUrlFetcher.Factory())
+                }
+                .build()
+        }
+        val painter = rememberAsyncImagePainter(request)
         Image(
             painter = painter,
             contentDescription = null,
@@ -101,34 +109,6 @@ fun ImageItem(url: String) {
                 Text(requestState.error.message ?: "Error")
             }
             ImageRequestState.Success -> Unit
-        }
-    }
-}
-
-fun <T> LazyListScope.itemsGridIndexed(
-    data: List<T>,
-    rowSize: Int,
-    itemContent: @Composable BoxScope.(T) -> Unit,
-) {
-    val rows = data.windowed(rowSize, rowSize, true)
-    items(rows) { row ->
-        Column(Modifier.fillParentMaxWidth()) {
-            Row(Modifier.fillMaxWidth()) {
-                val subSize = rowSize - row.size
-                for (i in row.indices) {
-                    val item = row[i]
-                    // val realIndex = i + index * rowSize
-                    Box(modifier = Modifier.weight(1f)) {
-                        itemContent(item)
-                    }
-                }
-
-                if (subSize > 0) {
-                    for (j in 0 until subSize) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-            }
         }
     }
 }

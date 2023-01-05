@@ -32,12 +32,24 @@ kotlin {
                 api(projects.imageLoader)
                 api("dev.icerock.moko:resources:${Versions.multiplatformResources}")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}")
+                implementation("io.ktor:ktor-client-logging:${Versions.ktor}")
+                implementation("io.github.aakira:napier:2.6.1")
             }
         }
-        val androidMain by getting
-        val jvmMain by getting
-        val appleMain by creating {
+        val noJsMain by creating {
             dependsOn(commonMain)
+            dependencies {
+                implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
+            }
+        }
+        val androidMain by getting {
+            dependsOn(noJsMain)
+        }
+        val jvmMain by getting {
+            dependsOn(noJsMain)
+        }
+        val appleMain by creating {
+            dependsOn(noJsMain)
         }
         val iosX64Main by getting {
             dependsOn(appleMain)
@@ -54,7 +66,11 @@ kotlin {
         val macosArm64Main by getting {
             dependsOn(appleMain)
         }
-        val jsMain by getting
+        val jsMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-js:${Versions.ktor}")
+            }
+        }
     }
 }
 
