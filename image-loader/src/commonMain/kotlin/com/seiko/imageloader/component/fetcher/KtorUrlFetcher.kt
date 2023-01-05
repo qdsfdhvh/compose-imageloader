@@ -10,7 +10,7 @@ import io.ktor.http.Url
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 
-class KtorUrlFetcher(
+open class KtorUrlFetcher(
     private val httpUrl: Url,
     private val httpClient: Lazy<HttpClient>,
 ) : Fetcher {
