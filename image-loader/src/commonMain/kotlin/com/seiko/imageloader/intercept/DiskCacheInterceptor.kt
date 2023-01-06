@@ -19,25 +19,28 @@ class DiskCacheInterceptor(
     private val fileSystem get() = diskCache.value.fileSystem
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        val cacheKey = chain.components.key(chain.request.data, chain.options)
-            ?: return chain.proceed(chain.request)
+        val request = chain.request
+        val options = chain.options
+
+        val cacheKey = chain.components.key(request.data, options)
+            ?: return chain.proceed(request)
 
         var snapshot = runCatching {
-            readFromDiskCache(chain.options, cacheKey)
+            readFromDiskCache(options, cacheKey)
         }.onFailure {
             logw(
                 tag = "DiskCacheInterceptor",
-                data = chain.request.data,
+                data = request.data,
                 throwable = it,
             ) { "read disk cache error:" }
         }.getOrNull()
         if (snapshot != null) {
             logi(
                 tag = "DiskCacheInterceptor",
-                data = chain.request.data,
+                data = request.data,
             ) { "read disk cache" }
             return SourceResult(
-                request = chain.request,
+                request = request,
                 channel = snapshot.source(),
                 dataSource = DataSource.Disk,
                 mimeType = null,
@@ -45,12 +48,12 @@ class DiskCacheInterceptor(
             )
         }
 
-        val result = chain.proceed(chain.request)
+        val result = chain.proceed(request)
         when (result) {
             is SourceResult -> {
                 snapshot = runCatching {
                     writeToDiskCache(
-                        chain.options,
+                        options,
                         cacheKey,
                         snapshot,
                         result.channel,
@@ -58,14 +61,14 @@ class DiskCacheInterceptor(
                 }.onFailure {
                     logw(
                         tag = "DiskCacheInterceptor",
-                        data = chain.request.data,
+                        data = request.data,
                         throwable = it,
                     ) { "write disk cache error:" }
                 }.getOrNull()
                 if (snapshot != null) {
                     logd(
                         tag = "DiskCacheInterceptor",
-                        data = chain.request.data,
+                        data = request.data,
                     ) { "write disk cache" }
                     return result.copy(
                         channel = snapshot.source(),

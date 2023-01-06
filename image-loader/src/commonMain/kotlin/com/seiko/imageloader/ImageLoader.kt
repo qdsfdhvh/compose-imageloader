@@ -55,7 +55,7 @@ class RealImageLoader(
         return try {
             RealInterceptorChain(
                 initialRequest = request,
-                initialOptions = request.options ?: options,
+                initialOptions = options,
                 interceptors = request.interceptors.orEmpty() + interceptors,
                 index = 0,
                 components = request.components?.merge(components) ?: components,

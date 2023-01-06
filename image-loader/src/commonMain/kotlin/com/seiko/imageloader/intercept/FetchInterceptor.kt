@@ -17,15 +17,17 @@ import com.seiko.imageloader.request.SourceResult
 class FetchInterceptor : Interceptor {
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
+        val request = chain.request
+        val options = chain.options
         return runCatching {
-            fetch(chain.components, chain.request, chain.options)
+            fetch(chain.components, request, options)
         }.fold(
             onSuccess = {
-                it.toImageResult(chain.request)
+                it.toImageResult(request)
             },
             onFailure = {
                 ErrorResult(
-                    request = chain.request,
+                    request = request,
                     error = it,
                 )
             }

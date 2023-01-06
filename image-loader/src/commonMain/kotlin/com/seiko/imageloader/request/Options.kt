@@ -2,15 +2,17 @@ package com.seiko.imageloader.request
 
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.size.SizeResolver
 
 data class Options(
-    val allowInexactSize: Boolean = false,
-    val premultipliedAlpha: Boolean = true,
-    val retryIfDiskDecodeError: Boolean = true,
-    val config: ImageConfig = ImageConfig.ARGB_8888,
-    val scale: Scale = Scale.FIT,
-    val memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
-    val diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
+    var allowInexactSize: Boolean = false,
+    var premultipliedAlpha: Boolean = true,
+    var retryIfDiskDecodeError: Boolean = true,
+    var config: ImageConfig = ImageConfig.ARGB_8888,
+    var scale: Scale = Scale.FIT,
+    var sizeResolver: SizeResolver = SizeResolver.Unspecified,
+    var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
+    var diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
 ) {
     enum class ImageConfig {
         ALPHA_8,

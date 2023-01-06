@@ -4,8 +4,11 @@ import com.seiko.imageloader.request.ImageResult
 
 class MappedInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        val mappedData = chain.components.map(chain.request.data, chain.options)
-        val newRequest = chain.request.newBuilder().data(mappedData).build()
+        val request = chain.request
+        val options = chain.options
+
+        val mappedData = chain.components.map(request.data, options)
+        val newRequest = request.newBuilder().data(mappedData).build()
         return chain.proceed(newRequest)
     }
 }
