@@ -21,21 +21,24 @@ class DecodeInterceptor : Interceptor {
     }
 
     private suspend fun proceed(chain: Interceptor.Chain, request: ImageRequest): ImageResult {
+        val options = chain.options
         return when (val result = chain.proceed(request)) {
             is SourceResult -> {
                 runCatching {
-                    decode(chain.components, result, chain.options)
+                    decode(chain.components, result, options)
                 }.fold(
                     onSuccess = { it.toImageResult(request) },
                     onFailure = {
-                        if (chain.options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
-                            val noDiskCacheRequest = chain.request.newBuilder()
-                                .options(
-                                    chain.options.copy(
-                                        retryIfDiskDecodeError = false,
-                                        diskCachePolicy = CachePolicy.WRITE_ONLY,
-                                    )
-                                )
+                        if (options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
+                            val noDiskCacheRequest = request.newBuilder()
+                                .options {
+                                    retryIfDiskDecodeError = false
+                                    diskCachePolicy = when (options.diskCachePolicy) {
+                                        CachePolicy.ENABLED,
+                                        CachePolicy.READ_ONLY -> CachePolicy.WRITE_ONLY
+                                        else -> options.diskCachePolicy
+                                    }
+                                }
                                 .build()
                             proceed(chain, noDiskCacheRequest)
                         } else {
@@ -47,6 +50,7 @@ class DecodeInterceptor : Interceptor {
                     }
                 )
             }
+
             else -> result
         }
     }
@@ -56,6 +60,7 @@ class DecodeInterceptor : Interceptor {
             request = request,
             image = image,
         )
+
         is DecodePainterResult -> ComposePainterResult(
             request = request,
             painter = painter,

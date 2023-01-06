@@ -14,7 +14,12 @@ interface Interceptor {
         val initialOptions: Options
 
         val request: ImageRequest
-        val options: Options get() = request.options ?: initialOptions
+        val options: Options get() =
+            initialOptions.also {
+                request.optionsBuilders.forEach { builder ->
+                    it.run(builder)
+                }
+            }
 
         val components: ComponentRegistry
 

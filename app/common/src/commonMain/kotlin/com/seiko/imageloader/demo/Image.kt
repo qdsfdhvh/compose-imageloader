@@ -19,5 +19,5 @@ data class Image(
         val thumb: String,
     )
 
-    val imageUrl: String get() = urls?.regular ?: url
+    val imageUrl: String get() = urls?.small ?: url
 }

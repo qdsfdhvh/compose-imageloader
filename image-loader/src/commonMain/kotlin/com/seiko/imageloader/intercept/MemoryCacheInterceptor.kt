@@ -15,45 +15,48 @@ class MemoryCacheInterceptor(
     private val memoryCache: Lazy<MemoryCache>,
 ) : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
-        val cacheKey = chain.components.key(chain.request.data, chain.options)
-            ?: return chain.proceed(chain.request)
+        val request = chain.request
+        val options = chain.options
+
+        val cacheKey = chain.components.key(request.data, options)
+            ?: return chain.proceed(request)
 
         val memoryCacheValue = runCatching {
-            readFromMemoryCache(chain.options, cacheKey)
+            readFromMemoryCache(options, cacheKey)
         }.onFailure {
             logw(
                 tag = "MemoryCacheInterceptor",
-                data = chain.request.data,
+                data = request.data,
                 throwable = it
             ) { "read memory cache error:" }
         }.getOrNull()
         if (memoryCacheValue != null) {
             logi(
                 tag = "MemoryCacheInterceptor",
-                data = chain.request.data,
+                data = request.data,
             ) { "read memory cache." }
             return ComposeImageResult(
-                request = chain.request,
+                request = request,
                 image = memoryCacheValue,
             )
         }
 
-        val result = chain.proceed(chain.request)
+        val result = chain.proceed(request)
         when (result) {
             is ComposeImageResult -> {
                 runCatching {
-                    writeToMemoryCache(chain.options, cacheKey, result.image)
+                    writeToMemoryCache(options, cacheKey, result.image)
                 }.onFailure {
                     logw(
                         tag = "MemoryCacheInterceptor",
-                        data = chain.request.data,
+                        data = request.data,
                         throwable = it
                     ) { "write memory cache error:" }
                 }.onSuccess { success ->
                     if (success) {
                         logd(
                             tag = "MemoryCacheInterceptor",
-                            data = chain.request.data,
+                            data = request.data,
                         ) { "write memory cache." }
                     }
                 }

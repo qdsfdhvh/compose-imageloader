@@ -3,6 +3,7 @@ package com.seiko.imageloader
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,10 +25,13 @@ import com.seiko.imageloader.request.ImageRequestBuilder
 import com.seiko.imageloader.request.ImageResult
 import com.seiko.imageloader.request.SourceResult
 import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.size.SizeResolver
 import com.seiko.imageloader.util.logw
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
@@ -80,6 +84,7 @@ fun rememberAsyncImagePainter(
     return painter
 }
 
+@Stable
 class AsyncImagePainter(
     request: ImageRequest,
     imageLoader: ImageLoader,
@@ -158,9 +163,12 @@ class AsyncImagePainter(
     private fun updateRequest(request: ImageRequest): ImageRequest {
         return request.newBuilder()
             .apply {
-                if (request.scale == null) {
-                    scale(contentScale.toScale())
-                }
+                size(object : SizeResolver {
+                    override suspend fun size(): Size {
+                        return drawSize.filterNot { it.isEmpty() }.firstOrNull() ?: Size.Unspecified
+                    }
+                })
+                scale(contentScale.toScale())
             }
             .build()
     }

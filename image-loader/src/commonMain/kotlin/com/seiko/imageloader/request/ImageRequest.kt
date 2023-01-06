@@ -5,12 +5,12 @@ import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.size.SizeResolver
 
 @Immutable
 class ImageRequest internal constructor(
     val data: Any,
-    val scale: Scale?,
-    val options: Options?,
+    val optionsBuilders: List<Options.() -> Unit>,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
 ) {
@@ -20,21 +20,18 @@ class ImageRequest internal constructor(
 class ImageRequestBuilder {
 
     private var data: Any?
-    private var scale: Scale?
-    private var options: Options?
+    private val optionsBuilders: MutableList<Options.() -> Unit>
     private var componentBuilder: ComponentRegistryBuilder? = null
     private var interceptors: MutableList<Interceptor>? = null
 
     constructor() {
         data = null
-        scale = null
-        options = null
+        optionsBuilders = mutableListOf()
     }
 
     constructor(request: ImageRequest) {
         data = request.data
-        scale = request.scale
-        options = request.options
+        optionsBuilders = request.optionsBuilders.toMutableList()
         componentBuilder = request.components?.newBuilder()
         interceptors = request.interceptors?.toMutableList()
     }
@@ -43,12 +40,20 @@ class ImageRequestBuilder {
         this.data = data
     }
 
-    fun scale(scale: Scale) = apply {
-        this.scale = scale
+    fun size(sizeResolver: SizeResolver) = apply {
+        optionsBuilders.add {
+            this.sizeResolver = sizeResolver
+        }
     }
 
-    fun options(options: Options?) = apply {
-        this.options = options
+    fun scale(scale: Scale) = apply {
+        optionsBuilders.add {
+            this.scale = scale
+        }
+    }
+
+    fun options(block: Options.() -> Unit) = apply {
+        optionsBuilders.add(block)
     }
 
     fun components(builder: ComponentRegistryBuilder.() -> Unit) = apply {
@@ -61,8 +66,7 @@ class ImageRequestBuilder {
 
     fun build() = ImageRequest(
         data = data ?: NullRequestData,
-        scale = scale,
-        options = options,
+        optionsBuilders = optionsBuilders,
         components = componentBuilder?.build(),
         interceptors = interceptors,
     )

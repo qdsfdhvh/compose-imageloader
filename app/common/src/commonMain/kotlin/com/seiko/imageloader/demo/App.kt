@@ -77,7 +77,7 @@ private fun ImageList(modifier: Modifier = Modifier) {
             ImageItem(overSize)
         }
         items(images) { image ->
-            ImageItem(image.url)
+            ImageItem(image.imageUrl)
         }
     }
 }
