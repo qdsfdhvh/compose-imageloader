@@ -14,9 +14,8 @@ class ByteBufferFetcher(
             // Reset the position so we can read the byte buffer again.
             data.position(0)
         }
-        return FetchSourceResult(
+        return FetchResult.Source(
             source = source,
-            mimeType = null,
         )
     }
 

@@ -11,7 +11,6 @@ import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.intercept.MappedInterceptor
 import com.seiko.imageloader.intercept.MemoryCacheInterceptor
 import com.seiko.imageloader.intercept.RealInterceptorChain
-import com.seiko.imageloader.model.ErrorResult
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
@@ -65,7 +64,7 @@ class RealImageLoader(
             if (throwable is CancellationException) {
                 throw throwable
             } else {
-                ErrorResult(
+                ImageResult.Error(
                     request = request,
                     error = throwable,
                 )

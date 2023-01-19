@@ -1,5 +1,7 @@
 package com.seiko.imageloader.component.fetcher
 
+import com.seiko.imageloader.model.extraData
+import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.source
 import io.ktor.client.HttpClient
@@ -20,9 +22,11 @@ open class KtorUrlFetcher(
             url(httpUrl)
         }
         if (response.status.isSuccess()) {
-            return FetchSourceResult(
+            return FetchResult.Source(
                 source = response.bodyAsChannel().source(),
-                mimeType = response.contentType()?.toString(),
+                extra = extraData {
+                    mimeType(response.contentType()?.toString())
+                }
             )
         }
         throw KtorUrlRequestException("code:${response.status.value}, ${response.status.description}")

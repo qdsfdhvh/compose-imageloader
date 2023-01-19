@@ -4,7 +4,6 @@ import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
-import com.seiko.imageloader.model.ComposeImageResult
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.logd
@@ -35,17 +34,17 @@ class MemoryCacheInterceptor(
                 tag = "MemoryCacheInterceptor",
                 data = request.data,
             ) { "read memory cache." }
-            return ComposeImageResult(
+            return ImageResult.Bitmap(
                 request = request,
-                image = memoryCacheValue,
+                bitmap = memoryCacheValue,
             )
         }
 
         val result = chain.proceed(request)
         when (result) {
-            is ComposeImageResult -> {
+            is ImageResult.Bitmap -> {
                 runCatching {
-                    writeToMemoryCache(options, cacheKey, result.image)
+                    writeToMemoryCache(options, cacheKey, result.bitmap)
                 }.onFailure {
                     logw(
                         tag = "MemoryCacheInterceptor",

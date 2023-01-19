@@ -7,11 +7,11 @@ import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.decodeDrawable
-import com.seiko.imageloader.component.fetcher.AssetMetadata
-import com.seiko.imageloader.component.fetcher.ContentMetadata
-import com.seiko.imageloader.component.fetcher.ResourceMetadata
+import com.seiko.imageloader.component.fetcher.AssetUriFetcher
+import com.seiko.imageloader.component.fetcher.ContentUriFetcher
+import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
+import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable.Companion.REPEAT_INFINITE
 import com.seiko.imageloader.util.ScaleDrawable
@@ -37,7 +37,7 @@ import java.nio.ByteBuffer
 @RequiresApi(28)
 class ImageDecoderDecoder @JvmOverloads constructor(
     private val context: Context,
-    private val source: SourceResult,
+    private val source: DecodeSource,
     private val options: Options,
     private val enforceMinimumFrameDelay: Boolean = true
 ) : Decoder {
@@ -55,7 +55,9 @@ class ImageDecoderDecoder @JvmOverloads constructor(
         } finally {
             imageDecoder?.close()
         }
-        return DecodePainterResult(wrapDrawable(drawable).toPainter())
+        return DecodeResult.Painter(
+            painter = wrapDrawable(drawable).toPainter(),
+        )
     }
 
     private fun wrapBufferedSource(channel: BufferedSource): BufferedSource {
@@ -68,24 +70,22 @@ class ImageDecoderDecoder @JvmOverloads constructor(
         }
     }
 
-    private suspend fun SourceResult.toImageDecoderSource(): ImageDecoder.Source {
-        // val file = fileOrNull()
-        // if (file != null) {
-        //     return ImageDecoder.createSource(file.toFile())
-        // }
-
-        val metadata = metadata
-        if (metadata is AssetMetadata) {
-            return ImageDecoder.createSource(context.assets, metadata.fileName)
-        }
-        if (metadata is ContentMetadata) {
-            return ImageDecoder.createSource(context.contentResolver, metadata.uri)
-        }
-        if (metadata is ResourceMetadata && metadata.packageName == context.packageName) {
-            return ImageDecoder.createSource(context.resources, metadata.resId)
+    private fun DecodeSource.toImageDecoderSource(): ImageDecoder.Source {
+        when (val metadata = extra.metadata) {
+            is AssetUriFetcher.MetaData -> {
+                return ImageDecoder.createSource(context.assets, metadata.fileName)
+            }
+            is ContentUriFetcher.Metadata -> {
+                return ImageDecoder.createSource(context.contentResolver, metadata.uri)
+            }
+            is ResourceUriFetcher.Metadata -> {
+                if (metadata.packageName == context.packageName) {
+                    return ImageDecoder.createSource(context.resources, metadata.resId)
+                }
+            }
         }
 
-        val source = wrapBufferedSource(channel)
+        val source = wrapBufferedSource(source)
         return when {
             SDK_INT >= 31 -> ImageDecoder.createSource(source.readByteArray())
             SDK_INT == 30 -> ImageDecoder.createSource(ByteBuffer.wrap(source.readByteArray()))
@@ -142,8 +142,8 @@ class ImageDecoderDecoder @JvmOverloads constructor(
         private val enforceMinimumFrameDelay: Boolean = true
     ) : Decoder.Factory {
 
-        override suspend fun create(source: SourceResult, options: Options): Decoder? {
-            if (!isApplicable(source.channel)) return null
+        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!isApplicable(source.source)) return null
             return ImageDecoderDecoder(context, source, options, enforceMinimumFrameDelay)
         }
 

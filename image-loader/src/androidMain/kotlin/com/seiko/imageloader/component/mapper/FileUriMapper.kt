@@ -11,7 +11,7 @@ class FileUriMapper : Mapper<File> {
     override fun map(data: Any, options: Options): File? {
         if (data !is Uri) return null
         if (!isApplicable(data)) return null
-        return File(data.path!!)
+        return data.path?.let { File(it) }
     }
 
     private fun isApplicable(data: Uri): Boolean {

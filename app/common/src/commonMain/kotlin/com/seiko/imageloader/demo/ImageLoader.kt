@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.intercept.Interceptor
-import com.seiko.imageloader.model.ComposePainterResult
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.model.NullRequestData
 import com.seiko.imageloader.util.DebugLogger
@@ -23,7 +22,7 @@ object NullDataInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val data = chain.request.data
         if (data === NullRequestData || data is String && data.isEmpty()) {
-            return ComposePainterResult(
+            return ImageResult.Painter(
                 request = chain.request,
                 painter = EmptyPainter,
             )

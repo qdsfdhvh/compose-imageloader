@@ -5,7 +5,6 @@ package com.seiko.imageloader.component.decoder
 import android.graphics.Bitmap
 import android.graphics.Movie
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable
 import com.seiko.imageloader.util.isGif
@@ -25,13 +24,13 @@ import okio.buffer
  *  it is below a threshold. See https://github.com/coil-kt/coil/issues/540 for more info.
  */
 internal class GifDecoder @JvmOverloads constructor(
-    private val source: SourceResult,
+    private val source: DecodeSource,
     private val options: Options,
     private val enforceMinimumFrameDelay: Boolean = true
 ) : Decoder {
 
     override suspend fun decode() = runInterruptible {
-        val bufferSource = source.channel
+        val bufferSource = source.source
         val bufferedSource: BufferedSource = if (enforceMinimumFrameDelay) {
             FrameDelayRewritingSource(bufferSource).buffer()
         } else {
@@ -64,7 +63,7 @@ internal class GifDecoder @JvmOverloads constructor(
         // Set the animated transformation to be applied on each frame.
         // drawable.setAnimatedTransformation(options.parameters.animatedTransformation())
 
-        DecodePainterResult(
+        DecodeResult.Painter(
             painter = drawable.toPainter(),
         )
     }
@@ -73,8 +72,8 @@ internal class GifDecoder @JvmOverloads constructor(
         private val enforceMinimumFrameDelay: Boolean = true
     ) : Decoder.Factory {
 
-        override suspend fun create(source: SourceResult, options: Options): Decoder? {
-            if (!isGif(source.channel)) return null
+        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!isGif(source.source)) return null
             return GifDecoder(source, options, enforceMinimumFrameDelay)
         }
 

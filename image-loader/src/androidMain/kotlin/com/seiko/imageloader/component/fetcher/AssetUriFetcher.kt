@@ -3,6 +3,9 @@ package com.seiko.imageloader.component.fetcher
 import android.content.Context
 import android.webkit.MimeTypeMap
 import com.eygraber.uri.Uri
+import com.seiko.imageloader.model.extraData
+import com.seiko.imageloader.model.metadata
+import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.isAssetUri
@@ -16,10 +19,12 @@ internal class AssetUriFetcher(
 
     override suspend fun fetch(): FetchResult {
         val path = data.pathSegments.drop(1).joinToString("/")
-        return FetchSourceResult(
+        return FetchResult.Source(
             source = context.assets.open(path).source().buffer(),
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromUrl(path),
-            metadata = AssetMetadata(data.lastPathSegment!!),
+            extra = extraData {
+                mimeType(MimeTypeMap.getSingleton().getMimeTypeFromUrl(path))
+                metadata(data.lastPathSegment?.let { MetaData(it) })
+            }
         )
     }
 
@@ -30,6 +35,8 @@ internal class AssetUriFetcher(
             return AssetUriFetcher(context, data)
         }
     }
-}
 
-data class AssetMetadata(val fileName: String)
+    data class MetaData(
+        val fileName: String
+    )
+}

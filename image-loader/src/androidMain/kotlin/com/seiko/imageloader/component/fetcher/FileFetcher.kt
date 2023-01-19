@@ -1,6 +1,8 @@
 package com.seiko.imageloader.component.fetcher
 
 import android.webkit.MimeTypeMap
+import com.seiko.imageloader.model.extraData
+import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import okio.buffer
 import okio.source
@@ -8,9 +10,11 @@ import java.io.File
 
 internal class FileFetcher(private val data: File) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return FetchSourceResult(
+        return FetchResult.Source(
             source = data.source().buffer(),
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(data.extension),
+            extra = extraData {
+                mimeType(MimeTypeMap.getSingleton().getMimeTypeFromExtension(data.extension))
+            }
         )
     }
 

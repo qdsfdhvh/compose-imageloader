@@ -7,9 +7,8 @@ import java.io.File
 
 internal class FileFetcher(private val data: File) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return FetchSourceResult(
+        return FetchResult.Source(
             source = data.source().buffer(),
-            mimeType = null,
         )
     }
 

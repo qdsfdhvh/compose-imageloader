@@ -4,7 +4,6 @@ import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.model.DataSource
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.closeQuietly
 import com.seiko.imageloader.util.logd
 import com.seiko.imageloader.util.logi
@@ -39,24 +38,22 @@ class DiskCacheInterceptor(
                 tag = "DiskCacheInterceptor",
                 data = request.data,
             ) { "read disk cache" }
-            return SourceResult(
+            return ImageResult.Source(
                 request = request,
-                channel = snapshot.source(),
+                source = snapshot.source(),
                 dataSource = DataSource.Disk,
-                mimeType = null,
-                metadata = null,
             )
         }
 
         val result = chain.proceed(request)
         when (result) {
-            is SourceResult -> {
+            is ImageResult.Source -> {
                 snapshot = runCatching {
                     writeToDiskCache(
                         options,
                         cacheKey,
                         snapshot,
-                        result.channel,
+                        result.source,
                     )
                 }.onFailure {
                     logw(
@@ -71,7 +68,7 @@ class DiskCacheInterceptor(
                         data = request.data,
                     ) { "write disk cache" }
                     return result.copy(
-                        channel = snapshot.source(),
+                        source = snapshot.source(),
                     )
                 }
             }

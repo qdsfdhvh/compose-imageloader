@@ -17,13 +17,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import com.seiko.imageloader.model.ComposeImageResult
-import com.seiko.imageloader.model.ComposePainterResult
-import com.seiko.imageloader.model.ErrorResult
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageRequestBuilder
 import com.seiko.imageloader.model.ImageResult
-import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
 import com.seiko.imageloader.util.logw
@@ -175,24 +171,30 @@ class AsyncImagePainter(
 
     private fun updateImage(input: ImageResult) {
         requestState = when (input) {
-            is ComposePainterResult -> {
+            is ImageResult.Painter -> {
                 updatePainter(input.painter)
                 ImageRequestState.Success
             }
-            is ComposeImageResult -> {
-                updatePainter(input.image.toPainter(filterQuality))
+            is ImageResult.Bitmap -> {
+                updatePainter(input.bitmap.toPainter(filterQuality))
                 ImageRequestState.Success
             }
-            is ErrorResult -> {
-                logw(
-                    tag = "AsyncImagePainter",
-                    data = request.data,
-                    throwable = input.error,
-                ) { "load image error" }
-                ImageRequestState.Failure(input.error)
+            is ImageResult.Error -> {
+                logAndReturnState(input.error)
             }
-            is SourceResult -> return
+            is ImageResult.Source -> {
+                logAndReturnState(RuntimeException("image result is source"))
+            }
         }
+    }
+
+    private fun logAndReturnState(error: Throwable): ImageRequestState.Failure {
+        logw(
+            tag = "AsyncImagePainter",
+            data = request.data,
+            throwable = error,
+        ) { "load image error" }
+        return ImageRequestState.Failure(error)
     }
 
     private fun updatePainter(painter: Painter) {
