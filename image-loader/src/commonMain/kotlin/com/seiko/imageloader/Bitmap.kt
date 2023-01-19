@@ -4,10 +4,10 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
 import androidx.compose.ui.graphics.painter.Painter
 
-expect class Image
+expect class Bitmap
 
-internal expect val Image.size: Int
+internal expect val Bitmap.size: Int
 
-internal expect val Image.identityHashCode: Int
+internal expect val Bitmap.identityHashCode: Int
 
-expect fun Image.toPainter(filterQuality: FilterQuality = DefaultFilterQuality): Painter
+expect fun Bitmap.toPainter(filterQuality: FilterQuality = DefaultFilterQuality): Painter

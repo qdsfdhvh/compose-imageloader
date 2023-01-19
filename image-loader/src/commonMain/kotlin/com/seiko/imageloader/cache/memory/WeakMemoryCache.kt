@@ -1,7 +1,7 @@
 package com.seiko.imageloader.cache.memory
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.seiko.imageloader.Image
+import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.identityHashCode
 import com.seiko.imageloader.util.WeakReference
 import com.seiko.imageloader.util.firstNotNullOfOrNullIndices
@@ -16,7 +16,7 @@ import kotlin.jvm.Synchronized
 internal interface WeakMemoryCache {
     val keys: Set<MemoryKey>
     fun get(key: MemoryKey): MemoryValue?
-    fun set(key: MemoryKey, image: Image, extras: Map<String, Any>, size: Int)
+    fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int)
     fun remove(key: MemoryKey): Boolean
     fun clearMemory()
 }
@@ -25,7 +25,7 @@ internal interface WeakMemoryCache {
 internal object EmptyWeakMemoryCache : WeakMemoryCache {
     override val keys get(): Set<MemoryKey> = emptySet()
     override fun get(key: MemoryKey): MemoryValue? = null
-    override fun set(key: MemoryKey, image: Image, extras: Map<String, Any>, size: Int) = Unit
+    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int) = Unit
     override fun remove(key: MemoryKey) = false
     override fun clearMemory() = Unit
 }
@@ -54,7 +54,7 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
     }
 
     @Synchronized
-    override fun set(key: MemoryKey, image: Image, extras: Map<String, Any>, size: Int) {
+    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int) {
         val values = cache.getOrPut(key) { arrayListOf() }
 
         // Insert the value into the list sorted descending by size.
@@ -122,7 +122,7 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
 
     internal class InternalValue(
         val identityHashCode: Int,
-        val image: WeakReference<Image>,
+        val image: WeakReference<Bitmap>,
         val extras: Map<String, Any>,
         val size: Int
     )

@@ -1,10 +1,10 @@
 package com.seiko.imageloader.cache.memory
 
-import com.seiko.imageloader.Image
+import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.size
 import com.seiko.imageloader.util.LruCache
 
-/** An in-memory cache that holds strong references [Image]s. */
+/** An in-memory cache that holds strong references [Bitmap]s. */
 internal interface StrongMemoryCache {
 
     val size: Int
@@ -15,7 +15,7 @@ internal interface StrongMemoryCache {
 
     fun get(key: MemoryKey): MemoryValue?
 
-    fun set(key: MemoryKey, image: Image, extras: Map<String, Any>)
+    fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>)
 
     fun remove(key: MemoryKey): Boolean
 
@@ -35,7 +35,7 @@ internal class EmptyStrongMemoryCache(
 
     override fun get(key: MemoryKey): MemoryValue? = null
 
-    override fun set(key: MemoryKey, image: Image, extras: Map<String, Any>) {
+    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>) {
         weakMemoryCache.set(key, image, extras, image.size)
     }
 
@@ -70,7 +70,7 @@ internal class RealStrongMemoryCache(
         return cache[key]?.image
     }
 
-    override fun set(key: MemoryKey, image: Image, extras: Map<String, Any>) {
+    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>) {
         val size = image.size
         if (size <= maxSize) {
             cache.put(key, InternalValue(image, extras, size))
@@ -92,7 +92,7 @@ internal class RealStrongMemoryCache(
     }
 
     private class InternalValue(
-        val image: Image,
+        val image: Bitmap,
         val extras: Map<String, Any>,
         val size: Int
     )

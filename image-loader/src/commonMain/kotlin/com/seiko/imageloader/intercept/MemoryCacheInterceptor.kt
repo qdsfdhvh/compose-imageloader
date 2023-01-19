@@ -1,6 +1,6 @@
 package com.seiko.imageloader.intercept
 
-import com.seiko.imageloader.Image
+import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
@@ -75,7 +75,7 @@ class MemoryCacheInterceptor(
     private fun writeToMemoryCache(
         options: Options,
         cacheKey: MemoryKey,
-        image: Image,
+        image: Bitmap,
     ): Boolean {
         if (!options.memoryCachePolicy.writeEnabled) return false
         memoryCache.value[cacheKey] = image

@@ -1,4 +1,4 @@
 package com.seiko.imageloader
 
-internal actual inline val Image.identityHashCode: Int
+internal actual inline val Bitmap.identityHashCode: Int
     get() = System.identityHashCode(this)

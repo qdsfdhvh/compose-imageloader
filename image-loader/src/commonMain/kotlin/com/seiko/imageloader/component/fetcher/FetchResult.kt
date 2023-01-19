@@ -1,7 +1,7 @@
 package com.seiko.imageloader.component.fetcher
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.seiko.imageloader.Image
+import com.seiko.imageloader.Bitmap
 import okio.BufferedSource
 
 sealed interface FetchResult
@@ -17,5 +17,5 @@ class FetchPainterResult(
 ) : FetchResult
 
 class FetchImageResult(
-    val image: Image
+    val image: Bitmap
 ) : FetchResult

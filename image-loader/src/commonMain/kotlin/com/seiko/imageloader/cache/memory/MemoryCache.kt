@@ -1,6 +1,6 @@
 package com.seiko.imageloader.cache.memory
 
-import com.seiko.imageloader.Image
+import com.seiko.imageloader.Bitmap
 
 interface MemoryCache {
 
@@ -32,4 +32,4 @@ interface MemoryCache {
 
 typealias MemoryKey = String
 
-typealias MemoryValue = Image
+typealias MemoryValue = Bitmap

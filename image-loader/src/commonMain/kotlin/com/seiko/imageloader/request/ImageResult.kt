@@ -1,7 +1,7 @@
 package com.seiko.imageloader.request
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.seiko.imageloader.Image
+import com.seiko.imageloader.Bitmap
 import okio.BufferedSource
 
 sealed interface ImageResult {
@@ -18,7 +18,7 @@ data class SourceResult(
 
 data class ComposeImageResult(
     override val request: ImageRequest,
-    val image: Image,
+    val image: Bitmap,
 ) : ImageResult
 
 data class ComposePainterResult(
