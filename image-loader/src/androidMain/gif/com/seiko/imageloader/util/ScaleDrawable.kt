@@ -11,7 +11,7 @@ import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.withSave
-import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.option.Scale
 import kotlin.math.roundToInt
 
 /**

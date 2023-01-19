@@ -2,7 +2,7 @@ package com.seiko.imageloader.component.fetcher
 
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.toPainter
 
 class DrawableFetcher(

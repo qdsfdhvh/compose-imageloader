@@ -1,8 +1,6 @@
-package com.seiko.imageloader.request
+package com.seiko.imageloader.option
 
 import com.seiko.imageloader.cache.CachePolicy
-import com.seiko.imageloader.size.Scale
-import com.seiko.imageloader.size.SizeResolver
 
 data class Options(
     var allowInexactSize: Boolean = false,

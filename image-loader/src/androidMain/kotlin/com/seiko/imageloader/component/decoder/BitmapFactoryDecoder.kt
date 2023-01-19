@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.ExifData
 import com.seiko.imageloader.util.ExifUtils

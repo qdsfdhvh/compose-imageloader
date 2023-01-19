@@ -1,4 +1,4 @@
-package com.seiko.imageloader.request
+package com.seiko.imageloader.model
 
 enum class DataSource {
     // Memory,

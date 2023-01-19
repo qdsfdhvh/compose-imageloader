@@ -1,6 +1,6 @@
 package com.seiko.imageloader.component.fetcher
 
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
 interface Fetcher {
     suspend fun fetch(): FetchResult?

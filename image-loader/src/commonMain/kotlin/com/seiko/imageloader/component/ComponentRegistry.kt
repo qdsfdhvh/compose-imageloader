@@ -4,8 +4,8 @@ import com.seiko.imageloader.component.decoder.Decoder
 import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.component.mapper.Mapper
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.forEachIndices
 
 class ComponentRegistry internal constructor(

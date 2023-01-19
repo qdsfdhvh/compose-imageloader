@@ -2,7 +2,7 @@ package com.seiko.imageloader.component.mapper
 
 import android.content.ContentResolver
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.firstPathSegment
 import com.seiko.imageloader.util.isAssetUri
 import java.io.File

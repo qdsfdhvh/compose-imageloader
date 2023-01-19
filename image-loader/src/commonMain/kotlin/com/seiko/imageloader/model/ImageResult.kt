@@ -1,4 +1,4 @@
-package com.seiko.imageloader.request
+package com.seiko.imageloader.model
 
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Bitmap

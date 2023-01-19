@@ -1,6 +1,6 @@
 package com.seiko.imageloader.component.fetcher
 
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import okio.buffer
 import okio.source
 import java.io.File

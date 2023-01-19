@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.ImageRequestState
 import com.seiko.imageloader.rememberAsyncImagePainter
-import com.seiko.imageloader.request.ImageRequestBuilder
+import com.seiko.imageloader.model.ImageRequestBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

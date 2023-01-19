@@ -1,4 +1,4 @@
-package com.seiko.imageloader.size
+package com.seiko.imageloader.option
 
 enum class Scale {
     FILL,

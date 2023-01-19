@@ -1,11 +1,12 @@
-package com.seiko.imageloader.request
+package com.seiko.imageloader.model
 
 import androidx.compose.runtime.Immutable
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
-import com.seiko.imageloader.size.Scale
-import com.seiko.imageloader.size.SizeResolver
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.Scale
+import com.seiko.imageloader.option.SizeResolver
 
 @Immutable
 class ImageRequest internal constructor(

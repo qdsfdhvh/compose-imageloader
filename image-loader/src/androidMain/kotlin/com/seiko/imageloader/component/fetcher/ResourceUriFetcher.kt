@@ -17,7 +17,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.toBitmapConfig

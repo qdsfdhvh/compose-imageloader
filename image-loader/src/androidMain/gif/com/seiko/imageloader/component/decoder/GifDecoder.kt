@@ -4,8 +4,8 @@ package com.seiko.imageloader.component.decoder
 
 import android.graphics.Bitmap
 import android.graphics.Movie
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable
 import com.seiko.imageloader.util.isGif
@@ -15,7 +15,6 @@ import com.seiko.imageloader.util.toPainter
 import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import okio.buffer
-import okio.source
 
 /**
  * A [Decoder] that uses [Movie] to decode GIFs.

@@ -19,7 +19,7 @@ import android.os.SystemClock
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withSave
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
-import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.transform.AnimatedTransformation
 import com.seiko.imageloader.transform.PixelOpacity
 

@@ -1,7 +1,7 @@
 package com.seiko.imageloader.component.mapper
 
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.logv
 
 class StringUriMapper : Mapper<Uri> {

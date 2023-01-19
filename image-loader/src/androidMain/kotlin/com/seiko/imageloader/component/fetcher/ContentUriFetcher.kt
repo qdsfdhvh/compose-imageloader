@@ -10,7 +10,7 @@ import android.provider.MediaStore
 import androidx.annotation.VisibleForTesting
 import com.eygraber.uri.Uri
 import com.eygraber.uri.toAndroidUri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import okio.buffer
 import okio.source
 import android.net.Uri as AndroidUri

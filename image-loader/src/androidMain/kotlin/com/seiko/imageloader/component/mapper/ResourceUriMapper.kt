@@ -3,7 +3,7 @@ package com.seiko.imageloader.component.mapper
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
 /**
  * Maps android.resource uris with resource names to uris containing their resources ID. i.e.:

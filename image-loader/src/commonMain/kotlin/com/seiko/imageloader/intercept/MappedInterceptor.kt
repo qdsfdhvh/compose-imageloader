@@ -1,6 +1,6 @@
 package com.seiko.imageloader.intercept
 
-import com.seiko.imageloader.request.ImageResult
+import com.seiko.imageloader.model.ImageResult
 
 class MappedInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {

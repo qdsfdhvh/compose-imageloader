@@ -4,7 +4,7 @@ import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.Logger
 import com.seiko.imageloader.util.httpEngine
 import com.seiko.imageloader.util.ioDispatcher

@@ -11,10 +11,10 @@ import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.intercept.MappedInterceptor
 import com.seiko.imageloader.intercept.MemoryCacheInterceptor
 import com.seiko.imageloader.intercept.RealInterceptorChain
-import com.seiko.imageloader.request.ErrorResult
-import com.seiko.imageloader.request.ImageRequest
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.model.ErrorResult
+import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

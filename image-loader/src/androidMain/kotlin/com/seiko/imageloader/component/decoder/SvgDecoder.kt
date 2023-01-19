@@ -7,8 +7,8 @@ import androidx.compose.ui.geometry.isUnspecified
 import androidx.core.graphics.createBitmap
 import com.caverock.androidsvg.RenderOptions
 import com.caverock.androidsvg.SVG
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.isSvg
 import com.seiko.imageloader.util.toBitmapConfig

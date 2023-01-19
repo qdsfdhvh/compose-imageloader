@@ -1,6 +1,6 @@
 package com.seiko.imageloader.component.mapper
 
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.logv
 import io.ktor.http.Url
 

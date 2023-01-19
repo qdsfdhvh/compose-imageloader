@@ -5,9 +5,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.intercept.Interceptor
-import com.seiko.imageloader.request.ComposePainterResult
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.NullRequestData
+import com.seiko.imageloader.model.ComposePainterResult
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.model.NullRequestData
 import com.seiko.imageloader.util.DebugLogger
 import com.seiko.imageloader.util.LogPriority
 

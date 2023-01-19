@@ -25,7 +25,7 @@ import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.component.mapper.ResourceIntMapper
 import com.seiko.imageloader.component.mapper.ResourceUriMapper
 import com.seiko.imageloader.component.mapper.StringUriMapper
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
 actual class ImageLoaderBuilder constructor(
     context: Context,

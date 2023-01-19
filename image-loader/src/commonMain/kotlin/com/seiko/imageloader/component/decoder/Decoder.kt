@@ -1,7 +1,7 @@
 package com.seiko.imageloader.component.decoder
 
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 
 interface Decoder {
     suspend fun decode(): DecodeResult?

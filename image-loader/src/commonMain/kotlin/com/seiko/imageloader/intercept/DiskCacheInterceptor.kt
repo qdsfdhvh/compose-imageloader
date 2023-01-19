@@ -1,10 +1,10 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.cache.disk.DiskCache
-import com.seiko.imageloader.request.DataSource
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.model.DataSource
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.closeQuietly
 import com.seiko.imageloader.util.logd
 import com.seiko.imageloader.util.logi

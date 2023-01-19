@@ -2,7 +2,7 @@ package com.seiko.imageloader.util
 
 import android.graphics.BitmapFactory
 import androidx.annotation.Px
-import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.option.Scale
 import kotlin.math.max
 import kotlin.math.min
 

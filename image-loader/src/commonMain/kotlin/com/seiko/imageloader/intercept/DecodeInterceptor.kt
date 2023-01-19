@@ -5,14 +5,14 @@ import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.decoder.DecodeImageResult
 import com.seiko.imageloader.component.decoder.DecodePainterResult
 import com.seiko.imageloader.component.decoder.DecodeResult
-import com.seiko.imageloader.request.ComposeImageResult
-import com.seiko.imageloader.request.ComposePainterResult
-import com.seiko.imageloader.request.DataSource
-import com.seiko.imageloader.request.ErrorResult
-import com.seiko.imageloader.request.ImageRequest
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.model.ComposeImageResult
+import com.seiko.imageloader.model.ComposePainterResult
+import com.seiko.imageloader.model.DataSource
+import com.seiko.imageloader.model.ErrorResult
+import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 
 class DecodeInterceptor : Interceptor {
 

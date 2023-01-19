@@ -7,7 +7,7 @@ import com.seiko.imageloader.component.decoder.SvgDecoder
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.keyer.KtorUrlKeyer
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
 actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 

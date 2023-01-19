@@ -1,9 +1,9 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.component.ComponentRegistry
-import com.seiko.imageloader.request.ImageRequest
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
 
 internal class RealInterceptorChain(
     override val initialRequest: ImageRequest,

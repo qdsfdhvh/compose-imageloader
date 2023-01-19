@@ -12,7 +12,7 @@ import com.seiko.imageloader.component.mapper.Base64Mapper
 import com.seiko.imageloader.component.mapper.FileUriMapper
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.component.mapper.StringUriMapper
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
 actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>() {
 

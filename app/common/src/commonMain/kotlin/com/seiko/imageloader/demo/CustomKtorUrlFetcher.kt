@@ -2,7 +2,7 @@ package com.seiko.imageloader.demo
 
 import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient

@@ -10,8 +10,8 @@ import androidx.core.graphics.decodeDrawable
 import com.seiko.imageloader.component.fetcher.AssetMetadata
 import com.seiko.imageloader.component.fetcher.ContentMetadata
 import com.seiko.imageloader.component.fetcher.ResourceMetadata
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable.Companion.REPEAT_INFINITE
 import com.seiko.imageloader.util.ScaleDrawable

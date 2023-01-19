@@ -1,6 +1,6 @@
 package com.seiko.imageloader.component.mapper
 
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import java.nio.ByteBuffer
 
 internal class ByteArrayMapper : Mapper<ByteBuffer> {

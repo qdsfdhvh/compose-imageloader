@@ -1,8 +1,8 @@
 package com.seiko.imageloader.component.decoder
 
 import androidx.compose.ui.unit.Density
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.model.SourceResult
 import com.seiko.imageloader.util.SVGPainter
 import com.seiko.imageloader.util.isSvg
 import okio.BufferedSource

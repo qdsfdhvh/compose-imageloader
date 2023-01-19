@@ -2,7 +2,7 @@ package com.seiko.imageloader.util
 
 import android.graphics.Bitmap
 import android.os.Build
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
 internal val Bitmap.safeConfig: Bitmap.Config
     get() = config ?: Bitmap.Config.ARGB_8888

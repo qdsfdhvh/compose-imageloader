@@ -4,9 +4,9 @@ import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
-import com.seiko.imageloader.request.ComposeImageResult
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.model.ComposeImageResult
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.logd
 import com.seiko.imageloader.util.logi
 import com.seiko.imageloader.util.logw
