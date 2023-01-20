@@ -138,7 +138,7 @@ class AsyncImagePainter(
             .onStart { requestState = ImageRequestState.Loading }
             .mapLatest { imageLoader.execute(updateRequest(request)) }
             .onEach(::updateImage)
-            .launchIn(imageLoader.imageScope)
+            .launchIn(imageLoader.config.imageScope)
     }
 
     override fun onForgotten() {

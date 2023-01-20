@@ -28,15 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
 import com.seiko.imageloader.ImageLoader
-import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
-import com.seiko.imageloader.cache.disk.DiskCacheBuilder
-import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
+import com.seiko.imageloader.component.setupBase64Components
+import com.seiko.imageloader.component.setupCommonComponents
+import com.seiko.imageloader.component.setupKtorComponents
+import com.seiko.imageloader.component.setupSkiaComponents
 import kotlinx.cinterop.autoreleasepool
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.toCValues
-import okio.Path.Companion.toPath
 import platform.Foundation.NSCachesDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSStringFromClass
@@ -73,7 +73,10 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
         _window = window
     }
 
-    override fun application(application: UIApplication, didFinishLaunchingWithOptions: Map<Any?, *>?): Boolean {
+    override fun application(
+        application: UIApplication,
+        didFinishLaunchingWithOptions: Map<Any?, *>?
+    ): Boolean {
         window = UIWindow(frame = UIScreen.mainScreen.bounds).apply {
             rootViewController = Application("Compose ImageLoader") {
                 Column {
@@ -94,21 +97,29 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
 }
 
 private fun generateImageLoader(): ImageLoader {
-    return ImageLoaderBuilder()
-        .commonConfig()
-        .memoryCache {
-            MemoryCacheBuilder()
-                // Set the max size to 25% of the app's available memory.
-                .maxSizePercent(0.25)
-                .build()
+    return ImageLoader {
+        commonConfig()
+        components {
+            setupKtorComponents()
+            setupBase64Components()
+            setupCommonComponents()
+            setupSkiaComponents(imageScope)
         }
-        .diskCache {
-            DiskCacheBuilder()
-                .directory(getCacheDir().toPath().resolve("image_cache"))
-                .maxSizeBytes(512L * 1024 * 1024) // 512MB
-                .build()
+        interceptor {
+            memoryCache {
+                MemoryCacheBuilder()
+                    // Set the max size to 25% of the app's available memory.
+                    .maxSizePercent(0.25)
+                    .build()
+            }
+            diskCache {
+                DiskCacheBuilder()
+                    .directory(getCacheDir().toPath().resolve("image_cache"))
+                    .maxSizeBytes(512L * 1024 * 1024) // 512MB
+                    .build()
+            }
         }
-        .build()
+    }
 }
 
 private fun getCacheDir(): String {

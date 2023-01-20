@@ -23,6 +23,11 @@ interface Logger {
 
     companion object : Logger {
 
+        val None = object : Logger {
+            override fun isLoggable(priority: LogPriority): Boolean = false
+            override fun log(priority: LogPriority, tag: String, data: Any?, throwable: Throwable?, message: String) = Unit
+        }
+
         private val baseArray = mutableListOf<Logger>()
 
         internal fun base(vararg logger: Logger) {

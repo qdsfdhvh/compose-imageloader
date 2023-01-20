@@ -5,10 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import com.seiko.imageloader.ImageLoader
-import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
+import com.seiko.imageloader.component.setupAndroidComponents
+import com.seiko.imageloader.component.setupBase64Components
+import com.seiko.imageloader.component.setupCommonComponents
+import com.seiko.imageloader.component.setupJvmComponents
+import com.seiko.imageloader.component.setupKtorComponents
 import okio.Path.Companion.toOkioPath
 
 class MainActivity : ComponentActivity() {
@@ -25,20 +29,29 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun generateImageLoader(): ImageLoader {
-        return ImageLoaderBuilder(this)
-            .commonConfig()
-            .memoryCache {
-                MemoryCacheBuilder(this)
-                    // Set the max size to 25% of the app's available memory.
-                    .maxSizePercent(0.25)
-                    .build()
+        return ImageLoader {
+            commonConfig()
+            components {
+                setupKtorComponents()
+                setupBase64Components()
+                setupCommonComponents()
+                setupJvmComponents()
+                setupAndroidComponents(applicationContext)
             }
-            .diskCache {
-                DiskCacheBuilder()
-                    .directory(cacheDir.resolve("image_cache").toOkioPath())
-                    .maxSizeBytes(512L * 1024 * 1024) // 512MB
-                    .build()
+            interceptor {
+                memoryCache {
+                    MemoryCacheBuilder(applicationContext)
+                        // Set the max size to 25% of the app's available memory.
+                        .maxSizePercent(0.25)
+                        .build()
+                }
+                diskCache {
+                    DiskCacheBuilder()
+                        .directory(cacheDir.resolve("image_cache").toOkioPath())
+                        .maxSizeBytes(512L * 1024 * 1024) // 512MB
+                        .build()
+                }
             }
-            .build()
+        }
     }
 }

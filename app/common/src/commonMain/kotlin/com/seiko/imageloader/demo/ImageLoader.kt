@@ -3,15 +3,18 @@ package com.seiko.imageloader.demo
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
-import com.seiko.imageloader.ImageLoaderBuilder
+import com.seiko.imageloader.ImageLoaderConfigBuilder
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.model.NullRequestData
 import com.seiko.imageloader.util.DebugLogger
 import com.seiko.imageloader.util.LogPriority
 
-fun ImageLoaderBuilder.commonConfig(): ImageLoaderBuilder {
-    return logger(DebugLogger(LogPriority.VERBOSE))
+fun ImageLoaderConfigBuilder.commonConfig() {
+    logger = DebugLogger(LogPriority.VERBOSE)
+    interceptor {
+        addInterceptor(NullDataInterceptor)
+    }
 }
 
 /**
