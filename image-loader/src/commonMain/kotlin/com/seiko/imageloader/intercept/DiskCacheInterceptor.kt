@@ -5,9 +5,8 @@ import com.seiko.imageloader.model.DataSource
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.closeQuietly
-import com.seiko.imageloader.util.logd
-import com.seiko.imageloader.util.logi
-import com.seiko.imageloader.util.logw
+import com.seiko.imageloader.util.d
+import com.seiko.imageloader.util.w
 import okio.BufferedSource
 import okio.buffer
 
@@ -20,6 +19,7 @@ class DiskCacheInterceptor(
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val options = chain.options
+        val logger = chain.config.logger
 
         val cacheKey = chain.components.key(request.data, options)
             ?: return chain.proceed(request)
@@ -27,14 +27,14 @@ class DiskCacheInterceptor(
         var snapshot = runCatching {
             readFromDiskCache(options, cacheKey)
         }.onFailure {
-            logw(
+            logger.w(
                 tag = "DiskCacheInterceptor",
                 data = request.data,
                 throwable = it,
             ) { "read disk cache error:" }
         }.getOrNull()
         if (snapshot != null) {
-            logi(
+            logger.d(
                 tag = "DiskCacheInterceptor",
                 data = request.data,
             ) { "read disk cache" }
@@ -56,14 +56,14 @@ class DiskCacheInterceptor(
                         result.source,
                     )
                 }.onFailure {
-                    logw(
+                    logger.w(
                         tag = "DiskCacheInterceptor",
                         data = request.data,
                         throwable = it,
                     ) { "write disk cache error:" }
                 }.getOrNull()
                 if (snapshot != null) {
-                    logd(
+                    logger.d(
                         tag = "DiskCacheInterceptor",
                         data = request.data,
                     ) { "write disk cache" }

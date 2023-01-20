@@ -10,6 +10,7 @@ internal class RealInterceptorChain(
     override val initialRequest: ImageRequest,
     override val initialOptions: Options,
     override val request: ImageRequest,
+    override val config: ImageLoaderConfig,
     private val index: Int,
     private val interceptors: List<Interceptor>,
     override val components: ComponentRegistry,
@@ -21,6 +22,7 @@ internal class RealInterceptorChain(
     ) : this(
         initialRequest = initialRequest,
         initialOptions = config.defaultOptions,
+        config = config,
         request = initialRequest,
         index = 0,
         interceptors = initialRequest.interceptors?.plus(config.engine.interceptors)
@@ -32,9 +34,10 @@ internal class RealInterceptorChain(
     private fun copy(index: Int, request: ImageRequest) = RealInterceptorChain(
         initialRequest = initialRequest,
         initialOptions = initialOptions,
-        interceptors = interceptors,
-        index = index,
+        config = config,
         request = request,
+        index = index,
+        interceptors = interceptors,
         components = components,
     )
 

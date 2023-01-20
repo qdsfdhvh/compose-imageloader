@@ -1,5 +1,6 @@
 package com.seiko.imageloader.intercept
 
+import com.seiko.imageloader.ImageLoaderConfig
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
@@ -12,6 +13,7 @@ interface Interceptor {
     interface Chain {
         val initialRequest: ImageRequest
         val initialOptions: Options
+        val config: ImageLoaderConfig
 
         val request: ImageRequest
         val options: Options

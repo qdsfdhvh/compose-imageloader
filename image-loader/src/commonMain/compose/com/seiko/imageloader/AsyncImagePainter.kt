@@ -22,7 +22,7 @@ import com.seiko.imageloader.model.ImageRequestBuilder
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
-import com.seiko.imageloader.util.logw
+import com.seiko.imageloader.util.w
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -189,7 +189,7 @@ class AsyncImagePainter(
     }
 
     private fun logAndReturnState(error: Throwable): ImageRequestState.Failure {
-        logw(
+        imageLoader.config.logger.w(
             tag = "AsyncImagePainter",
             data = request.data,
             throwable = error,
