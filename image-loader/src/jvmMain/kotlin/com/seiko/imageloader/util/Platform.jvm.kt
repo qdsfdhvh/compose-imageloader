@@ -30,3 +30,5 @@ internal actual suspend fun ByteArray.bufferedSource() = ByteArrayInputStream(th
 internal actual val ioDispatcher: CoroutineDispatcher get() = Dispatchers.IO
 
 internal actual val httpEngine: HttpClientEngine get() = OkHttp.create()
+
+internal expect fun getMimeTypeFromExtension(extension: String): String?

@@ -8,7 +8,6 @@ import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
-import com.seiko.imageloader.component.decoder.ImageIODecoder
 import okio.Path.Companion.toOkioPath
 import java.io.File
 
@@ -46,7 +45,7 @@ private fun generateImageLoader(): ImageLoader {
                 .build()
         }
         .components {
-            add(ImageIODecoder.Factory())
+            // add(ImageIODecoder.Factory())
         }
         .build()
 }

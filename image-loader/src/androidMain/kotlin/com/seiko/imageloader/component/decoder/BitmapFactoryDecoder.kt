@@ -175,10 +175,6 @@ class BitmapFactoryDecoder constructor(
         override suspend fun create(source: DecodeSource, options: Options): Decoder {
             return BitmapFactoryDecoder(context, source, options, maxImageSize, parallelismLock)
         }
-
-        override fun equals(other: Any?) = other is Factory
-
-        override fun hashCode() = javaClass.hashCode()
     }
 
     /** Prevent [BitmapFactory.decodeStream] from swallowing [Exception]s. */

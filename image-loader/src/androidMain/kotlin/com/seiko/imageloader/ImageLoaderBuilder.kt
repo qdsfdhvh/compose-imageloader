@@ -46,7 +46,7 @@ actual class ImageLoaderBuilder constructor(
             .add(ByteArrayMapper())
             // Keyers
             .add(KtorUrlKeyer())
-            .add(FileKeyer(true))
+            .add(FileKeyer())
             .add(UriKeyer(context))
             // Fetchers
             .add(Base64Fetcher.Factory())

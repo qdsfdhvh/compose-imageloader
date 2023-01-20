@@ -1,6 +1,6 @@
 package com.seiko.imageloader.component.fetcher
 
-import android.graphics.Bitmap
+import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.option.Options
 
 class BitmapFetcher(
@@ -8,7 +8,7 @@ class BitmapFetcher(
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return FetchResult.Bitmap(
-            bitmap = data
+            bitmap = data,
         )
     }
 

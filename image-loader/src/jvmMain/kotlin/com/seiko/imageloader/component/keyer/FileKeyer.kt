@@ -4,7 +4,7 @@ import com.seiko.imageloader.option.Options
 import java.io.File
 
 internal class FileKeyer(
-    private val addLastModifiedToFileCacheKey: Boolean,
+    private val addLastModifiedToFileCacheKey: Boolean = true,
 ) : Keyer {
     override fun key(data: Any, options: Options): String? {
         if (data !is File) return null

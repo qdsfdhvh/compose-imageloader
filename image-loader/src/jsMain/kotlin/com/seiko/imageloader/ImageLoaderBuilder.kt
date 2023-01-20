@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Density
 import com.seiko.imageloader.component.decoder.GifDecoder
 import com.seiko.imageloader.component.decoder.SkiaImageDecoder
 import com.seiko.imageloader.component.decoder.SvgDecoder
+import com.seiko.imageloader.component.fetcher.BitmapFetcher
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import com.seiko.imageloader.component.keyer.KtorUrlKeyer
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
@@ -25,7 +26,7 @@ actual class ImageLoaderBuilder : CommonImageLoaderBuilder<ImageLoaderBuilder>()
             .add(KtorUrlKeyer())
             // Fetchers
             .add(KtorUrlFetcher.Factory(httpClient))
-            // .add(FileFetcher.Factory())
+            .add(BitmapFetcher.Factory())
             // Decoders
             .add(SvgDecoder.Factory(density ?: Density(2f)))
             .add(GifDecoder.Factory(imageScope))

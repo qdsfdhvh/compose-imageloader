@@ -10,14 +10,14 @@ private const val KEY_META_DATA = "KEY_META_DATA"
 
 fun extraData(block: ExtraDataBuilder.() -> Unit) = buildMap(block)
 
-internal inline fun ExtraDataBuilder.mimeType(type: String?) {
+internal fun ExtraDataBuilder.mimeType(type: String?) {
     if (!type.isNullOrEmpty()) set(KEY_MIME_TYPE, type)
 }
 
 internal inline val ExtraData.mimeType: String?
     get() = get(KEY_MIME_TYPE) as? String
 
-internal inline fun ExtraDataBuilder.metadata(metadata: Any?) {
+internal fun ExtraDataBuilder.metadata(metadata: Any?) {
     if (metadata != null) set(KEY_META_DATA, metadata)
 }
 

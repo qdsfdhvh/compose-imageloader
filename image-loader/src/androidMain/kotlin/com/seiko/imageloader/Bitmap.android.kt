@@ -10,9 +10,6 @@ actual typealias Bitmap = android.graphics.Bitmap
 internal actual val Bitmap.size: Int
     get() = allocationByteCount
 
-internal actual inline val Bitmap.identityHashCode: Int
-    get() = System.identityHashCode(this)
-
 actual fun Bitmap.toPainter(filterQuality: FilterQuality): Painter {
     return BitmapPainter(asImageBitmap(), filterQuality = filterQuality)
 }

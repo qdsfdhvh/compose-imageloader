@@ -71,15 +71,10 @@ internal class GifDecoder @JvmOverloads constructor(
     class Factory @JvmOverloads constructor(
         private val enforceMinimumFrameDelay: Boolean = true
     ) : Decoder.Factory {
-
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isGif(source.source)) return null
             return GifDecoder(source, options, enforceMinimumFrameDelay)
         }
-
-        override fun equals(other: Any?) = other is Factory
-
-        override fun hashCode() = javaClass.hashCode()
     }
 
     companion object {

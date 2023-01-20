@@ -32,10 +32,16 @@ kotlin {
                 api("com.eygraber:uri-kmp:0.0.9")
             }
         }
-        val androidMain by getting {
-            kotlin.srcDir("src/androidMain/gif")
+        val jvmMain by creating {
+            dependsOn(commonMain)
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
+            }
+        }
+        val androidMain by getting {
+            kotlin.srcDir("src/androidMain/gif")
+            dependsOn(jvmMain)
+            dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
                 implementation("androidx.compose.ui:ui-graphics:1.4.0-alpha03")
                 implementation("androidx.core:core-ktx:1.9.0")
@@ -50,9 +56,9 @@ kotlin {
             dependsOn(commonMain)
         }
         val desktopMain by getting {
+            dependsOn(jvmMain)
             dependsOn(skiaMain)
             dependencies {
-                implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }

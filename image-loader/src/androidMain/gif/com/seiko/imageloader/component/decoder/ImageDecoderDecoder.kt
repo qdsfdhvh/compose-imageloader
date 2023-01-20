@@ -150,9 +150,5 @@ class ImageDecoderDecoder @JvmOverloads constructor(
         private fun isApplicable(source: BufferedSource): Boolean {
             return isGif(source) || isAnimatedWebP(source) || (SDK_INT >= 30 && isAnimatedHeif(source))
         }
-
-        override fun equals(other: Any?) = other is Factory
-
-        override fun hashCode() = javaClass.hashCode()
     }
 }
