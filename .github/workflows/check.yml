@@ -24,9 +24,6 @@ jobs:
       - name: Spotless Check
         run: ./gradlew spotlessCheck --stacktrace --no-daemon --no-parallel
 
-      - name: Lint
-        run: ./gradlew lint assemble --stacktrace --no-daemon --no-parallel
-
   build:
     name: Gradle check
     runs-on: ubuntu-latest
@@ -38,6 +35,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Lint
+        run: ./gradlew lint --stacktrace --no-daemon --no-parallel
+
+      - name: Assemble
+        run: ./gradlew assemble --stacktrace --no-daemon --no-parallel
 
       - name: Build
         run: ./gradlew build --stacktrace --no-daemon --no-parallel
