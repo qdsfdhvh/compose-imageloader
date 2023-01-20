@@ -12,7 +12,11 @@ kotlin {
     android {
         publishLibraryVariants("debug", "release")
     }
-    jvm("desktop")
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
+        }
+    }
     ios()
     iosSimulatorArm64()
     macosX64()

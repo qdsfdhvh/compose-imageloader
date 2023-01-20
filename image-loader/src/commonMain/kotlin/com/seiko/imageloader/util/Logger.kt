@@ -39,10 +39,10 @@ interface Logger {
     }
 }
 
-internal inline fun logv(
+internal fun logv(
     tag: String,
     data: Any,
-    noinline message: () -> String
+    message: () -> String
 ) = log(
     tag = tag,
     data = data,
@@ -51,10 +51,10 @@ internal inline fun logv(
     message = message,
 )
 
-internal inline fun logd(
+internal fun logd(
     tag: String,
     data: Any,
-    noinline message: () -> String
+    message: () -> String
 ) = log(
     tag = tag,
     data = data,
@@ -63,10 +63,10 @@ internal inline fun logd(
     message = message,
 )
 
-internal inline fun logi(
+internal fun logi(
     tag: String,
     data: Any,
-    noinline message: () -> String
+    message: () -> String
 ) = log(
     tag = tag,
     data = data,
@@ -75,11 +75,11 @@ internal inline fun logi(
     message = message,
 )
 
-internal inline fun logw(
+internal fun logw(
     tag: String,
     data: Any,
     throwable: Throwable,
-    noinline message: () -> String
+    message: () -> String
 ) = log(
     tag = tag,
     data = data,

@@ -45,7 +45,7 @@ class ImageDecoderDecoder @JvmOverloads constructor(
     override suspend fun decode(): DecodeResult {
         var imageDecoder: ImageDecoder? = null
         val drawable = try {
-            source.toImageDecoderSource().decodeDrawable { info, _ ->
+            source.toImageDecoderSource().decodeDrawable { _, _ ->
                 // Capture the image decoder to manually close it later.
                 imageDecoder = this
 
