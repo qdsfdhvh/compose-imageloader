@@ -26,7 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.ImageRequestState
-import com.seiko.imageloader.model.ImageRequestBuilder
+import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.rememberAsyncImagePainter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -86,13 +86,13 @@ private fun ImageList(modifier: Modifier = Modifier) {
 fun ImageItem(url: String) {
     Box(Modifier.aspectRatio(1f), Alignment.Center) {
         val request = remember {
-            ImageRequestBuilder()
-                .data(url)
-                .addInterceptor(NullDataInterceptor)
-                .components {
+            ImageRequest {
+                data(url)
+                addInterceptor(NullDataInterceptor)
+                components {
                     add(CustomKtorUrlFetcher.Factory())
                 }
-                .build()
+            }
         }
         val painter = rememberAsyncImagePainter(request)
         Image(

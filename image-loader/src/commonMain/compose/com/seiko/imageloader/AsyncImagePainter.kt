@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQ
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.model.ImageRequest
-import com.seiko.imageloader.model.ImageRequestBuilder
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
@@ -40,7 +39,7 @@ fun rememberAsyncImagePainter(
     contentScale: ContentScale = ContentScale.Fit,
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): AsyncImagePainter {
-    val request = remember(url) { ImageRequestBuilder().data(url).build() }
+    val request = remember(url) { ImageRequest(url) }
     return rememberAsyncImagePainter(
         request = request,
         imageLoader = imageLoader,
@@ -56,7 +55,7 @@ fun rememberAsyncImagePainter(
     contentScale: ContentScale = ContentScale.Fit,
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): AsyncImagePainter {
-    val request = remember(resId) { ImageRequestBuilder().data(resId).build() }
+    val request = remember(resId) { ImageRequest(resId) }
     return rememberAsyncImagePainter(
         request = request,
         imageLoader = imageLoader,
@@ -157,16 +156,14 @@ class AsyncImagePainter(
     }
 
     private fun updateRequest(request: ImageRequest): ImageRequest {
-        return request.newBuilder()
-            .apply {
-                size(object : SizeResolver {
-                    override suspend fun size(): Size {
-                        return drawSize.filterNot { it.isEmpty() }.firstOrNull() ?: Size.Unspecified
-                    }
-                })
-                scale(contentScale.toScale())
-            }
-            .build()
+        return request.newBuilder {
+            size(object : SizeResolver {
+                override suspend fun size(): Size {
+                    return drawSize.filterNot { it.isEmpty() }.firstOrNull() ?: Size.Unspecified
+                }
+            })
+            scale(contentScale.toScale())
+        }
     }
 
     private fun updateImage(input: ImageResult) {

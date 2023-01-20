@@ -12,9 +12,9 @@ import com.seiko.imageloader.util.LogPriority
 
 fun ImageLoaderConfigBuilder.commonConfig() {
     logger = DebugLogger(LogPriority.VERBOSE)
-    interceptor {
-        addInterceptor(NullDataInterceptor)
-    }
+    // interceptor {
+    //     addInterceptor(NullDataInterceptor)
+    // }
 }
 
 /**
