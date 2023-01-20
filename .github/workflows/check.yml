@@ -13,28 +13,31 @@ jobs:
     name: Spotless check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: spotless
+
+      - name: Spotless Check
         run: ./gradlew spotlessCheck --stacktrace --no-daemon --no-parallel
+
+      - name: Lint
+        run: ./gradlew lint assemble --stacktrace --no-daemon --no-parallel
 
   build:
     name: Gradle check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: set up JDK
+      - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 11
 
-      - name: lint
-        run: ./gradlew lint assemble --stacktrace --no-daemon --no-parallel
-
-      - name: test
-        run: ./gradlew test --stacktrace --no-daemon --no-parallel
+      - name: Build
+        run: ./gradlew build --stacktrace --no-daemon --no-parallel
