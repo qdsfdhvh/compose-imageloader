@@ -9,25 +9,33 @@ class InterceptorsBuilder {
     private var memoryCache: Lazy<MemoryCache>? = null
     private var diskCache: Lazy<DiskCache>? = null
 
-    fun addInterceptor(interceptor: Interceptor) = apply {
+    var useDefaultInterceptors = true
+
+    fun addInterceptor(interceptor: Interceptor) {
         interceptors.add(interceptor)
     }
 
-    fun memoryCache(initializer: (() -> MemoryCache)?) = apply {
+    fun addInterceptors(interceptors: Collection<Interceptor>) {
+        this.interceptors.addAll(interceptors)
+    }
+
+    fun memoryCache(initializer: (() -> MemoryCache)?) {
         memoryCache = initializer?.let { lazy(it) }
     }
 
-    fun diskCache(initializer: (() -> DiskCache)?) = apply {
+    fun diskCache(initializer: (() -> DiskCache)?) {
         diskCache = initializer?.let { lazy(it) }
     }
 
     fun build(): List<Interceptor> {
-        return interceptors + listOfNotNull(
-            MappedInterceptor(),
-            memoryCache?.let { MemoryCacheInterceptor(it) },
-            DecodeInterceptor(),
-            diskCache?.let { DiskCacheInterceptor(it) },
-            FetchInterceptor(),
-        )
+        return interceptors + if (useDefaultInterceptors) {
+            listOfNotNull(
+                MappedInterceptor(),
+                memoryCache?.let { MemoryCacheInterceptor(it) },
+                DecodeInterceptor(),
+                diskCache?.let { DiskCacheInterceptor(it) },
+                FetchInterceptor(),
+            )
+        } else emptyList()
     }
 }
