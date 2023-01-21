@@ -17,10 +17,6 @@ allprojects {
             jvmTarget = Versions.Java.jvmTarget
         }
     }
-    // @see https://youtrack.jetbrains.com/issue/KT-55102
-    tasks.withType<JavaCompile> {
-        targetCompatibility = Versions.Java.jvmTarget
-    }
 
     apply(plugin = "com.diffplug.spotless")
     spotless {

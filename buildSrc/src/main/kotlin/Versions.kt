@@ -16,7 +16,8 @@ object Versions {
 
     object Java {
         const val jvmTarget = "11"
-        val java = JavaVersion.VERSION_17
+        val target = JavaVersion.VERSION_11
+        val source = JavaVersion.VERSION_17
     }
 
     const val spotless = "6.7.2"

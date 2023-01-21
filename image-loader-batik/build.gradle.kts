@@ -13,6 +13,11 @@ dependencies {
     implementation("org.apache.xmlgraphics:batik-transcoder:1.16")
 }
 
+java {
+    sourceCompatibility = Versions.Java.source
+    targetCompatibility = Versions.Java.target
+}
+
 @Suppress("UnstableApiUsage")
 configure<MavenPublishBaseExtension> {
     configure(KotlinJvm())

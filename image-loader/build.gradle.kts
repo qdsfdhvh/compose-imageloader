@@ -101,8 +101,8 @@ android {
         minSdk = Versions.Android.min
     }
     compileOptions {
-        sourceCompatibility = Versions.Java.java
-        targetCompatibility = Versions.Java.java
+        sourceCompatibility = Versions.Java.source
+        targetCompatibility = Versions.Java.target
     }
 }
 
