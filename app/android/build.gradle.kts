@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace = "com.seiko.imageloader.demo"
     compileSdk = Versions.Android.compile
     defaultConfig {
         applicationId = "com.seiko.imageloader.demo"

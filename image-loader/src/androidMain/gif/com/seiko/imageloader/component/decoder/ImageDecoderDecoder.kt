@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.decodeDrawable
+import com.seiko.imageloader.cache.disk.systemFileSystem
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
@@ -19,11 +20,12 @@ import com.seiko.imageloader.util.isAnimatedHeif
 import com.seiko.imageloader.util.isAnimatedWebP
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
-import com.seiko.imageloader.util.log
 import com.seiko.imageloader.util.toBitmapConfig
 import com.seiko.imageloader.util.toPainter
 import okio.BufferedSource
+import okio.Path.Companion.toOkioPath
 import okio.buffer
+import java.io.File
 import java.nio.ByteBuffer
 
 /**
@@ -90,8 +92,13 @@ class ImageDecoderDecoder @JvmOverloads constructor(
             SDK_INT >= 31 -> ImageDecoder.createSource(source.readByteArray())
             SDK_INT == 30 -> ImageDecoder.createSource(ByteBuffer.wrap(source.readByteArray()))
             // https://issuetracker.google.com/issues/139371066
-            // else -> ImageDecoder.createSource(file().toFile())
-            else -> ImageDecoder.createSource(source.readByteArray())
+            else -> {
+                val temp = File.createTempFile("tmp", null)
+                systemFileSystem.write(temp.toOkioPath()) {
+                    writeAll(source)
+                }
+                ImageDecoder.createSource(temp)
+            }
         }
     }
 
@@ -119,7 +126,6 @@ class ImageDecoderDecoder @JvmOverloads constructor(
         if (baseDrawable !is AnimatedImageDrawable) {
             return baseDrawable
         }
-        log(tag = "ImageDecoder") { "is anime drawable" }
 
         baseDrawable.repeatCount = REPEAT_INFINITE
 
