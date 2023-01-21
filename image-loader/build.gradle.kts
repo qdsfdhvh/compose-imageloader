@@ -97,10 +97,8 @@ kotlin {
 android {
     namespace = "io.github.qdsfdhvh.imageloader"
     compileSdk = Versions.Android.compile
-    buildToolsVersion = Versions.Android.buildTools
     defaultConfig {
         minSdk = Versions.Android.min
-        targetSdk = Versions.Android.target
     }
     compileOptions {
         sourceCompatibility = Versions.Java.java

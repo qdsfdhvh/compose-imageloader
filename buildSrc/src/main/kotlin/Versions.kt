@@ -6,7 +6,6 @@ object Versions {
         const val min = 21
         const val compile = 33
         const val target = compile
-        const val buildTools = "33.0.0"
     }
 
     object Kotlin {
@@ -17,7 +16,7 @@ object Versions {
 
     object Java {
         const val jvmTarget = "11"
-        val java = JavaVersion.VERSION_11
+        val java = JavaVersion.VERSION_17
     }
 
     const val spotless = "6.7.2"

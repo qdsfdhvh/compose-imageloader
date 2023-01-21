@@ -6,7 +6,6 @@ plugins {
 
 android {
     compileSdk = Versions.Android.compile
-    buildToolsVersion = Versions.Android.buildTools
     defaultConfig {
         applicationId = "com.seiko.imageloader.demo"
         minSdk = Versions.Android.min
