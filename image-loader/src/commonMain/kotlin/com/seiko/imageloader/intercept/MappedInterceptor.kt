@@ -15,7 +15,7 @@ class MappedInterceptor : Interceptor {
             data = request.data,
         ) { "map -> ${request.data}" }
 
-        val newRequest = request.newBuilder().data(mappedData).build()
+        val newRequest = request.newBuilder { data(mappedData) }
         return chain.proceed(newRequest)
     }
 }
