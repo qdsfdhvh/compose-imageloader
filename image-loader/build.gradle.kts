@@ -43,7 +43,6 @@ kotlin {
             }
         }
         val androidMain by getting {
-            kotlin.srcDir("src/androidMain/gif")
             dependsOn(jvmMain)
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
