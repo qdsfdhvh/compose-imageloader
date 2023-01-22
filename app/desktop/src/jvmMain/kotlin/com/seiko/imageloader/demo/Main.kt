@@ -7,11 +7,8 @@ import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
-import com.seiko.imageloader.component.setupBase64Components
-import com.seiko.imageloader.component.setupCommonComponents
-import com.seiko.imageloader.component.setupJvmComponents
-import com.seiko.imageloader.component.setupKtorComponents
-import com.seiko.imageloader.component.setupSkiaComponents
+import com.seiko.imageloader.component.decoder.ImageIODecoder
+import com.seiko.imageloader.component.setupDefaultComponents
 import okio.Path.Companion.toOkioPath
 import java.io.File
 
@@ -37,12 +34,8 @@ private fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         commonConfig()
         components {
-            // add(ImageIODecoder.Factory())
-            setupKtorComponents()
-            setupBase64Components()
-            setupCommonComponents()
-            setupJvmComponents()
-            setupSkiaComponents(imageScope)
+            add(ImageIODecoder.Factory())
+            setupDefaultComponents(imageScope)
         }
         interceptor {
             memoryCache {

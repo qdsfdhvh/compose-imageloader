@@ -8,11 +8,7 @@ import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
-import com.seiko.imageloader.component.setupAndroidComponents
-import com.seiko.imageloader.component.setupBase64Components
-import com.seiko.imageloader.component.setupCommonComponents
-import com.seiko.imageloader.component.setupJvmComponents
-import com.seiko.imageloader.component.setupKtorComponents
+import com.seiko.imageloader.component.setupDefaultComponents
 import okio.Path.Companion.toOkioPath
 
 class MainActivity : ComponentActivity() {
@@ -32,11 +28,7 @@ class MainActivity : ComponentActivity() {
         return ImageLoader {
             commonConfig()
             components {
-                setupKtorComponents()
-                setupBase64Components()
-                setupCommonComponents()
-                setupJvmComponents()
-                setupAndroidComponents(applicationContext)
+                setupDefaultComponents(applicationContext)
             }
             interceptor {
                 memoryCache {

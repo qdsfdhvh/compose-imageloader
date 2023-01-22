@@ -27,7 +27,7 @@ kotlin {
     }
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDir("src/commonMain/compose")
+            kotlin.srcDir("src/commonMain/singleton")
             dependencies {
                 api(compose.ui)
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
@@ -43,6 +43,7 @@ kotlin {
             }
         }
         val androidMain by getting {
+            kotlin.srcDir("src/androidMain/singleton")
             dependsOn(jvmMain)
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
@@ -59,6 +60,7 @@ kotlin {
             dependsOn(commonMain)
         }
         val desktopMain by getting {
+            kotlin.srcDir("src/desktopMain/singleton")
             dependsOn(jvmMain)
             dependsOn(skiaMain)
             dependencies {
@@ -66,25 +68,29 @@ kotlin {
             }
         }
         val darwinMain by creating {
+            kotlin.srcDir("src/darwinMain/singleton")
             dependsOn(skiaMain)
+        }
+        val appleMain by creating {
+            dependsOn(darwinMain)
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
             }
         }
         val iosMain by getting {
-            dependsOn(darwinMain)
+            dependsOn(appleMain)
         }
         val iosSimulatorArm64Main by getting {
-            dependsOn(iosMain)
+            dependsOn(appleMain)
         }
         val macosX64Main by getting {
-            dependsOn(darwinMain)
+            dependsOn(appleMain)
         }
         val macosArm64Main by getting {
-            dependsOn(darwinMain)
+            dependsOn(appleMain)
         }
         val jsMain by getting {
-            dependsOn(skiaMain)
+            dependsOn(darwinMain)
             dependencies {
                 implementation("io.ktor:ktor-client-js:${Versions.ktor}")
                 implementation("com.squareup.okio:okio-nodefilesystem:${Versions.okio}")

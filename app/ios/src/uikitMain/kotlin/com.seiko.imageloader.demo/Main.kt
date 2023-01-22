@@ -31,10 +31,7 @@ import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
-import com.seiko.imageloader.component.setupBase64Components
-import com.seiko.imageloader.component.setupCommonComponents
-import com.seiko.imageloader.component.setupKtorComponents
-import com.seiko.imageloader.component.setupSkiaComponents
+import com.seiko.imageloader.component.setupDefaultComponents
 import kotlinx.cinterop.autoreleasepool
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.memScoped
@@ -103,10 +100,7 @@ private fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         commonConfig()
         components {
-            setupKtorComponents()
-            setupBase64Components()
-            setupCommonComponents()
-            setupSkiaComponents(imageScope)
+            setupDefaultComponents(imageScope)
         }
         interceptor {
             memoryCache {
