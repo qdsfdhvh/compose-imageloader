@@ -1,13 +1,15 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.cache.disk.DiskCache
+import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCache
+import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 
 class InterceptorsBuilder {
 
     private val interceptors = mutableListOf<Interceptor>()
-    private var memoryCache: Lazy<MemoryCache>? = null
-    private var diskCache: Lazy<DiskCache>? = null
+    private var memoryCache: (() -> MemoryCache)? = null
+    private var diskCache: (() -> DiskCache)? = null
 
     var useDefaultInterceptors = true
 
@@ -19,12 +21,12 @@ class InterceptorsBuilder {
         this.interceptors.addAll(interceptors)
     }
 
-    fun memoryCache(initializer: (() -> MemoryCache)?) {
-        memoryCache = initializer?.let { lazy(it) }
+    fun memoryCache(block: MemoryCacheBuilder.() -> Unit) {
+        memoryCache = { MemoryCache(block) }
     }
 
-    fun diskCache(initializer: (() -> DiskCache)?) {
-        diskCache = initializer?.let { lazy(it) }
+    fun diskCache(block: DiskCacheBuilder.() -> Unit) {
+        diskCache = { DiskCache(block) }
     }
 
     fun build(): List<Interceptor> {

@@ -12,6 +12,9 @@ import com.seiko.imageloader.util.w
 class MemoryCacheInterceptor(
     private val memoryCache: Lazy<MemoryCache>,
 ) : Interceptor {
+
+    constructor(memoryCache: () -> MemoryCache) : this(lazy(memoryCache))
+
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val options = chain.options

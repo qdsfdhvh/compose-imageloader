@@ -14,6 +14,8 @@ class DiskCacheInterceptor(
     private val diskCache: Lazy<DiskCache>,
 ) : Interceptor {
 
+    constructor(diskCache: () -> DiskCache) : this(lazy(diskCache))
+
     private val fileSystem get() = diskCache.value.fileSystem
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
