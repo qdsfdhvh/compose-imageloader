@@ -3,7 +3,7 @@ package com.seiko.imageloader.component.fetcher
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.option.Options
 
-class BitmapFetcher(
+class BitmapFetcher private constructor(
     private val data: Bitmap,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {

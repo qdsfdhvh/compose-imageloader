@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.toPainter
 
-class DrawableFetcher(
+class DrawableFetcher private constructor(
     private val data: Drawable,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {

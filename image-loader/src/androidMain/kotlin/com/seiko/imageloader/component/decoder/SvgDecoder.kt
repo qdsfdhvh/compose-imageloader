@@ -23,7 +23,7 @@ import kotlin.math.roundToInt
  * @param useViewBoundsAsIntrinsicSize If true, uses the SVG's view bounds as the intrinsic size for
  *  the SVG. If false, uses the SVG's width/height as the intrinsic size for the SVG.
  */
-class SvgDecoder constructor(
+class SvgDecoder private constructor(
     private val source: DecodeSource,
     private val options: Options,
     private val useViewBoundsAsIntrinsicSize: Boolean,

@@ -12,7 +12,7 @@ import com.seiko.imageloader.util.isAssetUri
 import okio.buffer
 import okio.source
 
-internal class AssetUriFetcher(
+class AssetUriFetcher private constructor(
     private val context: Context,
     private val data: Uri,
 ) : Fetcher {

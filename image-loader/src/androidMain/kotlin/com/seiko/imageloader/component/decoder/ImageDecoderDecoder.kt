@@ -37,7 +37,7 @@ import java.nio.ByteBuffer
  *  it is below a threshold. See https://github.com/coil-kt/coil/issues/540 for more info.
  */
 @RequiresApi(28)
-class ImageDecoderDecoder @JvmOverloads constructor(
+class ImageDecoderDecoder private constructor(
     private val context: Context,
     private val source: DecodeSource,
     private val options: Options,

@@ -10,7 +10,7 @@ import com.seiko.imageloader.option.Options
  *
  * android.resource://example.package.name/drawable/image -> android.resource://example.package.name/12345678
  */
-internal class ResourceUriMapper(private val context: Context) : Mapper<Uri> {
+class ResourceUriMapper(private val context: Context) : Mapper<Uri> {
 
     override fun map(data: Any, options: Options): Uri? {
         if (data !is Uri) return null

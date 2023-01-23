@@ -8,7 +8,7 @@ import okio.BufferedSource
 import org.jetbrains.skia.Data
 import org.jetbrains.skia.svg.SVGDOM
 
-class SvgDecoder(
+class SvgDecoder private constructor(
     private val density: Density,
     private val channel: BufferedSource,
 ) : Decoder {

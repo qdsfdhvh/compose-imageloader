@@ -23,7 +23,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 /** The base [Decoder] that uses [BitmapFactory] to decode a given [ImageSource]. */
-class BitmapFactoryDecoder constructor(
+class BitmapFactoryDecoder private constructor(
     private val context: Context,
     private val source: DecodeSource,
     private val options: Options,

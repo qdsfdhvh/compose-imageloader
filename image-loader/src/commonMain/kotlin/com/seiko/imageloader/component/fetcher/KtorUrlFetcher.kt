@@ -12,7 +12,7 @@ import io.ktor.http.Url
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 
-open class KtorUrlFetcher(
+class KtorUrlFetcher private constructor(
     private val httpUrl: Url,
     private val httpClient: Lazy<HttpClient>,
 ) : Fetcher {
@@ -35,6 +35,9 @@ open class KtorUrlFetcher(
     class Factory(
         private val httpClient: Lazy<HttpClient>,
     ) : Fetcher.Factory {
+
+        constructor(httpClient: () -> HttpClient) : this(lazy(httpClient))
+
         override fun create(data: Any, options: Options): Fetcher? {
             if (data is Url) return KtorUrlFetcher(data, httpClient)
             return null

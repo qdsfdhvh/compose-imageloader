@@ -19,7 +19,7 @@ import okio.buffer
 import okio.source
 import android.net.Uri as AndroidUri
 
-internal class ContentUriFetcher(
+class ContentUriFetcher private constructor(
     private val context: Context,
     private val data: Uri,
 ) : Fetcher {

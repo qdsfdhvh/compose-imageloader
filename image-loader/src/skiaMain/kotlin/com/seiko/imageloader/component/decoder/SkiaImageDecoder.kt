@@ -5,7 +5,7 @@ import okio.BufferedSource
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Image
 
-class SkiaImageDecoder(
+class SkiaImageDecoder private constructor(
     private val channel: BufferedSource,
 ) : Decoder {
 

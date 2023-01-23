@@ -6,7 +6,7 @@ import android.content.res.Configuration
 import com.eygraber.uri.Uri
 import com.seiko.imageloader.option.Options
 
-internal class UriKeyer(private val context: Context) : Keyer {
+class UriKeyer(private val context: Context) : Keyer {
     override fun key(data: Any, options: Options): String? {
         if (data !is Uri) return null
         // 'android.resource' uris can change if night mode is enabled/disabled.

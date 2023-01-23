@@ -8,7 +8,7 @@ import okio.BufferedSource
 import org.jetbrains.skia.Codec
 import org.jetbrains.skia.Data
 
-class GifDecoder(
+class GifDecoder private constructor(
     private val channel: BufferedSource,
     private val imageScope: CoroutineScope,
 ) : Decoder {

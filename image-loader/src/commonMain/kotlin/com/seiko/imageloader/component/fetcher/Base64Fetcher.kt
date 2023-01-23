@@ -6,7 +6,7 @@ import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.bufferedSource
 
-class Base64Fetcher(
+class Base64Fetcher private constructor(
     private val data: Base64Image,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {

@@ -30,7 +30,7 @@ import okio.source
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
-internal class ResourceUriFetcher(
+class ResourceUriFetcher private constructor(
     private val context: Context,
     private val data: Uri,
     private val options: Options

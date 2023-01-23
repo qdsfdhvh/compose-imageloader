@@ -90,7 +90,7 @@ fun ImageItem(url: String) {
                 data(url)
                 addInterceptor(NullDataInterceptor)
                 components {
-                    add(CustomKtorUrlFetcher.Factory())
+                    add(customKtorUrlFetcher)
                 }
             }
         }

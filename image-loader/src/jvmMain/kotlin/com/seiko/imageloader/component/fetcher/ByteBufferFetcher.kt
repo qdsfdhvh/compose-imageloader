@@ -4,7 +4,7 @@ import com.seiko.imageloader.option.Options
 import okio.Buffer
 import java.nio.ByteBuffer
 
-class ByteBufferFetcher(
+class ByteBufferFetcher private constructor(
     private val data: ByteBuffer,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {

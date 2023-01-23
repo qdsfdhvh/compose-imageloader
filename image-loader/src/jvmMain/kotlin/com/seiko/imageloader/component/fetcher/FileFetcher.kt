@@ -8,7 +8,9 @@ import okio.buffer
 import okio.source
 import java.io.File
 
-internal class FileFetcher(private val data: File) : Fetcher {
+class FileFetcher private constructor(
+    private val data: File,
+) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return FetchResult.Source(
             source = data.source().buffer(),
