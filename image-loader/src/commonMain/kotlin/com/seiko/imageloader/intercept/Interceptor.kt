@@ -12,13 +12,12 @@ interface Interceptor {
 
     interface Chain {
         val initialRequest: ImageRequest
-        val initialOptions: Options
         val config: ImageLoaderConfig
 
         val request: ImageRequest
         val options: Options
             get() =
-                initialOptions.also {
+                config.defaultOptions.also {
                     request.optionsBuilders.forEach { builder ->
                         it.run(builder)
                     }

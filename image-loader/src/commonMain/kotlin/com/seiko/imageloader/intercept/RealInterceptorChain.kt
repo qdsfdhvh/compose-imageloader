@@ -8,7 +8,6 @@ import com.seiko.imageloader.option.Options
 
 internal class RealInterceptorChain(
     override val initialRequest: ImageRequest,
-    override val initialOptions: Options,
     override val request: ImageRequest,
     override val config: ImageLoaderConfig,
     private val index: Int,
@@ -21,7 +20,6 @@ internal class RealInterceptorChain(
         config: ImageLoaderConfig,
     ) : this(
         initialRequest = initialRequest,
-        initialOptions = config.defaultOptions,
         config = config,
         request = initialRequest,
         index = 0,
@@ -33,7 +31,6 @@ internal class RealInterceptorChain(
 
     private fun copy(index: Int, request: ImageRequest) = RealInterceptorChain(
         initialRequest = initialRequest,
-        initialOptions = initialOptions,
         config = config,
         request = request,
         index = index,
