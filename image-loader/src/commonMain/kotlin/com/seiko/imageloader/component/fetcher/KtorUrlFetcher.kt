@@ -14,11 +14,13 @@ import io.ktor.http.isSuccess
 
 class KtorUrlFetcher private constructor(
     private val httpUrl: Url,
-    private val httpClient: Lazy<HttpClient>,
+    httpClient: () -> HttpClient,
 ) : Fetcher {
 
+    private val httpClient by lazy(httpClient)
+
     override suspend fun fetch(): FetchResult {
-        val response = httpClient.value.request {
+        val response = httpClient.request {
             url(httpUrl)
         }
         if (response.status.isSuccess()) {
@@ -33,11 +35,8 @@ class KtorUrlFetcher private constructor(
     }
 
     class Factory(
-        private val httpClient: Lazy<HttpClient>,
+        private val httpClient: () -> HttpClient,
     ) : Fetcher.Factory {
-
-        constructor(httpClient: () -> HttpClient) : this(lazy(httpClient))
-
         override fun create(data: Any, options: Options): Fetcher? {
             if (data is Url) return KtorUrlFetcher(data, httpClient)
             return null

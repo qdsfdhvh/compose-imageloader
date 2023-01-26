@@ -10,10 +10,10 @@ import com.seiko.imageloader.util.d
 import com.seiko.imageloader.util.w
 
 class MemoryCacheInterceptor(
-    private val memoryCache: Lazy<MemoryCache>,
+    memoryCache: () -> MemoryCache
 ) : Interceptor {
 
-    constructor(memoryCache: () -> MemoryCache) : this(lazy(memoryCache))
+    private val memoryCache by lazy(memoryCache)
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
@@ -70,7 +70,7 @@ class MemoryCacheInterceptor(
 
     private fun readFromMemoryCache(options: Options, cacheKey: MemoryKey): MemoryValue? {
         return if (options.memoryCachePolicy.readEnabled) {
-            memoryCache.value[cacheKey]
+            memoryCache[cacheKey]
         } else null
     }
 
@@ -80,7 +80,7 @@ class MemoryCacheInterceptor(
         image: Bitmap,
     ): Boolean {
         if (!options.memoryCachePolicy.writeEnabled) return false
-        memoryCache.value[cacheKey] = image
+        memoryCache[cacheKey] = image
         return true
     }
 }

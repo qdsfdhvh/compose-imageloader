@@ -11,12 +11,12 @@ import okio.BufferedSource
 import okio.buffer
 
 class DiskCacheInterceptor(
-    private val diskCache: Lazy<DiskCache>,
+    diskCache: () -> DiskCache
 ) : Interceptor {
 
-    constructor(diskCache: () -> DiskCache) : this(lazy(diskCache))
+    private val diskCache by lazy(diskCache)
 
-    private val fileSystem get() = diskCache.value.fileSystem
+    private val fileSystem get() = diskCache.fileSystem
 
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
@@ -84,7 +84,7 @@ class DiskCacheInterceptor(
         cacheKey: String,
     ): DiskCache.Snapshot? {
         return if (options.diskCachePolicy.readEnabled) {
-            diskCache.value[cacheKey]
+            diskCache[cacheKey]
         } else null
     }
 
@@ -99,7 +99,7 @@ class DiskCacheInterceptor(
             return null
         }
         val editor = snapshot?.closeAndEdit()
-            ?: diskCache.value.edit(cacheKey)
+            ?: diskCache.edit(cacheKey)
             ?: return null
         try {
             fileSystem.write(editor.data) {
