@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.KotlinJvm
-import com.vanniktech.maven.publish.MavenPublishBaseExtension
 
 plugins {
     kotlin("jvm")
@@ -17,8 +16,8 @@ java {
     sourceCompatibility = Versions.Java.source
     targetCompatibility = Versions.Java.target
 }
-
 @Suppress("UnstableApiUsage")
-configure<MavenPublishBaseExtension> {
+mavenPublishing {
     configure(KotlinJvm())
+    pomFromGradleProperties()
 }

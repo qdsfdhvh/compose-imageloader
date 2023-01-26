@@ -17,7 +17,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(projects.app.common)
-                implementation(projects.imageLoaderBatik)
+                implementation(projects.extension.imageio)
                 implementation(compose.desktop.currentOs)
             }
         }
