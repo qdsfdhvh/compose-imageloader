@@ -1,4 +1,4 @@
-package com.seiko.imageloader.demo
+package com.seiko.imageloader.demo.util
 
 import com.seiko.imageloader.component.fetcher.KtorUrlFetcher
 import io.github.aakira.napier.DebugAntilog

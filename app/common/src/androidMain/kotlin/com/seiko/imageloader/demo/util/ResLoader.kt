@@ -1,4 +1,4 @@
-package com.seiko.imageloader.demo
+package com.seiko.imageloader.demo.util
 
 import android.content.Context
 

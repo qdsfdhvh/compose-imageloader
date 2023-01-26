@@ -8,6 +8,9 @@ import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
+import com.seiko.imageloader.demo.util.LocalResLoader
+import com.seiko.imageloader.demo.util.ResLoader
+import com.seiko.imageloader.demo.util.commonConfig
 import okio.Path.Companion.toOkioPath
 
 class MainActivity : ComponentActivity() {

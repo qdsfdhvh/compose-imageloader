@@ -1,4 +1,4 @@
-package com.seiko.imageloader.demo
+package com.seiko.imageloader.demo.util
 
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO

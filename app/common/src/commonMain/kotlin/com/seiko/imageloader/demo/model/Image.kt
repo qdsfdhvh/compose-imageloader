@@ -1,4 +1,4 @@
-package com.seiko.imageloader.demo
+package com.seiko.imageloader.demo.model
 
 import kotlinx.serialization.Serializable
 
