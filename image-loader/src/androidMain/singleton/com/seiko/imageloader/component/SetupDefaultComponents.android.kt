@@ -7,7 +7,7 @@ import io.ktor.client.HttpClient
 fun ComponentRegistryBuilder.setupDefaultComponents(
     context: Context,
     maxImageSize: Int = 4096,
-    httpClient: Lazy<HttpClient> = lazy { HttpClient(httpEngine) },
+    httpClient: () -> HttpClient = { HttpClient(httpEngine) },
 ) {
     setupKtorComponents(httpClient)
     setupBase64Components()

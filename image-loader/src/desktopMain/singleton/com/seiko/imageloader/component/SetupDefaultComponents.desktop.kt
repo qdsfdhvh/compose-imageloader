@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 fun ComponentRegistryBuilder.setupDefaultComponents(
     imageScope: CoroutineScope,
     density: Density = Density(2f),
-    httpClient: Lazy<HttpClient> = lazy { HttpClient(httpEngine) },
+    httpClient: () -> HttpClient = { HttpClient(httpEngine) },
 ) {
     setupKtorComponents(httpClient)
     setupBase64Components()

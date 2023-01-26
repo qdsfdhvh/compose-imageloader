@@ -11,7 +11,7 @@ import com.seiko.imageloader.util.httpEngine
 import io.ktor.client.HttpClient
 
 fun ComponentRegistryBuilder.setupKtorComponents(
-    httpClient: Lazy<HttpClient> = lazy { HttpClient(httpEngine) },
+    httpClient: () -> HttpClient = { HttpClient(httpEngine) },
 ) {
     // Mappers
     add(KtorUrlMapper())
