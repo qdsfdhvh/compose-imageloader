@@ -1,18 +1,11 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.component.ComponentRegistry
-import com.seiko.imageloader.component.fetcher.FetchImageResult
-import com.seiko.imageloader.component.fetcher.FetchPainterResult
 import com.seiko.imageloader.component.fetcher.FetchResult
-import com.seiko.imageloader.component.fetcher.FetchSourceResult
-import com.seiko.imageloader.request.ComposeImageResult
-import com.seiko.imageloader.request.ComposePainterResult
-import com.seiko.imageloader.request.DataSource
-import com.seiko.imageloader.request.ErrorResult
-import com.seiko.imageloader.request.ImageRequest
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.model.DataSource
+import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
 
 class FetchInterceptor : Interceptor {
 
@@ -26,7 +19,7 @@ class FetchInterceptor : Interceptor {
                 it.toImageResult(request)
             },
             onFailure = {
-                ErrorResult(
+                ImageResult.Error(
                     request = request,
                     error = it,
                 )
@@ -35,20 +28,19 @@ class FetchInterceptor : Interceptor {
     }
 
     private fun FetchResult.toImageResult(request: ImageRequest) = when (this) {
-        is FetchSourceResult -> SourceResult(
+        is FetchResult.Source -> ImageResult.Source(
             request = request,
-            channel = source,
+            source = source,
             dataSource = DataSource.Engine,
-            mimeType = mimeType,
-            metadata = metadata,
+            extra = extra,
         )
-        is FetchPainterResult -> ComposePainterResult(
+        is FetchResult.Bitmap -> ImageResult.Bitmap(
+            request = request,
+            bitmap = bitmap,
+        )
+        is FetchResult.Painter -> ImageResult.Painter(
             request = request,
             painter = painter,
-        )
-        is FetchImageResult -> ComposeImageResult(
-            request = request,
-            image = image
         )
     }
 

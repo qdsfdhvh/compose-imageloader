@@ -1,9 +1,10 @@
 package com.seiko.imageloader.intercept
 
+import com.seiko.imageloader.ImageLoaderConfig
 import com.seiko.imageloader.component.ComponentRegistry
-import com.seiko.imageloader.request.ImageRequest
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
 
 interface Interceptor {
 
@@ -11,15 +12,16 @@ interface Interceptor {
 
     interface Chain {
         val initialRequest: ImageRequest
-        val initialOptions: Options
+        val config: ImageLoaderConfig
 
         val request: ImageRequest
-        val options: Options get() =
-            initialOptions.also {
-                request.optionsBuilders.forEach { builder ->
-                    it.run(builder)
+        val options: Options
+            get() =
+                config.defaultOptions.also {
+                    request.optionsBuilders.forEach { builder ->
+                        it.run(builder)
+                    }
                 }
-            }
 
         val components: ComponentRegistry
 

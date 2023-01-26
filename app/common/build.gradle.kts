@@ -11,7 +11,11 @@ plugins {
 
 kotlin {
     android()
-    jvm()
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
+        }
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -75,16 +79,15 @@ kotlin {
 }
 
 android {
+    namespace = "io.github.qdsfdhvh.imageloader.demo.common"
     compileSdk = Versions.Android.compile
-    buildToolsVersion = Versions.Android.buildTools
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = Versions.Android.min
-        targetSdk = Versions.Android.target
     }
     compileOptions {
-        sourceCompatibility = Versions.Java.java
-        targetCompatibility = Versions.Java.java
+        sourceCompatibility = Versions.Java.source
+        targetCompatibility = Versions.Java.target
     }
 }
 

@@ -3,14 +3,14 @@ package com.seiko.imageloader.component.mapper
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
 /**
  * Maps android.resource uris with resource names to uris containing their resources ID. i.e.:
  *
  * android.resource://example.package.name/drawable/image -> android.resource://example.package.name/12345678
  */
-internal class ResourceUriMapper(private val context: Context) : Mapper<Uri> {
+class ResourceUriMapper(private val context: Context) : Mapper<Uri> {
 
     override fun map(data: Any, options: Options): Uri? {
         if (data !is Uri) return null

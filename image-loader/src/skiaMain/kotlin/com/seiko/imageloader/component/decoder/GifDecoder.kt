@@ -1,7 +1,6 @@
 package com.seiko.imageloader.component.decoder
 
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.GifPainter
 import com.seiko.imageloader.util.isGif
 import kotlinx.coroutines.CoroutineScope
@@ -9,13 +8,13 @@ import okio.BufferedSource
 import org.jetbrains.skia.Codec
 import org.jetbrains.skia.Data
 
-class GifDecoder(
+class GifDecoder private constructor(
     private val channel: BufferedSource,
     private val imageScope: CoroutineScope,
 ) : Decoder {
     override suspend fun decode(): DecodeResult {
         val codec = Codec.makeFromData(Data.makeFromBytes(channel.readByteArray()))
-        return DecodePainterResult(
+        return DecodeResult.Painter(
             painter = GifPainter(codec, imageScope),
         )
     }
@@ -23,9 +22,9 @@ class GifDecoder(
     class Factory(
         private val imageScope: CoroutineScope,
     ) : Decoder.Factory {
-        override suspend fun create(source: SourceResult, options: Options): Decoder? {
-            if (!isGif(source.channel)) return null
-            return GifDecoder(source.channel, imageScope)
+        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!isGif(source.source)) return null
+            return GifDecoder(source.source, imageScope)
         }
     }
 }

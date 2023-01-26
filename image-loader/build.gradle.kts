@@ -12,7 +12,11 @@ kotlin {
     android {
         publishLibraryVariants("debug", "release")
     }
-    jvm("desktop")
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
+        }
+    }
     ios()
     iosSimulatorArm64()
     macosX64()
@@ -23,7 +27,7 @@ kotlin {
     }
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDir("src/commonMain/compose")
+            kotlin.srcDir("src/commonMain/singleton")
             dependencies {
                 api(compose.ui)
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
@@ -32,10 +36,16 @@ kotlin {
                 api("com.eygraber:uri-kmp:0.0.9")
             }
         }
-        val androidMain by getting {
-            kotlin.srcDir("src/androidMain/gif")
+        val jvmMain by creating {
+            dependsOn(commonMain)
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
+            }
+        }
+        val androidMain by getting {
+            kotlin.srcDir("src/androidMain/singleton")
+            dependsOn(jvmMain)
+            dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
                 implementation("androidx.compose.ui:ui-graphics:1.4.0-alpha03")
                 implementation("androidx.core:core-ktx:1.9.0")
@@ -50,32 +60,37 @@ kotlin {
             dependsOn(commonMain)
         }
         val desktopMain by getting {
+            kotlin.srcDir("src/desktopMain/singleton")
+            dependsOn(jvmMain)
             dependsOn(skiaMain)
             dependencies {
-                implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
             }
         }
         val darwinMain by creating {
+            kotlin.srcDir("src/darwinMain/singleton")
             dependsOn(skiaMain)
+        }
+        val appleMain by creating {
+            dependsOn(darwinMain)
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
             }
         }
         val iosMain by getting {
-            dependsOn(darwinMain)
+            dependsOn(appleMain)
         }
         val iosSimulatorArm64Main by getting {
-            dependsOn(iosMain)
+            dependsOn(appleMain)
         }
         val macosX64Main by getting {
-            dependsOn(darwinMain)
+            dependsOn(appleMain)
         }
         val macosArm64Main by getting {
-            dependsOn(darwinMain)
+            dependsOn(appleMain)
         }
         val jsMain by getting {
-            dependsOn(skiaMain)
+            dependsOn(darwinMain)
             dependencies {
                 implementation("io.ktor:ktor-client-js:${Versions.ktor}")
                 implementation("com.squareup.okio:okio-nodefilesystem:${Versions.okio}")
@@ -87,14 +102,12 @@ kotlin {
 android {
     namespace = "io.github.qdsfdhvh.imageloader"
     compileSdk = Versions.Android.compile
-    buildToolsVersion = Versions.Android.buildTools
     defaultConfig {
         minSdk = Versions.Android.min
-        targetSdk = Versions.Android.target
     }
     compileOptions {
-        sourceCompatibility = Versions.Java.java
-        targetCompatibility = Versions.Java.java
+        sourceCompatibility = Versions.Java.source
+        targetCompatibility = Versions.Java.target
     }
 }
 

@@ -9,32 +9,55 @@ on:
       - '**.md'
 
 jobs:
-  lint:
+  spotless:
     name: Spotless check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
-      - name: spotless
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Spotless Check
         run: ./gradlew spotlessCheck --stacktrace --no-daemon --no-parallel
 
-  build:
-    name: Gradle check
+  lint:
+    needs: spotless
+    name: Gradle Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: set up JDK
-        uses: actions/setup-java@v1
+      - name: Set up JDK
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
+          distribution: 'zulu'
+          java-version: 17
 
-      - name: lint
-        run: ./gradlew lint assemble --stacktrace --no-daemon --no-parallel
+      - name: Lint
+        run: ./gradlew lint --stacktrace --no-daemon --no-parallel
 
-      - name: test
-        run: ./gradlew test --stacktrace --no-daemon --no-parallel
+      - name: Assemble
+        run: ./gradlew assemble --stacktrace --no-daemon --no-parallel
+
+  build:
+    needs: spotless
+    name: Gradle Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Build
+        run: ./gradlew build --stacktrace --no-daemon --no-parallel

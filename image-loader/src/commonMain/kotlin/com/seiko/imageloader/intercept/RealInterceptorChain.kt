@@ -1,25 +1,39 @@
 package com.seiko.imageloader.intercept
 
+import com.seiko.imageloader.ImageLoaderConfig
 import com.seiko.imageloader.component.ComponentRegistry
-import com.seiko.imageloader.request.ImageRequest
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageResult
 
 internal class RealInterceptorChain(
     override val initialRequest: ImageRequest,
-    override val initialOptions: Options,
-    private val interceptors: List<Interceptor>,
-    private val index: Int,
     override val request: ImageRequest,
+    override val config: ImageLoaderConfig,
+    private val index: Int,
+    private val interceptors: List<Interceptor>,
     override val components: ComponentRegistry,
 ) : Interceptor.Chain {
 
+    constructor(
+        initialRequest: ImageRequest,
+        config: ImageLoaderConfig,
+    ) : this(
+        initialRequest = initialRequest,
+        config = config,
+        request = initialRequest,
+        index = 0,
+        interceptors = initialRequest.interceptors?.plus(config.engine.interceptors)
+            ?: config.engine.interceptors,
+        components = initialRequest.components?.merge(config.engine.componentRegistry)
+            ?: config.engine.componentRegistry,
+    )
+
     private fun copy(index: Int, request: ImageRequest) = RealInterceptorChain(
         initialRequest = initialRequest,
-        initialOptions = initialOptions,
-        interceptors = interceptors,
-        index = index,
+        config = config,
         request = request,
+        index = index,
+        interceptors = interceptors,
         components = components,
     )
 

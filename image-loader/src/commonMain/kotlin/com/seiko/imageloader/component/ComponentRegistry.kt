@@ -1,11 +1,11 @@
 package com.seiko.imageloader.component
 
+import com.seiko.imageloader.component.decoder.DecodeSource
 import com.seiko.imageloader.component.decoder.Decoder
 import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.component.mapper.Mapper
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.forEachIndices
 
 class ComponentRegistry internal constructor(
@@ -56,7 +56,7 @@ class ComponentRegistry internal constructor(
     }
 
     suspend fun decode(
-        source: SourceResult,
+        source: DecodeSource,
         options: Options,
         startIndex: Int = 0,
     ): Pair<Decoder, Int> {

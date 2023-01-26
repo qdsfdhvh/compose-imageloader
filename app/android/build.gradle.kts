@@ -5,8 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "com.seiko.imageloader.demo"
     compileSdk = Versions.Android.compile
-    buildToolsVersion = Versions.Android.buildTools
     defaultConfig {
         applicationId = "com.seiko.imageloader.demo"
         minSdk = Versions.Android.min
@@ -26,8 +26,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = Versions.Java.java
-        targetCompatibility = Versions.Java.java
+        sourceCompatibility = Versions.Java.source
+        targetCompatibility = Versions.Java.target
     }
 }
 

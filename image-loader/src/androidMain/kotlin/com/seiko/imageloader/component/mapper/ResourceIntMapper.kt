@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.annotation.DrawableRes
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 
-internal class ResourceIntMapper(private val context: Context) : Mapper<Uri> {
+class ResourceIntMapper(private val context: Context) : Mapper<Uri> {
 
     override fun map(data: Any, options: Options): Uri? {
         if (data !is Int) return null

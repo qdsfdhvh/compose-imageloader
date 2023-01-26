@@ -10,7 +10,7 @@ import androidx.core.graphics.component2
 import androidx.core.graphics.component3
 import androidx.core.graphics.component4
 import androidx.core.graphics.createBitmap
-import com.seiko.imageloader.size.Scale
+import com.seiko.imageloader.option.Scale
 import kotlin.math.roundToInt
 
 internal object DrawableUtils {

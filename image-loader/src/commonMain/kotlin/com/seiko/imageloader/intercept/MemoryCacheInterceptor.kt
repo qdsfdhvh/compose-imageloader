@@ -1,22 +1,24 @@
 package com.seiko.imageloader.intercept
 
-import com.seiko.imageloader.Image
+import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
-import com.seiko.imageloader.request.ComposeImageResult
-import com.seiko.imageloader.request.ImageResult
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.util.logd
-import com.seiko.imageloader.util.logi
-import com.seiko.imageloader.util.logw
+import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.util.d
+import com.seiko.imageloader.util.w
 
 class MemoryCacheInterceptor(
-    private val memoryCache: Lazy<MemoryCache>,
+    memoryCache: () -> MemoryCache
 ) : Interceptor {
+
+    private val memoryCache by lazy(memoryCache)
+
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val options = chain.options
+        val logger = chain.config.logger
 
         val cacheKey = chain.components.key(request.data, options)
             ?: return chain.proceed(request)
@@ -24,37 +26,37 @@ class MemoryCacheInterceptor(
         val memoryCacheValue = runCatching {
             readFromMemoryCache(options, cacheKey)
         }.onFailure {
-            logw(
+            logger.w(
                 tag = "MemoryCacheInterceptor",
                 data = request.data,
                 throwable = it
             ) { "read memory cache error:" }
         }.getOrNull()
         if (memoryCacheValue != null) {
-            logi(
+            logger.d(
                 tag = "MemoryCacheInterceptor",
                 data = request.data,
             ) { "read memory cache." }
-            return ComposeImageResult(
+            return ImageResult.Bitmap(
                 request = request,
-                image = memoryCacheValue,
+                bitmap = memoryCacheValue,
             )
         }
 
         val result = chain.proceed(request)
         when (result) {
-            is ComposeImageResult -> {
+            is ImageResult.Bitmap -> {
                 runCatching {
-                    writeToMemoryCache(options, cacheKey, result.image)
+                    writeToMemoryCache(options, cacheKey, result.bitmap)
                 }.onFailure {
-                    logw(
+                    logger.w(
                         tag = "MemoryCacheInterceptor",
                         data = request.data,
                         throwable = it
                     ) { "write memory cache error:" }
                 }.onSuccess { success ->
                     if (success) {
-                        logd(
+                        logger.d(
                             tag = "MemoryCacheInterceptor",
                             data = request.data,
                         ) { "write memory cache." }
@@ -68,17 +70,17 @@ class MemoryCacheInterceptor(
 
     private fun readFromMemoryCache(options: Options, cacheKey: MemoryKey): MemoryValue? {
         return if (options.memoryCachePolicy.readEnabled) {
-            memoryCache.value[cacheKey]
+            memoryCache[cacheKey]
         } else null
     }
 
     private fun writeToMemoryCache(
         options: Options,
         cacheKey: MemoryKey,
-        image: Image,
+        image: Bitmap,
     ): Boolean {
         if (!options.memoryCachePolicy.writeEnabled) return false
-        memoryCache.value[cacheKey] = image
+        memoryCache[cacheKey] = image
         return true
     }
 }

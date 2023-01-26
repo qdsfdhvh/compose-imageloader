@@ -7,8 +7,8 @@ import androidx.compose.ui.geometry.isUnspecified
 import androidx.core.graphics.createBitmap
 import com.caverock.androidsvg.RenderOptions
 import com.caverock.androidsvg.SVG
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.isSvg
 import com.seiko.imageloader.util.toBitmapConfig
@@ -23,8 +23,8 @@ import kotlin.math.roundToInt
  * @param useViewBoundsAsIntrinsicSize If true, uses the SVG's view bounds as the intrinsic size for
  *  the SVG. If false, uses the SVG's width/height as the intrinsic size for the SVG.
  */
-class SvgDecoder constructor(
-    private val source: SourceResult,
+class SvgDecoder private constructor(
+    private val source: DecodeSource,
     private val options: Options,
     private val useViewBoundsAsIntrinsicSize: Boolean,
 ) : Decoder {
@@ -32,7 +32,7 @@ class SvgDecoder constructor(
     override suspend fun decode(): DecodeResult {
         val size = options.sizeResolver.size()
         return runInterruptible {
-            val svg = SVG.getFromInputStream(source.channel.inputStream())
+            val svg = SVG.getFromInputStream(source.source.inputStream())
 
             if (svg.documentSVGVersion != null && svg.documentSVGVersion.startsWith("2")) {
                 throw RuntimeException("Un support SVG version '2.0'")
@@ -80,8 +80,8 @@ class SvgDecoder constructor(
             val renderOptions = RenderOptions()
             svg.renderToCanvas(Canvas(bitmap), renderOptions)
 
-            DecodeImageResult(
-                image = bitmap,
+            DecodeResult.Bitmap(
+                bitmap = bitmap,
             )
         }
     }
@@ -101,13 +101,13 @@ class SvgDecoder constructor(
         private val useViewBoundsAsIntrinsicSize: Boolean = true
     ) : Decoder.Factory {
 
-        override suspend fun create(source: SourceResult, options: Options): Decoder? {
+        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
             return SvgDecoder(source, options, useViewBoundsAsIntrinsicSize)
         }
 
-        private fun isApplicable(source: SourceResult): Boolean {
-            return source.mimeType == MIME_TYPE_SVG || isSvg(source.channel)
+        private fun isApplicable(source: DecodeSource): Boolean {
+            return source.extra.mimeType == MIME_TYPE_SVG || isSvg(source.source)
         }
     }
 

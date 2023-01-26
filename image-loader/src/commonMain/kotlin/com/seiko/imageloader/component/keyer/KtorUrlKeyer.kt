@@ -1,6 +1,6 @@
 package com.seiko.imageloader.component.keyer
 
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import io.ktor.http.Url
 
 class KtorUrlKeyer : Keyer {

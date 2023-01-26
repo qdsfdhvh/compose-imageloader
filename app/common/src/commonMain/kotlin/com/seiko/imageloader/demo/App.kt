@@ -1,114 +1,109 @@
 package com.seiko.imageloader.demo
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import com.seiko.imageloader.ImageRequestState
-import com.seiko.imageloader.rememberAsyncImagePainter
-import com.seiko.imageloader.request.ImageRequestBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import androidx.compose.ui.unit.dp
+import com.seiko.imageloader.demo.scene.BigImagesScene
+import com.seiko.imageloader.demo.scene.GifImagesScene
+import com.seiko.imageloader.demo.scene.NetworkImagesScene
+import com.seiko.imageloader.demo.scene.SvgImagesScene
 
 @Composable
 fun App() {
     ComposeImageLoaderTheme {
-        Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(onClick = { }) {
-                    Icon(Icons.Filled.Add, null)
+        var currentRoute by remember { mutableStateOf<Route>(Route.Home) }
+        fun onBack() {
+            currentRoute = Route.Home
+        }
+        fun onNavigate(route: Route) {
+            currentRoute = route
+        }
+        Crossfade(currentRoute) {
+            when (it) {
+                Route.Home -> HomeScene(::onNavigate)
+                Route.Network -> NetworkImagesScene(::onBack)
+                Route.Gif -> GifImagesScene(::onBack)
+                Route.Svg -> SvgImagesScene(::onBack)
+                Route.BigImage -> BigImagesScene(::onBack)
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeScene(
+    onNavigate: (Route) -> Unit,
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    Icon(Icons.Default.Home, "home")
+                },
+                title = {
+                    Text("ImageLoader")
                 }
-            },
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text("Material 3")
-                    }
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(innerPadding).fillMaxSize(),
+        ) {
+            val routes = remember {
+                listOf(
+                    Route.Network,
+                    Route.Gif,
+                    Route.Svg,
+                    Route.BigImage,
                 )
             }
-        ) { innerPadding ->
-            Box(Modifier.padding(innerPadding)) {
-                ImageList(Modifier.fillMaxSize())
-            }
-        }
-    }
-}
-
-private const val overSize = "https://ipfs.io/ipfs/bafybeigk7niz7mzg4lykydiqhq5i7clmy7ybr6y5omn4uqh7ptihlrdtli"
-
-@Composable
-private fun ImageList(modifier: Modifier = Modifier) {
-    var images by remember { mutableStateOf(emptyList<Image>()) }
-    LaunchedEffect(Unit) {
-        images = withContext(Dispatchers.Default) {
-            val jpegs = imageJsonData.decodeJson<List<Image>>()
-            val gifs = imageJsonDataGif.decodeJson<List<Image>>()
-            val svgs = imageJsonDataSvg.decodeJson<List<Image>>()
-            (jpegs + gifs + svgs).shuffled()
-        }
-    }
-
-    LazyVerticalGrid(
-        GridCells.Fixed(3),
-        modifier = modifier,
-    ) {
-        item {
-            ImageItem(overSize)
-        }
-        items(images) { image ->
-            ImageItem(image.imageUrl)
-        }
-    }
-}
-
-@Composable
-fun ImageItem(url: String) {
-    Box(Modifier.aspectRatio(1f), Alignment.Center) {
-        val request = remember {
-            ImageRequestBuilder()
-                .data(url)
-                .addInterceptor(NullDataInterceptor)
-                .components {
-                    add(CustomKtorUrlFetcher.Factory())
+            routes.forEach { route ->
+                key(route) {
+                    Button({ onNavigate(route) }) {
+                        Text(route.name)
+                    }
+                    Spacer(Modifier.height(8.dp))
                 }
-                .build()
-        }
-        val painter = rememberAsyncImagePainter(request)
-        Image(
-            painter = painter,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-        )
-        when (val requestState = painter.requestState) {
-            ImageRequestState.Loading -> {
-                CircularProgressIndicator()
             }
-            is ImageRequestState.Failure -> {
-                Text(requestState.error.message ?: "Error")
-            }
-            ImageRequestState.Success -> Unit
         }
     }
+}
+
+private val Route.name: String
+    get() = when (this) {
+        Route.Home -> "Home"
+        Route.Network -> "Network"
+        Route.Gif -> "Gif"
+        Route.Svg -> "Svg"
+        Route.BigImage -> "BigImage"
+    }
+
+private sealed interface Route {
+    object Home : Route
+    object Network : Route
+    object Gif : Route
+    object Svg : Route
+    object BigImage : Route
 }

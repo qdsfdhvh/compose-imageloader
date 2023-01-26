@@ -2,19 +2,19 @@ package com.seiko.imageloader.component.fetcher
 
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.toPainter
 
-class DrawableFetcher(
+class DrawableFetcher private constructor(
     private val data: Drawable,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return if (data is BitmapDrawable) {
-            FetchImageResult(
-                image = data.bitmap
+            FetchResult.Bitmap(
+                bitmap = data.bitmap
             )
         } else {
-            FetchPainterResult(
+            FetchResult.Painter(
                 painter = data.toPainter(),
             )
         }

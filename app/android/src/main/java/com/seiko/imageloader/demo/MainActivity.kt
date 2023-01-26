@@ -5,10 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import com.seiko.imageloader.ImageLoader
-import com.seiko.imageloader.ImageLoaderBuilder
 import com.seiko.imageloader.LocalImageLoader
-import com.seiko.imageloader.cache.disk.DiskCacheBuilder
-import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
+import com.seiko.imageloader.cache.memory.maxSizePercent
+import com.seiko.imageloader.component.setupDefaultComponents
+import com.seiko.imageloader.demo.util.LocalResLoader
+import com.seiko.imageloader.demo.util.ResLoader
+import com.seiko.imageloader.demo.util.commonConfig
 import okio.Path.Companion.toOkioPath
 
 class MainActivity : ComponentActivity() {
@@ -25,20 +27,21 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun generateImageLoader(): ImageLoader {
-        return ImageLoaderBuilder(this)
-            .commonConfig()
-            .memoryCache {
-                MemoryCacheBuilder(this)
+        return ImageLoader {
+            commonConfig()
+            components {
+                setupDefaultComponents(applicationContext)
+            }
+            interceptor {
+                memoryCache {
                     // Set the max size to 25% of the app's available memory.
-                    .maxSizePercent(0.25)
-                    .build()
+                    maxSizePercent(applicationContext, 0.25)
+                }
+                diskCache {
+                    directory(cacheDir.resolve("image_cache").toOkioPath())
+                    maxSizeBytes(512L * 1024 * 1024) // 512MB
+                }
             }
-            .diskCache {
-                DiskCacheBuilder()
-                    .directory(cacheDir.resolve("image_cache").toOkioPath())
-                    .maxSizeBytes(512L * 1024 * 1024) // 512MB
-                    .build()
-            }
-            .build()
+        }
     }
 }

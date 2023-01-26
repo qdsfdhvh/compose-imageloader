@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.fetcher
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.ContentResolver.SCHEME_CONTENT
 import android.content.Context
@@ -10,17 +11,20 @@ import android.provider.MediaStore
 import androidx.annotation.VisibleForTesting
 import com.eygraber.uri.Uri
 import com.eygraber.uri.toAndroidUri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.model.extraData
+import com.seiko.imageloader.model.metadata
+import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.option.Options
 import okio.buffer
 import okio.source
 import android.net.Uri as AndroidUri
 
-internal class ContentUriFetcher(
+class ContentUriFetcher private constructor(
     private val context: Context,
     private val data: Uri,
-    private val options: Options,
 ) : Fetcher {
 
+    @SuppressLint("Recycle")
     override suspend fun fetch(): FetchResult {
         val contentResolver = context.contentResolver
         val androidUri = data.toAndroidUri()
@@ -40,10 +44,12 @@ internal class ContentUriFetcher(
             checkNotNull(stream) { "Unable to open '$data'." }
         }
 
-        return FetchSourceResult(
+        return FetchResult.Source(
             source = inputStream.source().buffer(),
-            mimeType = contentResolver.getType(androidUri),
-            metadata = ContentMetadata(androidUri),
+            extra = extraData {
+                mimeType(contentResolver.getType(androidUri))
+                metadata(Metadata(androidUri))
+            },
         )
     }
 
@@ -78,11 +84,11 @@ internal class ContentUriFetcher(
         override fun create(data: Any, options: Options): Fetcher? {
             if (data !is Uri) return null
             if (!isApplicable(data)) return null
-            return ContentUriFetcher(context, data, options)
+            return ContentUriFetcher(context, data)
         }
 
         private fun isApplicable(data: Uri) = data.scheme == SCHEME_CONTENT
     }
-}
 
-data class ContentMetadata(val uri: AndroidUri)
+    data class Metadata(val uri: AndroidUri)
+}

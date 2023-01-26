@@ -4,8 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
-import com.seiko.imageloader.request.Options
-import com.seiko.imageloader.request.SourceResult
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.ExifData
 import com.seiko.imageloader.util.ExifUtils
@@ -24,9 +23,9 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 /** The base [Decoder] that uses [BitmapFactory] to decode a given [ImageSource]. */
-class BitmapFactoryDecoder constructor(
+class BitmapFactoryDecoder private constructor(
     private val context: Context,
-    private val source: SourceResult,
+    private val source: DecodeSource,
     private val options: Options,
     private val maxImageSize: Int,
     private val parallelismLock: Semaphore = Semaphore(Int.MAX_VALUE),
@@ -37,7 +36,7 @@ class BitmapFactoryDecoder constructor(
     }
 
     private fun BitmapFactory.Options.decode(): DecodeResult {
-        val safeSource = ExceptionCatchingSource(source.channel)
+        val safeSource = ExceptionCatchingSource(source.source)
         val safeBufferedSource = safeSource.buffer()
 
         // Read the image's dimensions.
@@ -77,8 +76,8 @@ class BitmapFactoryDecoder constructor(
 
         // Reverse the EXIF transformations to get the original image.
         val bitmap = ExifUtils.reverseTransformations(outBitmap, exifData)
-        return DecodeImageResult(
-            image = bitmap
+        return DecodeResult.Bitmap(
+            bitmap = bitmap,
         )
     }
 
@@ -173,13 +172,9 @@ class BitmapFactoryDecoder constructor(
 
         private val parallelismLock = Semaphore(maxParallelism)
 
-        override suspend fun create(source: SourceResult, options: Options): Decoder {
+        override suspend fun create(source: DecodeSource, options: Options): Decoder {
             return BitmapFactoryDecoder(context, source, options, maxImageSize, parallelismLock)
         }
-
-        override fun equals(other: Any?) = other is Factory
-
-        override fun hashCode() = javaClass.hashCode()
     }
 
     /** Prevent [BitmapFactory.decodeStream] from swallowing [Exception]s. */

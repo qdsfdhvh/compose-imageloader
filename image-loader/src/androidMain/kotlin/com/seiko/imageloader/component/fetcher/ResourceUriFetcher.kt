@@ -17,7 +17,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.request.Options
+import com.seiko.imageloader.model.extraData
+import com.seiko.imageloader.model.metadata
+import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.toBitmapConfig
@@ -27,7 +30,7 @@ import okio.source
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
-internal class ResourceUriFetcher(
+class ResourceUriFetcher private constructor(
     private val context: Context,
     private val data: Uri,
     private val options: Options
@@ -58,8 +61,8 @@ internal class ResourceUriFetcher(
 
             val isVector = drawable.isVector
             if (isVector) {
-                FetchImageResult(
-                    image = DrawableUtils.convertToBitmap(
+                FetchResult.Bitmap(
+                    bitmap = DrawableUtils.convertToBitmap(
                         drawable = drawable,
                         config = options.config.toBitmapConfig(),
                         scale = options.scale,
@@ -67,21 +70,23 @@ internal class ResourceUriFetcher(
                     )
                 )
             } else if (drawable is BitmapDrawable) {
-                FetchImageResult(
-                    image = drawable.bitmap
+                FetchResult.Bitmap(
+                    bitmap = drawable.bitmap
                 )
             } else {
-                FetchPainterResult(
+                FetchResult.Painter(
                     painter = drawable.toPainter(),
                 )
             }
         } else {
             val typedValue = TypedValue()
             val inputStream = resources.openRawResource(resId, typedValue)
-            FetchSourceResult(
+            FetchResult.Source(
                 source = inputStream.source().buffer(),
-                mimeType = mimeType,
-                metadata = ResourceMetadata(packageName, resId, typedValue.density),
+                extra = extraData {
+                    mimeType(mimeType)
+                    metadata(Metadata(packageName, resId, typedValue.density))
+                }
             )
         }
     }
@@ -105,16 +110,16 @@ internal class ResourceUriFetcher(
         }
     }
 
+    data class Metadata(
+        val packageName: String,
+        @DrawableRes val resId: Int,
+        val density: Int,
+    )
+
     companion object {
         private const val MIME_TYPE_XML = "text/xml"
     }
 }
-
-internal data class ResourceMetadata(
-    val packageName: String,
-    @DrawableRes val resId: Int,
-    val density: Int,
-)
 
 private fun Context.getDrawableCompat(@DrawableRes resId: Int): Drawable {
     return checkNotNull(

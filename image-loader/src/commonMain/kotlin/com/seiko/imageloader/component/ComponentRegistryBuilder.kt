@@ -12,19 +12,19 @@ class ComponentRegistryBuilder(
     private val decoderFactories: MutableList<Decoder.Factory> = mutableListOf(),
 ) {
 
-    fun add(mapper: Mapper<out Any>) = apply {
+    fun add(mapper: Mapper<out Any>) {
         mappers.add(mapper)
     }
 
-    fun add(keyer: Keyer) = apply {
+    fun add(keyer: Keyer) {
         keyers.add(keyer)
     }
 
-    fun add(fetcherFactory: Fetcher.Factory) = apply {
+    fun add(fetcherFactory: Fetcher.Factory) {
         fetcherFactories.add(fetcherFactory)
     }
 
-    fun add(decoderFactory: Decoder.Factory) = apply {
+    fun add(decoderFactory: Decoder.Factory) {
         decoderFactories.add(decoderFactory)
     }
 

@@ -1,1 +1,1 @@
-rootProject.name = "compose-imageLoader-buildSrc"
+rootProject.name = "buildSrc"
