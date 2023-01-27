@@ -32,7 +32,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("com.github.android:renderscript-intrinsics-replacement-toolkit:b6363490c3")
+                implementation("com.github.android:renderscript-intrinsics-replacement-toolkit:9a70eae6f1")
             }
         }
         val skiaMain by creating {
