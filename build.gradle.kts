@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -8,7 +7,7 @@ plugins {
     kotlin("android") apply false
     id("org.jetbrains.compose") version Versions.compose_jb apply false
     id("com.diffplug.spotless") version Versions.spotless
-    id("com.vanniktech.maven.publish") version "0.22.0" apply false
+    id("com.vanniktech.maven.publish") version "0.23.2"
 }
 
 allprojects {
@@ -39,10 +38,10 @@ allprojects {
     version = "1.2.7"
 
     plugins.withId("com.vanniktech.maven.publish.base") {
-        @Suppress("UnstableApiUsage")
-        configure<MavenPublishBaseExtension> {
+        mavenPublishing {
             publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
             signAllPublications()
+            @Suppress("UnstableApiUsage")
             pom {
                 name.set("compose-imageLoader")
                 description.set("Compose ImageLoader.")

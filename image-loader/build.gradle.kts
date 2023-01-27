@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.KotlinMultiplatform
-import com.vanniktech.maven.publish.MavenPublishBaseExtension
 
 plugins {
     kotlin("multiplatform")
@@ -111,7 +110,7 @@ android {
     }
 }
 
-@Suppress("UnstableApiUsage")
-configure<MavenPublishBaseExtension> {
+mavenPublishing {
+    @Suppress("UnstableApiUsage")
     configure(KotlinMultiplatform())
 }
