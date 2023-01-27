@@ -14,6 +14,12 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api("io.github.qdsfdhvh:image-loader:$last_version")
+                // api("io.github.qdsfdhvh:image-loader-extension-blur:$last_version")
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
+                // api("io.github.qdsfdhvh:image-loader-extension-imageio:$last_version")
             }
         }
     }
@@ -43,44 +49,45 @@ fun Content() {
 fun generateImageLoader(): ImageLoader {
     return ImageLoader(/* requestCoroutineContext = Dispatchers.IO */) {
         components {
-        setupDefaultComponents(
-            context,
-            httpClient = httpClient,
-        )
-        // or
-        // setupKtorComponents(httpClient)
-        // setupBase64Components()
-        // setupCommonComponents()
-        // setupJvmComponents()
-        // setupAndroidComponents(context, maxImageSize)
-        // or
-        // add(KtorUrlMapper())
-        // add(KtorUrlKeyer())
-        // add(KtorUrlFetcher.Factory(httpClient))
-        // ....
-    }
-    interceptor {
-        addInterceptor(DoSomthingInterceptor())
-        memoryCache {
-            // Set the max size to 25% of the app's available memory.
-            maxSizePercent(context, 0.25)
+            setupDefaultComponents(
+                context,
+                httpClient = httpClient,
+            )
+            // or
+            // setupKtorComponents(httpClient)
+            // setupBase64Components()
+            // setupCommonComponents()
+            // setupJvmComponents()
+            // setupAndroidComponents(context, maxImageSize)
+            // or
+            // add(KtorUrlMapper())
+            // add(KtorUrlKeyer())
+            // add(KtorUrlFetcher.Factory(httpClient))
+            // ....
         }
-        diskCache {
-            directory(context.cacheDir.resolve("image_cache").toOkioPath())
-            maxSizeBytes(512L * 1024 * 1024) // 512MB
+        interceptor {
+            addInterceptor(DoSomthingInterceptor())
+            memoryCache {
+                // Set the max size to 25% of the app's available memory.
+                maxSizePercent(context, 0.25)
+            }
+            diskCache {
+                directory(context.cacheDir.resolve("image_cache").toOkioPath())
+                maxSizeBytes(512L * 1024 * 1024) // 512MB
+            }
+            // or
+            // useDefaultInterceptors = false
+            // addInterceptors(
+            //     listOf(
+            //         DoSomthingInterceptor(),
+            //         MappedInterceptor(),
+            //         MemoryCacheInterceptor(),
+            //         DecodeInterceptor(),
+            //         DiskCacheInterceptor(),
+            //         FetchInterceptor(),
+            //     )
+            // )
         }
-        // or
-        // useDefaultInterceptors = false
-        // addInterceptors(
-        //     listOf(
-        //         DoSomthingInterceptor(),
-        //         MappedInterceptor(),
-        //         MemoryCacheInterceptor(),
-        //         DecodeInterceptor(),
-        //         DiskCacheInterceptor(),
-        //         FetchInterceptor(),
-        //     )
-        // )
     }
 }
 ```
