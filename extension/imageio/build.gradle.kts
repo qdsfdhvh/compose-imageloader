@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    api(projects.imageLoader)
+    implementation(projects.imageLoader)
     // svg
     implementation("com.twelvemonkeys.imageio:imageio-batik:3.8.3")
     implementation("org.apache.xmlgraphics:batik-transcoder:1.16")

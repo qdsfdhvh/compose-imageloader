@@ -28,12 +28,15 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(compose.ui)
-                api(compose.foundation)
-                api(compose.material)
                 api(compose.runtime)
+                api(compose.foundation)
+                api(compose.ui)
+                api(compose.material)
+                api(compose.materialIconsExtended)
 
                 api(projects.imageLoader)
+                api(projects.extension.blur)
+
                 api("dev.icerock.moko:resources:${Versions.multiplatformResources}")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}")
                 implementation("io.ktor:ktor-client-logging:${Versions.ktor}")

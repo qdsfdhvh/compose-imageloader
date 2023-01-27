@@ -4,6 +4,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.ImageLoaderConfigBuilder
+import com.seiko.imageloader.intercept.BlurInterceptor
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.model.NullRequestData
@@ -12,9 +13,9 @@ import com.seiko.imageloader.util.LogPriority
 
 fun ImageLoaderConfigBuilder.commonConfig() {
     logger = DebugLogger(LogPriority.VERBOSE)
-    // interceptor {
-    //     addInterceptor(NullDataInterceptor)
-    // }
+    interceptor {
+        addInterceptor(BlurInterceptor())
+    }
 }
 
 /**
