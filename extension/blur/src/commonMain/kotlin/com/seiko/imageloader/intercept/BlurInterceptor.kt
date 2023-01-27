@@ -5,7 +5,8 @@ import com.seiko.imageloader.model.BlurEffects
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.model.KEY_BLUR_RADIUS
 
-class BlurInterceptor() : Interceptor {
+// blur only support Bitmap
+class BlurInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val result = chain.proceed(request)

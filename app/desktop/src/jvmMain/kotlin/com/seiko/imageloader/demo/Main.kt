@@ -6,7 +6,6 @@ import androidx.compose.ui.window.application
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
-import com.seiko.imageloader.component.decoder.ImageIODecoder
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.demo.util.LocalResLoader
 import com.seiko.imageloader.demo.util.ResLoader
@@ -36,7 +35,7 @@ private fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         commonConfig()
         components {
-            add(ImageIODecoder.Factory())
+            // add(ImageIODecoder.Factory())
             setupDefaultComponents(imageScope)
         }
         interceptor {

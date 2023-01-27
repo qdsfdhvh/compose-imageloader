@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -27,10 +28,12 @@ fun NetworkImagesScene(
         onBack = onBack,
         title = { Text("Network") },
         floatingActionButton = {
-            Icon(
-                if (showBlur) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                contentDescription = "show blur",
-            )
+            FloatingActionButton({ showBlur = !showBlur }) {
+                Icon(
+                    if (showBlur) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                    contentDescription = "show blur",
+                )
+            }
         },
     ) { innerPadding ->
         val images = rememberImageList(imageJsonData)
@@ -41,7 +44,7 @@ fun NetworkImagesScene(
             items(images) { image ->
                 ImageItem(
                     url = image.imageUrl,
-                    blurRadius = if (showBlur) 20 else 0,
+                    blurRadius = if (showBlur) 15 else 0,
                 )
             }
         }
