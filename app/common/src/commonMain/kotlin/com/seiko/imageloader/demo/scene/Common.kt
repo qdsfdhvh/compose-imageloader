@@ -26,6 +26,7 @@ import com.seiko.imageloader.demo.util.NullDataInterceptor
 import com.seiko.imageloader.demo.util.customKtorUrlFetcher
 import com.seiko.imageloader.demo.util.decodeJson
 import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.blur
 import com.seiko.imageloader.rememberAsyncImagePainter
 
 @Composable
@@ -39,6 +40,7 @@ fun BackButton(onBack: () -> Unit) {
 fun BackScene(
     onBack: () -> Unit,
     title: @Composable () -> Unit,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
@@ -50,17 +52,24 @@ fun BackScene(
                 title = title,
             )
         },
+        floatingActionButton = floatingActionButton,
         content = content,
     )
 }
 
 @Composable
-fun ImageItem(url: String) {
+fun ImageItem(
+    url: String,
+    blurRadius: Int = 0,
+) {
     Box(Modifier.aspectRatio(1f), Alignment.Center) {
-        val request = remember {
+        val request = remember(url, blurRadius) {
             ImageRequest {
                 data(url)
                 addInterceptor(NullDataInterceptor)
+                if (blurRadius > 0) {
+                    blur(blurRadius)
+                }
                 components {
                     add(customKtorUrlFetcher)
                 }
