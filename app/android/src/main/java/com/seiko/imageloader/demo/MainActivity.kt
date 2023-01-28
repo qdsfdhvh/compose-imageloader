@@ -33,11 +33,11 @@ class MainActivity : ComponentActivity() {
                 setupDefaultComponents(applicationContext)
             }
             interceptor {
-                memoryCache {
+                memoryCacheConfig {
                     // Set the max size to 25% of the app's available memory.
                     maxSizePercent(applicationContext, 0.25)
                 }
-                diskCache {
+                diskCacheConfig {
                     directory(cacheDir.resolve("image_cache").toOkioPath())
                     maxSizeBytes(512L * 1024 * 1024) // 512MB
                 }
