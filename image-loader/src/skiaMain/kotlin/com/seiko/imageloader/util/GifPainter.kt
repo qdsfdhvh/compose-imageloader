@@ -34,7 +34,7 @@ internal class GifPainter(
         // Short circuit if we're already remembered.
         if (rememberJob != null) return
 
-        rememberJob = imageScope.launch(ioDispatcher) {
+        rememberJob = imageScope.launch {
             when (codec.framesInfo.size) {
                 0 -> Unit
                 1 -> {

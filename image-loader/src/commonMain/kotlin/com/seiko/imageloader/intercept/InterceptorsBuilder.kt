@@ -21,12 +21,20 @@ class InterceptorsBuilder {
         this.interceptors.addAll(interceptors)
     }
 
-    fun memoryCache(block: MemoryCacheBuilder.() -> Unit) {
+    fun memoryCacheConfig(block: MemoryCacheBuilder.() -> Unit) {
         memoryCache = { MemoryCache(block) }
     }
 
-    fun diskCache(block: DiskCacheBuilder.() -> Unit) {
+    fun memoryCache(block: () -> MemoryCache) {
+        memoryCache = block
+    }
+
+    fun diskCacheConfig(block: DiskCacheBuilder.() -> Unit) {
         diskCache = { DiskCache(block) }
+    }
+
+    fun diskCache(block: () -> DiskCache) {
+        diskCache = block
     }
 
     fun build(): List<Interceptor> {
