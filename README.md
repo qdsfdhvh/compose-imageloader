@@ -67,11 +67,11 @@ fun generateImageLoader(): ImageLoader {
         }
         interceptor {
             addInterceptor(DoSomthingInterceptor())
-            memoryCache {
+            memoryCacheConfig {
                 // Set the max size to 25% of the app's available memory.
                 maxSizePercent(context, 0.25)
             }
-            diskCache {
+            diskCacheConfig {
                 directory(context.cacheDir.resolve("image_cache").toOkioPath())
                 maxSizeBytes(512L * 1024 * 1024) // 512MB
             }
