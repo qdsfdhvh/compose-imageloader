@@ -8,7 +8,8 @@ plugins {
 kotlin {
     js(IR) {
         browser()
-        binaries.executable()
+        // Causes build to take too long, turn it off temporarily
+        // binaries.executable()
     }
     sourceSets {
         val jsMain by getting {
