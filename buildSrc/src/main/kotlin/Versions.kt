@@ -20,8 +20,8 @@ object Versions {
         val source = JavaVersion.VERSION_17
     }
 
-    const val spotless = "6.7.2"
-    const val ktlint = "0.45.2"
+    const val spotless = "6.14.1"
+    const val ktlint = "0.48.2"
     const val compose_jb = "1.3.0-rc05"
     const val multiplatformResources = "0.20.1"
     const val ktor = "2.2.1"
