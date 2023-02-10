@@ -16,8 +16,11 @@ fun MemoryCacheBuilder.maxSizePercent(
 
 private fun Context.defaultMemoryCacheSizePercent(): Double {
     return runCatching {
-        if (activityManager?.isLowRamDevice == true) LOW_MEMORY_MULTIPLIER
-        else STANDARD_MEMORY_MULTIPLIER
+        if (activityManager?.isLowRamDevice == true) {
+            LOW_MEMORY_MULTIPLIER
+        } else {
+            STANDARD_MEMORY_MULTIPLIER
+        }
     }.getOrDefault(STANDARD_MEMORY_MULTIPLIER)
 }
 

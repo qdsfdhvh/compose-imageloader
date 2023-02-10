@@ -19,7 +19,10 @@ internal object ExifUtils {
      * (often near the top of the file).
      */
     private val SUPPORTED_MIME_TYPES = arrayOf(
-        MIME_TYPE_JPEG, MIME_TYPE_WEBP, MIME_TYPE_HEIC, MIME_TYPE_HEIF
+        MIME_TYPE_JPEG,
+        MIME_TYPE_WEBP,
+        MIME_TYPE_HEIC,
+        MIME_TYPE_HEIF,
     )
 
     private val PAINT = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
@@ -78,7 +81,7 @@ internal object ExifUtils {
 /** Properties read from an image's EXIF header. */
 internal class ExifData(
     val isFlipped: Boolean,
-    val rotationDegrees: Int
+    val rotationDegrees: Int,
 ) {
 
     companion object {

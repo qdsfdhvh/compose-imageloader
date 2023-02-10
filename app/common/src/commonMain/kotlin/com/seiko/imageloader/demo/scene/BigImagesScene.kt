@@ -16,7 +16,7 @@ fun BigImagesScene(
         title = { Text("Big") },
     ) { innerPadding ->
         Column(
-            Modifier.padding(innerPadding).fillMaxSize()
+            Modifier.padding(innerPadding).fillMaxSize(),
         ) {
             ImageItem(OVER_SIZE_IMAGE)
         }

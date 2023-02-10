@@ -39,7 +39,7 @@ class ImageLoaderConfigBuilder internal constructor() {
         engine = ImageLoaderEngine(
             interceptors = interceptorsBuilder.build(),
             componentRegistry = componentsBuilder.build(),
-        )
+        ),
     )
 }
 

@@ -33,7 +33,7 @@ import org.xmlpull.v1.XmlPullParserException
 class ResourceUriFetcher private constructor(
     private val context: Context,
     private val data: Uri,
-    private val options: Options
+    private val options: Options,
 ) : Fetcher {
 
     override suspend fun fetch(): FetchResult {
@@ -66,12 +66,12 @@ class ResourceUriFetcher private constructor(
                         drawable = drawable,
                         config = options.config.toBitmapConfig(),
                         scale = options.scale,
-                        allowInexactSize = options.allowInexactSize
-                    )
+                        allowInexactSize = options.allowInexactSize,
+                    ),
                 )
             } else if (drawable is BitmapDrawable) {
                 FetchResult.Bitmap(
-                    bitmap = drawable.bitmap
+                    bitmap = drawable.bitmap,
                 )
             } else {
                 FetchResult.Painter(
@@ -86,7 +86,7 @@ class ResourceUriFetcher private constructor(
                 extra = extraData {
                     mimeType(mimeType)
                     metadata(Metadata(packageName, resId, typedValue.density))
-                }
+                },
             )
         }
     }
@@ -125,8 +125,8 @@ private fun Context.getDrawableCompat(@DrawableRes resId: Int): Drawable {
     return checkNotNull(
         AppCompatResources.getDrawable(
             this,
-            resId
-        )
+            resId,
+        ),
     ) { "Invalid resource ID: $resId" }
 }
 
@@ -135,8 +135,8 @@ private fun Resources.getDrawableCompat(resId: Int, theme: Resources.Theme?): Dr
         ResourcesCompat.getDrawable(
             this,
             resId,
-            theme
-        )
+            theme,
+        ),
     ) { "Invalid resource ID: $resId" }
 }
 
@@ -156,14 +156,19 @@ private fun Context.getXmlDrawableCompat(resources: Resources, @XmlRes resId: In
         when (parser.name) {
             "vector" -> {
                 return VectorDrawableCompat.createFromXmlInner(
-                    resources, parser,
-                    Xml.asAttributeSet(parser), theme
+                    resources,
+                    parser,
+                    Xml.asAttributeSet(parser),
+                    theme,
                 )
             }
             "animated-vector" -> {
                 return AnimatedVectorDrawableCompat.createFromXmlInner(
-                    this, resources,
-                    parser, Xml.asAttributeSet(parser), theme
+                    this,
+                    resources,
+                    parser,
+                    Xml.asAttributeSet(parser),
+                    theme,
                 )
             }
         }

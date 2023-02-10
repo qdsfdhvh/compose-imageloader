@@ -23,7 +23,7 @@ class FetchInterceptor : Interceptor {
                     request = request,
                     error = it,
                 )
-            }
+            },
         )
     }
 

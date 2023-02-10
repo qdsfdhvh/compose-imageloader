@@ -21,5 +21,5 @@ enum class PixelOpacity {
     /**
      * Indicates that the [AnimatedTransformation] removed all transparent pixels in the image.
      */
-    OPAQUE
+    OPAQUE,
 }

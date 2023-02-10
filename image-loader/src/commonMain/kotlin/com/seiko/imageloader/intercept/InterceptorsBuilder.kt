@@ -46,6 +46,8 @@ class InterceptorsBuilder {
                 diskCache?.let { DiskCacheInterceptor(it) },
                 FetchInterceptor(),
             )
-        } else emptyList()
+        } else {
+            emptyList()
+        }
     }
 }

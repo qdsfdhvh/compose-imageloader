@@ -8,7 +8,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.seiko.imageloader.component.setupDefaultComponents
 
 actual class ImageLoaderProvidableCompositionLocal constructor(
-    val delegate: ProvidableCompositionLocal<ImageLoader>
+    val delegate: ProvidableCompositionLocal<ImageLoader>,
 ) {
     actual inline val current: ImageLoader
         @Composable
@@ -27,5 +27,5 @@ actual fun createImageLoaderProvidableCompositionLocal() = ImageLoaderProvidable
                 setupDefaultComponents(imageScope)
             }
         }
-    }
+    },
 )

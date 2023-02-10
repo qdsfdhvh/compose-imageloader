@@ -31,7 +31,7 @@ internal object DrawableUtils {
         drawable: Drawable,
         config: Bitmap.Config,
         scale: Scale,
-        allowInexactSize: Boolean
+        allowInexactSize: Boolean,
     ): Bitmap {
         // Fast path: return the underlying bitmap.
         if (drawable is BitmapDrawable) {
@@ -39,7 +39,7 @@ internal object DrawableUtils {
             if (isConfigValid(bitmap, config) && isSizeValid(
                     allowInexactSize,
                     bitmap,
-                    scale
+                    scale,
                 )
             ) {
                 return bitmap
@@ -55,7 +55,7 @@ internal object DrawableUtils {
             srcHeight = srcHeight,
             dstWidth = srcWidth,
             dstHeight = srcHeight,
-            scale = scale
+            scale = scale,
         )
         val bitmapWidth = (multiplier * srcWidth).roundToInt()
         val bitmapHeight = (multiplier * srcHeight).roundToInt()
@@ -77,7 +77,7 @@ internal object DrawableUtils {
     private fun isSizeValid(
         allowInexactSize: Boolean,
         bitmap: Bitmap,
-        scale: Scale
+        scale: Scale,
     ): Boolean {
         return if (allowInexactSize) {
             // Any size is valid.
@@ -89,7 +89,7 @@ internal object DrawableUtils {
                 srcHeight = bitmap.height,
                 dstWidth = bitmap.width,
                 dstHeight = bitmap.height,
-                scale = scale
+                scale = scale,
             ) == 1.0
         }
     }

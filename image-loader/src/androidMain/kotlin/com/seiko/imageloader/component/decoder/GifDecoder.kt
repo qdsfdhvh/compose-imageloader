@@ -26,7 +26,7 @@ import okio.buffer
 class GifDecoder private constructor(
     private val source: DecodeSource,
     private val options: Options,
-    private val enforceMinimumFrameDelay: Boolean = true
+    private val enforceMinimumFrameDelay: Boolean = true,
 ) : Decoder {
 
     override suspend fun decode() = runInterruptible {
@@ -48,7 +48,7 @@ class GifDecoder private constructor(
                 config.isHardware -> Bitmap.Config.ARGB_8888
                 else -> config
             },
-            scale = options.scale
+            scale = options.scale,
         )
 
         // drawable.setRepeatCount(options.parameters.repeatCount() ?: MovieDrawable.REPEAT_INFINITE)
@@ -69,7 +69,7 @@ class GifDecoder private constructor(
     }
 
     class Factory @JvmOverloads constructor(
-        private val enforceMinimumFrameDelay: Boolean = true
+        private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isGif(source.source)) return null

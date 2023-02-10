@@ -14,7 +14,7 @@ actual abstract class PlatformLogger actual constructor() : Logger {
             ConsoleHandler().apply {
                 level = Level.ALL
                 formatter = SimpleFormatter()
-            }
+            },
         )
     }
 
@@ -24,18 +24,20 @@ actual abstract class PlatformLogger actual constructor() : Logger {
         LogPriority.INFO to "[INFO]",
         LogPriority.WARN to "[WARN]",
         LogPriority.ERROR to "[ERROR]",
-        LogPriority.ASSERT to "[ASSERT]"
+        LogPriority.ASSERT to "[ASSERT]",
     )
 
     actual fun log(
         priority: LogPriority,
         tag: String,
         throwable: Throwable?,
-        message: String
+        message: String,
     ) {
         val fullMessage = if (throwable != null) {
             "$message\n${throwable.stackTraceString}"
-        } else message
+        } else {
+            message
+        }
         when (priority) {
             LogPriority.VERBOSE -> logger.finest(buildLog(priority, tag, fullMessage))
             LogPriority.DEBUG -> logger.fine(buildLog(priority, tag, fullMessage))

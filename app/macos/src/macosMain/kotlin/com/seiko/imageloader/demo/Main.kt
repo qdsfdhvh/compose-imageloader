@@ -50,6 +50,10 @@ private fun generateImageLoader(): ImageLoader {
 
 private fun getCacheDir(): String {
     return NSFileManager.defaultManager.URLForDirectory(
-        NSCachesDirectory, NSUserDomainMask, null, true, null
+        NSCachesDirectory,
+        NSUserDomainMask,
+        null,
+        true,
+        null,
     )!!.path.orEmpty()
 }

@@ -11,7 +11,7 @@ open class DebugLogger(
         tag: String,
         data: Any?,
         throwable: Throwable?,
-        message: String
+        message: String,
     ) {
         val fullMessage = buildString {
             if (data != null) {

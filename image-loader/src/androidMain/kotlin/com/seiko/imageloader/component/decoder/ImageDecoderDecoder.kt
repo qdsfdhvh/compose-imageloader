@@ -41,7 +41,7 @@ class ImageDecoderDecoder private constructor(
     private val context: Context,
     private val source: DecodeSource,
     private val options: Options,
-    private val enforceMinimumFrameDelay: Boolean = true
+    private val enforceMinimumFrameDelay: Boolean = true,
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
@@ -145,7 +145,7 @@ class ImageDecoderDecoder private constructor(
 
     class Factory @JvmOverloads constructor(
         private val context: Context,
-        private val enforceMinimumFrameDelay: Boolean = true
+        private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {

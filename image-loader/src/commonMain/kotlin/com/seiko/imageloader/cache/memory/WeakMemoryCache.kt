@@ -124,7 +124,7 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
         val identityHashCode: Int,
         val image: WeakReference<Bitmap>,
         val extras: Map<String, Any>,
-        val size: Int
+        val size: Int,
     )
 
     companion object {

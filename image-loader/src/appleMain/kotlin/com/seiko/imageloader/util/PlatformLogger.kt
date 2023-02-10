@@ -15,14 +15,14 @@ actual abstract class PlatformLogger actual constructor() : Logger {
         LogPriority.INFO to "💙 INFO",
         LogPriority.WARN to "💛 WARN",
         LogPriority.ERROR to "❤️ ERROR",
-        LogPriority.ASSERT to "💞 ASSERT"
+        LogPriority.ASSERT to "💞 ASSERT",
     )
 
     actual fun log(
         priority: LogPriority,
         tag: String,
         throwable: Throwable?,
-        message: String
+        message: String,
     ) {
         println(buildLog(priority, tag, throwable, message))
     }

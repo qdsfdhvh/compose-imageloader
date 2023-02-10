@@ -6,24 +6,31 @@ internal open class LruCache<K, V>(maxSize: Int) {
 
     var maxSize = 0
         private set
+
         @Synchronized get
     var size = 0
         private set
+
         @Synchronized get
     var putCount = 0
         private set
+
         @Synchronized get
     var createCount = 0
         private set
+
         @Synchronized get
     var evictionCount = 0
         private set
+
         @Synchronized get
     var hitCount = 0
         private set
+
         @Synchronized get
     var missCount = 0
         private set
+
         @Synchronized get
 
     private val map: LinkedHashMap<K, V>
@@ -160,6 +167,7 @@ internal open class LruCache<K, V>(maxSize: Int) {
     fun evictAll() {
         trimToSize(-1) // -1 will evict 0-sized elements
     }
+
     @Synchronized
     fun snapshot(): Map<K, V> = LinkedHashMap(map)
 }

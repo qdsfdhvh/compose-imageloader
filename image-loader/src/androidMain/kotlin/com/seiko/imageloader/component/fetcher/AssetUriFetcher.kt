@@ -24,7 +24,7 @@ class AssetUriFetcher private constructor(
             extra = extraData {
                 mimeType(MimeTypeMap.getSingleton().getMimeTypeFromUrl(path))
                 metadata(data.lastPathSegment?.let { MetaData(it) })
-            }
+            },
         )
     }
 
@@ -37,6 +37,6 @@ class AssetUriFetcher private constructor(
     }
 
     data class MetaData(
-        val fileName: String
+        val fileName: String,
     )
 }
