@@ -92,7 +92,7 @@ kotlin {
             dependsOn(darwinMain)
             dependencies {
                 implementation("io.ktor:ktor-client-js:${Versions.ktor}")
-                implementation("com.squareup.okio:okio-nodefilesystem:${Versions.okio}")
+                implementation("com.squareup.okio:okio-fakefilesystem:${Versions.okio}")
             }
         }
     }
