@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun ComposeImageLoaderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) {
         darkColors()
@@ -21,6 +21,6 @@ fun ComposeImageLoaderTheme(
     MaterialTheme(
         colors = colors,
         typography = Typography(),
-        content = content
+        content = content,
     )
 }

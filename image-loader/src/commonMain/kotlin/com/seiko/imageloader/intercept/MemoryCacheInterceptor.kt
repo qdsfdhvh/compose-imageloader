@@ -10,7 +10,7 @@ import com.seiko.imageloader.util.d
 import com.seiko.imageloader.util.w
 
 class MemoryCacheInterceptor(
-    memoryCache: () -> MemoryCache
+    memoryCache: () -> MemoryCache,
 ) : Interceptor {
 
     private val memoryCache by lazy(memoryCache)
@@ -29,7 +29,7 @@ class MemoryCacheInterceptor(
             logger.w(
                 tag = "MemoryCacheInterceptor",
                 data = request.data,
-                throwable = it
+                throwable = it,
             ) { "read memory cache error:" }
         }.getOrNull()
         if (memoryCacheValue != null) {
@@ -52,7 +52,7 @@ class MemoryCacheInterceptor(
                     logger.w(
                         tag = "MemoryCacheInterceptor",
                         data = request.data,
-                        throwable = it
+                        throwable = it,
                     ) { "write memory cache error:" }
                 }.onSuccess { success ->
                     if (success) {
@@ -71,7 +71,9 @@ class MemoryCacheInterceptor(
     private fun readFromMemoryCache(options: Options, cacheKey: MemoryKey): MemoryValue? {
         return if (options.memoryCachePolicy.readEnabled) {
             memoryCache[cacheKey]
-        } else null
+        } else {
+            null
+        }
     }
 
     private fun writeToMemoryCache(

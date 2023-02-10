@@ -133,7 +133,7 @@ class BitmapFactoryDecoder private constructor(
             srcHeight = srcHeight,
             dstWidth = dstWidth,
             dstHeight = dstHeight,
-            scale = options.scale
+            scale = options.scale,
         )
 
         // Calculate the image's density scaling multiple.
@@ -142,7 +142,7 @@ class BitmapFactoryDecoder private constructor(
             srcHeight = srcHeight / inSampleSize.toDouble(),
             dstWidth = dstWidth.toDouble(),
             dstHeight = dstHeight.toDouble(),
-            scale = options.scale
+            scale = options.scale,
         )
 
         // Only upscale the image if the options require an exact size.

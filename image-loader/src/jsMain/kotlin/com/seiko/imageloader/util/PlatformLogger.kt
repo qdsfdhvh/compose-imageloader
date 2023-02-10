@@ -5,7 +5,7 @@ actual abstract class PlatformLogger actual constructor() : Logger {
         priority: LogPriority,
         tag: String,
         throwable: Throwable?,
-        message: String
+        message: String,
     ) {
         when (priority) {
             LogPriority.VERBOSE -> console.log("VERBOSE $tag : $message")

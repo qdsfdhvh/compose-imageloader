@@ -11,11 +11,13 @@ actual abstract class PlatformLogger actual constructor() : Logger {
         priority: LogPriority,
         tag: String,
         throwable: Throwable?,
-        message: String
+        message: String,
     ) {
         val fullMessage = if (throwable != null) {
             "$message\n${throwable.stackTraceString}"
-        } else message
+        } else {
+            message
+        }
 
         val length = fullMessage.length
         if (length <= MAX_LOG_LENGTH) {

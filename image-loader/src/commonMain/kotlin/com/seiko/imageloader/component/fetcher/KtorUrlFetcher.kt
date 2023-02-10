@@ -28,7 +28,7 @@ class KtorUrlFetcher private constructor(
                 source = response.bodyAsChannel().source(),
                 extra = extraData {
                     mimeType(response.contentType()?.toString())
-                }
+                },
             )
         }
         throw KtorUrlRequestException("code:${response.status.value}, ${response.status.description}")

@@ -17,7 +17,7 @@ class Base64Mapper : Mapper<Base64Image> {
             val content = it.last()
             Base64Image(
                 contentType = contentType,
-                content = content.decodeBase64Bytes()
+                content = content.decodeBase64Bytes(),
             )
         }
     }

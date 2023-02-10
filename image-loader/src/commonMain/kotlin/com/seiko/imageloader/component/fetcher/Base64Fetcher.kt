@@ -14,7 +14,7 @@ class Base64Fetcher private constructor(
             source = data.content.bufferedSource(),
             extra = extraData {
                 mimeType(data.contentType)
-            }
+            },
         )
     }
 

@@ -16,7 +16,7 @@ import com.seiko.imageloader.component.mapper.ResourceUriMapper
 
 fun ComponentRegistryBuilder.setupAndroidComponents(
     context: Context,
-    maxImageSize: Int = 4096
+    maxImageSize: Int = 4096,
 ) {
     // Mappers
     add(ResourceUriMapper(context))

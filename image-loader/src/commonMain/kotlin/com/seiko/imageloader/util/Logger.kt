@@ -6,7 +6,7 @@ enum class LogPriority {
     INFO,
     WARN,
     ERROR,
-    ASSERT;
+    ASSERT,
 }
 
 interface Logger {
@@ -18,7 +18,7 @@ interface Logger {
         tag: String,
         data: Any?,
         throwable: Throwable?,
-        message: String
+        message: String,
     )
 
     companion object {
@@ -29,7 +29,7 @@ interface Logger {
                 tag: String,
                 data: Any?,
                 throwable: Throwable?,
-                message: String
+                message: String,
             ) = Unit
         }
     }
@@ -38,7 +38,7 @@ interface Logger {
 internal fun Logger.v(
     tag: String,
     data: Any,
-    message: () -> String
+    message: () -> String,
 ) = log(
     priority = LogPriority.VERBOSE,
     tag = tag,
@@ -50,7 +50,7 @@ internal fun Logger.v(
 internal fun Logger.d(
     tag: String,
     data: Any,
-    message: () -> String
+    message: () -> String,
 ) = log(
     priority = LogPriority.DEBUG,
     tag = tag,
@@ -62,7 +62,7 @@ internal fun Logger.d(
 internal fun Logger.i(
     tag: String,
     data: Any,
-    message: () -> String
+    message: () -> String,
 ) = log(
     priority = LogPriority.INFO,
     tag = tag,
@@ -75,7 +75,7 @@ internal fun Logger.w(
     tag: String,
     data: Any,
     throwable: Throwable,
-    message: () -> String
+    message: () -> String,
 ) = log(
     priority = LogPriority.WARN,
     tag = tag,
@@ -89,7 +89,7 @@ internal inline fun Logger.log(
     tag: String,
     data: Any? = null,
     throwable: Throwable? = null,
-    message: () -> String
+    message: () -> String,
 ) {
     if (isLoggable(priority)) {
         log(priority, tag, data, throwable, message())

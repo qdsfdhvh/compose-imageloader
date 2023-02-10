@@ -16,7 +16,7 @@ class FileFetcher private constructor(
             source = data.source().buffer(),
             extra = extraData {
                 mimeType(getMimeTypeFromExtension(data.extension))
-            }
+            },
         )
     }
 

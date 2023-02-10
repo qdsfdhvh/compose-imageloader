@@ -11,7 +11,7 @@ class DrawableFetcher private constructor(
     override suspend fun fetch(): FetchResult {
         return if (data is BitmapDrawable) {
             FetchResult.Bitmap(
-                bitmap = data.bitmap
+                bitmap = data.bitmap,
             )
         } else {
             FetchResult.Painter(

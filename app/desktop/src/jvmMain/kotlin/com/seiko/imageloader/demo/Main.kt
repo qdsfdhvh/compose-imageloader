@@ -52,7 +52,7 @@ private fun generateImageLoader(): ImageLoader {
 }
 
 enum class OperatingSystem {
-    Android, iOS, Windows, Linux, MacOS, Unknown,
+    Android, IOS, Windows, Linux, MacOS, Unknown
 }
 
 private val currentOperatingSystem: OperatingSystem

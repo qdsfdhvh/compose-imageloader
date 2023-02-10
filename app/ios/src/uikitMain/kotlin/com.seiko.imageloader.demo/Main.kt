@@ -77,7 +77,7 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
 
     override fun application(
         application: UIApplication,
-        didFinishLaunchingWithOptions: Map<Any?, *>?
+        didFinishLaunchingWithOptions: Map<Any?, *>?,
     ): Boolean {
         window = UIWindow(frame = UIScreen.mainScreen.bounds).apply {
             rootViewController = Application("Compose ImageLoader") {
@@ -119,6 +119,10 @@ private fun generateImageLoader(): ImageLoader {
 
 private fun getCacheDir(): String {
     return NSFileManager.defaultManager.URLForDirectory(
-        NSCachesDirectory, NSUserDomainMask, null, true, null
+        NSCachesDirectory,
+        NSUserDomainMask,
+        null,
+        true,
+        null,
     )!!.path.orEmpty()
 }

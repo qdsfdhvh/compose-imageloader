@@ -6,7 +6,7 @@ import okio.Sink
 
 abstract class ForwardingSink(
     /** [Sink] to which this instance is delegating. */
-    private val delegate: Sink
+    private val delegate: Sink,
 ) : Sink {
     // TODO 'Sink by delegate' once https://youtrack.jetbrains.com/issue/KT-23935 is fixed.
 

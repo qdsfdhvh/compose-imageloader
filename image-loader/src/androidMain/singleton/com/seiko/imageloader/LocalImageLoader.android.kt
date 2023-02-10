@@ -8,7 +8,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 
 actual class ImageLoaderProvidableCompositionLocal constructor(
-    val delegate: ProvidableCompositionLocal<ImageLoader?>
+    val delegate: ProvidableCompositionLocal<ImageLoader?>,
 ) {
     actual inline val current: ImageLoader
         @Composable
@@ -21,5 +21,5 @@ actual class ImageLoaderProvidableCompositionLocal constructor(
 }
 
 actual fun createImageLoaderProvidableCompositionLocal() = ImageLoaderProvidableCompositionLocal(
-    delegate = staticCompositionLocalOf { null }
+    delegate = staticCompositionLocalOf { null },
 )

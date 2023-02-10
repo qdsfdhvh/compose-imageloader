@@ -11,7 +11,7 @@ import okio.BufferedSource
 import okio.buffer
 
 class DiskCacheInterceptor(
-    diskCache: () -> DiskCache
+    diskCache: () -> DiskCache,
 ) : Interceptor {
 
     private val diskCache by lazy(diskCache)
@@ -85,7 +85,9 @@ class DiskCacheInterceptor(
     ): DiskCache.Snapshot? {
         return if (options.diskCachePolicy.readEnabled) {
             diskCache[cacheKey]
-        } else null
+        } else {
+            null
+        }
     }
 
     private fun writeToDiskCache(

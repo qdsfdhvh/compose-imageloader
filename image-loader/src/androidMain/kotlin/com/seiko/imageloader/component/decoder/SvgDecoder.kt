@@ -58,7 +58,7 @@ class SvgDecoder private constructor(
                     srcHeight = svgHeight,
                     dstWidth = dstWidth,
                     dstHeight = dstHeight,
-                    scale = options.scale
+                    scale = options.scale,
                 )
                 bitmapWidth = (multiplier * svgWidth).toInt()
                 bitmapHeight = (multiplier * svgHeight).toInt()
@@ -98,7 +98,7 @@ class SvgDecoder private constructor(
     }
 
     class Factory constructor(
-        private val useViewBoundsAsIntrinsicSize: Boolean = true
+        private val useViewBoundsAsIntrinsicSize: Boolean = true,
     ) : Decoder.Factory {
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {

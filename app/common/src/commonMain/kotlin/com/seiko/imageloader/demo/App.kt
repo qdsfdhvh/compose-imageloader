@@ -62,9 +62,9 @@ private fun HomeScene(
                 },
                 title = {
                     Text("ImageLoader")
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

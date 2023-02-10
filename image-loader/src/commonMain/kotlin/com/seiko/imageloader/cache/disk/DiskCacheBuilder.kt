@@ -71,7 +71,7 @@ class DiskCacheBuilder internal constructor() {
             maxSize = maxSize,
             directory = directory,
             fileSystem = fileSystem,
-            cleanupDispatcher = cleanupDispatcher
+            cleanupDispatcher = cleanupDispatcher,
         )
     }
 }

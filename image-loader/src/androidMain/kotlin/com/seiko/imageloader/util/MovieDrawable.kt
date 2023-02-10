@@ -31,7 +31,7 @@ import com.seiko.imageloader.transform.PixelOpacity
 internal class MovieDrawable @JvmOverloads constructor(
     private val movie: Movie,
     val config: Bitmap.Config = Bitmap.Config.ARGB_8888,
-    val scale: Scale = Scale.FIT
+    val scale: Scale = Scale.FIT,
 ) : Drawable(), Animatable2Compat {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)

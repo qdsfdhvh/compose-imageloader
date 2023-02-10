@@ -26,7 +26,7 @@ import kotlin.math.ceil
 
 internal class SVGPainter(
     private val dom: SVGDOM,
-    private val density: Density
+    private val density: Density,
 ) : Painter() {
     private val root = dom.root
 
@@ -116,7 +116,7 @@ private class DrawCache {
         size: IntSize,
         density: Density,
         layoutDirection: LayoutDirection,
-        block: DrawScope.() -> Unit
+        block: DrawScope.() -> Unit,
     ) {
         this.scopeDensity = density
         this.layoutDirection = layoutDirection
@@ -147,7 +147,7 @@ private class DrawCache {
     fun drawInto(
         target: DrawScope,
         alpha: Float = 1.0f,
-        colorFilter: ColorFilter? = null
+        colorFilter: ColorFilter? = null,
     ) {
         val targetImage = mCachedImage
         check(targetImage != null) {

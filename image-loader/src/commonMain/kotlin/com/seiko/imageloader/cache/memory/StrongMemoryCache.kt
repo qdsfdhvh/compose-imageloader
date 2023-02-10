@@ -24,7 +24,7 @@ internal interface StrongMemoryCache {
 
 /** A [StrongMemoryCache] implementation that caches nothing. */
 internal class EmptyStrongMemoryCache(
-    private val weakMemoryCache: WeakMemoryCache
+    private val weakMemoryCache: WeakMemoryCache,
 ) : StrongMemoryCache {
 
     override val size get() = 0
@@ -47,7 +47,7 @@ internal class EmptyStrongMemoryCache(
 /** A [StrongMemoryCache] implementation backed by an [LruCache]. */
 internal class RealStrongMemoryCache(
     maxSize: Int,
-    private val weakMemoryCache: WeakMemoryCache
+    private val weakMemoryCache: WeakMemoryCache,
 ) : StrongMemoryCache {
 
     private val cache = object : LruCache<MemoryKey, InternalValue>(maxSize) {
@@ -56,7 +56,7 @@ internal class RealStrongMemoryCache(
             evicted: Boolean,
             key: MemoryKey,
             oldValue: InternalValue,
-            newValue: InternalValue?
+            newValue: InternalValue?,
         ) = weakMemoryCache.set(key, oldValue.image, oldValue.extras, oldValue.size)
     }
 
@@ -94,6 +94,6 @@ internal class RealStrongMemoryCache(
     private class InternalValue(
         val image: Bitmap,
         val extras: Map<String, Any>,
-        val size: Int
+        val size: Int,
     )
 }

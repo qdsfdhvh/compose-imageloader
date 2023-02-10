@@ -85,7 +85,9 @@ internal class GifPainter(
         return bitmapCache?.let {
             if (codec.width == bitmapCache?.width && codec.height == bitmapCache?.height) {
                 it.apply { allocPixels(codec.imageInfo) }
-            } else null
+            } else {
+                null
+            }
         } ?: Bitmap().apply { allocPixels(codec.imageInfo) }
             .also {
                 bitmapCache = it

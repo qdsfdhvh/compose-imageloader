@@ -2,7 +2,7 @@ package com.seiko.imageloader.cache.memory
 
 internal class RealMemoryCache(
     private val strongMemoryCache: StrongMemoryCache,
-    private val weakMemoryCache: WeakMemoryCache
+    private val weakMemoryCache: WeakMemoryCache,
 ) : MemoryCache {
 
     override val size get() = strongMemoryCache.size

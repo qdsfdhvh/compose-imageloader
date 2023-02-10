@@ -16,16 +16,16 @@ interface ImageLoader {
 
 fun ImageLoader(
     requestCoroutineContext: CoroutineContext = ioDispatcher,
-    block: ImageLoaderConfigBuilder.() -> Unit
+    block: ImageLoaderConfigBuilder.() -> Unit,
 ): ImageLoader = RealImageLoader(
     requestCoroutineContext = requestCoroutineContext,
-    config = ImageLoaderConfig(block)
+    config = ImageLoaderConfig(block),
 )
 
 @Immutable
 private class RealImageLoader(
     private val requestCoroutineContext: CoroutineContext,
-    override val config: ImageLoaderConfig
+    override val config: ImageLoaderConfig,
 ) : ImageLoader {
     override suspend fun execute(request: ImageRequest): ImageResult {
         return withContext(requestCoroutineContext) {

@@ -19,7 +19,7 @@ internal object DecodeUtils {
         @Px srcHeight: Int,
         @Px dstWidth: Int,
         @Px dstHeight: Int,
-        scale: Scale
+        scale: Scale,
     ): Int {
         val widthInSampleSize = Integer.highestOneBit(srcWidth / dstWidth)
         val heightInSampleSize = Integer.highestOneBit(srcHeight / dstHeight)
@@ -39,7 +39,7 @@ internal object DecodeUtils {
         @Px srcHeight: Int,
         @Px dstWidth: Int,
         @Px dstHeight: Int,
-        scale: Scale
+        scale: Scale,
     ): Double {
         val widthPercent = dstWidth / srcWidth.toDouble()
         val heightPercent = dstHeight / srcHeight.toDouble()
@@ -56,7 +56,7 @@ internal object DecodeUtils {
         @Px srcHeight: Float,
         @Px dstWidth: Float,
         @Px dstHeight: Float,
-        scale: Scale
+        scale: Scale,
     ): Float {
         val widthPercent = dstWidth / srcWidth
         val heightPercent = dstHeight / srcHeight
@@ -73,7 +73,7 @@ internal object DecodeUtils {
         @Px srcHeight: Double,
         @Px dstWidth: Double,
         @Px dstHeight: Double,
-        scale: Scale
+        scale: Scale,
     ): Double {
         val widthPercent = dstWidth / srcWidth
         val heightPercent = dstHeight / srcHeight

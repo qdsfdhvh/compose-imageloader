@@ -30,7 +30,8 @@ class DecodeInterceptor : Interceptor {
                                     retryIfDiskDecodeError = false
                                     diskCachePolicy = when (options.diskCachePolicy) {
                                         CachePolicy.ENABLED,
-                                        CachePolicy.READ_ONLY -> CachePolicy.WRITE_ONLY
+                                        CachePolicy.READ_ONLY,
+                                        -> CachePolicy.WRITE_ONLY
                                         else -> options.diskCachePolicy
                                     }
                                 }
@@ -42,7 +43,7 @@ class DecodeInterceptor : Interceptor {
                                 error = it,
                             )
                         }
-                    }
+                    },
                 )
             }
 

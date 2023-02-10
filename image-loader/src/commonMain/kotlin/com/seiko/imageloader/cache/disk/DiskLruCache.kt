@@ -209,7 +209,7 @@ internal class DiskLruCache(
             ) {
                 throw IOException(
                     "unexpected journal header: " +
-                        "[$magic, $version, $appVersionString, $valueCountString, $blank]"
+                        "[$magic, $version, $appVersionString, $valueCountString, $blank]",
                 )
             }
 
