@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.demo.scene.BigImagesScene
 import com.seiko.imageloader.demo.scene.GifImagesScene
 import com.seiko.imageloader.demo.scene.NetworkImagesScene
+import com.seiko.imageloader.demo.scene.PokemonScene
 import com.seiko.imageloader.demo.scene.SvgImagesScene
 
 @Composable
@@ -45,6 +46,7 @@ fun App() {
                 Route.Gif -> GifImagesScene(::onBack)
                 Route.Svg -> SvgImagesScene(::onBack)
                 Route.BigImage -> BigImagesScene(::onBack)
+                Route.Pokemon -> PokemonScene(::onBack)
             }
         }
     }
@@ -77,6 +79,7 @@ private fun HomeScene(
                     Route.Gif,
                     Route.Svg,
                     Route.BigImage,
+                    Route.Pokemon,
                 )
             }
             routes.forEach { route ->
@@ -98,6 +101,7 @@ private val Route.name: String
         Route.Gif -> "Gif"
         Route.Svg -> "Svg"
         Route.BigImage -> "BigImage"
+        Route.Pokemon -> "Pokemon"
     }
 
 private sealed interface Route {
@@ -106,4 +110,5 @@ private sealed interface Route {
     object Gif : Route
     object Svg : Route
     object BigImage : Route
+    object Pokemon : Route
 }
