@@ -13,7 +13,7 @@ class MappedInterceptor : Interceptor {
         logger.d(
             tag = "MappedInterceptor",
             data = request.data,
-        ) { "map -> ${request.data}" }
+        ) { "map -> $mappedData" }
 
         val newRequest = request.newBuilder { data(mappedData) }
         return chain.proceed(newRequest)
