@@ -7,7 +7,7 @@ plugins {
     kotlin("android") apply false
     id("org.jetbrains.compose") version Versions.compose_jb apply false
     id("com.diffplug.spotless") version Versions.spotless
-    id("com.vanniktech.maven.publish") version "0.23.2"
+    id("com.vanniktech.maven.publish") version "0.24.0"
 }
 
 allprojects {
