@@ -32,7 +32,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
                 api("com.squareup.okio:okio:${Versions.okio}")
                 api("io.ktor:ktor-client-core:${Versions.ktor}")
-                api("com.eygraber:uri-kmp:0.0.9")
+                api("com.eygraber:uri-kmp:0.0.11")
             }
         }
         val jvmMain by creating {
