@@ -1,4 +1,23 @@
-# Config for github.com/bobvanderlinden/probot-auto-merge
-minApprovals:
-  COLLABORATOR: 1
+# Configuration for probot-auto-merge - https://github.com/bobvanderlinden/probot-auto-merge
+
+updateBranch: true
+deleteBranchAfterMerge: true
 reportStatus: true
+
+maxRequestedChanges:
+  NONE: 0
+blockingLabels:
+  - blocked
+
+# Will merge whenever the above conditions are met, but also
+# the owner has approved or merge label was added.
+rules:
+  - requiredAuthorRole: OWNER
+    minApprovals:
+      OWNER: 1
+#  - minApprovals:
+#      OWNER: 2
+  - requiredLabels:
+      - merge
+
+mergeCommitMessage: "{title} (#{number})"
