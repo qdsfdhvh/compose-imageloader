@@ -4,6 +4,7 @@
     "config:base"
   ],
   "prHourlyLimit": 2,
+  "labels": ["dependencies", "action:review"],
   "ignoreDeps": [
     "com.github.android:renderscript-intrinsics-replacement-toolkit"
   ]
