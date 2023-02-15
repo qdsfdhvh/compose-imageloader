@@ -2,7 +2,8 @@ name: Pull Request Label Reviewers
 on:
   pull_request_target:
     types:
-      - action:review
+      - unlabeled
+      - labeled
 
 jobs:
   assign_and_unassign:
