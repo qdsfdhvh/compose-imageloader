@@ -4,6 +4,9 @@ updateBranch: true
 deleteBranchAfterMerge: true
 reportStatus: true
 
+minApprovals:
+  COLLABORATOR: 0
+
 maxRequestedChanges:
   NONE: 0
 blockingLabels:
@@ -12,11 +15,8 @@ blockingLabels:
 # Will merge whenever the above conditions are met, but also
 # the owner has approved or merge label was added.
 rules:
-  - requiredAuthorRole: OWNER
-    minApprovals:
+  - minApprovals:
       OWNER: 1
-#  - minApprovals:
-#      OWNER: 2
   - requiredLabels:
       - merge
 
