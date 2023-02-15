@@ -1,0 +1,10 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "prHourlyLimit": 2,
+  "ignoreDeps": [
+    "com.github.android:renderscript-intrinsics-replacement-toolkit"
+  ]
+}
