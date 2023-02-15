@@ -48,7 +48,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
                 implementation("androidx.compose.ui:ui-graphics:1.4.0-alpha03")
                 implementation("androidx.core:core-ktx:1.9.0")
-                implementation("androidx.exifinterface:exifinterface:1.3.5")
+                implementation("androidx.exifinterface:exifinterface:1.3.6")
                 implementation("androidx.appcompat:appcompat-resources:1.5.1")
                 implementation("com.google.accompanist:accompanist-drawablepainter:0.25.1")
                 // svg
