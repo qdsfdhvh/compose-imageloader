@@ -9,7 +9,7 @@ kotlin {
     js(IR) {
         browser()
         // Causes build to take too long, turn it off temporarily
-        binaries.executable()
+        // binaries.executable()
     }
     sourceSets {
         val jsMain by getting {
