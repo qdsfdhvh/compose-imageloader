@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.ImageRequestState
 import com.seiko.imageloader.demo.model.Image
 import com.seiko.imageloader.demo.util.NullDataInterceptor
-import com.seiko.imageloader.demo.util.customKtorUrlFetcher
 import com.seiko.imageloader.demo.util.decodeJson
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.blur
@@ -70,9 +69,9 @@ fun ImageItem(
                 if (blurRadius > 0) {
                     blur(blurRadius)
                 }
-                components {
-                    add(customKtorUrlFetcher)
-                }
+                // components {
+                //     add(customKtorUrlFetcher)
+                // }
             }
         }
         val painter = rememberAsyncImagePainter(request)
