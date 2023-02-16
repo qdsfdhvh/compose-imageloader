@@ -2,7 +2,7 @@ name: Merge Bot
 
 on:
   workflow_run:
-    workflows: [Label bot, Release CI]
+    workflows: [Label bot, Check CI]
     types:
       - completed
 
