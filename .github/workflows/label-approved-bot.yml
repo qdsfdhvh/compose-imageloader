@@ -1,0 +1,33 @@
+name: Label bot
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - ready_for_review
+      - review_request_removed
+      - review_requested
+      - synchronize
+      - unlabeled
+      - opened
+      - edited
+  pull_request_review:
+    types:
+      - dismissed
+      - submitted
+
+concurrency:
+  group: label-bot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  label-bot:
+    name: Labeling
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label Labeling
+        uses: Tlaster/actions-labeler@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ready_label: ready_for_review
+          approved_label: approved
