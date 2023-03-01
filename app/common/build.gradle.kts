@@ -51,6 +51,7 @@ kotlin {
             }
         }
         val appleMain by creating {
+            dependsOn(commonMain)
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
             }
