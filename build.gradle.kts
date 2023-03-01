@@ -1,13 +1,16 @@
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application") apply false
-    id("com.android.library") apply false
-    kotlin("android") apply false
-    id("org.jetbrains.compose") version Versions.compose_jb apply false
-    id("com.diffplug.spotless") version Versions.spotless
-    id("com.vanniktech.maven.publish") version "0.24.0"
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.plugin.serialization) apply false
+    alias(libs.plugins.composeJb) apply false
+    alias(libs.plugins.spotless)
+    alias(libs.plugins.publish)
+    id("build-logic") apply false
 }
 
 allprojects {
@@ -21,16 +24,13 @@ allprojects {
     spotless {
         kotlin {
             target("**/*.kt")
-            targetExclude("$buildDir/**/*.kt", "bin/**/*.kt", "buildSrc/**/*.kt")
-            ktlint(Versions.ktlint)
+            targetExclude("**/build/")
+            ktlint(libs.versions.ktlint.get().toString())
         }
         kotlinGradle {
-            target("*.gradle.kts")
-            ktlint(Versions.ktlint)
-        }
-        java {
-            target("**/*.java")
-            targetExclude("$buildDir/**/*.java", "bin/**/*.java")
+            target("**/*.gradle.kts")
+            targetExclude("**/build/")
+            ktlint(libs.versions.ktlint.get().toString())
         }
     }
 

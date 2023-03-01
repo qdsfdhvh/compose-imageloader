@@ -5,6 +5,7 @@ pluginManagement {
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
+    includeBuild("build-logic")
 }
 
 @Suppress("UnstableApiUsage")
@@ -33,12 +34,10 @@ gradleEnterprise {
 
 rootProject.name = "compose-imageLoader"
 
-include(":image-loader")
 include(
+    ":image-loader",
     ":extension:blur",
     ":extension:imageio",
-)
-include(
     ":app:common",
     ":app:android",
     ":app:desktop",
