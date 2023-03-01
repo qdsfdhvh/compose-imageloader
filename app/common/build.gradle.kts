@@ -34,7 +34,7 @@ kotlin {
                 api(projects.imageLoader)
                 api(projects.extension.blur)
 
-                implementation(libs.moko.resources)
+                // implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.napier)
@@ -79,7 +79,6 @@ kotlin {
 android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
     compileSdk = Versions.Android.compile
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = Versions.Android.min
     }
