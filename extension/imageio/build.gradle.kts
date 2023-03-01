@@ -16,6 +16,7 @@ java {
     sourceCompatibility = Versions.Java.source
     targetCompatibility = Versions.Java.target
 }
+
 @Suppress("UnstableApiUsage")
 mavenPublishing {
     configure(KotlinJvm())

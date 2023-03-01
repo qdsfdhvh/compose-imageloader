@@ -1,8 +1,6 @@
-import org.jetbrains.compose.compose
-
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.serialization").version(Versions.Kotlin.lang)
+    kotlin("plugin.serialization")
     id("org.jetbrains.compose")
     id("com.android.library")
     // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
@@ -16,8 +14,7 @@ kotlin {
             kotlinOptions.jvmTarget = Versions.Java.jvmTarget
         }
     }
-    iosX64()
-    iosArm64()
+    ios()
     iosSimulatorArm64()
     macosX64()
     macosArm64()
@@ -37,31 +34,29 @@ kotlin {
                 api(projects.imageLoader)
                 api(projects.extension.blur)
 
-                api("dev.icerock.moko:resources:${Versions.multiplatformResources}")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}")
-                implementation("io.ktor:ktor-client-logging:${Versions.ktor}")
-                implementation("io.github.aakira:napier:2.6.1")
-            }
-        }
-        val noJsMain by creating {
-            dependsOn(commonMain)
-            dependencies {
-                implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
+                // implementation(libs.moko.resources)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.napier)
             }
         }
         val androidMain by getting {
-            dependsOn(noJsMain)
+            dependencies {
+                implementation(libs.ktor.client.cio)
+            }
         }
         val jvmMain by getting {
-            dependsOn(noJsMain)
+            dependencies {
+                implementation(libs.ktor.client.cio)
+            }
         }
         val appleMain by creating {
-            dependsOn(noJsMain)
+            dependsOn(commonMain)
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
-        val iosX64Main by getting {
-            dependsOn(appleMain)
-        }
-        val iosArm64Main by getting {
+        val iosMain by getting {
             dependsOn(appleMain)
         }
         val iosSimulatorArm64Main by getting {
@@ -75,7 +70,7 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-js:${Versions.ktor}")
+                implementation(libs.ktor.client.js)
             }
         }
     }
@@ -84,7 +79,6 @@ kotlin {
 android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
     compileSdk = Versions.Android.compile
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = Versions.Android.min
     }

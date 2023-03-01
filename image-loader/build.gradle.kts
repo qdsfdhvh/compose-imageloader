@@ -29,23 +29,23 @@ kotlin {
             kotlin.srcDir("src/commonMain/singleton")
             dependencies {
                 api(compose.ui)
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}")
-                api("com.squareup.okio:okio:${Versions.okio}")
-                api("io.ktor:ktor-client-core:${Versions.ktor}")
-                api("com.eygraber:uri-kmp:0.0.11")
+                api(libs.kotlinx.coroutines.core)
+                api(libs.okio)
+                api(libs.ktor.core)
+                api(libs.uri.kmp)
             }
         }
         val jvmMain by creating {
             dependsOn(commonMain)
             dependencies {
-                implementation("io.ktor:ktor-client-okhttp:${Versions.ktor}")
+                implementation(libs.ktor.client.okhttp)
             }
         }
         val androidMain by getting {
             kotlin.srcDir("src/androidMain/singleton")
             dependsOn(jvmMain)
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.coroutines}")
+                implementation(libs.kotlinx.coroutines.android)
                 implementation("androidx.compose.ui:ui-graphics:1.4.0-beta01")
                 implementation("androidx.core:core-ktx:1.9.0")
                 implementation("androidx.exifinterface:exifinterface:1.3.6")
@@ -63,7 +63,7 @@ kotlin {
             dependsOn(jvmMain)
             dependsOn(skiaMain)
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:${Versions.Kotlin.coroutines}")
+                implementation(libs.kotlinx.coroutines.swing)
             }
         }
         val darwinMain by creating {
@@ -73,7 +73,7 @@ kotlin {
         val appleMain by creating {
             dependsOn(darwinMain)
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
+                implementation(libs.ktor.client.darwin)
             }
         }
         val iosMain by getting {
@@ -91,8 +91,8 @@ kotlin {
         val jsMain by getting {
             dependsOn(darwinMain)
             dependencies {
-                implementation("io.ktor:ktor-client-js:${Versions.ktor}")
-                implementation("com.squareup.okio:okio-fakefilesystem:${Versions.okio}")
+                implementation(libs.ktor.client.js)
+                implementation(libs.okio.fakefilesystem)
             }
         }
     }

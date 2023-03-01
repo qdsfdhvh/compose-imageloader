@@ -30,7 +30,7 @@ import com.seiko.imageloader.demo.scene.PokemonScene
 import com.seiko.imageloader.demo.scene.SvgImagesScene
 
 @Composable
-fun App() {
+fun App(modifier: Modifier = Modifier) {
     ComposeImageLoaderTheme {
         var currentRoute by remember { mutableStateOf<Route>(Route.Home) }
         fun onBack() {
@@ -39,7 +39,7 @@ fun App() {
         fun onNavigate(route: Route) {
             currentRoute = route
         }
-        Crossfade(currentRoute) {
+        Crossfade(currentRoute, modifier) {
             when (it) {
                 Route.Home -> HomeScene(::onNavigate)
                 Route.Network -> NetworkImagesScene(::onBack)

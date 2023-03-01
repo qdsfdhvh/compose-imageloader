@@ -1,2 +1,5 @@
-Compose ImageLoader.xcodeproj/
-plists/
+Podfile.lock
+Pods/*
+*.xcworkspace/*
+*.xcodeproj/*
+!*/project.pbxproj
