@@ -42,7 +42,7 @@ include(
     ":app:common",
     ":app:android",
     ":app:desktop",
-    ":app:ios",
+    ":app:ios-combine",
     ":app:macos",
     ":app:web",
 )

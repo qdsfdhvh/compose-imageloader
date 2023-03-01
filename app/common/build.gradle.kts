@@ -1,5 +1,3 @@
-import org.jetbrains.compose.compose
-
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization").version(Versions.Kotlin.lang)
@@ -16,8 +14,7 @@ kotlin {
             kotlinOptions.jvmTarget = Versions.Java.jvmTarget
         }
     }
-    iosX64()
-    iosArm64()
+    ios()
     iosSimulatorArm64()
     macosX64()
     macosArm64()
@@ -43,25 +40,22 @@ kotlin {
                 implementation("io.github.aakira:napier:2.6.1")
             }
         }
-        val noJsMain by creating {
-            dependsOn(commonMain)
+        val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
             }
         }
-        val androidMain by getting {
-            dependsOn(noJsMain)
-        }
         val jvmMain by getting {
-            dependsOn(noJsMain)
+            dependencies {
+                implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
+            }
         }
         val appleMain by creating {
-            dependsOn(noJsMain)
+            dependencies {
+                implementation("io.ktor:ktor-client-darwin:${Versions.ktor}")
+            }
         }
-        val iosX64Main by getting {
-            dependsOn(appleMain)
-        }
-        val iosArm64Main by getting {
+        val iosMain by getting {
             dependsOn(appleMain)
         }
         val iosSimulatorArm64Main by getting {
