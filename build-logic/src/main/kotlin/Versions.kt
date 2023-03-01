@@ -5,8 +5,10 @@ object Versions {
     object Project {
         // incompatible API changes
         private const val major = "1"
+
         // functionality in a backwards compatible manner
         private const val monir = "2"
+
         // backwards compatible bug fixes
         private const val path = "9"
         const val version = "$major.$monir.$path"
