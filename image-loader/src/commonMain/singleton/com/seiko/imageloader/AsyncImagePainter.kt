@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withTimeoutOrNull
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -166,10 +167,10 @@ class AsyncImagePainter(
                     scale = contentScale.toScale()
                 }
                 if (sizeResolver == SizeResolver.Unspecified) {
-                    sizeResolver = object : SizeResolver {
-                        override suspend fun size(): Size {
-                            return drawSize.filterNot { it.isEmpty() }.firstOrNull() ?: Size.Unspecified
-                        }
+                    sizeResolver = SizeResolver {
+                        withTimeoutOrNull(200) {
+                            drawSize.filterNot { it.isEmpty() }.firstOrNull()
+                        } ?: drawSize.value.takeUnless { it.isEmpty() } ?: Size.Unspecified
                     }
                 }
             }
