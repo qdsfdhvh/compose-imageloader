@@ -17,6 +17,11 @@ sealed interface ImageResult {
         val bitmap: com.seiko.imageloader.Bitmap,
     ) : ImageResult
 
+    data class Image(
+        override val request: ImageRequest,
+        val image: com.seiko.imageloader.Image,
+    ) : ImageResult
+
     data class Painter(
         override val request: ImageRequest,
         val painter: androidx.compose.ui.graphics.painter.Painter,

@@ -21,10 +21,10 @@ import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.toBitmapConfig
-import com.seiko.imageloader.util.toPainter
 import okio.buffer
 import okio.source
 import org.xmlpull.v1.XmlPullParser
@@ -74,8 +74,8 @@ class ResourceUriFetcher private constructor(
                     bitmap = drawable.bitmap,
                 )
             } else {
-                FetchResult.Painter(
-                    painter = drawable.toPainter(),
+                FetchResult.Image(
+                    image = drawable.toImage(),
                 )
             }
         } else {

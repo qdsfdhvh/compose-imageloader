@@ -17,6 +17,10 @@ sealed interface DecodeResult {
         val bitmap: com.seiko.imageloader.Bitmap,
     ) : DecodeResult
 
+    data class Image(
+        val image: com.seiko.imageloader.Image,
+    ) : DecodeResult
+
     data class Painter(
         val painter: androidx.compose.ui.graphics.painter.Painter,
     ) : DecodeResult

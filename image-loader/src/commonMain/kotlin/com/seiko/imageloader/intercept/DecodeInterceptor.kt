@@ -56,6 +56,10 @@ class DecodeInterceptor : Interceptor {
             request = request,
             bitmap = bitmap,
         )
+        is DecodeResult.Image -> ImageResult.Image(
+            request = request,
+            image = image,
+        )
         is DecodeResult.Painter -> ImageResult.Painter(
             request = request,
             painter = painter,

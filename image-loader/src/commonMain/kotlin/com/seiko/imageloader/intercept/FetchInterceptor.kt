@@ -38,6 +38,10 @@ class FetchInterceptor : Interceptor {
             request = request,
             bitmap = bitmap,
         )
+        is FetchResult.Image -> ImageResult.Image(
+            request = request,
+            image = image,
+        )
         is FetchResult.Painter -> ImageResult.Painter(
             request = request,
             painter = painter,

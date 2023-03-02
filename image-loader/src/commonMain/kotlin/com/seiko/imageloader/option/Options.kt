@@ -7,7 +7,7 @@ data class Options(
     var premultipliedAlpha: Boolean = true,
     var retryIfDiskDecodeError: Boolean = true,
     var config: ImageConfig = ImageConfig.ARGB_8888,
-    var scale: Scale = Scale.FIT,
+    var scale: Scale = Scale.AUTO,
     var sizeResolver: SizeResolver = SizeResolver.Unspecified,
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED,

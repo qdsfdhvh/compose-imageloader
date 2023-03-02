@@ -13,6 +13,7 @@ import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable.Companion.REPEAT_INFINITE
 import com.seiko.imageloader.util.ScaleDrawable
@@ -21,7 +22,6 @@ import com.seiko.imageloader.util.isAnimatedWebP
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
-import com.seiko.imageloader.util.toPainter
 import okio.BufferedSource
 import okio.Path.Companion.toOkioPath
 import okio.buffer
@@ -57,8 +57,8 @@ class ImageDecoderDecoder private constructor(
         } finally {
             imageDecoder?.close()
         }
-        return DecodeResult.Painter(
-            painter = wrapDrawable(drawable).toPainter(),
+        return DecodeResult.Image(
+            image = wrapDrawable(drawable).toImage(),
         )
     }
 

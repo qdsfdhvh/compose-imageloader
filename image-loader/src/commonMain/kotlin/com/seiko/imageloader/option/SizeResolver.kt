@@ -1,24 +1,25 @@
 package com.seiko.imageloader.option
 
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.DpSize
 
 interface SizeResolver {
-    suspend fun size(): Size
+    suspend fun Density.size(): Size
 
     companion object {
         val Unspecified = SizeResolver(Size.Unspecified)
     }
 }
 
-fun SizeResolver(size: Size): SizeResolver = RealSizeResolver(size)
+fun SizeResolver(block: suspend () -> Size) = object : SizeResolver {
+    override suspend fun Density.size(): Size = block()
+}
 
-private class RealSizeResolver(private val size: Size) : SizeResolver {
-    override suspend fun size() = size
+fun SizeResolver(size: Size): SizeResolver = object : SizeResolver {
+    override suspend fun Density.size(): Size = size
+}
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        return other is RealSizeResolver && size == other.size
-    }
-
-    override fun hashCode() = size.hashCode()
+fun SizeResolver(size: DpSize): SizeResolver = object : SizeResolver {
+    override suspend fun Density.size(): Size = size.toSize()
 }

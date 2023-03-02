@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withTimeoutOrNull
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -88,7 +89,7 @@ class AsyncImagePainter(
     private var rememberJob: Job? = null
     private val drawSize = MutableStateFlow(Size.Zero)
 
-    private var painter: Painter? by mutableStateOf(null)
+    private var painter: Painter by mutableStateOf(EmptyPainter)
     private var alpha: Float by mutableStateOf(DefaultAlpha)
     private var colorFilter: ColorFilter? by mutableStateOf(null)
 
@@ -105,14 +106,16 @@ class AsyncImagePainter(
         internal set
 
     override val intrinsicSize: Size
-        get() = painter?.intrinsicSize ?: Size.Unspecified
+        get() = painter.intrinsicSize
 
     override fun DrawScope.onDraw() {
         // Update the draw scope's current size.
         drawSize.value = size
 
         // Draw the current painter.
-        painter?.apply { draw(size, alpha, colorFilter) }
+        with(painter) {
+            draw(size, alpha, colorFilter)
+        }
     }
 
     override fun applyAlpha(alpha: Float): Boolean {
@@ -143,11 +146,13 @@ class AsyncImagePainter(
     override fun onForgotten() {
         clear()
         (painter as? RememberObserver)?.onForgotten()
+        painter = EmptyPainter
     }
 
     override fun onAbandoned() {
         clear()
         (painter as? RememberObserver)?.onAbandoned()
+        painter = EmptyPainter
     }
 
     private fun clear() {
@@ -157,23 +162,33 @@ class AsyncImagePainter(
 
     private fun updateRequest(request: ImageRequest): ImageRequest {
         return request.newBuilder {
-            size(object : SizeResolver {
-                override suspend fun size(): Size {
-                    return drawSize.filterNot { it.isEmpty() }.firstOrNull() ?: Size.Unspecified
+            options {
+                if (scale == Scale.AUTO) {
+                    scale = contentScale.toScale()
                 }
-            })
-            scale(contentScale.toScale())
+                if (sizeResolver == SizeResolver.Unspecified) {
+                    sizeResolver = SizeResolver {
+                        withTimeoutOrNull(200) {
+                            drawSize.filterNot { it.isEmpty() }.firstOrNull()
+                        } ?: drawSize.value.takeUnless { it.isEmpty() } ?: Size.Unspecified
+                    }
+                }
+            }
         }
     }
 
     private fun updateImage(input: ImageResult) {
         requestState = when (input) {
-            is ImageResult.Painter -> {
-                updatePainter(input.painter)
-                ImageRequestState.Success
-            }
             is ImageResult.Bitmap -> {
                 updatePainter(input.bitmap.toPainter(filterQuality))
+                ImageRequestState.Success
+            }
+            is ImageResult.Image -> {
+                updatePainter(input.image.toPainter(filterQuality))
+                ImageRequestState.Success
+            }
+            is ImageResult.Painter -> {
+                updatePainter(input.painter)
                 ImageRequestState.Success
             }
             is ImageResult.Error -> {
@@ -219,4 +234,9 @@ sealed interface ImageRequestState {
 
     @Immutable
     object Loading : ImageRequestState
+}
+
+private object EmptyPainter : Painter() {
+    override val intrinsicSize get() = Size.Unspecified
+    override fun DrawScope.onDraw() = Unit
 }
