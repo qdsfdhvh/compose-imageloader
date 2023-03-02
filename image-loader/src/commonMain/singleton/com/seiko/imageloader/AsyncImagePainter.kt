@@ -161,12 +161,18 @@ class AsyncImagePainter(
 
     private fun updateRequest(request: ImageRequest): ImageRequest {
         return request.newBuilder {
-            size(object : SizeResolver {
-                override suspend fun size(): Size {
-                    return drawSize.filterNot { it.isEmpty() }.firstOrNull() ?: Size.Unspecified
+            options {
+                if (scale == Scale.AUTO) {
+                    scale = contentScale.toScale()
                 }
-            })
-            scale(contentScale.toScale())
+                if (sizeResolver == SizeResolver.Unspecified) {
+                    sizeResolver = object : SizeResolver {
+                        override suspend fun size(): Size {
+                            return drawSize.filterNot { it.isEmpty() }.firstOrNull() ?: Size.Unspecified
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -25,7 +25,7 @@ internal object DecodeUtils {
         val heightInSampleSize = Integer.highestOneBit(srcHeight / dstHeight)
         return when (scale) {
             Scale.FILL -> min(widthInSampleSize, heightInSampleSize)
-            Scale.FIT -> max(widthInSampleSize, heightInSampleSize)
+            else -> max(widthInSampleSize, heightInSampleSize)
         }.coerceAtLeast(1)
     }
 
@@ -45,7 +45,7 @@ internal object DecodeUtils {
         val heightPercent = dstHeight / srcHeight.toDouble()
         return when (scale) {
             Scale.FILL -> max(widthPercent, heightPercent)
-            Scale.FIT -> min(widthPercent, heightPercent)
+            else -> min(widthPercent, heightPercent)
         }
     }
 
@@ -62,7 +62,7 @@ internal object DecodeUtils {
         val heightPercent = dstHeight / srcHeight
         return when (scale) {
             Scale.FILL -> max(widthPercent, heightPercent)
-            Scale.FIT -> min(widthPercent, heightPercent)
+            else -> min(widthPercent, heightPercent)
         }
     }
 
@@ -79,7 +79,7 @@ internal object DecodeUtils {
         val heightPercent = dstHeight / srcHeight
         return when (scale) {
             Scale.FILL -> max(widthPercent, heightPercent)
-            Scale.FIT -> min(widthPercent, heightPercent)
+            else -> min(widthPercent, heightPercent)
         }
     }
 }
