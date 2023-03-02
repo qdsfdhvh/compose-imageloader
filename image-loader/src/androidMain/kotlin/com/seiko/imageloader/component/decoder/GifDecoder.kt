@@ -5,12 +5,12 @@ package com.seiko.imageloader.component.decoder
 import android.graphics.Bitmap
 import android.graphics.Movie
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
-import com.seiko.imageloader.util.toPainter
 import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import okio.buffer
@@ -63,8 +63,8 @@ class GifDecoder private constructor(
         // Set the animated transformation to be applied on each frame.
         // drawable.setAnimatedTransformation(options.parameters.animatedTransformation())
 
-        DecodeResult.Painter(
-            painter = drawable.toPainter(),
+        DecodeResult.Image(
+            image = drawable.toImage(),
         )
     }
 
@@ -77,10 +77,10 @@ class GifDecoder private constructor(
         }
     }
 
-    companion object {
-        const val REPEAT_COUNT_KEY = "coil#repeat_count"
-        const val ANIMATED_TRANSFORMATION_KEY = "coil#animated_transformation"
-        const val ANIMATION_START_CALLBACK_KEY = "coil#animation_start_callback"
-        const val ANIMATION_END_CALLBACK_KEY = "coil#animation_end_callback"
-    }
+    // companion object {
+    //     const val REPEAT_COUNT_KEY = "coil#repeat_count"
+    //     const val ANIMATED_TRANSFORMATION_KEY = "coil#animated_transformation"
+    //     const val ANIMATION_START_CALLBACK_KEY = "coil#animation_start_callback"
+    //     const val ANIMATION_END_CALLBACK_KEY = "coil#animation_end_callback"
+    // }
 }

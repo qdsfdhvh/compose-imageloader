@@ -172,12 +172,16 @@ class AsyncImagePainter(
 
     private fun updateImage(input: ImageResult) {
         requestState = when (input) {
-            is ImageResult.Painter -> {
-                updatePainter(input.painter)
-                ImageRequestState.Success
-            }
             is ImageResult.Bitmap -> {
                 updatePainter(input.bitmap.toPainter(filterQuality))
+                ImageRequestState.Success
+            }
+            is ImageResult.Image -> {
+                updatePainter(input.image.toPainter(filterQuality))
+                ImageRequestState.Success
+            }
+            is ImageResult.Painter -> {
+                updatePainter(input.painter)
                 ImageRequestState.Success
             }
             is ImageResult.Error -> {

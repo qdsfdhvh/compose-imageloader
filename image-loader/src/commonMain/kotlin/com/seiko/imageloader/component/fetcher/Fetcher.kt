@@ -22,6 +22,10 @@ sealed interface FetchResult {
         val bitmap: com.seiko.imageloader.Bitmap,
     ) : FetchResult
 
+    data class Image(
+        val image: com.seiko.imageloader.Image,
+    ) : FetchResult
+
     data class Painter(
         val painter: androidx.compose.ui.graphics.painter.Painter,
     ) : FetchResult
