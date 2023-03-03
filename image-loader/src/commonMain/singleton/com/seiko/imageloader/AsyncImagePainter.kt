@@ -170,7 +170,7 @@ class AsyncImagePainter(
                     sizeResolver = SizeResolver {
                         withTimeoutOrNull(200) {
                             drawSize.filterNot { it.isEmpty() }.firstOrNull()
-                        } ?: drawSize.value.takeUnless { it.isEmpty() } ?: Size.Unspecified
+                        } ?: Size.Unspecified
                     }
                 }
             }
