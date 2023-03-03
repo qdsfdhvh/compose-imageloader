@@ -4,7 +4,7 @@ import android.graphics.Bitmap.createBitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.isUnspecified
+import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.caverock.androidsvg.SVG
@@ -29,6 +29,7 @@ class SvgDecoder private constructor(
     private val density: Density,
     private val options: Options,
     private val useViewBoundsAsIntrinsicSize: Boolean,
+    private val useSvgSizeFirst: Boolean,
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
@@ -88,15 +89,14 @@ class SvgDecoder private constructor(
         }
     }
 
-    private fun getDstSize(srcWidth: Float, srcHeight: Float, size: Size): Pair<Float, Float> {
-        return if (size.isUnspecified || size.isEmpty()) {
-            with(density) {
-                val dstWidth = if (srcWidth > 0) srcWidth else DEFAULT_SIZE.toPx()
-                val dstHeight = if (srcHeight > 0) srcHeight else DEFAULT_SIZE.toPx()
-                dstWidth to dstHeight
-            }
-        } else {
+    private fun getDstSize(svgWidth: Float, svgHeight: Float, size: Size): Pair<Float, Float> {
+        return if (size.isSpecified && !size.isEmpty()) {
             val (dstWidth, dstHeight) = size
+            dstWidth to dstHeight
+        } else {
+            val iconSize = with(density) { DEFAULT_ICON_SIZE.toPx() }
+            val dstWidth = if (svgWidth > 0 && useSvgSizeFirst) svgWidth else iconSize
+            val dstHeight = if (svgHeight > 0 && useSvgSizeFirst) svgHeight else iconSize
             dstWidth to dstHeight
         }
     }
@@ -104,11 +104,18 @@ class SvgDecoder private constructor(
     class Factory constructor(
         private val density: Density,
         private val useViewBoundsAsIntrinsicSize: Boolean = true,
+        private val useSvgSizeFirst: Boolean = false,
     ) : Decoder.Factory {
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
-            return SvgDecoder(source, density, options, useViewBoundsAsIntrinsicSize)
+            return SvgDecoder(
+                source = source,
+                density = density,
+                options = options,
+                useViewBoundsAsIntrinsicSize = useViewBoundsAsIntrinsicSize,
+                useSvgSizeFirst = useSvgSizeFirst,
+            )
         }
 
         private fun isApplicable(source: DecodeSource): Boolean {
@@ -118,6 +125,6 @@ class SvgDecoder private constructor(
 
     companion object {
         private const val MIME_TYPE_SVG = "image/svg+xml"
-        private val DEFAULT_SIZE = 24.dp
+        private val DEFAULT_ICON_SIZE = 24.dp
     }
 }
