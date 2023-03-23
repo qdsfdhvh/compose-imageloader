@@ -50,7 +50,7 @@ kotlin {
                 implementation("androidx.core:core-ktx:1.9.0")
                 implementation("androidx.exifinterface:exifinterface:1.3.6")
                 implementation("androidx.appcompat:appcompat-resources:1.6.1")
-                implementation("com.google.accompanist:accompanist-drawablepainter:0.28.0")
+                implementation("com.google.accompanist:accompanist-drawablepainter:0.30.0")
                 // svg
                 implementation("com.caverock:androidsvg-aar:1.4")
             }
