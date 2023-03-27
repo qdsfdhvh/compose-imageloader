@@ -19,7 +19,7 @@ kotlin {
         version = "1.0.0"
         summary = "Shared code for the sample"
         homepage = "https://github.com/qdsfdhvh/compose-imageloader"
-        ios.deploymentTarget = "15.2"
+        ios.deploymentTarget = "16.0"
         podfile = project.file("../ios/Podfile")
         framework {
             baseName = "combine"
