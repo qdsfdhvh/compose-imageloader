@@ -1,11 +1,6 @@
 package com.seiko.imageloader.demo
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeUIViewController
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
@@ -18,33 +13,17 @@ import okio.Path.Companion.toPath
 import platform.Foundation.NSCachesDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
-import platform.UIKit.UILayoutGuide
 import platform.UIKit.UIViewController
-import platform.UIKit.UIWindow
-import platform.UIKit.accessibilityFrame
-import platform.UIKit.safeAreaLayoutGuide
 
 @Suppress("FunctionName")
-fun MainViewController(window: UIWindow): UIViewController = ComposeUIViewController {
+fun MainViewController(): UIViewController = ComposeUIViewController {
     CompositionLocalProvider(
         LocalImageLoader provides generateImageLoader(),
         LocalResLoader provides ResLoader(),
     ) {
-        Column {
-            App(
-                modifier = Modifier
-                    .windowInsetsPadding(window.safeAreaLayoutGuide.toWindowInsets()),
-            )
-        }
+        App()
     }
 }
-
-private fun UILayoutGuide.toWindowInsets() = WindowInsets(
-    top = topAnchor.accessibilityFrame.size.dp,
-    // bottom = bottomAnchor.accessibilityFrame.size.dp,
-    // left = leftAnchor.accessibilityFrame.size.dp,
-    // right = rightAnchor.accessibilityFrame.size.dp,
-)
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoader {
