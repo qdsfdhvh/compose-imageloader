@@ -25,6 +25,7 @@ import com.seiko.imageloader.demo.model.Image
 import com.seiko.imageloader.demo.util.NullDataInterceptor
 import com.seiko.imageloader.demo.util.decodeJson
 import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.blur
 import com.seiko.imageloader.rememberAsyncImagePainter
 
@@ -82,8 +83,11 @@ fun ImageItem(
             modifier = Modifier.fillMaxSize(),
         )
         when (val requestState = painter.requestState) {
-            ImageRequestState.Loading -> {
-                CircularProgressIndicator()
+            is ImageRequestState.Loading -> {
+                val event = requestState.event
+                if (event is ImageRequestEvent.ReadDiskCache && !event.hasCache) {
+                    CircularProgressIndicator()
+                }
             }
             is ImageRequestState.Failure -> {
                 Text(requestState.error.message ?: "Error")

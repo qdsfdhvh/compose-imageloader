@@ -3,6 +3,7 @@ package com.seiko.imageloader
 import androidx.compose.runtime.Immutable
 import com.seiko.imageloader.intercept.RealInterceptorChain
 import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.util.ioDispatcher
 import kotlinx.coroutines.withContext
@@ -30,6 +31,7 @@ private class RealImageLoader(
     override suspend fun execute(request: ImageRequest): ImageResult {
         return withContext(requestCoroutineContext) {
             runCatching {
+                request.call(ImageRequestEvent.Prepare)
                 RealInterceptorChain(
                     initialRequest = request,
                     config = config,

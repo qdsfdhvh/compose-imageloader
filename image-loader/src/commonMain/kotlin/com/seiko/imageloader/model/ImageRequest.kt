@@ -15,7 +15,12 @@ class ImageRequest internal constructor(
     val extra: ExtraData,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
+    internal val eventListener: List<ImageRequestEventListener>?,
 ) {
+    internal fun call(event: ImageRequestEvent) {
+        eventListener?.forEach { it.invoke(event) }
+    }
+
     fun newBuilder(block: ImageRequestBuilder.() -> Unit) =
         ImageRequestBuilder(this).apply(block).build()
 }
@@ -25,13 +30,17 @@ class ImageRequestBuilder {
     private var data: Any?
     private var extraData: ExtraData?
     private val optionsBuilders: MutableList<Options.() -> Unit>
-    private var componentBuilder: ComponentRegistryBuilder? = null
-    private var interceptors: MutableList<Interceptor>? = null
+    private var componentBuilder: ComponentRegistryBuilder?
+    private var interceptors: MutableList<Interceptor>?
+    private var eventListener: MutableList<ImageRequestEventListener>?
 
     internal constructor() {
         data = null
         extraData = null
         optionsBuilders = mutableListOf()
+        componentBuilder = null
+        interceptors = null
+        eventListener = null
     }
 
     internal constructor(request: ImageRequest) {
@@ -40,6 +49,7 @@ class ImageRequestBuilder {
         optionsBuilders = request.optionsBuilders.toMutableList()
         componentBuilder = request.components?.newBuilder()
         interceptors = request.interceptors?.toMutableList()
+        eventListener = request.eventListener?.toMutableList()
     }
 
     fun data(data: Any?) {
@@ -70,6 +80,10 @@ class ImageRequestBuilder {
         (interceptors ?: mutableListOf<Interceptor>().also { interceptors = it }).add(interceptor)
     }
 
+    fun eventListener(listener: (ImageRequestEvent) -> Unit) {
+        (eventListener ?: mutableListOf<ImageRequestEventListener>().also { eventListener = it }).add(listener)
+    }
+
     fun extra(builder: ExtraDataBuilder.() -> Unit) {
         extraData = extraData
             ?.takeUnless { it.isEmpty() }
@@ -84,6 +98,7 @@ class ImageRequestBuilder {
         components = componentBuilder?.build(),
         interceptors = interceptors,
         extra = extraData ?: EmptyExtraData,
+        eventListener = eventListener,
     )
 }
 

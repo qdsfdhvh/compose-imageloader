@@ -2,6 +2,7 @@ package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.model.DataSource
+import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.closeQuietly
@@ -35,6 +36,8 @@ class DiskCacheInterceptor(
                 throwable = it,
             ) { "read disk cache error:" }
         }.getOrNull()
+
+        request.call(ImageRequestEvent.ReadDiskCache(snapshot != null))
         if (snapshot != null) {
             logger.d(
                 tag = "DiskCacheInterceptor",

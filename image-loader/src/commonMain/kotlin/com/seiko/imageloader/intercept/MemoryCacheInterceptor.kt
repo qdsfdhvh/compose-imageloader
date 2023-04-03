@@ -4,6 +4,7 @@ import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
+import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.d
@@ -32,6 +33,8 @@ class MemoryCacheInterceptor(
                 throwable = it,
             ) { "read memory cache error:" }
         }.getOrNull()
+
+        request.call(ImageRequestEvent.ReadMemoryCache(memoryCacheValue != null))
         if (memoryCacheValue != null) {
             logger.d(
                 tag = "MemoryCacheInterceptor",
