@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQ
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
@@ -30,7 +31,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withTimeoutOrNull
 
 @Composable
@@ -97,7 +97,7 @@ class AsyncImagePainter(
 
     internal var filterQuality = DefaultFilterQuality
 
-    var requestState: ImageRequestState by mutableStateOf(ImageRequestState.Loading)
+    var requestState: ImageRequestState by mutableStateOf(ImageRequestState.Loading())
 
     var request: ImageRequest by mutableStateOf(request)
         internal set
@@ -137,7 +137,6 @@ class AsyncImagePainter(
         (painter as? RememberObserver)?.onRemembered()
 
         rememberJob = snapshotFlow { request }
-            .onStart { requestState = ImageRequestState.Loading }
             .mapLatest { imageLoader.execute(updateRequest(request)) }
             .onEach(::updateImage)
             .launchIn(imageLoader.config.imageScope)
@@ -173,6 +172,9 @@ class AsyncImagePainter(
                         } ?: Size.Unspecified
                     }
                 }
+            }
+            eventListener {
+                requestState = ImageRequestState.Loading(it)
             }
         }
     }
@@ -233,7 +235,7 @@ sealed interface ImageRequestState {
     data class Failure(val error: Throwable) : ImageRequestState
 
     @Immutable
-    object Loading : ImageRequestState
+    data class Loading(val event: ImageRequestEvent = ImageRequestEvent.Prepare) : ImageRequestState
 }
 
 private object EmptyPainter : Painter() {
