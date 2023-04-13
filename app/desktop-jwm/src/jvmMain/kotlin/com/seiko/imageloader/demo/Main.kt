@@ -1,8 +1,7 @@
 package com.seiko.imageloader.demo
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
+import club.eridani.compose.jwm.ApplicationWindow
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
@@ -14,13 +13,8 @@ import okio.Path.Companion.toOkioPath
 import java.io.File
 
 fun main() {
-    application {
-        Window(
-            title = "PreCompose Sample",
-            onCloseRequest = {
-                exitApplication()
-            },
-        ) {
+    io.github.humbleui.jwm.App.start {
+        ApplicationWindow {
             CompositionLocalProvider(
                 LocalImageLoader provides generateImageLoader(),
                 LocalResLoader provides ResLoader(),
@@ -30,6 +24,7 @@ fun main() {
         }
     }
 }
+
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoader {
@@ -79,3 +74,4 @@ private fun getCacheDir() = when (currentOperatingSystem) {
 }
 
 private const val APPLICATION_NAME = "Compose ImageLoader"
+

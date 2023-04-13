@@ -10,18 +10,16 @@ kotlin {
         compilations.all {
             kotlinOptions.jvmTarget = Versions.Java.jvmTarget
         }
-        // error: Both artifact maps contains same key: .../desktop-jvm-1.2.0.jar with different values for kmp: [:app:desktop:jvmMain, :app:desktop:commonMain] and platform: :app:desktop:main
-        // withJava()
     }
     sourceSets {
         val jvmMain by getting {
+            kotlin.srcDir("src/jvmMain/jwm")
             dependencies {
                 implementation(projects.app.common)
-                implementation(projects.extension.imageio)
                 implementation(compose.desktop.currentOs)
+                implementation("io.github.humbleui:jwm:0.4.15")
             }
         }
-        val jvmTest by getting
     }
 }
 
@@ -32,20 +30,14 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Compose ImageLoader"
             packageVersion = "1.0.0"
-            modules("java.sql") // https://github.com/JetBrains/compose-jb/issues/381
-            modules("jdk.unsupported")
-            modules("jdk.unsupported.desktop")
             macOS {
-                bundleID = "com.seiko.imageloader.demo"
-                // iconFile.set(project.file("src/jvmMain/resources/icon/ic_launcher.icns"))
+                bundleID = "com.seiko.imageloader.demo2"
             }
             linux {
-                // iconFile.set(project.file("src/jvmMain/resources/icon/ic_launcher.png"))
             }
             windows {
                 shortcut = true
                 menu = true
-                // iconFile.set(project.file("src/jvmMain/resources/icon/ic_launcher.ico"))
             }
         }
         buildTypes {

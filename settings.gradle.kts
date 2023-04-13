@@ -41,6 +41,7 @@ include(
     ":app:common",
     ":app:android",
     ":app:desktop",
+    ":app:desktop-jwm",
     ":app:ios-combine",
     ":app:macos",
     ":app:web",
