@@ -20,10 +20,14 @@ import kotlin.math.ceil
 internal class SVGPainter(
     private val dom: SVGDOM,
     private val density: Density,
+    private val requestSize: Size = Size.Unspecified,
 ) : Painter() {
     private val root = dom.root
 
     private val defaultSizePx: Size = run {
+        if (requestSize.isSpecified) {
+            return@run requestSize
+        }
         val width = root?.width?.withUnit(SVGLengthUnit.PX)?.value ?: 0f
         val height = root?.height?.withUnit(SVGLengthUnit.PX)?.value ?: 0f
         if (width == 0f && height == 0f) {

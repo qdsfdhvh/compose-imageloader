@@ -16,9 +16,13 @@ import kotlin.math.ceil
 internal class SVGPainter(
     private val dom: SVG,
     private val density: Density,
+    private val requestSize: Size = Size.Unspecified,
 ) : Painter() {
 
     private val defaultSizePx: Size = run {
+        if (requestSize.isSpecified) {
+            return@run requestSize
+        }
         val width = dom.documentWidth
         val height = dom.documentHeight
         if (width == 0f && height == 0f) {

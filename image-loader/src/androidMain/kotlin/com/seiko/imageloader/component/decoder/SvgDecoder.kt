@@ -14,12 +14,16 @@ import com.seiko.imageloader.util.isSvg
 class SvgDecoder private constructor(
     private val source: DecodeSource,
     private val density: Density,
+    private val options: Options,
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
         val svg = SVG.getFromInputStream(source.source.inputStream())
+        val requestSize = options.sizeResolver.run {
+            density.size()
+        }
         return DecodeResult.Painter(
-            painter = SVGPainter(svg, density),
+            painter = SVGPainter(svg, density, requestSize),
         )
     }
 
@@ -32,6 +36,7 @@ class SvgDecoder private constructor(
             return SvgDecoder(
                 source = source,
                 density = density,
+                options = options,
             )
         }
 
