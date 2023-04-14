@@ -9,37 +9,26 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
-import org.jetbrains.skia.Rect
-import org.jetbrains.skia.svg.SVGDOM
-import org.jetbrains.skia.svg.SVGLength
-import org.jetbrains.skia.svg.SVGLengthUnit
-import org.jetbrains.skia.svg.SVGPreserveAspectRatio
-import org.jetbrains.skia.svg.SVGPreserveAspectRatioAlign
+import com.caverock.androidsvg.PreserveAspectRatio
+import com.caverock.androidsvg.SVG
 import kotlin.math.ceil
 
 internal class SVGPainter(
-    private val dom: SVGDOM,
+    private val dom: SVG,
     private val density: Density,
     private val requestSize: Size = Size.Unspecified,
 ) : Painter() {
-    private val root = dom.root
 
     private val defaultSizePx: Size = run {
         if (requestSize.isSpecified) {
             return@run requestSize
         }
-        val width = root?.width?.withUnit(SVGLengthUnit.PX)?.value ?: 0f
-        val height = root?.height?.withUnit(SVGLengthUnit.PX)?.value ?: 0f
+        val width = dom.documentWidth
+        val height = dom.documentHeight
         if (width == 0f && height == 0f) {
             Size.Unspecified
         } else {
             Size(width, height)
-        }
-    }
-
-    init {
-        if (root?.viewBox == null && defaultSizePx.isSpecified) {
-            root?.viewBox = Rect.makeXYWH(0f, 0f, defaultSizePx.width, defaultSizePx.height)
         }
     }
 
@@ -85,10 +74,10 @@ internal class SVGPainter(
 
     private fun DrawScope.drawSvg(size: Size) {
         drawIntoCanvas { canvas ->
-            root?.width = SVGLength(size.width, SVGLengthUnit.PX)
-            root?.height = SVGLength(size.height, SVGLengthUnit.PX)
-            root?.preserveAspectRatio = SVGPreserveAspectRatio(SVGPreserveAspectRatioAlign.NONE)
-            dom.render(canvas.nativeCanvas)
+            dom.documentWidth = size.width
+            dom.documentHeight = size.height
+            dom.documentPreserveAspectRatio = PreserveAspectRatio.STRETCH
+            dom.renderToCanvas(canvas.nativeCanvas)
         }
     }
 }

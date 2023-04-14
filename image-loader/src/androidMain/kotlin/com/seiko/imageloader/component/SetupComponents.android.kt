@@ -19,8 +19,6 @@ fun ComponentRegistryBuilder.setupAndroidComponents(
     context: Context,
     density: Density = Density(context),
     maxImageSize: Int = 4096,
-    useViewBoundsAsIntrinsicSizeWithSvg: Boolean = true,
-    useSvgSizeFirst: Boolean = false,
 ) {
     // Mappers
     add(ResourceUriMapper(context))
@@ -33,7 +31,7 @@ fun ComponentRegistryBuilder.setupAndroidComponents(
     add(ResourceUriFetcher.Factory(context))
     add(DrawableFetcher.Factory())
     // Decoders
-    add(SvgDecoder.Factory(density, useViewBoundsAsIntrinsicSizeWithSvg, useSvgSizeFirst))
+    add(SvgDecoder.Factory(density))
     add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder.Factory(context) else GifDecoder.Factory())
     add(BitmapFactoryDecoder.Factory(context, maxImageSize))
 }

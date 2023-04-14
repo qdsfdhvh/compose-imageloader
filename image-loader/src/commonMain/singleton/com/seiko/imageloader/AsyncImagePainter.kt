@@ -21,17 +21,13 @@ import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Scale
-import com.seiko.imageloader.option.SizeResolver
 import com.seiko.imageloader.util.w
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withTimeoutOrNull
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -164,13 +160,6 @@ class AsyncImagePainter(
             options {
                 if (scale == Scale.AUTO) {
                     scale = contentScale.toScale()
-                }
-                if (sizeResolver == SizeResolver.Unspecified) {
-                    sizeResolver = SizeResolver {
-                        withTimeoutOrNull(200) {
-                            drawSize.filterNot { it.isEmpty() }.firstOrNull()
-                        } ?: Size.Unspecified
-                    }
                 }
             }
             eventListener {
