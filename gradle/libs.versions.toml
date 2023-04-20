@@ -1,5 +1,5 @@
 [versions]
-agp = "7.4.2"
+agp = "8.0.0"
 compose-jb = "1.4.0"
 kotlin = "1.8.10"
 kotlinx-coroutines = "1.6.4"
