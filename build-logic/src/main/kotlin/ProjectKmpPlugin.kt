@@ -1,6 +1,5 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 class ProjectKmpPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -11,20 +10,6 @@ class ProjectKmpPlugin : Plugin<Project> {
                 apply("com.android.library")
             }
             kotlin {
-                @OptIn(ExperimentalKotlinGradlePluginApi::class)
-                targetHierarchy.default {
-                    group("jvm") {
-                        withAndroid()
-                        withJvm()
-                    }
-                    group("skia") {
-                        withJvm()
-                        group("darwin") {
-                            withNative()
-                            withJs()
-                        }
-                    }
-                }
                 android {
                     publishLibraryVariants("debug", "release")
                 }
@@ -40,6 +25,45 @@ class ProjectKmpPlugin : Plugin<Project> {
                 js(IR) {
                     browser()
                     nodejs()
+                }
+
+                @Suppress("UNUSED_VARIABLE")
+                sourceSets.apply {
+                    val commonMain = getByName("commonMain")
+                    val jvmMain = maybeCreate("jvmMain").apply {
+                        dependsOn(commonMain)
+                    }
+                    val skiaMain = maybeCreate("skiaMain").apply {
+                        dependsOn(commonMain)
+                    }
+                    val androidMain = getByName("androidMain").apply {
+                        dependsOn(jvmMain)
+                    }
+                    val desktopMain = getByName("desktopMain").apply {
+                        dependsOn(jvmMain)
+                        dependsOn(skiaMain)
+                    }
+                    val darwinMain = maybeCreate("darwinMain").apply {
+                        dependsOn(skiaMain)
+                    }
+                    val appleMain = maybeCreate("appleMain").apply {
+                        dependsOn(darwinMain)
+                    }
+                    val iosMain = getByName("iosMain").apply {
+                        dependsOn(appleMain)
+                    }
+                    val iosSimulatorArm64Main = getByName("iosSimulatorArm64Main").apply {
+                        dependsOn(appleMain)
+                    }
+                    val macosX64Main = getByName("macosX64Main").apply {
+                        dependsOn(appleMain)
+                    }
+                    val macosArm64Main = getByName("macosArm64Main").apply {
+                        dependsOn(appleMain)
+                    }
+                    val jsMain = getByName("jsMain").apply {
+                        dependsOn(darwinMain)
+                    }
                 }
             }
             android {
