@@ -18,7 +18,14 @@ kotlin {
                 api(libs.uri.kmp)
             }
         }
+        val noJsMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                implementation("androidx.collection:collection:1.3.0-alpha04")
+            }
+        }
         val jvmMain by getting {
+            dependsOn(noJsMain)
             dependencies {
                 implementation(libs.ktor.client.okhttp)
             }
@@ -45,6 +52,7 @@ kotlin {
             kotlin.srcDir("src/darwinMain/singleton")
         }
         val appleMain by getting {
+            dependsOn(noJsMain)
             dependencies {
                 implementation(libs.ktor.client.darwin)
             }
