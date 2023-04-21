@@ -1,27 +1,12 @@
 plugins {
-    kotlin("multiplatform")
+    id("project-kmp")
     kotlin("plugin.serialization")
-    id("org.jetbrains.compose")
-    id("com.android.library")
     // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
     // id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
 }
 
 kotlin {
-    android()
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
-        }
-    }
-    ios()
-    iosSimulatorArm64()
-    macosX64()
-    macosArm64()
-    js(IR) {
-        browser()
-        binaries.executable()
-    }
+    @Suppress("UNUSED_VARIABLE")
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -45,28 +30,15 @@ kotlin {
                 implementation(libs.ktor.client.cio)
             }
         }
-        val jvmMain by getting {
+        val desktopMain by getting {
             dependencies {
                 implementation(libs.ktor.client.cio)
             }
         }
-        val appleMain by creating {
-            dependsOn(commonMain)
+        val appleMain by getting {
             dependencies {
                 implementation(libs.ktor.client.darwin)
             }
-        }
-        val iosMain by getting {
-            dependsOn(appleMain)
-        }
-        val iosSimulatorArm64Main by getting {
-            dependsOn(appleMain)
-        }
-        val macosX64Main by getting {
-            dependsOn(appleMain)
-        }
-        val macosArm64Main by getting {
-            dependsOn(appleMain)
         }
         val jsMain by getting {
             dependencies {
@@ -78,14 +50,6 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
-    compileSdk = Versions.Android.compile
-    defaultConfig {
-        minSdk = Versions.Android.min
-    }
-    compileOptions {
-        sourceCompatibility = Versions.Java.source
-        targetCompatibility = Versions.Java.target
-    }
 }
 
 // multiplatformResources {
