@@ -27,12 +27,11 @@ kotlin {
             kotlin.srcDir("src/androidMain/singleton")
             dependencies {
                 implementation(libs.kotlinx.coroutines.android)
-                implementation("androidx.core:core-ktx:1.10.0")
-                implementation("androidx.exifinterface:exifinterface:1.3.6")
-                implementation("androidx.appcompat:appcompat-resources:1.6.1")
-                implementation("com.google.accompanist:accompanist-drawablepainter:0.28.0")
-                // svg
-                implementation("com.caverock:androidsvg-aar:1.4")
+                implementation(libs.androidx.core.ktx)
+                implementation(libs.androidx.appcompat)
+                implementation(libs.androidx.exifinterface)
+                implementation(libs.accompanist.drawablepainter)
+                implementation(libs.androidsvg)
             }
         }
         val desktopMain by getting {
@@ -60,7 +59,7 @@ kotlin {
             jvmMain.dependsOn(this)
             appleMain.dependsOn(this)
             dependencies {
-                implementation("androidx.collection:collection:1.3.0-alpha04")
+                implementation(libs.androidx.collection)
             }
         }
     }
