@@ -14,7 +14,7 @@ kotlin {
                 api(compose.ui)
                 api(libs.kotlinx.coroutines.core)
                 api(libs.okio)
-                api(libs.ktor.core)
+                api(libs.ktor.client.core)
                 api(libs.uri.kmp)
             }
         }
