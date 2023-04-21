@@ -16,7 +16,7 @@ ktor = "2.3.0"
 okio = "3.3.0"
 uri-kmp = "0.0.11"
 napier = "2.6.1"
-accompanist-drawablepainter = "0.30.0"
+accompanist-drawablepainter = "0.30.1"
 androidsvg = "1.4"
 
 [plugins]
