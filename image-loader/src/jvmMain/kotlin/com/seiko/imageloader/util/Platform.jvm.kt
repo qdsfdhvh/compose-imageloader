@@ -4,8 +4,6 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import okio.BufferedSource
 import okio.buffer
 import okio.source
@@ -26,8 +24,6 @@ internal actual suspend fun ByteReadChannel.source(): BufferedSource {
 }
 
 internal actual suspend fun ByteArray.bufferedSource() = ByteArrayInputStream(this).source().buffer()
-
-internal actual val ioDispatcher: CoroutineDispatcher get() = Dispatchers.IO
 
 internal actual val httpEngine: HttpClientEngine get() = OkHttp.create()
 
