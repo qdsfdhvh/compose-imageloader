@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.serialization")
     // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
     // id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -19,7 +20,7 @@ kotlin {
                 api(projects.imageLoader)
                 api(projects.extension.blur)
 
-                // implementation(libs.moko.resources)
+                implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.napier)

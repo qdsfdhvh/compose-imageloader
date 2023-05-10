@@ -38,6 +38,7 @@ include(
     ":image-loader",
     ":extension:blur",
     ":extension:imageio",
+    ":extension:moko-resources",
     ":app:common",
     ":app:android",
     ":app:desktop",
