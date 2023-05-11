@@ -73,6 +73,10 @@ fun ImageItem(
                 // components {
                 //     add(customKtorUrlFetcher)
                 // }
+                options {
+                    playAnimate = true
+                    repeatCount = 0
+                }
             }
         }
         val painter = rememberAsyncImagePainter(request)

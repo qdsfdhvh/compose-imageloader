@@ -49,9 +49,9 @@ class GifDecoder private constructor(
                 else -> config
             },
             scale = options.scale,
+            playAnimate = options.playAnimate,
         )
-
-        // drawable.setRepeatCount(options.parameters.repeatCount() ?: MovieDrawable.REPEAT_INFINITE)
+        drawable.setRepeatCount(options.repeatCount)
 
         // Set the start and end animation callbacks if any one is supplied through the request.
         // val onStart = options.parameters.animationStartCallback()

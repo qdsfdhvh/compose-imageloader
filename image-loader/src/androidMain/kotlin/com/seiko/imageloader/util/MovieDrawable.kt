@@ -19,6 +19,7 @@ import android.os.SystemClock
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withSave
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.transform.AnimatedTransformation
 import com.seiko.imageloader.transform.PixelOpacity
@@ -32,6 +33,7 @@ internal class MovieDrawable @JvmOverloads constructor(
     private val movie: Movie,
     val config: Bitmap.Config = Bitmap.Config.ARGB_8888,
     val scale: Scale = Scale.FIT,
+    private val playAnimate: Boolean = false,
 ) : Drawable(), Animatable2Compat {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
@@ -248,6 +250,8 @@ internal class MovieDrawable @JvmOverloads constructor(
     override fun isRunning() = isRunning
 
     override fun start() {
+        if (!playAnimate) return
+
         if (isRunning) return
         isRunning = true
 
@@ -259,6 +263,8 @@ internal class MovieDrawable @JvmOverloads constructor(
     }
 
     override fun stop() {
+        if (!playAnimate) return
+
         if (!isRunning) return
         isRunning = false
 
@@ -279,6 +285,6 @@ internal class MovieDrawable @JvmOverloads constructor(
 
     companion object {
         /** Pass this to [setRepeatCount] to repeat infinitely. */
-        const val REPEAT_INFINITE = -1
+        const val REPEAT_INFINITE = Options.REPEAT_INFINITE
     }
 }
