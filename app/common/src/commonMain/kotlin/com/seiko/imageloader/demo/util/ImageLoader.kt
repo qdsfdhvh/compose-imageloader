@@ -20,7 +20,7 @@ fun ImageLoaderConfigBuilder.commonConfig() {
             tag: String,
             data: Any?,
             throwable: Throwable?,
-            message: String
+            message: String,
         ) {
             DebugLogger.log(
                 severity = when (priority) {
@@ -41,7 +41,7 @@ fun ImageLoaderConfigBuilder.commonConfig() {
                     }
                     append("[message] ")
                     append(message)
-                }
+                },
             )
         }
 
