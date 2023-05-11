@@ -15,7 +15,7 @@ moko-resources = "0.22.0"
 ktor = "2.3.0"
 okio = "3.3.0"
 uri-kmp = "0.0.11"
-napier = "2.6.1"
+kermit = "2.0.0-RC4"
 accompanist-drawablepainter = "0.30.1"
 androidsvg = "1.4"
 
@@ -57,7 +57,7 @@ ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 
 uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 moko-resources = { module = "dev.icerock.moko:resources", version.ref = "moko-resources" }
-napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 
 [bundles]
