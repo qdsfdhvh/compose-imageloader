@@ -8,10 +8,10 @@ import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.IntSize
+import com.seiko.imageloader.option.Options
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Codec
@@ -20,6 +20,8 @@ import kotlin.time.Duration.Companion.milliseconds
 internal class GifPainter(
     private val codec: Codec,
     private val imageScope: CoroutineScope,
+    private val playAnimate: Boolean = true,
+    private val repeatCount: Int = Options.REPEAT_INFINITE,
 ) : Painter(), RememberObserver {
 
     private var bitmapCache: Bitmap? = null
@@ -35,13 +37,14 @@ internal class GifPainter(
         if (rememberJob != null) return
 
         rememberJob = imageScope.launch {
-            when (codec.framesInfo.size) {
-                0 -> Unit
-                1 -> {
+            when {
+                codec.framesInfo.isEmpty() -> Unit
+                codec.framesInfo.size == 1 || !playAnimate -> {
                     drawImageBitmap.value = getImageBitmap(codec, 0)
                 }
                 else -> {
-                    while (isActive) {
+                    var loopIteration = -1
+                    while (repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount) {
                         for ((index, frame) in codec.framesInfo.withIndex()) {
                             drawImageBitmap.value = getImageBitmap(codec, index)
                             delay(frame.duration.milliseconds)

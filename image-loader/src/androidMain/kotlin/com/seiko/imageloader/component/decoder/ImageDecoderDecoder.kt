@@ -15,7 +15,6 @@ import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
-import com.seiko.imageloader.util.MovieDrawable.Companion.REPEAT_INFINITE
 import com.seiko.imageloader.util.ScaleDrawable
 import com.seiko.imageloader.util.isAnimatedHeif
 import com.seiko.imageloader.util.isAnimatedWebP
@@ -127,7 +126,7 @@ class ImageDecoderDecoder private constructor(
             return baseDrawable
         }
 
-        baseDrawable.repeatCount = REPEAT_INFINITE
+        baseDrawable.repeatCount = options.repeatCount
 
         // Set the start and end animation callbacks if any one is supplied through the request.
         // val onStart = options.parameters.animationStartCallback()
@@ -140,7 +139,7 @@ class ImageDecoderDecoder private constructor(
         // }
 
         // Wrap AnimatedImageDrawable in a ScaleDrawable so it always scales to fill its bounds.
-        return ScaleDrawable(baseDrawable, options.scale)
+        return ScaleDrawable(baseDrawable, options.scale, options.playAnimate)
     }
 
     class Factory @JvmOverloads constructor(

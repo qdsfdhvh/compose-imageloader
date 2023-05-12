@@ -11,11 +11,17 @@ import org.jetbrains.skia.Data
 class GifDecoder private constructor(
     private val channel: BufferedSource,
     private val imageScope: CoroutineScope,
+    private val options: Options,
 ) : Decoder {
     override suspend fun decode(): DecodeResult {
         val codec = Codec.makeFromData(Data.makeFromBytes(channel.readByteArray()))
         return DecodeResult.Painter(
-            painter = GifPainter(codec, imageScope),
+            painter = GifPainter(
+                codec = codec,
+                imageScope = imageScope,
+                playAnimate = options.playAnimate,
+                repeatCount = options.repeatCount,
+            ),
         )
     }
 
@@ -24,7 +30,7 @@ class GifDecoder private constructor(
     ) : Decoder.Factory {
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isGif(source.source)) return null
-            return GifDecoder(source.source, imageScope)
+            return GifDecoder(source.source, imageScope, options)
         }
     }
 }

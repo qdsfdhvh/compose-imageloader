@@ -23,6 +23,7 @@ import kotlin.math.roundToInt
 internal class ScaleDrawable @JvmOverloads constructor(
     val child: Drawable,
     val scale: Scale = Scale.FIT,
+    private val playAnimate: Boolean = false,
 ) : Drawable(), Drawable.Callback, Animatable {
 
     private var childDx = 0f
@@ -109,10 +110,10 @@ internal class ScaleDrawable @JvmOverloads constructor(
     override fun isRunning() = child is Animatable && child.isRunning
 
     override fun start() {
-        if (child is Animatable) child.start()
+        if (child is Animatable && playAnimate) child.start()
     }
 
     override fun stop() {
-        if (child is Animatable) child.stop()
+        if (child is Animatable && playAnimate) child.stop()
     }
 }
