@@ -23,8 +23,6 @@ internal actual suspend fun ByteReadChannel.source(): BufferedSource {
     return toInputStream().source().buffer()
 }
 
-internal actual suspend fun ByteArray.bufferedSource() = ByteArrayInputStream(this).source().buffer()
-
 internal actual val httpEngine: HttpClientEngine get() = OkHttp.create()
 
 internal expect fun getMimeTypeFromExtension(extension: String): String?

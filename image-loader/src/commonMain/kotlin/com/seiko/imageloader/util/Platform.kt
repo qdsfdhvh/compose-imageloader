@@ -20,8 +20,6 @@ internal expect inline fun <R> synchronized(lock: LockObject, block: () -> R): R
 
 internal expect suspend fun ByteReadChannel.source(): BufferedSource
 
-internal expect suspend fun ByteArray.bufferedSource(): BufferedSource
-
 internal expect val ioDispatcher: CoroutineDispatcher
 
 internal expect val httpEngine: HttpClientEngine
