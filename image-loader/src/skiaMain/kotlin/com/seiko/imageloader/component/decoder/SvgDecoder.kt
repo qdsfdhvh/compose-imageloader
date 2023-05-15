@@ -5,17 +5,21 @@ import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.SVGPainter
 import com.seiko.imageloader.util.isSvg
+import okio.BufferedSource
+import okio.use
 import org.jetbrains.skia.Data
 import org.jetbrains.skia.svg.SVGDOM
 
 class SvgDecoder private constructor(
-    private val source: DecodeSource,
+    private val source: BufferedSource,
     private val density: Density,
     private val options: Options,
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
-        val data = Data.makeFromBytes(source.source.readByteArray())
+        val data = source.use {
+            Data.makeFromBytes(it.readByteArray())
+        }
         val requestSize = options.sizeResolver.run {
             density.size()
         }
@@ -30,7 +34,7 @@ class SvgDecoder private constructor(
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
             return SvgDecoder(
-                source = source,
+                source = source.source,
                 density = density,
                 options = options,
             )
