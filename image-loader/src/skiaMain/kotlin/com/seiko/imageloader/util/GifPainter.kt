@@ -77,9 +77,10 @@ internal class GifPainter(
         if (rememberJob == null) return
         rememberJob?.cancel()
         rememberJob = null
+        drawImageBitmap.value = null
+        bitmapCache?.close()
         bitmapCache = null
         intSizeCache = null
-        drawImageBitmap.value = null
     }
 
     override fun DrawScope.onDraw() {
