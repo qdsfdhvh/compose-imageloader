@@ -100,7 +100,7 @@ private val Route.name: String
         Route.Network -> "Network"
         Route.Gif -> "Gif"
         Route.Svg -> "Svg"
-        Route.Other -> "BigImage"
+        Route.Other -> "Other"
         Route.Pokemon -> "Pokemon"
     }
 
