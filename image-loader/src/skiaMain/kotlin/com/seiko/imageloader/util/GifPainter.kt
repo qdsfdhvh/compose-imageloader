@@ -91,9 +91,9 @@ internal class GifPainter(
 
     private fun recycleIntSize(size: Size): IntSize {
         var intSize = intSizeCache
-        if (intSize == null
-            || size.width.compareTo(intSize.width) != 0
-            || size.height.compareTo(intSize.height) != 0
+        if (intSize == null ||
+            size.width.compareTo(intSize.width) != 0 ||
+            size.height.compareTo(intSize.height) != 0
         ) {
             intSize = IntSize(size.width.toInt(), size.height.toInt()).also {
                 intSizeCache = it

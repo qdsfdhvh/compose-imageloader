@@ -23,9 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.seiko.imageloader.demo.scene.OtherImagesScene
 import com.seiko.imageloader.demo.scene.GifImagesScene
 import com.seiko.imageloader.demo.scene.NetworkImagesScene
+import com.seiko.imageloader.demo.scene.OtherImagesScene
 import com.seiko.imageloader.demo.scene.PokemonScene
 import com.seiko.imageloader.demo.scene.SvgImagesScene
 

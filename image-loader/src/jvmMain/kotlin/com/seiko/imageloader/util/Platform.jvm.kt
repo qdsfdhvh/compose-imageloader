@@ -7,7 +7,6 @@ import io.ktor.utils.io.jvm.javaio.toInputStream
 import okio.BufferedSource
 import okio.buffer
 import okio.source
-import java.io.ByteArrayInputStream
 
 actual typealias WeakReference<T> = java.lang.ref.WeakReference<T>
 
