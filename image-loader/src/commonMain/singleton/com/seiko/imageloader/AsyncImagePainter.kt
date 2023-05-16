@@ -203,9 +203,11 @@ class AsyncImagePainter(
     private fun updatePainter(painter: Painter) {
         val previous = this.painter
         this.painter = painter
-        if (rememberJob != null && previous != painter) {
+        if (previous != painter) {
             (previous as? RememberObserver)?.onForgotten()
-            (painter as? RememberObserver)?.onRemembered()
+            if (rememberJob != null) {
+                (painter as? RememberObserver)?.onRemembered()
+            }
         }
     }
 }
