@@ -103,7 +103,7 @@ internal class GifPainter(
 
     private fun getImageBitmap(codec: Codec, frameIndex: Int): ImageBitmap {
         return recycleBitmap(codec).apply {
-            codec.readPixels(this, frameIndex)
+            codec.readPixels(this, frameIndex, frameIndex - 1)
         }.asComposeImageBitmap().also {
             it.prepareToDraw()
         }
