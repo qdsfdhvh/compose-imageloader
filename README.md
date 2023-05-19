@@ -110,6 +110,62 @@ val newImageRequest = newBuilder {
 }
 ```
 
+#### Memory/Disk cache support on all platforms
+To enable caching on all platforms you have to setup custom ImageLoader
+```kotlin
+internal expect fun ComponentRegistryBuilder.setupDefaultComponents()
+internal expect fun getImageCacheDirectoryPath(): Path
+
+private fun generateImageLoader(
+    memCacheSize: Int = 32 * 1024 * 1024, //32MB
+    diskCacheSize: Int = 512 * 1024 * 1024 //512MB
+) = ImageLoader {
+    interceptor {
+        memoryCacheConfig {
+            maxSizeBytes(memCacheSize)
+        }
+        diskCacheConfig {
+            directory(getImageCacheDirectoryPath())
+            maxSizeBytes(diskCacheSize.toLong())
+        }
+    }
+    components {
+        setupDefaultComponents()
+    }
+}
+
+//actuals on the platforms:
+//Android
+actual fun ComponentRegistryBuilder.setupDefaultComponents() = this.setupDefaultComponents(App.context)
+actual fun getImageCacheDirectoryPath(): Path = App.context.cacheDir.absolutePath.toPath()
+
+//iOS
+actual fun ComponentRegistryBuilder.setupDefaultComponents() = this.setupDefaultComponents()
+actual fun getImageCacheDirectoryPath(): Path {
+    val cacheDir = NSSearchPathForDirectoriesInDomains(
+        NSCachesDirectory,
+        NSUserDomainMask,
+        true
+    ).first() as String
+    return (cacheDir + "/media").toPath()
+}
+
+//Desktop
+actual fun ComponentRegistryBuilder.setupDefaultComponents() = this.setupDefaultComponents()
+actual fun getImageCacheDirectoryPath(): Path = "media/".toPath()
+```
+And provide it to composition
+```kotlin
+@Composable
+fun App() {
+    CompositionLocalProvider(
+        LocalImageLoader provides generateImageLoader(),
+    ) {
+        //your app here
+    }
+}
+```
+
 ### Before 1.2.8
 
 `LocalImageLoader` has no default value, must be configured on each platform, and configuration is similar to `coil`.
