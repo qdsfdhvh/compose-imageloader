@@ -45,6 +45,7 @@ include(
     ":app:desktop",
     ":app:ios-combine",
     ":app:macos",
+    ":app:wasm",
     ":app:web",
 )
 
