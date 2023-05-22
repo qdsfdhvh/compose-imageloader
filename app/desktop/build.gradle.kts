@@ -10,10 +10,9 @@ kotlin {
         compilations.all {
             kotlinOptions.jvmTarget = Versions.Java.jvmTarget
         }
-        // error: Both artifact maps contains same key: .../desktop-jvm-1.2.0.jar with different values for kmp: [:app:desktop:jvmMain, :app:desktop:commonMain] and platform: :app:desktop:main
-        // withJava()
     }
     sourceSets {
+        @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
             dependencies {
                 implementation(projects.app.common)
@@ -21,7 +20,6 @@ kotlin {
                 implementation(compose.desktop.currentOs)
             }
         }
-        val jvmTest by getting
     }
 }
 

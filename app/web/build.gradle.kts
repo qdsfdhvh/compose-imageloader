@@ -1,5 +1,3 @@
-
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
@@ -12,6 +10,7 @@ kotlin {
         // binaries.executable()
     }
     sourceSets {
+        @Suppress("UNUSED_VARIABLE")
         val jsMain by getting {
             dependencies {
                 implementation(projects.app.common)
