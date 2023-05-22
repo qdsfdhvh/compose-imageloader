@@ -4,6 +4,7 @@ pluginManagement {
         google()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
     includeBuild("build-logic")
 }
@@ -17,6 +18,7 @@ dependencyResolutionManagement {
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
 
