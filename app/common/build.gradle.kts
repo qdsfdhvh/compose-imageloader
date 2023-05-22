@@ -40,7 +40,7 @@ kotlin {
                 implementation(libs.ktor.client.darwin)
             }
         }
-        val jsMain by getting {
+        val jsWasmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
             }

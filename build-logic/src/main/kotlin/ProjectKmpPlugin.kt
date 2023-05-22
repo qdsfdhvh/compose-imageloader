@@ -1,5 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+// import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 class ProjectKmpPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -18,14 +19,33 @@ class ProjectKmpPlugin : Plugin<Project> {
                         kotlinOptions.jvmTarget = Versions.Java.jvmTarget
                     }
                 }
-                ios()
+                iosX64()
+                iosArm64()
                 iosSimulatorArm64()
                 macosX64()
                 macosArm64()
                 js(IR) {
-                    browser()
-                    nodejs()
+                    nodejs {
+                        testTask {
+                            useMocha {
+                                timeout = "8000"
+                            }
+                        }
+                    }
+                    browser {
+                        testTask {
+                            testLogging.showStandardStreams = true
+                            useKarma {
+                                useChromeHeadless()
+                                useFirefox()
+                            }
+                        }
+                    }
                 }
+                // @OptIn(ExperimentalWasmDsl::class)
+                // wasm {
+                //     d8()
+                // }
 
                 @Suppress("UNUSED_VARIABLE")
                 sourceSets.apply {
@@ -43,17 +63,23 @@ class ProjectKmpPlugin : Plugin<Project> {
                         dependsOn(jvmMain)
                         dependsOn(skiaMain)
                     }
-                    val darwinMain = maybeCreate("darwinMain").apply {
+                    val jsNativeMain = maybeCreate("jsNativeMain").apply {
                         dependsOn(skiaMain)
                     }
                     val appleMain = maybeCreate("appleMain").apply {
-                        dependsOn(darwinMain)
+                        dependsOn(jsNativeMain)
                     }
-                    val iosMain = getByName("iosMain").apply {
+                    val iosMain = maybeCreate("iosMain").apply {
                         dependsOn(appleMain)
+                    }
+                    val iosX64Main = getByName("iosX64Main").apply {
+                        dependsOn(iosMain)
+                    }
+                    val iosArm64Main = getByName("iosArm64Main").apply {
+                        dependsOn(iosMain)
                     }
                     val iosSimulatorArm64Main = getByName("iosSimulatorArm64Main").apply {
-                        dependsOn(appleMain)
+                        dependsOn(iosMain)
                     }
                     val macosX64Main = getByName("macosX64Main").apply {
                         dependsOn(appleMain)
@@ -61,9 +87,21 @@ class ProjectKmpPlugin : Plugin<Project> {
                     val macosArm64Main = getByName("macosArm64Main").apply {
                         dependsOn(appleMain)
                     }
-                    val jsMain = getByName("jsMain").apply {
-                        dependsOn(darwinMain)
+                    val jsWasmMain = maybeCreate("jsWasmMain").apply {
+                        dependsOn(jsNativeMain)
                     }
+                    val jsMain = getByName("jsMain").apply {
+                        dependsOn(jsWasmMain)
+                        dependencies {
+                            implementation(kotlin("stdlib-js"))
+                        }
+                    }
+                    // val wasmMain = getByName("wasmMain").apply {
+                    //     dependsOn(jsWasmMain)
+                    //     dependencies {
+                    //         implementation(kotlin("stdlib-wasm"))
+                    //     }
+                    // }
                 }
             }
             android {

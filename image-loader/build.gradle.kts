@@ -40,8 +40,8 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.swing)
             }
         }
-        val darwinMain by getting {
-            kotlin.srcDir("src/darwinMain/singleton")
+        val jsNativeMain by getting {
+            kotlin.srcDir("src/jsNativeMain/singleton")
         }
         val appleMain by getting {
             dependencies {
