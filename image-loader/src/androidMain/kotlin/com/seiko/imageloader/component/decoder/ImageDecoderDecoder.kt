@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.decodeDrawable
-import com.seiko.imageloader.cache.disk.systemFileSystem
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
@@ -22,6 +21,7 @@ import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
 import okio.BufferedSource
+import okio.FileSystem
 import okio.Path.Companion.toOkioPath
 import okio.buffer
 import java.io.File
@@ -93,7 +93,7 @@ class ImageDecoderDecoder private constructor(
             // https://issuetracker.google.com/issues/139371066
             else -> {
                 val temp = File.createTempFile("tmp", null)
-                systemFileSystem.write(temp.toOkioPath()) {
+                FileSystem.SYSTEM.write(temp.toOkioPath()) {
                     writeAll(source)
                 }
                 ImageDecoder.createSource(temp)
