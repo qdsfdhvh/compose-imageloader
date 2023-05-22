@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     CanvasBasedWindow("ComposeImageLoader") {
+        // TODO App
         Box(
             modifier = Modifier.fillMaxSize().background(Color.Cyan.copy(alpha = 0.5f)),
             contentAlignment = Alignment.Center,
