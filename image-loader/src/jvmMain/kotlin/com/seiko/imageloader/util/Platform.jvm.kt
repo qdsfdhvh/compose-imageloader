@@ -5,6 +5,7 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import okio.BufferedSource
+import okio.FileSystem
 import okio.buffer
 import okio.source
 
@@ -23,5 +24,7 @@ internal actual suspend fun ByteReadChannel.source(): BufferedSource {
 }
 
 internal actual val httpEngine: HttpClientEngine get() = OkHttp.create()
+
+internal actual val defaultFileSystem: FileSystem? get() = FileSystem.SYSTEM
 
 internal expect fun getMimeTypeFromExtension(extension: String): String?

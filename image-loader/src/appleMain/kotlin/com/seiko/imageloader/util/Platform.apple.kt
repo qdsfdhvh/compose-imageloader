@@ -4,6 +4,7 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.locks.SynchronizedObject
+import okio.FileSystem
 
 actual typealias WeakReference<T> = kotlin.native.ref.WeakReference<T>
 
@@ -25,3 +26,5 @@ internal actual inline fun <R> synchronized(lock: LockObject, block: () -> R): R
 }
 
 internal actual val httpEngine: HttpClientEngine get() = Darwin.create()
+
+internal actual val defaultFileSystem: FileSystem? get() = FileSystem.SYSTEM

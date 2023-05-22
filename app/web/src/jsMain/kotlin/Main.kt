@@ -8,6 +8,8 @@ import com.seiko.imageloader.demo.App
 import com.seiko.imageloader.demo.util.LocalResLoader
 import com.seiko.imageloader.demo.util.ResLoader
 import com.seiko.imageloader.demo.util.commonConfig
+import okio.FileSystem
+import okio.fakefilesystem.FakeFileSystem
 import org.jetbrains.skiko.wasm.onWasmReady
 
 fun main() {
@@ -34,10 +36,10 @@ private fun generateImageLoader(): ImageLoader {
                 // Set the max size to 25% of the app's available memory.
                 maxSizePercent(0.25)
             }
-            // diskCacheConfig {
-            //     directory(getCacheDir().toPath().resolve("image_cache"))
-            //     maxSizeBytes(512L * 1024 * 1024) // 512MB
-            // }
+            diskCacheConfig(FakeFileSystem()) {
+                directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY)
+                maxSizeBytes(256L * 1024 * 1024) // 256MB
+            }
         }
     }
 }
