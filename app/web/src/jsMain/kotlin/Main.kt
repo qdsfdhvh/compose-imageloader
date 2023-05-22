@@ -1,5 +1,6 @@
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.window.Window
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.window.CanvasBasedWindow
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
@@ -10,9 +11,10 @@ import com.seiko.imageloader.demo.util.ResLoader
 import com.seiko.imageloader.demo.util.commonConfig
 import org.jetbrains.skiko.wasm.onWasmReady
 
+@OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     onWasmReady {
-        Window("ComposeImageLoader") {
+        CanvasBasedWindow("ComposeImageLoader") {
             CompositionLocalProvider(
                 LocalImageLoader provides generateImageLoader(),
                 LocalResLoader provides ResLoader(),
