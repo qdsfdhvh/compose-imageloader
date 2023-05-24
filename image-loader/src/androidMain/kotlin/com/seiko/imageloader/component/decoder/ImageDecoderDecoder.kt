@@ -52,7 +52,7 @@ class ImageDecoderDecoder private constructor(
                 decoder.decodeBitmap { _, _ ->
                     imageDecoder = this
                 }
-            }  finally {
+            } finally {
                 imageDecoder?.close()
             }
             DecodeResult.Bitmap(
