@@ -23,7 +23,6 @@ import kotlin.time.Duration.Companion.milliseconds
 internal class GifPainter(
     private val codec: Codec,
     private val imageScope: CoroutineScope,
-    private val playAnimate: Boolean = true,
     private val repeatCount: Int = Options.REPEAT_INFINITE,
 ) : Painter(), RememberObserver {
 
@@ -50,7 +49,7 @@ internal class GifPainter(
         yield()
         when {
             codec.framesInfo.isEmpty() -> Unit
-            codec.framesInfo.size == 1 || !playAnimate -> {
+            codec.framesInfo.size == 1 -> {
                 emit(getImageBitmap(codec, 0))
             }
             else -> {
