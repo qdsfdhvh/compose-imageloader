@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.decodeBitmap
 import androidx.core.graphics.decodeDrawable
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
@@ -45,20 +46,34 @@ class ImageDecoderDecoder private constructor(
 
     override suspend fun decode(): DecodeResult {
         var imageDecoder: ImageDecoder? = null
-        val drawable = try {
-            source.toImageDecoderSource().decodeDrawable { _, _ ->
-                // Capture the image decoder to manually close it later.
-                imageDecoder = this
-
-                // Configure any other attributes.
-                configureImageDecoderProperties()
+        val decoder = source.toImageDecoderSource()
+        return if (!options.playAnimate) {
+            val bitmap = try {
+                decoder.decodeBitmap { _, _ ->
+                    imageDecoder = this
+                }
+            } finally {
+                imageDecoder?.close()
             }
-        } finally {
-            imageDecoder?.close()
+            DecodeResult.Bitmap(
+                bitmap = bitmap,
+            )
+        } else {
+            val drawable = try {
+                decoder.decodeDrawable { _, _ ->
+                    // Capture the image decoder to manually close it later.
+                    imageDecoder = this
+
+                    // Configure any other attributes.
+                    configureImageDecoderProperties()
+                }
+            } finally {
+                imageDecoder?.close()
+            }
+            DecodeResult.Image(
+                image = wrapDrawable(drawable).toImage(),
+            )
         }
-        return DecodeResult.Image(
-            image = wrapDrawable(drawable).toImage(),
-        )
     }
 
     private fun wrapBufferedSource(channel: BufferedSource): BufferedSource {
@@ -139,7 +154,7 @@ class ImageDecoderDecoder private constructor(
         // }
 
         // Wrap AnimatedImageDrawable in a ScaleDrawable so it always scales to fill its bounds.
-        return ScaleDrawable(baseDrawable, options.scale, options.playAnimate)
+        return ScaleDrawable(baseDrawable, options.scale)
     }
 
     class Factory @JvmOverloads constructor(

@@ -3,7 +3,9 @@
 package com.seiko.imageloader.component.decoder
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Movie
+import androidx.core.graphics.createBitmap
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
@@ -36,20 +38,30 @@ class GifDecoder private constructor(
         } else {
             bufferSource
         }
-        val movie: Movie? = bufferedSource.use { Movie.decodeStream(it.inputStream()) }
 
+        val movie: Movie? = bufferedSource.use { Movie.decodeStream(it.inputStream()) }
         check(movie != null && movie.width() > 0 && movie.height() > 0) { "Failed to decode GIF." }
 
         val config = options.config.toBitmapConfig()
+        val movieConfig = when {
+            // movie.isOpaque && options.allowRgb565 -> Bitmap.Config.RGB_565
+            config.isHardware -> Bitmap.Config.ARGB_8888
+            else -> config
+        }
+
+        if (!options.playAnimate) {
+            val bitmap = createBitmap(movie.width(), movie.height(), movieConfig)
+            val canvas = Canvas(bitmap)
+            movie.draw(canvas, 0f, 0f)
+            return@runInterruptible DecodeResult.Bitmap(
+                bitmap = bitmap,
+            )
+        }
+
         val drawable = MovieDrawable(
             movie = movie,
-            config = when {
-                // movie.isOpaque && options.allowRgb565 -> Bitmap.Config.RGB_565
-                config.isHardware -> Bitmap.Config.ARGB_8888
-                else -> config
-            },
+            config = movieConfig,
             scale = options.scale,
-            playAnimate = options.playAnimate,
         )
         drawable.setRepeatCount(options.repeatCount)
 
