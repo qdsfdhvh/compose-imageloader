@@ -76,6 +76,81 @@ fun rememberAsyncImagePainter(
     return painter
 }
 
+@Composable
+fun rememberImagePainter(
+    url: String,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+    placeholderPainter: (@Composable () -> Painter)? = null,
+    errorPainter: (@Composable () -> Painter)? = null,
+): Painter {
+    val request = remember(url) {
+        ImageRequest {
+            data(url)
+            if (placeholderPainter != null) {
+                placeholderPainter { placeholderPainter() }
+            }
+            if (errorPainter != null) {
+                errorPainter { errorPainter() }
+            }
+        }
+    }
+    return rememberImagePainter(
+        request = request,
+        imageLoader = imageLoader,
+        contentScale = contentScale,
+        filterQuality = filterQuality
+    )
+}
+
+@Composable
+fun rememberImagePainter(
+    resId: Int,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+    placeholderPainter: (@Composable () -> Painter)? = null,
+    errorPainter: (@Composable () -> Painter)? = null,
+): Painter {
+    val request = remember(resId) {
+        ImageRequest {
+            data(resId)
+            if (placeholderPainter != null) {
+                placeholderPainter { placeholderPainter() }
+            }
+            if (errorPainter != null) {
+                errorPainter { errorPainter() }
+            }
+        }
+    }
+    return rememberImagePainter(
+        request = request,
+        imageLoader = imageLoader,
+        contentScale = contentScale,
+        filterQuality = filterQuality
+    )
+}
+
+@Composable
+fun rememberImagePainter(
+    request: ImageRequest,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality
+): Painter {
+    val painter = remember { AsyncImagePainter(request, imageLoader) }
+    painter.imageLoader = imageLoader
+    painter.request = request
+    painter.contentScale = contentScale
+    painter.filterQuality = filterQuality
+    return when (painter.requestState) {
+        is ImageRequestState.Loading -> request.placeholderPainter?.invoke() ?: painter
+        is ImageRequestState.Failure -> request.errorPainter?.invoke() ?: painter
+        else -> painter
+    }
+}
+
 @Stable
 class AsyncImagePainter(
     request: ImageRequest,
