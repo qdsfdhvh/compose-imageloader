@@ -118,7 +118,7 @@ class ImageRequestBuilder {
         extra = extraData ?: EmptyExtraData,
         eventListener = eventListener,
         placeholderPainter = placeholderPainter,
-        errorPainter = errorPainter
+        errorPainter = errorPainter,
     )
 }
 

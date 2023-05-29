@@ -100,7 +100,7 @@ fun rememberImagePainter(
         request = request,
         imageLoader = imageLoader,
         contentScale = contentScale,
-        filterQuality = filterQuality
+        filterQuality = filterQuality,
     )
 }
 
@@ -128,7 +128,7 @@ fun rememberImagePainter(
         request = request,
         imageLoader = imageLoader,
         contentScale = contentScale,
-        filterQuality = filterQuality
+        filterQuality = filterQuality,
     )
 }
 
@@ -137,7 +137,7 @@ fun rememberImagePainter(
     request: ImageRequest,
     imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
-    filterQuality: FilterQuality = DefaultFilterQuality
+    filterQuality: FilterQuality = DefaultFilterQuality,
 ): Painter {
     val painter = remember { AsyncImagePainter(request, imageLoader) }
     painter.imageLoader = imageLoader
