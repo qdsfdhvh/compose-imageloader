@@ -27,3 +27,8 @@ java {
 intellij {
     version.set("2023.1")
 }
+
+// fix ktor @see https://stackoverflow.com/questions/75694002/problem-with-ktor-client-in-intellij-idea-plugin-development
+configurations.all {
+    exclude("org.slf4j", "slf4j-api")
+}
