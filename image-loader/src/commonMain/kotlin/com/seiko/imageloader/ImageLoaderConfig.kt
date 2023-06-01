@@ -19,7 +19,7 @@ class ImageLoaderConfigBuilder internal constructor() {
     private var _imageScope: CoroutineScope? = null
 
     var imageScope: CoroutineScope
-        get() = _imageScope ?: defaultImageScope
+        get() = _imageScope ?: defaultImageScope.also { _imageScope = it }
         set(value) {
             _imageScope = value
         }
