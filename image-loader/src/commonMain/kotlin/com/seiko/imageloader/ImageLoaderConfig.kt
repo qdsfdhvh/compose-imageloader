@@ -4,9 +4,8 @@ import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.InterceptorsBuilder
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.Logger
+import com.seiko.imageloader.util.defaultImageScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 class ImageLoaderConfig internal constructor(
     val imageScope: CoroutineScope,
@@ -17,7 +16,14 @@ class ImageLoaderConfig internal constructor(
 
 class ImageLoaderConfigBuilder internal constructor() {
 
-    var imageScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var _imageScope: CoroutineScope? = null
+
+    var imageScope: CoroutineScope
+        get() = _imageScope ?: defaultImageScope
+        set(value) {
+            _imageScope = value
+        }
+
     var logger = Logger.None
     var options = Options()
 
