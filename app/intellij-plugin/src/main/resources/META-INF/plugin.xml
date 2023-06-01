@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>com.seiko.imageloader.demo.ComposeDemoPlugin</id>
+    <name>Compose ImageLoader for Idea Demo</name>
+    <vendor email="seiko_des@outlook.com" url="https://github.com/qdsfdhvh/compose-imageloader">SeikoDes</vendor>
+
+    <description><![CDATA[
+A plugin demonstrates Compose ImageLoader on IntelliJ Platform
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="com.seiko.imageloader.demo.ComposeDemoAction" class="com.seiko.imageloader.demo.ComposeDemoAction"
+            text="Show Compose ImageLoader Demo...">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
