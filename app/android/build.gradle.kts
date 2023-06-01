@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.compose")
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
