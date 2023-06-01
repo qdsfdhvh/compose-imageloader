@@ -18,6 +18,10 @@ uri-kmp = "0.0.11"
 kermit = "2.0.0-RC4"
 accompanist-drawablepainter = "0.30.1"
 androidsvg = "1.4"
+benchmark = "1.2.0-alpha14"
+junit = "1.1.5"
+espresso-core = "3.5.1"
+uiautomator = "2.2.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -27,6 +31,8 @@ kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization"
 composeJb = { id = "org.jetbrains.compose", version.ref = "compose-jb" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "benchmark"}
+androidTest = { id = "com.android.test", version.ref = "agp" }
 
 [libraries]
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -42,6 +48,11 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat-resources", version.ref = "androidx-appcompat" }
 androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "androidx-exifinterface" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark" }
+androidx-profileinstaller = "androidx.profileinstaller:profileinstaller:1.3.1"
 
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanist-drawablepainter" }
 

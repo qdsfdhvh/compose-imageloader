@@ -3,6 +3,7 @@ import com.vanniktech.maven.publish.KotlinMultiplatform
 plugins {
     id("project-kmp")
     id("com.vanniktech.maven.publish.base")
+    alias(libs.plugins.baselineprofile)
 }
 
 kotlin {
@@ -66,6 +67,15 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader"
+}
+
+baselineProfile {
+    // https://issuetracker.google.com/issues/282127523
+    baselineProfileOutputDir = "../../src/androidMain/generated/baselineProfiles"
+}
+
+dependencies {
+    baselineProfile(projects.app.android.benchmark)
 }
 
 mavenPublishing {
