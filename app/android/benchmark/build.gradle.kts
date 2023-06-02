@@ -13,6 +13,10 @@ android {
         minSdk = 28
         targetSdk = Versions.Android.target
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // TODO temporary until AGP 8.2, which no longer requires this.
+        //  This is because when we update baseline profiles, we do them on emulators but they
+        //  run all tests.
         testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
     }
     compileOptions {
@@ -59,10 +63,4 @@ dependencies {
     implementation(libs.androidx.uiautomator)
     implementation(libs.androidx.benchmark.macro.junit4)
     implementation(libs.androidx.profileinstaller)
-}
-
-androidComponents {
-    beforeVariants {
-        it.enable = it.buildType == "benchmark"
-    }
 }

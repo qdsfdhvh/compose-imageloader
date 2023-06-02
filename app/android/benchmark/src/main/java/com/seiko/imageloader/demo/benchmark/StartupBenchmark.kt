@@ -25,6 +25,7 @@ class StartupBenchmark {
     @get:Rule
     val benchmarkRule = MacrobenchmarkRule()
 
+    // TODO java.io.EOFException: \n not found: size=0 content=...
     @Test
     fun startup() = benchmarkRule.measureRepeated(
         packageName = "com.seiko.imageloader.demo",
