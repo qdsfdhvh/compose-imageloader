@@ -58,8 +58,7 @@ jobs:
         run: ./gradlew lint --stacktrace --no-daemon --no-parallel
 
       - name: Assemble
-        run: ./gradlew --stacktrace \
-          assemble -x :app:android:benchmark:pixel6Api31Setup -x :app:android:benchmark:collectNonMinifiedReleaseBaselineProfile
+        run: ./gradlew --stacktrace assemble -x :app:android:benchmark:pixel6Api31Setup -x :app:android:benchmark:collectNonMinifiedReleaseBaselineProfile
 
   build:
     needs: spotless
