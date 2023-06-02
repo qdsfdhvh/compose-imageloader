@@ -59,7 +59,7 @@ jobs:
 
       - name: Assemble
         run: ./gradlew --stacktrace \
-          assemble -x :app:android:benchmark:pixel6api31Setup -x :app:android:benchmark:collectNonMinifiedReleaseBaselineProfile
+          assemble -x :app:android:benchmark:pixel6Api31Setup -x :app:android:benchmark:collectNonMinifiedReleaseBaselineProfile
 
   build:
     needs: spotless
