@@ -8,11 +8,14 @@ import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.IntSize
+import com.seiko.imageloader.option.Options
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.yield
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Codec
 import kotlin.time.Duration.Companion.milliseconds
@@ -20,9 +23,12 @@ import kotlin.time.Duration.Companion.milliseconds
 internal class GifPainter(
     private val codec: Codec,
     private val imageScope: CoroutineScope,
+    private val repeatCount: Int = Options.REPEAT_INFINITE,
 ) : Painter(), RememberObserver {
 
     private var bitmapCache: Bitmap? = null
+    private var intSizeCache: IntSize? = null
+
     private var drawImageBitmap = mutableStateOf<ImageBitmap?>(null)
 
     private var rememberJob: Job? = null
@@ -34,18 +40,24 @@ internal class GifPainter(
         // Short circuit if we're already remembered.
         if (rememberJob != null) return
 
-        rememberJob = imageScope.launch {
-            when (codec.framesInfo.size) {
-                0 -> Unit
-                1 -> {
-                    drawImageBitmap.value = getImageBitmap(codec, 0)
-                }
-                else -> {
-                    while (isActive) {
-                        for ((index, frame) in codec.framesInfo.withIndex()) {
-                            drawImageBitmap.value = getImageBitmap(codec, index)
-                            delay(frame.duration.milliseconds)
-                        }
+        rememberJob = gifImageFlow()
+            .onEach { drawImageBitmap.value = it }
+            .launchIn(imageScope)
+    }
+
+    private fun gifImageFlow() = flow {
+        yield()
+        when {
+            codec.framesInfo.isEmpty() -> Unit
+            codec.framesInfo.size == 1 -> {
+                emit(getImageBitmap(codec, 0))
+            }
+            else -> {
+                var loopIteration = -1
+                while (repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount) {
+                    for ((index, frame) in codec.framesInfo.withIndex()) {
+                        emit(getImageBitmap(codec, index))
+                        delay(frame.duration.milliseconds)
                     }
                 }
             }
@@ -64,33 +76,47 @@ internal class GifPainter(
         if (rememberJob == null) return
         rememberJob?.cancel()
         rememberJob = null
-        bitmapCache = null
         drawImageBitmap.value = null
+        bitmapCache?.close()
+        bitmapCache = null
+        intSizeCache = null
     }
 
     override fun DrawScope.onDraw() {
-        drawImageBitmap.value?.let {
-            val intSize = IntSize(size.width.toInt(), size.height.toInt())
-            drawImage(it, dstSize = intSize)
+        drawImageBitmap.value?.let { image ->
+            drawImage(image, dstSize = recycleIntSize(size))
         }
     }
 
+    private fun recycleIntSize(size: Size): IntSize {
+        var intSize = intSizeCache
+        if (intSize == null ||
+            size.width.compareTo(intSize.width) != 0 ||
+            size.height.compareTo(intSize.height) != 0
+        ) {
+            intSize = IntSize(size.width.toInt(), size.height.toInt()).also {
+                intSizeCache = it
+            }
+        }
+        return intSize
+    }
+
     private fun getImageBitmap(codec: Codec, frameIndex: Int): ImageBitmap {
-        val bitmap = recycleBitmap(codec)
-        codec.readPixels(bitmap, frameIndex)
-        return bitmap.asComposeImageBitmap()
+        return recycleBitmap(codec).apply {
+            codec.readPixels(this, frameIndex, frameIndex - 1)
+        }.asComposeImageBitmap().also {
+            it.prepareToDraw()
+        }
     }
 
     private fun recycleBitmap(codec: Codec): Bitmap {
-        return bitmapCache?.let {
-            if (codec.width == bitmapCache?.width && codec.height == bitmapCache?.height) {
-                it.apply { allocPixels(codec.imageInfo) }
-            } else {
-                null
-            }
-        } ?: Bitmap().apply { allocPixels(codec.imageInfo) }
-            .also {
-                bitmapCache = it
-            }
+        val bitmap = bitmapCache ?: Bitmap().also {
+            it.allocPixels(codec.imageInfo)
+            bitmapCache = it
+        }
+        if (bitmap.width != codec.width && bitmap.height != codec.height) {
+            bitmap.allocPixels(codec.imageInfo)
+        }
+        return bitmap
     }
 }

@@ -6,8 +6,8 @@ import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.decodeBitmap
 import androidx.core.graphics.decodeDrawable
-import com.seiko.imageloader.cache.disk.systemFileSystem
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
@@ -15,7 +15,6 @@ import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
-import com.seiko.imageloader.util.MovieDrawable.Companion.REPEAT_INFINITE
 import com.seiko.imageloader.util.ScaleDrawable
 import com.seiko.imageloader.util.isAnimatedHeif
 import com.seiko.imageloader.util.isAnimatedWebP
@@ -23,6 +22,7 @@ import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
 import okio.BufferedSource
+import okio.FileSystem
 import okio.Path.Companion.toOkioPath
 import okio.buffer
 import java.io.File
@@ -46,20 +46,34 @@ class ImageDecoderDecoder private constructor(
 
     override suspend fun decode(): DecodeResult {
         var imageDecoder: ImageDecoder? = null
-        val drawable = try {
-            source.toImageDecoderSource().decodeDrawable { _, _ ->
-                // Capture the image decoder to manually close it later.
-                imageDecoder = this
-
-                // Configure any other attributes.
-                configureImageDecoderProperties()
+        val decoder = source.toImageDecoderSource()
+        return if (!options.playAnimate) {
+            val bitmap = try {
+                decoder.decodeBitmap { _, _ ->
+                    imageDecoder = this
+                }
+            } finally {
+                imageDecoder?.close()
             }
-        } finally {
-            imageDecoder?.close()
+            DecodeResult.Bitmap(
+                bitmap = bitmap,
+            )
+        } else {
+            val drawable = try {
+                decoder.decodeDrawable { _, _ ->
+                    // Capture the image decoder to manually close it later.
+                    imageDecoder = this
+
+                    // Configure any other attributes.
+                    configureImageDecoderProperties()
+                }
+            } finally {
+                imageDecoder?.close()
+            }
+            DecodeResult.Image(
+                image = wrapDrawable(drawable).toImage(),
+            )
         }
-        return DecodeResult.Image(
-            image = wrapDrawable(drawable).toImage(),
-        )
     }
 
     private fun wrapBufferedSource(channel: BufferedSource): BufferedSource {
@@ -94,7 +108,7 @@ class ImageDecoderDecoder private constructor(
             // https://issuetracker.google.com/issues/139371066
             else -> {
                 val temp = File.createTempFile("tmp", null)
-                systemFileSystem.write(temp.toOkioPath()) {
+                FileSystem.SYSTEM.write(temp.toOkioPath()) {
                     writeAll(source)
                 }
                 ImageDecoder.createSource(temp)
@@ -127,7 +141,7 @@ class ImageDecoderDecoder private constructor(
             return baseDrawable
         }
 
-        baseDrawable.repeatCount = REPEAT_INFINITE
+        baseDrawable.repeatCount = options.repeatCount
 
         // Set the start and end animation callbacks if any one is supplied through the request.
         // val onStart = options.parameters.animationStartCallback()

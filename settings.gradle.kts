@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.13.1"
+    id("com.gradle.enterprise") version "3.13.3"
 }
 
 gradleEnterprise {
@@ -45,6 +45,7 @@ include(
     ":app:ios-combine",
     ":app:macos",
     ":app:web",
+    ":app:intellij-plugin",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

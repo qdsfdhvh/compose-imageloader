@@ -23,7 +23,7 @@ kotlin {
                 implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.logging)
-                implementation(libs.napier)
+                implementation(libs.kermit)
             }
         }
         val androidMain by getting {

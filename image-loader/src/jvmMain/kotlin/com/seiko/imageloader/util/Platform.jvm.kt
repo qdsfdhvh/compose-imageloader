@@ -5,9 +5,9 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import okio.BufferedSource
+import okio.FileSystem
 import okio.buffer
 import okio.source
-import java.io.ByteArrayInputStream
 
 actual typealias WeakReference<T> = java.lang.ref.WeakReference<T>
 
@@ -23,8 +23,8 @@ internal actual suspend fun ByteReadChannel.source(): BufferedSource {
     return toInputStream().source().buffer()
 }
 
-internal actual suspend fun ByteArray.bufferedSource() = ByteArrayInputStream(this).source().buffer()
-
 internal actual val httpEngine: HttpClientEngine get() = OkHttp.create()
+
+internal actual val defaultFileSystem: FileSystem? get() = FileSystem.SYSTEM
 
 internal expect fun getMimeTypeFromExtension(extension: String): String?

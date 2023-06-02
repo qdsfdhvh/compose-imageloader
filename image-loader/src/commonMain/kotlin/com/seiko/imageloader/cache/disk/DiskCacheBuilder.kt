@@ -5,10 +5,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import okio.FileSystem
 import okio.Path
 
-class DiskCacheBuilder internal constructor() {
+class DiskCacheBuilder internal constructor(private val fileSystem: FileSystem) {
 
     private var directory: Path? = null
-    private var fileSystem = systemFileSystem
+
     private var maxSizePercent = 0.02 // 2%
     private var minimumMaxSizeBytes = 10L * 1024 * 1024 // 10MB
     private var maximumMaxSizeBytes = 250L * 1024 * 1024 // 250MB
@@ -23,10 +23,6 @@ class DiskCacheBuilder internal constructor() {
      */
     fun directory(directory: Path) {
         this.directory = directory
-    }
-
-    fun fileSystem(fileSystem: FileSystem) {
-        this.fileSystem = fileSystem
     }
 
     fun maxSizePercent(percent: Double) {
@@ -76,9 +72,7 @@ class DiskCacheBuilder internal constructor() {
     }
 }
 
-fun DiskCache(block: DiskCacheBuilder.() -> Unit) =
-    DiskCacheBuilder().apply(block).build()
-
-internal expect val systemFileSystem: FileSystem
+fun DiskCache(fileSystem: FileSystem, block: DiskCacheBuilder.() -> Unit) =
+    DiskCacheBuilder(fileSystem).apply(block).build()
 
 internal expect fun directorySize(directory: Path): Long

@@ -11,7 +11,13 @@ data class Options(
     var sizeResolver: SizeResolver = SizeResolver.Unspecified,
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
+    var playAnimate: Boolean = true,
 ) {
+    var repeatCount: Int = REPEAT_INFINITE
+        set(value) {
+            field = maxOf(value, REPEAT_INFINITE)
+        }
+
     enum class ImageConfig {
         ALPHA_8,
 
@@ -20,5 +26,9 @@ data class Options(
         ARGB_8888,
         RGBA_F16,
         HARDWARE,
+    }
+
+    companion object {
+        internal const val REPEAT_INFINITE = -1
     }
 }
