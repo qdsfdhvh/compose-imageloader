@@ -45,7 +45,7 @@ jobs:
         run: ./gradlew lint --stacktrace --no-daemon --no-parallel
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace --no-daemon --no-parallel
+        run: ./gradlew assemble --stacktrace --no-daemon --no-parallel -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=20
 
   build:
     needs: spotless
@@ -64,4 +64,4 @@ jobs:
       - uses: gradle/gradle-build-action@v2
 
       - name: Build
-        run: ./gradlew build --stacktrace --no-daemon --no-parallel
+        run: ./gradlew build --stacktrace --no-daemon --no-parallel -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=20
