@@ -45,6 +45,7 @@ include(
     ":app:ios-combine",
     ":app:macos",
     ":app:web",
+    ":app:intellij-plugin",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
