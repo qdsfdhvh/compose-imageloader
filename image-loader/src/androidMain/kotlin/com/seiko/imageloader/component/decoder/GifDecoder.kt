@@ -3,9 +3,7 @@
 package com.seiko.imageloader.component.decoder
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Movie
-import androidx.core.graphics.createBitmap
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
@@ -49,15 +47,6 @@ class GifDecoder private constructor(
             else -> config
         }
 
-        if (!options.playAnimate) {
-            val bitmap = createBitmap(movie.width(), movie.height(), movieConfig)
-            val canvas = Canvas(bitmap)
-            movie.draw(canvas, 0f, 0f)
-            return@runInterruptible DecodeResult.Bitmap(
-                bitmap = bitmap,
-            )
-        }
-
         val drawable = MovieDrawable(
             movie = movie,
             config = movieConfig,
@@ -84,6 +73,7 @@ class GifDecoder private constructor(
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!options.playAnimate) return null
             if (!isGif(source.source)) return null
             return GifDecoder(source, options, enforceMinimumFrameDelay)
         }
