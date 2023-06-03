@@ -16,9 +16,9 @@ import com.seiko.imageloader.component.mapper.ResourceIntMapper
 import com.seiko.imageloader.component.mapper.ResourceUriMapper
 
 fun ComponentRegistryBuilder.setupAndroidComponents(
-    context: Context,
-    density: Density = Density(context),
-    maxImageSize: Int = 4096,
+    context: Context? = null,
+    density: Density? = context?.let { Density(it) },
+    maxImageSize: Int = BitmapFactoryDecoder.DEFAULT_MAX_PARALLELISM,
 ) {
     // Mappers
     add(ResourceUriMapper(context))

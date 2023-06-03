@@ -15,6 +15,7 @@ import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 import okio.buffer
 import okio.source
 import android.net.Uri as AndroidUri
@@ -78,13 +79,16 @@ class ContentUriFetcher private constructor(
     }
 
     class Factory(
-        private val context: Context,
+        private val context: Context? = null,
     ) : Fetcher.Factory {
 
         override fun create(data: Any, options: Options): Fetcher? {
             if (data !is Uri) return null
             if (!isApplicable(data)) return null
-            return ContentUriFetcher(context, data)
+            return ContentUriFetcher(
+                context = context ?: options.androidContext,
+                data = data,
+            )
         }
 
         private fun isApplicable(data: Uri) = data.scheme == SCHEME_CONTENT
