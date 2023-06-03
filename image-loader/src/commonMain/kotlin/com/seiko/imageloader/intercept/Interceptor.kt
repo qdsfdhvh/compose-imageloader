@@ -17,7 +17,8 @@ interface Interceptor {
         val request: ImageRequest
         val options: Options
             get() =
-                config.defaultOptions.also {
+                // copy options, otherwise default options will be change
+                config.defaultOptions.copy().also {
                     request.optionsBuilders.forEach { builder ->
                         it.run(builder)
                     }
