@@ -110,7 +110,7 @@ class ImageRequestBuilder {
         errorPainter = loader
     }
 
-    fun build() = ImageRequest(
+    internal fun build() = ImageRequest(
         data = data ?: NullRequestData,
         optionsBuilders = optionsBuilders,
         components = componentBuilder?.build(),
