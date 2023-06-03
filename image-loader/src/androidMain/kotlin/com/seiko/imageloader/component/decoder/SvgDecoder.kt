@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Density
 import com.caverock.androidsvg.SVG
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.util.SVGPainter
 import com.seiko.imageloader.util.isSvg
 
@@ -27,15 +28,15 @@ class SvgDecoder private constructor(
         )
     }
 
-    class Factory constructor(
-        private val density: Density,
+    class Factory(
+        private val density: Density? = null,
     ) : Decoder.Factory {
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
             return SvgDecoder(
                 source = source,
-                density = density,
+                density = density ?: Density(options.androidContext),
                 options = options,
             )
         }

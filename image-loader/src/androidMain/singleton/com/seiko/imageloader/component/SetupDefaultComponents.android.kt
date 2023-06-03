@@ -6,8 +6,8 @@ import com.seiko.imageloader.util.httpEngine
 import io.ktor.client.HttpClient
 
 fun ComponentRegistryBuilder.setupDefaultComponents(
-    context: Context,
-    density: Density = Density(context),
+    context: Context? = null,
+    density: Density? = context?.let { Density(it) },
     maxImageSize: Int = 4096,
     httpClient: () -> HttpClient = { HttpClient(httpEngine) },
 ) {

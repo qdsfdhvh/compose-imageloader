@@ -12,6 +12,7 @@ import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.ScaleDrawable
@@ -103,7 +104,7 @@ class ImageDecoderDecoder private constructor(
     }
 
     private fun ImageDecoder.configureImageDecoderProperties() {
-        val config = options.config.toBitmapConfig()
+        val config = options.imageConfig.toBitmapConfig()
         allocator = if (config.isHardware) {
             ImageDecoder.ALLOCATOR_HARDWARE
         } else {
@@ -143,15 +144,20 @@ class ImageDecoderDecoder private constructor(
         return ScaleDrawable(baseDrawable, options.scale)
     }
 
-    class Factory @JvmOverloads constructor(
-        private val context: Context,
+    class Factory(
+        private val context: Context? = null,
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
             if (!options.playAnimate) return null
             if (!isApplicable(source.source)) return null
-            return ImageDecoderDecoder(context, source, options, enforceMinimumFrameDelay)
+            return ImageDecoderDecoder(
+                context = context ?: options.androidContext,
+                source = source,
+                options = options,
+                enforceMinimumFrameDelay = enforceMinimumFrameDelay,
+            )
         }
 
         private fun isApplicable(source: BufferedSource): Boolean {
