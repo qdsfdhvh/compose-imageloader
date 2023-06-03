@@ -11,6 +11,7 @@ import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.demo.util.LocalResLoader
 import com.seiko.imageloader.demo.util.ResLoader
 import com.seiko.imageloader.demo.util.commonConfig
+import com.seiko.imageloader.option.androidContext
 import okio.Path.Companion.toOkioPath
 
 class MainActivity : ComponentActivity() {
@@ -29,8 +30,11 @@ class MainActivity : ComponentActivity() {
     private fun generateImageLoader(): ImageLoader {
         return ImageLoader {
             commonConfig()
+            options {
+                androidContext(applicationContext)
+            }
             components {
-                setupDefaultComponents(applicationContext)
+                setupDefaultComponents()
             }
             interceptor {
                 memoryCacheConfig {

@@ -4,6 +4,7 @@ import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
+import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
@@ -21,7 +22,7 @@ class MemoryCacheInterceptor(
         val options = chain.options
         val logger = chain.config.logger
 
-        val cacheKey = chain.components.key(request.data, options)
+        val cacheKey = chain.components.key(request.data, options, Keyer.Type.Memory)
             ?: return chain.proceed(request)
 
         val memoryCacheValue = runCatching {

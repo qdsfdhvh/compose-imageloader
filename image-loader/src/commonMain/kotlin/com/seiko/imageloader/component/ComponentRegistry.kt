@@ -36,9 +36,9 @@ class ComponentRegistry internal constructor(
         return mappedData
     }
 
-    fun key(data: Any, options: Options): String? {
+    fun key(data: Any, options: Options, type: Keyer.Type): String? {
         keyers.forEachIndices { keyer ->
-            keyer.key(data, options)?.let { return it }
+            keyer.key(data, options, type)?.let { return it }
         }
         return null
     }

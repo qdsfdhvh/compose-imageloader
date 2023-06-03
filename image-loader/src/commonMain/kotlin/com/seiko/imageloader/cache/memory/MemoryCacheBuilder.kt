@@ -19,7 +19,7 @@ class MemoryCacheBuilder internal constructor() {
         weakReferencesEnabled = enable
     }
 
-    fun build(): MemoryCache {
+    internal fun build(): MemoryCache {
         val weakMemoryCache = if (weakReferencesEnabled) {
             RealWeakMemoryCache()
         } else {

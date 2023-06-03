@@ -1,9 +1,8 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.Bitmap
-import com.seiko.imageloader.model.BlurEffects
 import com.seiko.imageloader.model.ImageResult
-import com.seiko.imageloader.model.KEY_BLUR_RADIUS
+import com.seiko.imageloader.model.blurEffects
 
 // blur only support Bitmap
 class BlurInterceptor : Interceptor {
@@ -11,8 +10,7 @@ class BlurInterceptor : Interceptor {
         val request = chain.request
         val result = chain.proceed(request)
         if (result is ImageResult.Bitmap) {
-            val blurEffects = request.extra[KEY_BLUR_RADIUS] as? BlurEffects
-                ?: return result
+            val blurEffects = request.blurEffects ?: return result
             return result.copy(bitmap = blur(result.bitmap, blurEffects.radius))
         }
         return result

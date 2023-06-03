@@ -6,13 +6,13 @@ import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
-import androidx.core.graphics.decodeBitmap
 import androidx.core.graphics.decodeDrawable
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.ScaleDrawable
@@ -45,35 +45,22 @@ class ImageDecoderDecoder private constructor(
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
-        var imageDecoder: ImageDecoder? = null
         val decoder = source.toImageDecoderSource()
-        return if (!options.playAnimate) {
-            val bitmap = try {
-                decoder.decodeBitmap { _, _ ->
-                    imageDecoder = this
-                }
-            } finally {
-                imageDecoder?.close()
-            }
-            DecodeResult.Bitmap(
-                bitmap = bitmap,
-            )
-        } else {
-            val drawable = try {
-                decoder.decodeDrawable { _, _ ->
-                    // Capture the image decoder to manually close it later.
-                    imageDecoder = this
+        var imageDecoder: ImageDecoder? = null
+        val drawable = try {
+            decoder.decodeDrawable { _, _ ->
+                // Capture the image decoder to manually close it later.
+                imageDecoder = this
 
-                    // Configure any other attributes.
-                    configureImageDecoderProperties()
-                }
-            } finally {
-                imageDecoder?.close()
+                // Configure any other attributes.
+                configureImageDecoderProperties()
             }
-            DecodeResult.Image(
-                image = wrapDrawable(drawable).toImage(),
-            )
+        } finally {
+            imageDecoder?.close()
         }
+        return DecodeResult.Image(
+            image = wrapDrawable(drawable).toImage(),
+        )
     }
 
     private fun wrapBufferedSource(channel: BufferedSource): BufferedSource {
@@ -117,7 +104,7 @@ class ImageDecoderDecoder private constructor(
     }
 
     private fun ImageDecoder.configureImageDecoderProperties() {
-        val config = options.config.toBitmapConfig()
+        val config = options.imageConfig.toBitmapConfig()
         allocator = if (config.isHardware) {
             ImageDecoder.ALLOCATOR_HARDWARE
         } else {
@@ -157,14 +144,20 @@ class ImageDecoderDecoder private constructor(
         return ScaleDrawable(baseDrawable, options.scale)
     }
 
-    class Factory @JvmOverloads constructor(
-        private val context: Context,
+    class Factory(
+        private val context: Context? = null,
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!options.playAnimate) return null
             if (!isApplicable(source.source)) return null
-            return ImageDecoderDecoder(context, source, options, enforceMinimumFrameDelay)
+            return ImageDecoderDecoder(
+                context = context ?: options.androidContext,
+                source = source,
+                options = options,
+                enforceMinimumFrameDelay = enforceMinimumFrameDelay,
+            )
         }
 
         private fun isApplicable(source: BufferedSource): Boolean {
