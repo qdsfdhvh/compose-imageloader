@@ -1,38 +1,62 @@
 package com.seiko.imageloader.component.fetcher
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import com.seiko.imageloader.Image
+import com.seiko.imageloader.option.Options
 import dev.icerock.moko.resources.AssetResource
 import dev.icerock.moko.resources.ColorResource
 import dev.icerock.moko.resources.FileResource
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.getUIColor
-import okio.BufferedSource
+import kotlinx.cinterop.DoubleVarOf
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import kotlinx.cinterop.value
+import platform.CoreGraphics.CGFloat
 import platform.CoreGraphics.CGImageRef
 import platform.UIKit.UIImage
 
-internal actual fun AssetResource.toSource(): BufferedSource {
-    TODO("Not yet implemented")
+internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
+    return null
 }
 
-internal actual fun ColorResource.toColor(): Color {
-    val color = getUIColor().CIColor
-    return Color(
-        red = color.red.toFloat(),
-        blue = color.blue.toFloat(),
-        green = color.green.toFloat(),
-        alpha = color.alpha.toFloat(),
+internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
+    val uiColor = getUIColor()
+    val color = memScoped {
+        val red: DoubleVarOf<CGFloat> = alloc()
+        val green: DoubleVarOf<CGFloat> = alloc()
+        val blue: DoubleVarOf<CGFloat> = alloc()
+        val alpha: DoubleVarOf<CGFloat> = alloc()
+        uiColor.getRed(
+            red = red.ptr,
+            green = green.ptr,
+            blue = blue.ptr,
+            alpha = alpha.ptr,
+        )
+        Color(
+            red = red.value.toFloat(),
+            green = green.value.toFloat(),
+            blue = blue.value.toFloat(),
+            alpha = alpha.value.toFloat(),
+        )
+    }
+    return FetchResult.Painter(
+        painter = ColorPainter(color),
     )
 }
 
-internal actual fun FileResource.toSource(): BufferedSource {
-    TODO("Not yet implemented")
+internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
+    return null
 }
 
-internal actual fun ImageResource.toImage(): Image {
+internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
     val uiImage: UIImage = this.toUIImage()
         ?: throw IllegalArgumentException("can't read UIImage of $this")
     val cgImage: CGImageRef = uiImage.CGImage()
         ?: throw IllegalArgumentException("can't read CGImage of $this")
-    return cgImage.toSkiaImage()
+    return FetchResult.Image(
+        image = cgImage.toSkiaImage(),
+    )
 }

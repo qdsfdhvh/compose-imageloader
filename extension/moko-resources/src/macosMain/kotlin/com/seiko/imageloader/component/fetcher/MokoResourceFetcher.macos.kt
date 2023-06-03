@@ -1,43 +1,50 @@
 package com.seiko.imageloader.component.fetcher
 
 import androidx.compose.ui.graphics.Color
-import com.seiko.imageloader.Image
+import androidx.compose.ui.graphics.painter.ColorPainter
+import com.seiko.imageloader.option.Options
 import dev.icerock.moko.resources.AssetResource
 import dev.icerock.moko.resources.ColorResource
 import dev.icerock.moko.resources.FileResource
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.getNSColor
-import okio.BufferedSource
+import platform.AppKit.NSColorSpace.Companion.deviceRGBColorSpace
 import platform.AppKit.NSImage
 import platform.CoreGraphics.CGImageRef
-import platform.CoreImage.CIColor
 
-
-internal actual fun AssetResource.toSource(): BufferedSource {
-    TODO("Not yet implemented")
+internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
+    return null
 }
 
-internal actual fun ColorResource.toColor(): Color {
-    val color = CIColor(getNSColor().CGColor)
-    return Color(
-        red = color.red.toFloat(),
-        blue = color.blue.toFloat(),
-        green = color.green.toFloat(),
-        alpha = color.alpha.toFloat(),
+internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
+    val nsColor = getNSColor()
+    val deviceColor = nsColor.colorUsingColorSpace(deviceRGBColorSpace)
+        ?: error("can't convert $nsColor to deviceRGBColorSpace")
+    return FetchResult.Painter(
+        painter = ColorPainter(
+            Color(
+                red = deviceColor.redComponent.toFloat(),
+                green = deviceColor.greenComponent.toFloat(),
+                blue = deviceColor.blueComponent.toFloat(),
+                alpha = deviceColor.alphaComponent.toFloat(),
+            ),
+        ),
     )
 }
 
-internal actual fun FileResource.toSource(): BufferedSource {
-    TODO("Not yet implemented")
+internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
+    return null
 }
 
-internal actual fun ImageResource.toImage(): Image {
+internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
     val nsImage: NSImage = this.toNSImage()
         ?: throw IllegalArgumentException("can't read NSImage of $this")
     val cgImage: CGImageRef = nsImage.CGImageForProposedRect(
         proposedDestRect = null,
         context = null,
-        hints = null
+        hints = null,
     ) ?: throw IllegalArgumentException("can't read CGImage of $this")
-    return cgImage.toSkiaImage()
+    return FetchResult.Image(
+        image = cgImage.toSkiaImage(),
+    )
 }

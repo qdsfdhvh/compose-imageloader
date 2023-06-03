@@ -50,7 +50,7 @@ internal fun CGImageRef.toSkiaImage(): Image {
         x = 0.0,
         y = 0.0,
         width = width.toDouble(),
-        height = height.toDouble()
+        height = height.toDouble(),
     )
 
     val ctx: CGContextRef = CGBitmapContextCreate(
@@ -60,7 +60,7 @@ internal fun CGImageRef.toSkiaImage(): Image {
         bitsPerComponent = bitsPerComponent,
         bytesPerRow = bytesPerRow,
         space = space,
-        bitmapInfo = bitmapInfo
+        bitmapInfo = bitmapInfo,
     ) ?: throw IllegalArgumentException("can't create bitmap context for $cgImage")
 
     CGContextClearRect(c = ctx, rect = rect)
@@ -77,9 +77,9 @@ internal fun CGImageRef.toSkiaImage(): Image {
             width = width.toInt(),
             height = height.toInt(),
             colorType = ColorType.RGBA_8888,
-            alphaType = ColorAlphaType.PREMUL
+            alphaType = ColorAlphaType.PREMUL,
         ),
         bytes = bytes,
-        rowBytes = bytesPerRow.toInt()
+        rowBytes = bytesPerRow.toInt(),
     )
 }

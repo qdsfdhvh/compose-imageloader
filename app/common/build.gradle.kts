@@ -1,8 +1,6 @@
 plugins {
     id("project-kmp")
     kotlin("plugin.serialization")
-    // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
-    // id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
     alias(libs.plugins.moko.resources)
 }
 
@@ -53,9 +51,6 @@ android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
 }
 
-// multiplatformResources {
-//     multiplatformResourcesPackage = "com.seiko.imageloader.demo"
-// }
-
-// skip task because it's failed on gradle 7 and we not use results of this processing
-// tasks.getByName("iosArm64ProcessResources").enabled = false
+multiplatformResources {
+    multiplatformResourcesPackage = "com.seiko.imageloader.demo"
+}
