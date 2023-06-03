@@ -61,9 +61,10 @@ fun BackScene(
 fun ImageItem(
     url: String,
     blurRadius: Int = 0,
+    playAnime: Boolean = true,
 ) {
     Box(Modifier.aspectRatio(1f), Alignment.Center) {
-        val request = remember(url, blurRadius) {
+        val request = remember(url, blurRadius, playAnime) {
             ImageRequest {
                 data(url)
                 addInterceptor(NullDataInterceptor)
@@ -74,8 +75,7 @@ fun ImageItem(
                 //     add(customKtorUrlFetcher)
                 // }
                 options {
-                    playAnimate = true
-                    repeatCount = 0
+                    playAnimate = playAnime
                 }
             }
         }
