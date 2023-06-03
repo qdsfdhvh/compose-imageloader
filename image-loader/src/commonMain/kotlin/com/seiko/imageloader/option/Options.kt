@@ -11,6 +11,9 @@ data class Options(
     var sizeResolver: SizeResolver = SizeResolver.Unspecified,
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
+    /**
+     * play gif or not
+     */
     var playAnimate: Boolean = true,
 ) {
     var repeatCount: Int = REPEAT_INFINITE

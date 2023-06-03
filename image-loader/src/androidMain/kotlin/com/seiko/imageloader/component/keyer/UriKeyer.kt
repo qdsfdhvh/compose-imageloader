@@ -7,7 +7,7 @@ import com.eygraber.uri.Uri
 import com.seiko.imageloader.option.Options
 
 class UriKeyer(private val context: Context) : Keyer {
-    override fun key(data: Any, options: Options): String? {
+    override fun key(data: Any, options: Options, type: Keyer.Type): String? {
         if (data !is Uri) return null
 
         if (data.scheme != SCHEME_ANDROID_RESOURCE) return data.toString()

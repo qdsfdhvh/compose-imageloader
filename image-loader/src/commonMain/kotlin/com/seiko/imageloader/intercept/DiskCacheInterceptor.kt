@@ -1,6 +1,7 @@
 package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.cache.disk.DiskCache
+import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.model.DataSource
 import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
@@ -24,7 +25,7 @@ class DiskCacheInterceptor(
         val options = chain.options
         val logger = chain.config.logger
 
-        val cacheKey = chain.components.key(request.data, options)
+        val cacheKey = chain.components.key(request.data, options, Keyer.Type.Disk)
             ?: return chain.proceed(request)
 
         var snapshot = runCatching {
