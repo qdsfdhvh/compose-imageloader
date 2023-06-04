@@ -8,12 +8,15 @@ import dev.icerock.moko.resources.ColorResource
 import dev.icerock.moko.resources.FileResource
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.getNSColor
+import okio.FileSystem
+import okio.Path.Companion.toPath
+import okio.buffer
 import platform.AppKit.NSColorSpace.Companion.deviceRGBColorSpace
 import platform.AppKit.NSImage
 import platform.CoreGraphics.CGImageRef
 
 internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
-    return null
+    return (this as FileResource).toFetchResult(options)
 }
 
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
@@ -33,7 +36,14 @@ internal actual suspend fun ColorResource.toFetchResult(options: Options): Fetch
 }
 
 internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
-    return null
+    val path = bundle.pathForResource(
+        name = fileName,
+        ofType = extension,
+        inDirectory = "files",
+    )!!.toPath()
+    return FetchResult.Source(
+        source = FileSystem.SYSTEM.source(path).buffer(),
+    )
 }
 
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {

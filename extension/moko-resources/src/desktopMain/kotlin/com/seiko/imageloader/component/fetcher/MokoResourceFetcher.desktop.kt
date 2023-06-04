@@ -9,15 +9,10 @@ import dev.icerock.moko.resources.FileResource
 import dev.icerock.moko.resources.ImageResource
 import okio.buffer
 import okio.source
-import org.jetbrains.skiko.toImage
 import java.io.FileNotFoundException
 
 internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
-    val stream = resourcesClassLoader.getResourceAsStream(filePath)
-        ?: throw FileNotFoundException("Couldn't open resource as stream at: $filePath")
-    return FetchResult.Source(
-        source = stream.source().buffer(),
-    )
+    return (this as FileResource).toFetchResult(options)
 }
 
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {

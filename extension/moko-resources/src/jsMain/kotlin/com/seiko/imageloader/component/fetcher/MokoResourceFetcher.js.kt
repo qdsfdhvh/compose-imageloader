@@ -10,10 +10,13 @@ import dev.icerock.moko.resources.ImageResource
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import okio.Buffer
+import okio.BufferedSource
 import org.khronos.webgl.Int8Array
 
 internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
-    return null
+    return FetchResult.Source(
+        source = fetchToSource(originalPath),
+    )
 }
 
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
@@ -23,19 +26,25 @@ internal actual suspend fun ColorResource.toFetchResult(options: Options): Fetch
 }
 
 internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
-    return null
+    return FetchResult.Source(
+        source = fetchToSource(fileUrl),
+    )
 }
 
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
+    return FetchResult.Source(
+        source = fetchToSource(fileUrl),
+    )
+}
+
+private suspend fun fetchToSource(fileUrl: String): BufferedSource {
     val response = window.fetch(fileUrl).await()
     if (response.ok.not()) {
         throw RuntimeException("can't load data from $fileUrl")
     }
     val buffer = response.arrayBuffer().await()
     val bytes = Int8Array(buffer).unsafeCast<ByteArray>()
-    return FetchResult.Source(
-        source = Buffer().apply {
-            write(bytes)
-        },
-    )
+    return Buffer().apply {
+        write(bytes)
+    }
 }

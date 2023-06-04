@@ -2,7 +2,6 @@ package com.seiko.imageloader.component.fetcher
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import com.seiko.imageloader.Image
 import com.seiko.imageloader.option.Options
 import dev.icerock.moko.resources.AssetResource
 import dev.icerock.moko.resources.ColorResource
@@ -14,12 +13,15 @@ import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.value
+import okio.FileSystem
+import okio.Path.Companion.toPath
+import okio.buffer
 import platform.CoreGraphics.CGFloat
 import platform.CoreGraphics.CGImageRef
 import platform.UIKit.UIImage
 
 internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
-    return null
+    return (this as FileResource).toFetchResult(options)
 }
 
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
@@ -48,7 +50,14 @@ internal actual suspend fun ColorResource.toFetchResult(options: Options): Fetch
 }
 
 internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
-    return null
+    val path = bundle.pathForResource(
+        name = fileName,
+        ofType = extension,
+        inDirectory = "files",
+    )!!.toPath()
+    return FetchResult.Source(
+        source = FileSystem.SYSTEM.source(path).buffer(),
+    )
 }
 
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
