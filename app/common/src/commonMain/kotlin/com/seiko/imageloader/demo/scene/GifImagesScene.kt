@@ -43,7 +43,7 @@ fun GifImagesScene(
         ) {
             items(images) { image ->
                 ImageItem(
-                    url = image.imageUrl,
+                    data = image.imageUrl,
                     playAnime = playAnime,
                 )
             }

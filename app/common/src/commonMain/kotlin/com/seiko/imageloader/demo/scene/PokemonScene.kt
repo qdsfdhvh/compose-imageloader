@@ -23,7 +23,7 @@ fun PokemonScene(
         ) {
             items(200) {
                 ImageItem(
-                    url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${it + 1}.png",
+                    data = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${it + 1}.png",
                 )
             }
         }

@@ -16,7 +16,8 @@ kotlin {
                 api(compose.materialIconsExtended)
 
                 api(projects.imageLoader)
-                api(projects.extension.blur)
+                implementation(projects.extension.blur)
+                implementation(projects.extension.mokoResources)
 
                 implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)

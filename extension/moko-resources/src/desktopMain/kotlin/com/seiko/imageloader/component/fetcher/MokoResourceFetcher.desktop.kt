@@ -42,7 +42,9 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
 }
 
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.Image(
-        image = image.toImage(),
+    val stream = resourcesClassLoader.getResourceAsStream(filePath)
+        ?: throw FileNotFoundException("Couldn't open resource as stream at: $filePath")
+    return FetchResult.Source(
+        source = stream.source().buffer(),
     )
 }
