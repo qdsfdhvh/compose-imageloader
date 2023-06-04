@@ -55,3 +55,8 @@ android {
 multiplatformResources {
     multiplatformResourcesPackage = "com.seiko.imageloader.demo"
 }
+
+// workaround
+tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRiosSimulatorArm64Main" })
+}
