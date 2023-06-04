@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("org.jetbrains.compose")
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
