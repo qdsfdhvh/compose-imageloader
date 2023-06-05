@@ -63,3 +63,9 @@ tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach 
 tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
     dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
 }
+tasks.matching { it.name == "macosArm64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
+tasks.matching { it.name == "macosX64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
