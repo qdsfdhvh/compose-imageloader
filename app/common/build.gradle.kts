@@ -58,5 +58,5 @@ multiplatformResources {
 
 // workaround
 tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRiosSimulatorArm64Main" })
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
 }
