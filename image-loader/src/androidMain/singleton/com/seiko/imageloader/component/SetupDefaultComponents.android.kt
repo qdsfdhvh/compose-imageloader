@@ -9,7 +9,8 @@ import io.ktor.client.HttpClient
 fun ComponentRegistryBuilder.setupDefaultComponents(
     context: Context? = null,
     density: Density? = context?.let { Density(it) },
-    maxImageSize: Int = BitmapFactoryDecoder.DEFAULT_MAX_PARALLELISM,
+    maxImageSize: Int = BitmapFactoryDecoder.DEFAULT_MAX_IMAGE_SIZE,
+    maxParallelism: Int = BitmapFactoryDecoder.DEFAULT_MAX_PARALLELISM,
     httpClient: () -> HttpClient = { HttpClient(httpEngine) },
 ) {
     setupKtorComponents(httpClient)
@@ -20,5 +21,6 @@ fun ComponentRegistryBuilder.setupDefaultComponents(
         context = context,
         density = density,
         maxImageSize = maxImageSize,
+        maxParallelism = maxParallelism,
     )
 }
