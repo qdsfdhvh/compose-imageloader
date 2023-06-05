@@ -39,6 +39,6 @@ fun ComponentRegistryBuilder.setupAndroidComponents(
             context = context,
             maxImageSize = maxImageSize,
             maxParallelism = maxParallelism,
-        )
+        ),
     )
 }
