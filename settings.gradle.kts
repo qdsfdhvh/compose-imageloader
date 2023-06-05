@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
+        mavenCentral()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
@@ -10,10 +11,10 @@ pluginManagement {
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    // error with js
     // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
+        mavenCentral()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
