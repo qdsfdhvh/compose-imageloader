@@ -60,3 +60,6 @@ multiplatformResources {
 tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
     dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
 }
+tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
