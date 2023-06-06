@@ -17,9 +17,9 @@ interface Interceptor {
         val request: ImageRequest
         val options: Options
             get() =
-                config.defaultOptions.also {
+                config.defaultOptions.newBuilder {
                     request.optionsBuilders.forEach { builder ->
-                        it.run(builder)
+                        builder.invoke(this)
                     }
                 }
 

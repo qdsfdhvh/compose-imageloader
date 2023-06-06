@@ -28,7 +28,7 @@ class ComponentRegistryBuilder(
         decoderFactories.add(decoderFactory)
     }
 
-    fun build(): ComponentRegistry = ComponentRegistry(
+    internal fun build(): ComponentRegistry = ComponentRegistry(
         mappers = mappers,
         keyers = keyers,
         fetcherFactories = fetcherFactories,

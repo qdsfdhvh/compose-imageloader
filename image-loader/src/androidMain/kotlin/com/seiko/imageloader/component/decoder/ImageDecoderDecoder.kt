@@ -7,12 +7,12 @@ import android.graphics.drawable.Drawable
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.decodeDrawable
-import com.seiko.imageloader.cache.disk.systemFileSystem
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.ScaleDrawable
@@ -22,6 +22,7 @@ import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
 import okio.BufferedSource
+import okio.FileSystem
 import okio.Path.Companion.toOkioPath
 import okio.buffer
 import java.io.File
@@ -44,9 +45,10 @@ class ImageDecoderDecoder private constructor(
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
+        val decoder = source.toImageDecoderSource()
         var imageDecoder: ImageDecoder? = null
         val drawable = try {
-            source.toImageDecoderSource().decodeDrawable { _, _ ->
+            decoder.decodeDrawable { _, _ ->
                 // Capture the image decoder to manually close it later.
                 imageDecoder = this
 
@@ -93,7 +95,7 @@ class ImageDecoderDecoder private constructor(
             // https://issuetracker.google.com/issues/139371066
             else -> {
                 val temp = File.createTempFile("tmp", null)
-                systemFileSystem.write(temp.toOkioPath()) {
+                FileSystem.SYSTEM.write(temp.toOkioPath()) {
                     writeAll(source)
                 }
                 ImageDecoder.createSource(temp)
@@ -102,7 +104,7 @@ class ImageDecoderDecoder private constructor(
     }
 
     private fun ImageDecoder.configureImageDecoderProperties() {
-        val config = options.config.toBitmapConfig()
+        val config = options.imageConfig.toBitmapConfig()
         allocator = if (config.isHardware) {
             ImageDecoder.ALLOCATOR_HARDWARE
         } else {
@@ -139,17 +141,23 @@ class ImageDecoderDecoder private constructor(
         // }
 
         // Wrap AnimatedImageDrawable in a ScaleDrawable so it always scales to fill its bounds.
-        return ScaleDrawable(baseDrawable, options.scale, options.playAnimate)
+        return ScaleDrawable(baseDrawable, options.scale)
     }
 
-    class Factory @JvmOverloads constructor(
-        private val context: Context,
+    class Factory(
+        private val context: Context? = null,
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!options.playAnimate) return null
             if (!isApplicable(source.source)) return null
-            return ImageDecoderDecoder(context, source, options, enforceMinimumFrameDelay)
+            return ImageDecoderDecoder(
+                context = context ?: options.androidContext,
+                source = source,
+                options = options,
+                enforceMinimumFrameDelay = enforceMinimumFrameDelay,
+            )
         }
 
         private fun isApplicable(source: BufferedSource): Boolean {

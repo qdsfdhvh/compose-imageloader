@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
+        mavenCentral()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
@@ -11,10 +12,10 @@ pluginManagement {
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    // error with js
     // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
+        mavenCentral()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
@@ -23,7 +24,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.13.2"
+    id("com.gradle.enterprise") version "3.13.3"
 }
 
 gradleEnterprise {
@@ -40,6 +41,7 @@ include(
     ":image-loader",
     ":extension:blur",
     ":extension:imageio",
+    ":extension:moko-resources",
     ":app:common",
     ":app:android",
     ":app:desktop",
@@ -47,6 +49,7 @@ include(
     ":app:macos",
     ":app:wasm",
     ":app:web",
+    ":app:intellij-plugin",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

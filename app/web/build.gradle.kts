@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 implementation(projects.app.common)
                 implementation(compose.runtime)
+                implementation(libs.okio.fakefilesystem)
                 implementation(npm("path-browserify", "^1.0.1"))
                 implementation(npm("os-browserify", "^0.3.0"))
             }

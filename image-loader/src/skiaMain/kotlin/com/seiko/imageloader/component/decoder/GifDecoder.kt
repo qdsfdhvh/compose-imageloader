@@ -22,7 +22,6 @@ class GifDecoder private constructor(
             painter = GifPainter(
                 codec = codec,
                 imageScope = imageScope,
-                playAnimate = options.playAnimate,
                 repeatCount = options.repeatCount,
             ),
         )
@@ -32,6 +31,7 @@ class GifDecoder private constructor(
         private val imageScope: CoroutineScope,
     ) : Decoder.Factory {
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!options.playAnimate) return null
             if (!isGif(source.source)) return null
             return GifDecoder(source.source, imageScope, options)
         }

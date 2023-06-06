@@ -4,6 +4,8 @@ import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
+import com.seiko.imageloader.util.defaultFileSystem
+import okio.FileSystem
 
 class InterceptorsBuilder {
 
@@ -29,15 +31,20 @@ class InterceptorsBuilder {
         memoryCache = block
     }
 
-    fun diskCacheConfig(block: DiskCacheBuilder.() -> Unit) {
-        diskCache = { DiskCache(block) }
+    fun diskCacheConfig(
+        fileSystem: FileSystem? = defaultFileSystem,
+        block: DiskCacheBuilder.() -> Unit,
+    ) {
+        if (fileSystem != null) {
+            diskCache = { DiskCache(fileSystem, block) }
+        }
     }
 
     fun diskCache(block: () -> DiskCache) {
         diskCache = block
     }
 
-    fun build(): List<Interceptor> {
+    internal fun build(): List<Interceptor> {
         return interceptors + if (useDefaultInterceptors) {
             listOfNotNull(
                 MappedInterceptor(),

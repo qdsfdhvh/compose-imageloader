@@ -33,7 +33,6 @@ internal class MovieDrawable @JvmOverloads constructor(
     private val movie: Movie,
     val config: Bitmap.Config = Bitmap.Config.ARGB_8888,
     val scale: Scale = Scale.FIT,
-    private val playAnimate: Boolean = false,
 ) : Drawable(), Animatable2Compat {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
@@ -250,8 +249,6 @@ internal class MovieDrawable @JvmOverloads constructor(
     override fun isRunning() = isRunning
 
     override fun start() {
-        if (!playAnimate) return
-
         if (isRunning) return
         isRunning = true
 
@@ -263,8 +260,6 @@ internal class MovieDrawable @JvmOverloads constructor(
     }
 
     override fun stop() {
-        if (!playAnimate) return
-
         if (!isRunning) return
         isRunning = false
 

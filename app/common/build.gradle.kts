@@ -1,8 +1,7 @@
 plugins {
     id("project-kmp")
     kotlin("plugin.serialization")
-    // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
-    // id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -17,9 +16,10 @@ kotlin {
                 api(compose.materialIconsExtended)
 
                 api(projects.imageLoader)
-                api(projects.extension.blur)
+                implementation(projects.extension.blur)
+                implementation(projects.extension.mokoResources)
 
-                // implementation(libs.moko.resources)
+                implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.kermit)
@@ -52,9 +52,20 @@ android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
 }
 
-// multiplatformResources {
-//     multiplatformResourcesPackage = "com.seiko.imageloader.demo"
-// }
+multiplatformResources {
+    multiplatformResourcesPackage = "com.seiko.imageloader.demo"
+}
 
-// skip task because it's failed on gradle 7 and we not use results of this processing
-// tasks.getByName("iosArm64ProcessResources").enabled = false
+// workaround
+tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
+tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
+tasks.matching { it.name == "macosArm64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
+tasks.matching { it.name == "macosX64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}

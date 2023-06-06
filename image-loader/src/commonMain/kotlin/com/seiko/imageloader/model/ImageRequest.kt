@@ -1,21 +1,25 @@
 package com.seiko.imageloader.model
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
-import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.OptionsBuilder
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
 
 @Immutable
 class ImageRequest internal constructor(
     val data: Any,
-    val optionsBuilders: List<Options.() -> Unit>,
+    val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     val extra: ExtraData,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
     internal val eventListener: List<ImageRequestEventListener>?,
+    val placeholderPainter: (@Composable () -> Painter)?,
+    val errorPainter: (@Composable () -> Painter)?,
 ) {
     internal fun call(event: ImageRequestEvent) {
         eventListener?.forEach { it.invoke(event) }
@@ -29,10 +33,12 @@ class ImageRequestBuilder {
 
     private var data: Any?
     private var extraData: ExtraData?
-    private val optionsBuilders: MutableList<Options.() -> Unit>
+    private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit>
     private var componentBuilder: ComponentRegistryBuilder?
     private var interceptors: MutableList<Interceptor>?
     private var eventListener: MutableList<ImageRequestEventListener>?
+    private var placeholderPainter: (@Composable () -> Painter)?
+    private var errorPainter: (@Composable () -> Painter)?
 
     internal constructor() {
         data = null
@@ -41,6 +47,8 @@ class ImageRequestBuilder {
         componentBuilder = null
         interceptors = null
         eventListener = null
+        placeholderPainter = null
+        errorPainter = null
     }
 
     internal constructor(request: ImageRequest) {
@@ -50,6 +58,8 @@ class ImageRequestBuilder {
         componentBuilder = request.components?.newBuilder()
         interceptors = request.interceptors?.toMutableList()
         eventListener = request.eventListener?.toMutableList()
+        placeholderPainter = request.placeholderPainter
+        errorPainter = request.errorPainter
     }
 
     fun data(data: Any?) {
@@ -68,7 +78,7 @@ class ImageRequestBuilder {
         }
     }
 
-    fun options(block: Options.() -> Unit) {
+    fun options(block: OptionsBuilder.() -> Unit) {
         optionsBuilders.add(block)
     }
 
@@ -92,13 +102,23 @@ class ImageRequestBuilder {
             ?: extraData(builder)
     }
 
-    fun build() = ImageRequest(
+    fun placeholderPainter(loader: @Composable () -> Painter) {
+        placeholderPainter = loader
+    }
+
+    fun errorPainter(loader: @Composable () -> Painter) {
+        errorPainter = loader
+    }
+
+    internal fun build() = ImageRequest(
         data = data ?: NullRequestData,
         optionsBuilders = optionsBuilders,
         components = componentBuilder?.build(),
         interceptors = interceptors,
         extra = extraData ?: EmptyExtraData,
         eventListener = eventListener,
+        placeholderPainter = placeholderPainter,
+        errorPainter = errorPainter,
     )
 }
 

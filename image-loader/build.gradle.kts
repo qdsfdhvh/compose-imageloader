@@ -51,7 +51,6 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
-                implementation(libs.okio.fakefilesystem)
             }
         }
         val noJsMain by creating {
