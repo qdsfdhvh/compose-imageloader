@@ -1,6 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-// import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 class ProjectKmpPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -42,10 +42,10 @@ class ProjectKmpPlugin : Plugin<Project> {
                         }
                     }
                 }
-                // @OptIn(ExperimentalWasmDsl::class)
-                // wasm {
-                //     d8()
-                // }
+                @OptIn(ExperimentalWasmDsl::class)
+                wasm {
+                    d8()
+                }
 
                 @Suppress("UNUSED_VARIABLE")
                 sourceSets.apply {
@@ -99,12 +99,12 @@ class ProjectKmpPlugin : Plugin<Project> {
                             implementation(kotlin("stdlib-js"))
                         }
                     }
-                    // val wasmMain = getByName("wasmMain").apply {
-                    //     dependsOn(jsWasmMain)
-                    //     dependencies {
-                    //         implementation(kotlin("stdlib-wasm"))
-                    //     }
-                    // }
+                    val wasmMain = getByName("wasmMain").apply {
+                        dependsOn(jsWasmMain)
+                        dependencies {
+                            implementation(kotlin("stdlib-wasm"))
+                        }
+                    }
                 }
             }
             android {
