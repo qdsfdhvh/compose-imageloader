@@ -36,22 +36,23 @@ class GifDecoder private constructor(
         } else {
             bufferSource
         }
-        val movie: Movie? = bufferedSource.use { Movie.decodeStream(it.inputStream()) }
 
+        val movie: Movie? = bufferedSource.use { Movie.decodeStream(it.inputStream()) }
         check(movie != null && movie.width() > 0 && movie.height() > 0) { "Failed to decode GIF." }
 
-        val config = options.config.toBitmapConfig()
+        val config = options.imageConfig.toBitmapConfig()
+        val movieConfig = when {
+            // movie.isOpaque && options.allowRgb565 -> Bitmap.Config.RGB_565
+            config.isHardware -> Bitmap.Config.ARGB_8888
+            else -> config
+        }
+
         val drawable = MovieDrawable(
             movie = movie,
-            config = when {
-                // movie.isOpaque && options.allowRgb565 -> Bitmap.Config.RGB_565
-                config.isHardware -> Bitmap.Config.ARGB_8888
-                else -> config
-            },
+            config = movieConfig,
             scale = options.scale,
         )
-
-        // drawable.setRepeatCount(options.parameters.repeatCount() ?: MovieDrawable.REPEAT_INFINITE)
+        drawable.setRepeatCount(options.repeatCount)
 
         // Set the start and end animation callbacks if any one is supplied through the request.
         // val onStart = options.parameters.animationStartCallback()
@@ -72,6 +73,7 @@ class GifDecoder private constructor(
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+            if (!options.playAnimate) return null
             if (!isGif(source.source)) return null
             return GifDecoder(source, options, enforceMinimumFrameDelay)
         }

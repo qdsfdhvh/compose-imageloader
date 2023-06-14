@@ -2,15 +2,15 @@ package com.seiko.imageloader.component
 
 import android.content.Context
 import androidx.compose.ui.unit.Density
+import com.seiko.imageloader.component.decoder.BitmapFactoryDecoder
 import com.seiko.imageloader.util.httpEngine
 import io.ktor.client.HttpClient
 
 fun ComponentRegistryBuilder.setupDefaultComponents(
-    context: Context,
-    density: Density = Density(context),
-    maxImageSize: Int = 4096,
-    useViewBoundsAsIntrinsicSizeWithSvg: Boolean = true,
-    useSvgSizeFirst: Boolean = false,
+    context: Context? = null,
+    density: Density? = context?.let { Density(it) },
+    maxImageSize: Int = BitmapFactoryDecoder.DEFAULT_MAX_IMAGE_SIZE,
+    maxParallelism: Int = BitmapFactoryDecoder.DEFAULT_MAX_PARALLELISM,
     httpClient: () -> HttpClient = { HttpClient(httpEngine) },
 ) {
     setupKtorComponents(httpClient)
@@ -20,8 +20,7 @@ fun ComponentRegistryBuilder.setupDefaultComponents(
     setupAndroidComponents(
         context = context,
         density = density,
-        useViewBoundsAsIntrinsicSizeWithSvg = useViewBoundsAsIntrinsicSizeWithSvg,
         maxImageSize = maxImageSize,
-        useSvgSizeFirst = useSvgSizeFirst,
+        maxParallelism = maxParallelism,
     )
 }

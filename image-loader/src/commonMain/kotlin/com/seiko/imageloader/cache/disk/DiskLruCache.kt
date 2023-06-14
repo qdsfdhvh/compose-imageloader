@@ -23,7 +23,6 @@ import okio.Path
 import okio.Sink
 import okio.blackholeSink
 import okio.buffer
-import kotlin.jvm.Synchronized
 
 /**
  * A cache that uses a bounded amount of space on a filesystem. Each cache entry has a string key
@@ -148,8 +147,7 @@ internal class DiskLruCache(
         }
     }
 
-    @Synchronized
-    fun initialize() {
+    fun initialize() = synchronized(syncObject) {
         if (initialized) return
 
         // If a temporary file exists, delete it.
@@ -305,8 +303,7 @@ internal class DiskLruCache(
     /**
      * Writes [lruEntries] to a new journal file. This replaces the current journal if it exists.
      */
-    @Synchronized
-    private fun writeJournal() {
+    private fun writeJournal() = synchronized(syncObject) {
         journalWriter?.close()
 
         fileSystem.write(journalFileTmp) {
@@ -350,8 +347,7 @@ internal class DiskLruCache(
      * Returns a snapshot of the entry named [key], or null if it doesn't exist or is not currently
      * readable. If a value is returned, it is moved to the head of the LRU queue.
      */
-    @Synchronized
-    operator fun get(key: String): Snapshot? {
+    operator fun get(key: String): Snapshot? = synchronized(syncObject) {
         checkNotClosed()
         validateKey(key)
         initialize()
@@ -374,8 +370,7 @@ internal class DiskLruCache(
     }
 
     /** Returns an editor for the entry named [key], or null if another edit is in progress. */
-    @Synchronized
-    fun edit(key: String): Editor? {
+    fun edit(key: String): Editor? = synchronized(syncObject) {
         checkNotClosed()
         validateKey(key)
         initialize()
@@ -426,14 +421,12 @@ internal class DiskLruCache(
      * Returns the number of bytes currently being used to store the values in this cache.
      * This may be greater than the max size if a background deletion is pending.
      */
-    @Synchronized
-    fun size(): Long {
+    fun size(): Long = synchronized(syncObject) {
         initialize()
         return size
     }
 
-    @Synchronized
-    private fun completeEdit(editor: Editor, success: Boolean) {
+    private fun completeEdit(editor: Editor, success: Boolean) = synchronized(syncObject) {
         val entry = editor.entry
         check(entry.currentEditor == editor)
 
@@ -509,8 +502,7 @@ internal class DiskLruCache(
      *
      * @return true if an entry was removed.
      */
-    @Synchronized
-    fun remove(key: String): Boolean {
+    fun remove(key: String): Boolean = synchronized(syncObject) {
         checkNotClosed()
         validateKey(key)
         initialize()
@@ -569,8 +561,7 @@ internal class DiskLruCache(
     }
 
     /** Closes this cache. Stored values will remain on the filesystem. */
-    @Synchronized
-    override fun close() {
+    override fun close() = synchronized(syncObject) {
         if (!initialized || closed) {
             closed = true
             return
@@ -591,8 +582,7 @@ internal class DiskLruCache(
         closed = true
     }
 
-    // @Synchronized
-    // override fun flush() {
+    // override fun flush() = synchronized(syncObject) {
     //     if (!initialized) return
     //
     //     checkNotClosed()
@@ -631,8 +621,7 @@ internal class DiskLruCache(
      * Deletes all stored values from the cache. In-flight edits will complete normally but their
      * values will not be stored.
      */
-    @Synchronized
-    fun evictAll() {
+    fun evictAll() = synchronized(syncObject) {
         initialize()
         // Copying for concurrent iteration.
         for (entry in lruEntries.values.toTypedArray()) {

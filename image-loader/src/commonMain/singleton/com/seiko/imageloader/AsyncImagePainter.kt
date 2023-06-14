@@ -21,17 +21,13 @@ import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Scale
-import com.seiko.imageloader.option.SizeResolver
 import com.seiko.imageloader.util.w
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withTimeoutOrNull
 
 @Composable
 fun rememberAsyncImagePainter(
@@ -78,6 +74,81 @@ fun rememberAsyncImagePainter(
     painter.contentScale = contentScale
     painter.filterQuality = filterQuality
     return painter
+}
+
+@Composable
+fun rememberImagePainter(
+    url: String,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+    placeholderPainter: (@Composable () -> Painter)? = null,
+    errorPainter: (@Composable () -> Painter)? = null,
+): Painter {
+    val request = remember(url) {
+        ImageRequest {
+            data(url)
+            if (placeholderPainter != null) {
+                placeholderPainter { placeholderPainter() }
+            }
+            if (errorPainter != null) {
+                errorPainter { errorPainter() }
+            }
+        }
+    }
+    return rememberImagePainter(
+        request = request,
+        imageLoader = imageLoader,
+        contentScale = contentScale,
+        filterQuality = filterQuality,
+    )
+}
+
+@Composable
+fun rememberImagePainter(
+    resId: Int,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+    placeholderPainter: (@Composable () -> Painter)? = null,
+    errorPainter: (@Composable () -> Painter)? = null,
+): Painter {
+    val request = remember(resId) {
+        ImageRequest {
+            data(resId)
+            if (placeholderPainter != null) {
+                placeholderPainter { placeholderPainter() }
+            }
+            if (errorPainter != null) {
+                errorPainter { errorPainter() }
+            }
+        }
+    }
+    return rememberImagePainter(
+        request = request,
+        imageLoader = imageLoader,
+        contentScale = contentScale,
+        filterQuality = filterQuality,
+    )
+}
+
+@Composable
+fun rememberImagePainter(
+    request: ImageRequest,
+    imageLoader: ImageLoader = LocalImageLoader.current,
+    contentScale: ContentScale = ContentScale.Fit,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+): Painter {
+    val painter = remember { AsyncImagePainter(request, imageLoader) }
+    painter.imageLoader = imageLoader
+    painter.request = request
+    painter.contentScale = contentScale
+    painter.filterQuality = filterQuality
+    return when (painter.requestState) {
+        is ImageRequestState.Loading -> request.placeholderPainter?.invoke() ?: painter
+        is ImageRequestState.Failure -> request.errorPainter?.invoke() ?: painter
+        else -> painter
+    }
 }
 
 @Stable
@@ -165,13 +236,6 @@ class AsyncImagePainter(
                 if (scale == Scale.AUTO) {
                     scale = contentScale.toScale()
                 }
-                if (sizeResolver == SizeResolver.Unspecified) {
-                    sizeResolver = SizeResolver {
-                        withTimeoutOrNull(200) {
-                            drawSize.filterNot { it.isEmpty() }.firstOrNull()
-                        } ?: Size.Unspecified
-                    }
-                }
             }
             eventListener {
                 requestState = ImageRequestState.Loading(it)
@@ -214,9 +278,11 @@ class AsyncImagePainter(
     private fun updatePainter(painter: Painter) {
         val previous = this.painter
         this.painter = painter
-        if (rememberJob != null && previous != painter) {
+        if (previous != painter) {
             (previous as? RememberObserver)?.onForgotten()
-            (painter as? RememberObserver)?.onRemembered()
+            if (rememberJob != null) {
+                (painter as? RememberObserver)?.onRemembered()
+            }
         }
     }
 }

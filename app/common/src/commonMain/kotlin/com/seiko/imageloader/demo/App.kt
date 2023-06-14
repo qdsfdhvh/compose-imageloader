@@ -23,9 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.seiko.imageloader.demo.scene.BigImagesScene
 import com.seiko.imageloader.demo.scene.GifImagesScene
 import com.seiko.imageloader.demo.scene.NetworkImagesScene
+import com.seiko.imageloader.demo.scene.OtherImagesScene
 import com.seiko.imageloader.demo.scene.PokemonScene
 import com.seiko.imageloader.demo.scene.SvgImagesScene
 
@@ -45,7 +45,7 @@ fun App(modifier: Modifier = Modifier) {
                 Route.Network -> NetworkImagesScene(::onBack)
                 Route.Gif -> GifImagesScene(::onBack)
                 Route.Svg -> SvgImagesScene(::onBack)
-                Route.BigImage -> BigImagesScene(::onBack)
+                Route.Other -> OtherImagesScene(::onBack)
                 Route.Pokemon -> PokemonScene(::onBack)
             }
         }
@@ -78,7 +78,7 @@ private fun HomeScene(
                     Route.Network,
                     Route.Gif,
                     Route.Svg,
-                    Route.BigImage,
+                    Route.Other,
                     Route.Pokemon,
                 )
             }
@@ -100,7 +100,7 @@ private val Route.name: String
         Route.Network -> "Network"
         Route.Gif -> "Gif"
         Route.Svg -> "Svg"
-        Route.BigImage -> "BigImage"
+        Route.Other -> "Other"
         Route.Pokemon -> "Pokemon"
     }
 
@@ -109,6 +109,6 @@ private sealed interface Route {
     object Network : Route
     object Gif : Route
     object Svg : Route
-    object BigImage : Route
+    object Other : Route
     object Pokemon : Route
 }

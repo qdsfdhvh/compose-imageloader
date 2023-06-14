@@ -1,22 +1,30 @@
 package com.seiko.imageloader.component.decoder
 
 import androidx.compose.ui.unit.Density
+import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.SVGPainter
 import com.seiko.imageloader.util.isSvg
 import okio.BufferedSource
+import okio.use
 import org.jetbrains.skia.Data
 import org.jetbrains.skia.svg.SVGDOM
 
 class SvgDecoder private constructor(
+    private val source: BufferedSource,
     private val density: Density,
-    private val channel: BufferedSource,
+    private val options: Options,
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
-        val data = Data.makeFromBytes(channel.readByteArray())
+        val data = source.use {
+            Data.makeFromBytes(it.readByteArray())
+        }
+        val requestSize = options.sizeResolver.run {
+            density.size()
+        }
         return DecodeResult.Painter(
-            painter = SVGPainter(SVGDOM(data), density),
+            painter = SVGPainter(SVGDOM(data), density, requestSize),
         )
     }
 
@@ -24,8 +32,20 @@ class SvgDecoder private constructor(
         private val density: Density,
     ) : Decoder.Factory {
         override suspend fun create(source: DecodeSource, options: Options): Decoder? {
-            if (!isSvg(source.source)) return null
-            return SvgDecoder(density, source.source)
+            if (!isApplicable(source)) return null
+            return SvgDecoder(
+                source = source.source,
+                density = density,
+                options = options,
+            )
         }
+
+        private fun isApplicable(source: DecodeSource): Boolean {
+            return source.extra.mimeType == MIME_TYPE_SVG || isSvg(source.source)
+        }
+    }
+
+    companion object {
+        private const val MIME_TYPE_SVG = "image/svg+xml"
     }
 }

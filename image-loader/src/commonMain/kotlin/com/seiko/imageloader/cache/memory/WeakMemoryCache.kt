@@ -3,10 +3,11 @@ package com.seiko.imageloader.cache.memory
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.identityHashCode
+import com.seiko.imageloader.util.LockObject
 import com.seiko.imageloader.util.WeakReference
 import com.seiko.imageloader.util.firstNotNullOfOrNullIndices
 import com.seiko.imageloader.util.removeIfIndices
-import kotlin.jvm.Synchronized
+import com.seiko.imageloader.util.synchronized
 
 /**
  * An in-memory cache that holds weak references to [Painter]s.
@@ -36,12 +37,12 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
     internal val cache = LinkedHashMap<MemoryKey, ArrayList<InternalValue>>()
     private var operationsSinceCleanUp = 0
 
-    override val keys: Set<MemoryKey>
-        @Synchronized
-        get() = cache.keys.toSet()
+    private val syncObject = LockObject()
 
-    @Synchronized
-    override fun get(key: MemoryKey): MemoryValue? {
+    override val keys: Set<MemoryKey>
+        get() = synchronized(syncObject) { cache.keys.toSet() }
+
+    override fun get(key: MemoryKey): MemoryValue? = synchronized(syncObject) {
         val values = cache[key] ?: return null
 
         // Find the first bitmap that hasn't been collected.
@@ -53,8 +54,7 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
         return value
     }
 
-    @Synchronized
-    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int) {
+    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int) = synchronized(syncObject) {
         val values = cache.getOrPut(key) { arrayListOf() }
 
         // Insert the value into the list sorted descending by size.
@@ -78,13 +78,11 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
         cleanUpIfNecessary()
     }
 
-    @Synchronized
-    override fun remove(key: MemoryKey): Boolean {
+    override fun remove(key: MemoryKey): Boolean = synchronized(syncObject) {
         return cache.remove(key) != null
     }
 
-    @Synchronized
-    override fun clearMemory() {
+    override fun clearMemory() = synchronized(syncObject) {
         operationsSinceCleanUp = 0
         cache.clear()
     }

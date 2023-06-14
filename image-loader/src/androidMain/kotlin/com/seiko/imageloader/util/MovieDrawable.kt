@@ -19,6 +19,7 @@ import android.os.SystemClock
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withSave
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.transform.AnimatedTransformation
 import com.seiko.imageloader.transform.PixelOpacity
@@ -279,6 +280,6 @@ internal class MovieDrawable @JvmOverloads constructor(
 
     companion object {
         /** Pass this to [setRepeatCount] to repeat infinitely. */
-        const val REPEAT_INFINITE = -1
+        const val REPEAT_INFINITE = Options.REPEAT_INFINITE
     }
 }

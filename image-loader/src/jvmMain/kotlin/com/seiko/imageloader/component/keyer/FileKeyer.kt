@@ -6,7 +6,7 @@ import java.io.File
 class FileKeyer(
     private val addLastModifiedToFileCacheKey: Boolean = true,
 ) : Keyer {
-    override fun key(data: Any, options: Options): String? {
+    override fun key(data: Any, options: Options, type: Keyer.Type): String? {
         if (data !is File) return null
         return if (addLastModifiedToFileCacheKey) {
             "${data.path}:${data.lastModified()}"

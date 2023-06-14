@@ -21,6 +21,7 @@ import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
@@ -64,7 +65,7 @@ class ResourceUriFetcher private constructor(
                 FetchResult.Bitmap(
                     bitmap = DrawableUtils.convertToBitmap(
                         drawable = drawable,
-                        config = options.config.toBitmapConfig(),
+                        config = options.imageConfig.toBitmapConfig(),
                         scale = options.scale,
                         allowInexactSize = options.allowInexactSize,
                     ),
@@ -98,11 +99,17 @@ class ResourceUriFetcher private constructor(
         throw IllegalStateException("Invalid $SCHEME_ANDROID_RESOURCE URI: $data")
     }
 
-    class Factory(private val context: Context) : Fetcher.Factory {
+    class Factory(
+        private val context: Context? = null,
+    ) : Fetcher.Factory {
         override fun create(data: Any, options: Options): Fetcher? {
             if (data !is Uri) return null
             if (!isApplicable(data)) return null
-            return ResourceUriFetcher(context, data, options)
+            return ResourceUriFetcher(
+                context = context ?: options.androidContext,
+                data = data,
+                options = options,
+            )
         }
 
         private fun isApplicable(data: Uri): Boolean {
@@ -162,6 +169,7 @@ private fun Context.getXmlDrawableCompat(resources: Resources, @XmlRes resId: In
                     theme,
                 )
             }
+
             "animated-vector" -> {
                 return AnimatedVectorDrawableCompat.createFromXmlInner(
                     this,

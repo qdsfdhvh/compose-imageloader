@@ -1,27 +1,11 @@
 plugins {
-    kotlin("multiplatform")
+    id("project-kmp")
     kotlin("plugin.serialization")
-    id("org.jetbrains.compose")
-    id("com.android.library")
-    // task error: Cannot change attributes of dependency configuration ':app:common:iosArm64ApiElements' after it has been resolved
-    // id("dev.icerock.mobile.multiplatform-resources").version(Versions.multiplatformResources)
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
-    android()
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
-        }
-    }
-    ios()
-    iosSimulatorArm64()
-    macosX64()
-    macosArm64()
-    js(IR) {
-        browser()
-        binaries.executable()
-    }
+    @Suppress("UNUSED_VARIABLE")
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -32,12 +16,13 @@ kotlin {
                 api(compose.materialIconsExtended)
 
                 api(projects.imageLoader)
-                api(projects.extension.blur)
+                implementation(projects.extension.blur)
+                implementation(projects.extension.mokoResources)
 
-                // implementation(libs.moko.resources)
+                implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.logging)
-                implementation(libs.napier)
+                implementation(libs.kermit)
             }
         }
         val androidMain by getting {
@@ -45,28 +30,15 @@ kotlin {
                 implementation(libs.ktor.client.cio)
             }
         }
-        val jvmMain by getting {
+        val desktopMain by getting {
             dependencies {
                 implementation(libs.ktor.client.cio)
             }
         }
-        val appleMain by creating {
-            dependsOn(commonMain)
+        val appleMain by getting {
             dependencies {
                 implementation(libs.ktor.client.darwin)
             }
-        }
-        val iosMain by getting {
-            dependsOn(appleMain)
-        }
-        val iosSimulatorArm64Main by getting {
-            dependsOn(appleMain)
-        }
-        val macosX64Main by getting {
-            dependsOn(appleMain)
-        }
-        val macosArm64Main by getting {
-            dependsOn(appleMain)
         }
         val jsMain by getting {
             dependencies {
@@ -78,19 +50,22 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
-    compileSdk = Versions.Android.compile
-    defaultConfig {
-        minSdk = Versions.Android.min
-    }
-    compileOptions {
-        sourceCompatibility = Versions.Java.source
-        targetCompatibility = Versions.Java.target
-    }
 }
 
-// multiplatformResources {
-//     multiplatformResourcesPackage = "com.seiko.imageloader.demo"
-// }
+multiplatformResources {
+    multiplatformResourcesPackage = "com.seiko.imageloader.demo"
+}
 
-// skip task because it's failed on gradle 7 and we not use results of this processing
-// tasks.getByName("iosArm64ProcessResources").enabled = false
+// workaround
+tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
+tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
+tasks.matching { it.name == "macosArm64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}
+tasks.matching { it.name == "macosX64ProcessResources" }.configureEach {
+    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+}

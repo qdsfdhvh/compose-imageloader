@@ -8,7 +8,7 @@ import kotlin.experimental.and
 private val LEFT_ANGLE_BRACKET = "<".encodeUtf8()
 private val SVG_TAG = "<svg".encodeUtf8()
 
-internal fun isSvg(source: BufferedSource): Boolean {
+fun isSvg(source: BufferedSource): Boolean {
     return source.rangeEquals(0, LEFT_ANGLE_BRACKET) &&
         source.indexOf(SVG_TAG, 0, 1024) != -1L
 }
@@ -55,7 +55,7 @@ fun isGif(source: BufferedSource): Boolean {
 /**
  * Return 'true' if the [source] contains a WebP image. The [source] is not consumed.
  */
-internal fun isWebP(source: BufferedSource): Boolean {
+fun isWebP(source: BufferedSource): Boolean {
     return source.rangeEquals(0, WEBP_HEADER_RIFF) &&
         source.rangeEquals(8, WEBP_HEADER_WEBP)
 }
@@ -63,7 +63,7 @@ internal fun isWebP(source: BufferedSource): Boolean {
 /**
  * Return 'true' if the [source] contains an animated WebP image. The [source] is not consumed.
  */
-internal fun isAnimatedWebP(source: BufferedSource): Boolean {
+fun isAnimatedWebP(source: BufferedSource): Boolean {
     return isWebP(source) &&
         source.rangeEquals(12, WEBP_HEADER_VPX8) &&
         source.request(17) &&
@@ -73,7 +73,7 @@ internal fun isAnimatedWebP(source: BufferedSource): Boolean {
 /**
  * Return 'true' if the [source] contains an HEIF image. The [source] is not consumed.
  */
-internal fun isHeif(source: BufferedSource): Boolean {
+fun isHeif(source: BufferedSource): Boolean {
     return source.rangeEquals(4, HEIF_HEADER_FTYP)
 }
 
@@ -81,7 +81,7 @@ internal fun isHeif(source: BufferedSource): Boolean {
  * Return 'true' if the [source] contains an animated HEIF image sequence. The [source] is not
  * consumed.
  */
-internal fun isAnimatedHeif(source: BufferedSource): Boolean {
+fun isAnimatedHeif(source: BufferedSource): Boolean {
     return isHeif(source) &&
         (
             source.rangeEquals(8, HEIF_HEADER_MSF1) ||

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.ExifData
 import com.seiko.imageloader.util.ExifUtils
@@ -83,7 +84,7 @@ class BitmapFactoryDecoder private constructor(
 
     /** Compute and set [BitmapFactory.Options.inPreferredConfig]. */
     private fun BitmapFactory.Options.configureConfig(exifData: ExifData) {
-        var config = options.config.toBitmapConfig()
+        var config = options.imageConfig.toBitmapConfig()
 
         // Disable hardware bitmaps if we need to perform EXIF transformations.
         if (exifData.isFlipped || exifData.isRotated) {
@@ -164,16 +165,22 @@ class BitmapFactoryDecoder private constructor(
         }
     }
 
-    class Factory constructor(
-        private val context: Context,
-        private val maxImageSize: Int,
+    class Factory(
+        private val context: Context? = null,
+        private val maxImageSize: Int = DEFAULT_MAX_IMAGE_SIZE,
         maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
     ) : Decoder.Factory {
 
         private val parallelismLock = Semaphore(maxParallelism)
 
         override suspend fun create(source: DecodeSource, options: Options): Decoder {
-            return BitmapFactoryDecoder(context, source, options, maxImageSize, parallelismLock)
+            return BitmapFactoryDecoder(
+                context = context ?: options.androidContext,
+                source = source,
+                options = options,
+                maxImageSize = maxImageSize,
+                parallelismLock = parallelismLock,
+            )
         }
     }
 
@@ -195,5 +202,6 @@ class BitmapFactoryDecoder private constructor(
 
     internal companion object {
         internal const val DEFAULT_MAX_PARALLELISM = 4
+        internal const val DEFAULT_MAX_IMAGE_SIZE = 4096
     }
 }

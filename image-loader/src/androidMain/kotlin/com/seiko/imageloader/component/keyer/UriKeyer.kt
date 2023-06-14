@@ -5,9 +5,10 @@ import android.content.Context
 import android.content.res.Configuration
 import com.eygraber.uri.Uri
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.androidContext
 
-class UriKeyer(private val context: Context) : Keyer {
-    override fun key(data: Any, options: Options): String? {
+class UriKeyer(private val context: Context? = null) : Keyer {
+    override fun key(data: Any, options: Options, type: Keyer.Type): String? {
         if (data !is Uri) return null
 
         if (data.scheme != SCHEME_ANDROID_RESOURCE) return data.toString()
@@ -15,11 +16,12 @@ class UriKeyer(private val context: Context) : Keyer {
         // android uri is mapper to android.resource://example.package.name/12345678,
         // but resId is changeable, here is convert resId to entryName.
         val resId = data.pathSegments.lastOrNull()?.toIntOrNull() ?: return data.toString()
-        val entryName = context.resources.getResourceEntryName(resId)
+        val androidContext = context ?: options.androidContext
+        val entryName = androidContext.resources.getResourceEntryName(resId)
         val newUri = data.buildUpon().path(entryName).build()
 
         // 'android.resource' uris can change if night mode is enabled/disabled.
-        return "$newUri-${context.resources.configuration.nightMode}"
+        return "$newUri-${androidContext.resources.configuration.nightMode}"
     }
 
     private val Configuration.nightMode: Int

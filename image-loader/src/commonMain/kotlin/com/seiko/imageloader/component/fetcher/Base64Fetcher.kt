@@ -4,14 +4,16 @@ import com.seiko.imageloader.component.mapper.Base64Image
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.util.bufferedSource
+import okio.Buffer
 
 class Base64Fetcher private constructor(
     private val data: Base64Image,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return FetchResult.Source(
-            source = data.content.bufferedSource(),
+            source = Buffer().apply {
+                write(data.content)
+            },
             extra = extraData {
                 mimeType(data.contentType)
             },
