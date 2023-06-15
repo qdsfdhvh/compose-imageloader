@@ -10,18 +10,23 @@ sidebar_position: 1
 kotlin {
     android()
     ios()
+    // ...
 
     sourceSets {
         val commonMain by getting {
             dependencies {
 +                api("io.github.qdsfdhvh:image-loader:1.5.1")
-+                // api("io.github.qdsfdhvh:image-loader-extension-blur:1.5.1")
-+                // api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.5.1")
+
+                // optional - Moko Resources Decoder
+                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.5.1")
+                // optional - Blur Interceptor (only support bitmap)
+                api("io.github.qdsfdhvh:image-loader-extension-blur:1.5.1")
             }
         }
         val jvmMain by getting {
             dependencies {
-+                // api("io.github.qdsfdhvh:image-loader-extension-imageio:1.5.1")
+                // optional - ImageIO Decoder
+                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.5.1")
             }
         }
     }
@@ -30,3 +35,16 @@ kotlin {
 
 ## Version Catalog
 
+Copy the following snippets if you are using [gradle version catalog](https://docs.gradle.org/current/userguide/platforms.html).
+
+```xml title="libs.versions.toml"
+[versions]
+image-loader = "1.5.1"
+
+[libraries]
+image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
+image-loader-extension-moko-resources = { module = "io.github.qdsfdhvh:image-loader-extension-moko-resources", version.ref = "image-loader" }
+image-loader-extension-blur = { module = "io.github.qdsfdhvh:image-loader-extension-blur", version.ref = "image-loader" }
+image-loader-extension-imageio = { module = "io.github.qdsfdhvh:image-loader-extension-imageio", version.ref = "image-loader" }
+
+```
