@@ -1,8 +1,7 @@
-import com.vanniktech.maven.publish.KotlinMultiplatform
-
 plugins {
     id("project-kmp")
-    id("com.vanniktech.maven.publish.base")
+    alias(libs.plugins.publish)
+    alias(libs.plugins.dokka)
 }
 
 kotlin {
@@ -26,10 +25,4 @@ android {
         sourceCompatibility = Versions.Java.source
         targetCompatibility = Versions.Java.target
     }
-}
-
-@Suppress("UnstableApiUsage")
-mavenPublishing {
-    configure(KotlinMultiplatform())
-    pomFromGradleProperties()
 }
