@@ -1,8 +1,7 @@
-import com.vanniktech.maven.publish.KotlinJvm
-
 plugins {
     kotlin("jvm")
-    id("com.vanniktech.maven.publish.base")
+    alias(libs.plugins.publish)
+    alias(libs.plugins.dokka)
 }
 
 dependencies {
@@ -15,10 +14,4 @@ dependencies {
 java {
     sourceCompatibility = Versions.Java.source
     targetCompatibility = Versions.Java.target
-}
-
-@Suppress("UnstableApiUsage")
-mavenPublishing {
-    configure(KotlinJvm())
-    pomFromGradleProperties()
 }

@@ -1,4 +1,4 @@
-name: Release CI
+name: Publish CI
 
 on:
   push:
@@ -10,22 +10,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish_maven:
-    name: Publish Maven
+  publish:
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 90
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JDK
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
       - name: Publish to MavenCentral
-        run: ./gradlew publishAllPublicationsToMavenCentralRepository --stacktrace
+        run: ./gradlew publishAllPublicationsToMavenCentral --no-build-cache
         env:
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
