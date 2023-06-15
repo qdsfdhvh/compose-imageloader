@@ -1,0 +1,32 @@
+---
+sidebar_position: 1
+---
+
+# Setup
+
+## Multiplatform
+
+```diff title="build.gradle.kts"
+kotlin {
+    android()
+    ios()
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
++                api("io.github.qdsfdhvh:image-loader:1.5.1")
++                // api("io.github.qdsfdhvh:image-loader-extension-blur:1.5.1")
++                // api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.5.1")
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
++                // api("io.github.qdsfdhvh:image-loader-extension-imageio:1.5.1")
+            }
+        }
+    }
+}
+```
+
+## Version Catalog
+
