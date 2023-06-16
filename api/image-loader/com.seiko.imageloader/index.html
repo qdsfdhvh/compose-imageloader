@@ -1,0 +1,419 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>com.seiko.imageloader</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>compose-imageLoader</span>            </a>    </div>
+    <div>1.5.1
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":image-loader:dokkaHtmlPartial/androidMain">android</button>
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":image-loader:dokkaHtmlPartial/commonMain">common</button>
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":image-loader:dokkaHtmlPartial/darwinMain">darwin</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":image-loader:dokkaHtmlPartial/desktopMain">desktop</button>
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":image-loader:dokkaHtmlPartial/skiaMain">skia</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="image-loader::com.seiko.imageloader////PointingToDeclaration//-1879189208">
+  <div class="breadcrumbs"><a href="../index.html">image-loader</a><span class="delimiter">/</span><span class="current">com.seiko.imageloader</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="492539814%2FClasslikes%2F-940786642" anchor-label="AsyncImagePainter" id="492539814%2FClasslikes%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-async-image-painter/index.html"><span>Async</span><wbr><span>Image</span><wbr><span><span>Painter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="492539814%2FClasslikes%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Stable.html"><span class="token annotation builtin">Stable</span></a></div></div><span class="token keyword">class </span><a href="-async-image-painter/index.html">AsyncImagePainter</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">request<span class="token operator">: </span><a href="../com.seiko.imageloader.model/-image-request/index.html">ImageRequest</a><span class="token punctuation">, </span></span><span class="parameter ">imageLoader<span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a></span></span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a>, <a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/RememberObserver.html">RememberObserver</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1993848385%2FClasslikes%2F2131012044" anchor-label="Bitmap" id="1993848385%2FClasslikes%2F2131012044" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/skiaMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/skiaMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/skiaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bitmap/index.html"><span><span>Bitmap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1993848385%2FClasslikes%2F2131012044"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain" data-toggle=":image-loader:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/skiaMain" data-filterable-set=":image-loader:dokkaHtmlPartial/skiaMain" data-toggle=":image-loader:dokkaHtmlPartial/skiaMain">skia</button></div>
+<div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">typealias </span><a href="-bitmap/index.html">Bitmap</a><span class="token operator"> = </span><a href="https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html">Bitmap</a></div></div><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">class </span><a href="-bitmap/index.html">Bitmap</a></div></div><div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/skiaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">typealias </span><a href="-bitmap/index.html">Bitmap</a><span class="token operator"> = </span><span data-unresolved-link="org.jetbrains.skia/Bitmap///PointingToDeclaration/">Bitmap</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1838850807%2FClasslikes%2F2131012044" anchor-label="Image" id="1838850807%2FClasslikes%2F2131012044" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/skiaMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/skiaMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/skiaMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image/index.html"><span><span>Image</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1838850807%2FClasslikes%2F2131012044"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain" data-toggle=":image-loader:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/skiaMain" data-filterable-set=":image-loader:dokkaHtmlPartial/skiaMain" data-toggle=":image-loader:dokkaHtmlPartial/skiaMain">skia</button></div>
+<div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="-image/index.html">Image</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>drawable<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html">Drawable</a></span></span><span class="token punctuation">)</span></div></div><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">class </span><a href="-image/index.html">Image</a></div></div><div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/skiaMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">typealias </span><a href="-image/index.html">Image</a><span class="token operator"> = </span><span data-unresolved-link="org.jetbrains.skia/Image///PointingToDeclaration/">Image</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-705926748%2FClasslikes%2F-940786642" anchor-label="ImageLoader" id="-705926748%2FClasslikes%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader/index.html"><span>Image</span><wbr><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-705926748%2FClasslikes%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Immutable.html"><span class="token annotation builtin">Immutable</span></a></div></div><span class="token keyword">interface </span><a href="-image-loader/index.html">ImageLoader</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-564721086%2FClasslikes%2F-940786642" anchor-label="ImageLoaderConfig" id="-564721086%2FClasslikes%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader-config/index.html"><span>Image</span><wbr><span>Loader</span><wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-564721086%2FClasslikes%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-image-loader-config/index.html">ImageLoaderConfig</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="239298021%2FClasslikes%2F-940786642" anchor-label="ImageLoaderConfigBuilder" id="239298021%2FClasslikes%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader-config-builder/index.html"><span>Image</span><wbr><span>Loader</span><wbr><span>Config</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="239298021%2FClasslikes%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-image-loader-config-builder/index.html">ImageLoaderConfigBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-744328382%2FClasslikes%2F-940786642" anchor-label="ImageLoaderEngine" id="-744328382%2FClasslikes%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader-engine/index.html"><span>Image</span><wbr><span>Loader</span><wbr><span><span>Engine</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-744328382%2FClasslikes%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-image-loader-engine/index.html">ImageLoaderEngine</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1124647500%2FClasslikes%2F-1681889300" anchor-label="ImageLoaderFactory" id="-1124647500%2FClasslikes%2F-1681889300" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader-factory/index.html"><span>Image</span><wbr><span>Loader</span><wbr><span><span>Factory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1124647500%2FClasslikes%2F-1681889300"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-image-loader-factory/index.html">ImageLoaderFactory</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="510051077%2FClasslikes%2F118428914" anchor-label="ImageLoaderProvidableCompositionLocal" id="510051077%2FClasslikes%2F118428914" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/darwinMain,:image-loader:dokkaHtmlPartial/desktopMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/darwinMain,:image-loader:dokkaHtmlPartial/desktopMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/darwinMain,:image-loader:dokkaHtmlPartial/desktopMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader-providable-composition-local/index.html"><span>Image</span><wbr><span>Loader</span><wbr><span>Providable</span><wbr><span>Composition</span><wbr><span><span>Local</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="510051077%2FClasslikes%2F118428914"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain" data-toggle=":image-loader:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/darwinMain" data-filterable-set=":image-loader:dokkaHtmlPartial/darwinMain" data-toggle=":image-loader:dokkaHtmlPartial/darwinMain">darwin</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/desktopMain" data-filterable-set=":image-loader:dokkaHtmlPartial/desktopMain" data-toggle=":image-loader:dokkaHtmlPartial/desktopMain">desktop</button></div>
+<div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword">class </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div><div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/darwinMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div><div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/desktopMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword">class </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1927603413%2FClasslikes%2F-940786642" anchor-label="ImageRequestState" id="1927603413%2FClasslikes%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-request-state/index.html"><span>Image</span><wbr><span>Request</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1927603413%2FClasslikes%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Immutable.html"><span class="token annotation builtin">Immutable</span></a></div></div><span class="token keyword">interface </span><a href="-image-request-state/index.html">ImageRequestState</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1990132550%2FProperties%2F-1681889300" anchor-label="imageLoader" id="-1990132550%2FProperties%2F-1681889300" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="image-loader.html"><span>image</span><wbr><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1990132550%2FProperties%2F-1681889300"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">.</span><a href="image-loader.html">imageLoader</a><span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1747259156%2FProperties%2F-940786642" anchor-label="LocalImageLoader" id="-1747259156%2FProperties%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-local-image-loader.html"><span>Local</span><wbr><span>Image</span><wbr><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1747259156%2FProperties%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="-local-image-loader.html">LocalImageLoader</a><span class="token operator">: </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-253321086%2FFunctions%2F-940786642" anchor-label="asImageBitmap" id="-253321086%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-image-bitmap.html"><span>as</span><wbr><span>Image</span><wbr><span><span>Bitmap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-253321086%2FFunctions%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-bitmap/index.html">Bitmap</a><span class="token punctuation">.</span><a href="as-image-bitmap.html"><span class="token function">asImageBitmap</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/ImageBitmap.html">ImageBitmap</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1349689633%2FFunctions%2F-1681889300" anchor-label="clearContextImageLoader" id="-1349689633%2FFunctions%2F-1681889300" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-context-image-loader.html"><span>clear</span><wbr><span>Context</span><wbr><span>Image</span><wbr><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1349689633%2FFunctions%2F-1681889300"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="clear-context-image-loader.html"><span class="token function">clearContextImageLoader</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1114791642%2FFunctions%2F118428914" anchor-label="createImageLoaderProvidableCompositionLocal" id="1114791642%2FFunctions%2F118428914" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/darwinMain,:image-loader:dokkaHtmlPartial/desktopMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/darwinMain,:image-loader:dokkaHtmlPartial/desktopMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain,:image-loader:dokkaHtmlPartial/darwinMain,:image-loader:dokkaHtmlPartial/desktopMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="create-image-loader-providable-composition-local.html"><span>create</span><wbr><span>Image</span><wbr><span>Loader</span><wbr><span>Providable</span><wbr><span>Composition</span><wbr><span><span>Local</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1114791642%2FFunctions%2F118428914"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain" data-toggle=":image-loader:dokkaHtmlPartial/commonMain">common</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/darwinMain" data-filterable-set=":image-loader:dokkaHtmlPartial/darwinMain" data-toggle=":image-loader:dokkaHtmlPartial/darwinMain">darwin</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/desktopMain" data-filterable-set=":image-loader:dokkaHtmlPartial/desktopMain" data-toggle=":image-loader:dokkaHtmlPartial/desktopMain">desktop</button></div>
+<div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="create-image-loader-providable-composition-local.html"><span class="token function">createImageLoaderProvidableCompositionLocal</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="create-image-loader-providable-composition-local.html"><span class="token function">createImageLoaderProvidableCompositionLocal</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div><div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/darwinMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="create-image-loader-providable-composition-local.html"><span class="token function">createImageLoaderProvidableCompositionLocal</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div><div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/desktopMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="create-image-loader-providable-composition-local.html"><span class="token function">createImageLoaderProvidableCompositionLocal</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-image-loader-providable-composition-local/index.html">ImageLoaderProvidableCompositionLocal</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1174644767%2FFunctions%2F-940786642" anchor-label="ImageLoader" id="-1174644767%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader.html"><span>Image</span><wbr><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1174644767%2FFunctions%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-image-loader.html"><span class="token function">ImageLoader</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">requestCoroutineContext<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="token operator"> = </span>ioDispatcher<span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="-image-loader-config-builder/index.html">ImageLoaderConfigBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1854019139%2FFunctions%2F-940786642" anchor-label="ImageLoaderConfig" id="-1854019139%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-image-loader-config.html"><span>Image</span><wbr><span>Loader</span><wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1854019139%2FFunctions%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-image-loader-config.html"><span class="token function">ImageLoaderConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="-image-loader-config-builder/index.html">ImageLoaderConfigBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-image-loader-config/index.html">ImageLoaderConfig</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="108188343%2FFunctions%2F-940786642" anchor-label="rememberAsyncImagePainter" id="108188343%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-async-image-painter.html"><span>remember</span><wbr><span>Async</span><wbr><span>Image</span><wbr><span><span>Painter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="108188343%2FFunctions%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-async-image-painter.html"><span class="token function">rememberAsyncImagePainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">request<span class="token operator">: </span><a href="../com.seiko.imageloader.model/-image-request/index.html">ImageRequest</a><span class="token punctuation">, </span></span><span class="parameter ">imageLoader<span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a><span class="token operator"> = </span>LocalImageLoader.current<span class="token punctuation">, </span></span><span class="parameter ">contentScale<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/layout/ContentScale.html">ContentScale</a><span class="token operator"> = </span>ContentScale.Fit<span class="token punctuation">, </span></span><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-async-image-painter/index.html">AsyncImagePainter</a></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-async-image-painter.html"><span class="token function">rememberAsyncImagePainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">resId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">imageLoader<span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a><span class="token operator"> = </span>LocalImageLoader.current<span class="token punctuation">, </span></span><span class="parameter ">contentScale<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/layout/ContentScale.html">ContentScale</a><span class="token operator"> = </span>ContentScale.Fit<span class="token punctuation">, </span></span><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-async-image-painter/index.html">AsyncImagePainter</a></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-async-image-painter.html"><span class="token function">rememberAsyncImagePainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">imageLoader<span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a><span class="token operator"> = </span>LocalImageLoader.current<span class="token punctuation">, </span></span><span class="parameter ">contentScale<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/layout/ContentScale.html">ContentScale</a><span class="token operator"> = </span>ContentScale.Fit<span class="token punctuation">, </span></span><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-async-image-painter/index.html">AsyncImagePainter</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1329664105%2FFunctions%2F-940786642" anchor-label="rememberImagePainter" id="1329664105%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+          <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-image-painter.html"><span>remember</span><wbr><span>Image</span><wbr><span><span>Painter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1329664105%2FFunctions%2F-940786642"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-image-painter.html"><span class="token function">rememberImagePainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">request<span class="token operator">: </span><a href="../com.seiko.imageloader.model/-image-request/index.html">ImageRequest</a><span class="token punctuation">, </span></span><span class="parameter ">imageLoader<span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a><span class="token operator"> = </span>LocalImageLoader.current<span class="token punctuation">, </span></span><span class="parameter ">contentScale<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/layout/ContentScale.html">ContentScale</a><span class="token operator"> = </span>ContentScale.Fit<span class="token punctuation">, </span></span><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-image-painter.html"><span class="token function">rememberImagePainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">resId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">imageLoader<span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a><span class="token operator"> = </span>LocalImageLoader.current<span class="token punctuation">, </span></span><span class="parameter ">contentScale<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/layout/ContentScale.html">ContentScale</a><span class="token operator"> = </span>ContentScale.Fit<span class="token punctuation">, </span></span><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality<span class="token punctuation">, </span></span><span class="parameter ">placeholderPainter<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">errorPainter<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="remember-image-painter.html"><span class="token function">rememberImagePainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">imageLoader<span class="token operator">: </span><a href="-image-loader/index.html">ImageLoader</a><span class="token operator"> = </span>LocalImageLoader.current<span class="token punctuation">, </span></span><span class="parameter ">contentScale<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/layout/ContentScale.html">ContentScale</a><span class="token operator"> = </span>ContentScale.Fit<span class="token punctuation">, </span></span><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality<span class="token punctuation">, </span></span><span class="parameter ">placeholderPainter<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">errorPainter<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1108441109%2FFunctions%2F-1681889300" anchor-label="toImage" id="1108441109%2FFunctions%2F-1681889300" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-image.html"><span>to</span><wbr><span><span>Image</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1108441109%2FFunctions%2F-1681889300"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><a href="https://developer.android.com/reference/kotlin/android/graphics/drawable/Drawable.html">Drawable</a><span class="token punctuation">.</span><a href="to-image.html"><span class="token function">toImage</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-image/index.html">Image</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1659295488%2FFunctions%2F999501262" anchor-label="toPainter" id="1659295488%2FFunctions%2F999501262" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain,:image-loader:dokkaHtmlPartial/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-painter.html"><span>to</span><wbr><span><span>Painter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1659295488%2FFunctions%2F999501262"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/androidMain" data-filterable-set=":image-loader:dokkaHtmlPartial/androidMain" data-active="" data-toggle=":image-loader:dokkaHtmlPartial/androidMain">android</button><button class="platform-bookmark" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain" data-toggle=":image-loader:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-dependent-content" data-togglable=":image-loader:dokkaHtmlPartial/androidMain"><div class="symbol monospace"><span class="token keyword">actual </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-image/index.html">Image</a><span class="token punctuation">.</span><a href="to-painter.html"><span class="token function">toPainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a></div></div><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-bitmap/index.html">Bitmap</a><span class="token punctuation">.</span><a href="to-painter.html"><span class="token function">toPainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a></div><div class="symbol monospace"><span class="token keyword">expect </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="-image/index.html">Image</a><span class="token punctuation">.</span><a href="to-painter.html"><span class="token function">toPainter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">filterQuality<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/FilterQuality.html">FilterQuality</a><span class="token operator"> = </span>DefaultFilterQuality</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/painter/Painter.html">Painter</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

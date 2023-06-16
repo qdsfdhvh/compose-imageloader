@@ -1,0 +1,40 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.seiko.imageloader.cache.memory//maxSizePercent/com.seiko.imageloader.cache.memory.MemoryCacheBuilder#kotlin.Double/PointingToDeclaration/image-loader/com.seiko.imageloader.cache.memory/[desktop]max-size-percent.html
+$dokka.location:com.seiko.imageloader.component.decoder/GifDecoder.Factory///PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-gif-decoder/-factory/index.html
+$dokka.location:com.seiko.imageloader.component.decoder/GifDecoder.Factory/Factory/#kotlin.Boolean/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[android]-gif-decoder/-factory/-factory.html
+$dokka.location:com.seiko.imageloader.component.decoder/GifDecoder.Factory/Factory/#kotlinx.coroutines.CoroutineScope/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-gif-decoder/-factory/-factory.html
+$dokka.location:com.seiko.imageloader.component.decoder/GifDecoder.Factory/create/#com.seiko.imageloader.model.ImageResult.Source#com.seiko.imageloader.option.Options/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-gif-decoder/-factory/create.html
+$dokka.location:com.seiko.imageloader.component.decoder/GifDecoder///PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-gif-decoder/index.html
+$dokka.location:com.seiko.imageloader.component.decoder/GifDecoder/decode/#/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-gif-decoder/decode.html
+$dokka.location:com.seiko.imageloader.component.decoder/SvgDecoder.Companion///PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-svg-decoder/-companion/index.html
+$dokka.location:com.seiko.imageloader.component.decoder/SvgDecoder.Factory///PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-svg-decoder/-factory/index.html
+$dokka.location:com.seiko.imageloader.component.decoder/SvgDecoder.Factory/Factory/#androidx.compose.ui.unit.Density/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-svg-decoder/-factory/-factory.html
+$dokka.location:com.seiko.imageloader.component.decoder/SvgDecoder.Factory/Factory/#androidx.compose.ui.unit.Density?/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[android]-svg-decoder/-factory/-factory.html
+$dokka.location:com.seiko.imageloader.component.decoder/SvgDecoder.Factory/create/#com.seiko.imageloader.model.ImageResult.Source#com.seiko.imageloader.option.Options/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-svg-decoder/-factory/create.html
+$dokka.location:com.seiko.imageloader.component.decoder/SvgDecoder///PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-svg-decoder/index.html
+$dokka.location:com.seiko.imageloader.component.decoder/SvgDecoder/decode/#/PointingToDeclaration/image-loader/com.seiko.imageloader.component.decoder/[skia]-svg-decoder/decode.html
+$dokka.location:com.seiko.imageloader.component//setupDefaultComponents/com.seiko.imageloader.component.ComponentRegistryBuilder#kotlinx.coroutines.CoroutineScope#androidx.compose.ui.unit.Density#kotlin.Function0[io.ktor.client.HttpClient]/PointingToDeclaration/image-loader/com.seiko.imageloader.component/[desktop]setup-default-components.html
+$dokka.location:com.seiko.imageloader/ImageLoaderProvidableCompositionLocal/delegate/#/PointingToDeclaration/image-loader/com.seiko.imageloader/-image-loader-providable-composition-local/[desktop]delegate.html
+module:image-loader
+com.seiko.imageloader
+com.seiko.imageloader.cache
+com.seiko.imageloader.cache.disk
+com.seiko.imageloader.cache.memory
+com.seiko.imageloader.component
+com.seiko.imageloader.component.decoder
+com.seiko.imageloader.component.fetcher
+com.seiko.imageloader.component.keyer
+com.seiko.imageloader.component.mapper
+com.seiko.imageloader.intercept
+com.seiko.imageloader.model
+com.seiko.imageloader.option
+com.seiko.imageloader.transform
+com.seiko.imageloader.util
+module:blur
+com.seiko.imageloader.intercept
+com.seiko.imageloader.model
+module:imageio
+com.seiko.imageloader.component.decoder
+module:moko-resources
+com.seiko.imageloader.component.fetcher
