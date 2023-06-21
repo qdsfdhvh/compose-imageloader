@@ -1,8 +1,7 @@
-import com.vanniktech.maven.publish.KotlinMultiplatform
-
 plugins {
     id("project-kmp")
-    id("com.vanniktech.maven.publish.base")
+    alias(libs.plugins.publish)
+    alias(libs.plugins.dokka)
 }
 
 kotlin {
@@ -66,9 +65,4 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader"
-}
-
-mavenPublishing {
-    @Suppress("UnstableApiUsage")
-    configure(KotlinMultiplatform())
 }

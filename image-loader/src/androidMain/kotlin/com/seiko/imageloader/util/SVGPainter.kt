@@ -74,6 +74,9 @@ internal class SVGPainter(
 
     private fun DrawScope.drawSvg(size: Size) {
         drawIntoCanvas { canvas ->
+            if (dom.documentViewBox == null) {
+                dom.setDocumentViewBox(0f, 0f, dom.documentWidth, dom.documentHeight)
+            }
             dom.documentWidth = size.width
             dom.documentHeight = size.height
             dom.documentPreserveAspectRatio = PreserveAspectRatio.STRETCH

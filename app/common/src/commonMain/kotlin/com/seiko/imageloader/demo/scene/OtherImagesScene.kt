@@ -1,14 +1,23 @@
 package com.seiko.imageloader.demo.scene
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.demo.MR
+import com.seiko.imageloader.rememberAsyncImagePainter
 
 @Composable
 fun OtherImagesScene(
@@ -22,6 +31,16 @@ fun OtherImagesScene(
             verticalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.padding(innerPadding).fillMaxSize(),
         ) {
+            item {
+                Text("Other Svg")
+            }
+            item {
+                Row {
+                    TestSvgImage("https://cdn.alza.cz/Foto/category/40/18901355.svg")
+                    Spacer(Modifier.width(8.dp))
+                    TestSvgImage("https://cdn.alza.cz/Foto/ImgGalery/Ikony/main-navigation/dilna.svg")
+                }
+            }
             item {
                 Text("Base64")
             }
@@ -54,4 +73,19 @@ fun OtherImagesScene(
             }
         }
     }
+}
+
+@Composable
+private fun TestSvgImage(url: String) {
+    Image(
+        painter = rememberAsyncImagePainter(
+            url = url,
+            contentScale = ContentScale.FillWidth,
+        ),
+        contentDescription = null,
+        modifier = Modifier
+            .size(50.dp)
+            .background(color = Color.Red),
+        contentScale = ContentScale.FillWidth,
+    )
 }
