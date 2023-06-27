@@ -38,6 +38,12 @@ android {
     }
 }
 
+baselineProfile {
+    filter {
+        include("com.seiko.imageloader.demo.**")
+    }
+}
+
 dependencies {
     implementation(projects.app.common)
     implementation("androidx.activity:activity-compose:1.7.2")
