@@ -54,7 +54,7 @@ baselineProfile {
     useConnectedDevices = false
 
     // Set to true to see the emulator, useful for debugging. Only enabled locally
-    // enableEmulatorDisplay = false
+    enableEmulatorDisplay = false
 }
 
 dependencies {
