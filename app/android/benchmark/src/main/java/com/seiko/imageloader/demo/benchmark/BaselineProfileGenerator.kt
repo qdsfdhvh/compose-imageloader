@@ -1,7 +1,6 @@
 package com.seiko.imageloader.demo.benchmark
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
-import androidx.test.uiautomator.By
 import org.junit.Rule
 import org.junit.Test
 
