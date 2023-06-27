@@ -71,7 +71,7 @@ android {
 baselineProfile {
     baselineProfileOutputDir = "../../src/androidMain/generated/baselineProfiles"
     filter {
-        include("com.seiko.imageloader.*")
+        include("com.seiko.imageloader.**")
     }
 }
 
