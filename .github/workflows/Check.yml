@@ -43,9 +43,6 @@ jobs:
       - name: Check spotless
         run: ./gradlew spotlessCheck --no-configuration-cache --stacktrace
 
-      - name: Assemble
-        run: ./gradlew assemble --stacktrace
-
   lint:
     needs: spotless
     runs-on: ubuntu-latest
