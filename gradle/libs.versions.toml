@@ -1,6 +1,6 @@
 [versions]
 agp = "8.0.2"
-compose-jb = "1.4.0"
+compose-jb = "1.4.1"
 kotlin = "1.8.20"
 kotlinx-coroutines = "1.7.1"
 kotlinx-serialization = "1.5.1"
