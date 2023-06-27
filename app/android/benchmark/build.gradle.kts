@@ -2,7 +2,7 @@ import com.android.build.api.dsl.ManagedVirtualDevice
 
 plugins {
     alias(libs.plugins.androidTest)
-    alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.baselineProfile)
     kotlin("android")
 }
 
@@ -34,7 +34,7 @@ android {
         }
     }
     testOptions.managedDevices.devices {
-        maybeCreate<com.android.build.api.dsl.ManagedVirtualDevice>("pixel6Api31").apply {
+        maybeCreate<ManagedVirtualDevice>("pixel6Api31").apply {
             device = "Pixel 6"
             apiLevel = 31
             systemImageSource = "aosp"

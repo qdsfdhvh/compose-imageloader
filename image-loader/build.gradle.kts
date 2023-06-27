@@ -2,7 +2,7 @@ plugins {
     id("project-kmp")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.baselineProfile)
 }
 
 kotlin {

@@ -34,7 +34,7 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 moko-resources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko-resources" }
-baselineprofile = { id = "androidx.baselineprofile", version.ref = "benchmark"}
+baselineProfile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
 androidTest = { id = "com.android.test", version.ref = "agp" }
 
 [libraries]
