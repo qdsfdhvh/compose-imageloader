@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
+        mavenCentral()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
@@ -10,10 +11,10 @@ pluginManagement {
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    // error with js
     // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
+        mavenCentral()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
@@ -21,7 +22,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.13.3"
+    id("com.gradle.enterprise") version "3.13.4"
 }
 
 gradleEnterprise {
@@ -38,6 +39,7 @@ include(
     ":image-loader",
     ":extension:blur",
     ":extension:imageio",
+    ":extension:moko-resources",
     ":app:common",
     ":app:android",
     ":app:android:benchmark",

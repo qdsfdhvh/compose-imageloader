@@ -51,7 +51,7 @@ class DiskCacheBuilder internal constructor(private val fileSystem: FileSystem) 
         this.cleanupDispatcher = dispatcher
     }
 
-    fun build(): DiskCache {
+    internal fun build(): DiskCache {
         val directory = checkNotNull(directory) { "directory == null" }
         val maxSize = if (maxSizePercent > 0) {
             try {

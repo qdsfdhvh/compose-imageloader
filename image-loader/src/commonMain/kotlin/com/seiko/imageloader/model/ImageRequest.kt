@@ -6,14 +6,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
-import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.OptionsBuilder
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
 
 @Immutable
 class ImageRequest internal constructor(
     val data: Any,
-    val optionsBuilders: List<Options.() -> Unit>,
+    val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     val extra: ExtraData,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
@@ -33,7 +33,7 @@ class ImageRequestBuilder {
 
     private var data: Any?
     private var extraData: ExtraData?
-    private val optionsBuilders: MutableList<Options.() -> Unit>
+    private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit>
     private var componentBuilder: ComponentRegistryBuilder?
     private var interceptors: MutableList<Interceptor>?
     private var eventListener: MutableList<ImageRequestEventListener>?
@@ -78,7 +78,7 @@ class ImageRequestBuilder {
         }
     }
 
-    fun options(block: Options.() -> Unit) {
+    fun options(block: OptionsBuilder.() -> Unit) {
         optionsBuilders.add(block)
     }
 
@@ -110,7 +110,7 @@ class ImageRequestBuilder {
         errorPainter = loader
     }
 
-    fun build() = ImageRequest(
+    internal fun build() = ImageRequest(
         data = data ?: NullRequestData,
         optionsBuilders = optionsBuilders,
         components = componentBuilder?.build(),

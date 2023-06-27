@@ -44,7 +44,7 @@ private fun generateImageLoader(): ImageLoader {
                 maxSizePercent(0.25)
             }
             diskCacheConfig {
-                directory(getCacheDir().resolve("image_cache").toOkioPath())
+                directory(getCacheDir().toOkioPath().resolve("image_cache"))
                 maxSizeBytes(512L * 1024 * 1024) // 512MB
             }
         }
@@ -52,7 +52,7 @@ private fun generateImageLoader(): ImageLoader {
 }
 
 enum class OperatingSystem {
-    Android, IOS, Windows, Linux, MacOS, Unknown
+    Windows, Linux, MacOS, Unknown
 }
 
 private val currentOperatingSystem: OperatingSystem

@@ -1,0 +1,31 @@
+<head>
+  <title>Compose Image library for Kotlin Multiplatform</title>
+</head>
+
+# Compose ImageLoader
+
+[![](https://img.shields.io/badge/Kotlin-Multiplatform-%237f52ff?logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
+[![](https://img.shields.io/maven-central/v/io.github.qdsfdhvh/image-loader)](https://mvnrepository.com/artifact/io.github.qdsfdhvh/image-loader)
+[![](https://img.shields.io/github/license/qdsfdhvh/compose-imageloader)](https://github.com/qdsfdhvh/compose-imageloader/blob/main/LICENSE)
+
+```kotlin
+@Composeable
+fun Content() {
+    val url = "https://..."
+    val painter = rememberAsyncImagePainter(url)
+    Image(
+        painter = painter,
+        contentDescription = null,
+    )
+}
+```
+
+## Documents
+
+- [Setup](/docs/setup)
+- [Core](/docs/core)
+  - [Quick Start](/docs/core/basic)
+
+## Related libraries
+
+[Coil](https://github.com/coil-kt/coil)

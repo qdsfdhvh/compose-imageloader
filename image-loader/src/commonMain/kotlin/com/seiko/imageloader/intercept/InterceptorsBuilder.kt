@@ -44,7 +44,7 @@ class InterceptorsBuilder {
         diskCache = block
     }
 
-    fun build(): List<Interceptor> {
+    internal fun build(): List<Interceptor> {
         return interceptors + if (useDefaultInterceptors) {
             listOfNotNull(
                 MappedInterceptor(),

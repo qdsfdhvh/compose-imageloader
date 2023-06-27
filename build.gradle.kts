@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.composeJb) apply false
     alias(libs.plugins.spotless)
     alias(libs.plugins.publish)
+    alias(libs.plugins.dokka)
     id("build-logic") apply false
 }
 
@@ -68,4 +69,9 @@ allprojects {
             }
         }
     }
+}
+
+tasks.dokkaHtmlMultiModule {
+    moduleVersion.set(Versions.Project.version)
+    outputDirectory.set(rootDir.resolve("docs/static/api"))
 }

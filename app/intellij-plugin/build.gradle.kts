@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.intellij") version "1.13.3"
+    id("org.jetbrains.intellij") version "1.14.2"
     java
     kotlin("jvm")
     id("org.jetbrains.compose")
@@ -9,7 +9,7 @@ plugins {
 dependencies {
     implementation(projects.app.common)
     implementation(compose.desktop.currentOs)
-    testImplementation("junit", "junit", "4.12")
+    testImplementation("junit", "junit", "4.13.2")
 }
 
 repositories {

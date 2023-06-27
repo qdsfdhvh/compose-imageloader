@@ -34,7 +34,7 @@ kotlin {
 #### ImageLoader
 
 ```kotlin
-@Composeable
+@Composable
 fun Content() {
     CompositionLocalProvider(
         LocalImageLoader provides generateImageLoader(),
@@ -171,7 +171,7 @@ fun App() {
 `LocalImageLoader` has no default value, must be configured on each platform, and configuration is similar to `coil`.
 
 ```kotlin
-@Composeable
+@Composable
 fun Content() {
     CompositionLocalProvider(
         LocalImageLoader provides generateImageLoader(),

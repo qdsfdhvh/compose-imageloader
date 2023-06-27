@@ -53,13 +53,16 @@ class ProjectKmpPlugin : Plugin<Project> {
                         dependsOn(appleMain)
                     }
                     val iosSimulatorArm64Main = getByName("iosSimulatorArm64Main").apply {
+                        dependsOn(iosMain)
+                    }
+                    val macosMain = maybeCreate("macosMain").apply {
                         dependsOn(appleMain)
                     }
                     val macosX64Main = getByName("macosX64Main").apply {
-                        dependsOn(appleMain)
+                        dependsOn(macosMain)
                     }
                     val macosArm64Main = getByName("macosArm64Main").apply {
-                        dependsOn(appleMain)
+                        dependsOn(macosMain)
                     }
                     val jsMain = getByName("jsMain").apply {
                         dependsOn(darwinMain)

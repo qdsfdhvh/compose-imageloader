@@ -1,8 +1,7 @@
-import com.vanniktech.maven.publish.KotlinMultiplatform
-
 plugins {
     id("project-kmp")
-    id("com.vanniktech.maven.publish.base")
+    alias(libs.plugins.publish)
+    alias(libs.plugins.dokka)
     alias(libs.plugins.baselineprofile)
 }
 
@@ -78,9 +77,4 @@ baselineProfile {
 
 dependencies {
     baselineProfile(projects.app.android.benchmark)
-}
-
-mavenPublishing {
-    @Suppress("UnstableApiUsage")
-    configure(KotlinMultiplatform())
 }
