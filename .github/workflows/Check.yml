@@ -90,21 +90,15 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Assemble
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          target: google_apis
-          arch: x86_64
-          profile: Galaxy Nexus
-          script: |
-            ./gradlew assemble --stacktrace
+        run: ./gradlew assemble --stacktrace
+
 
   build:
     needs: spotless
@@ -125,18 +119,11 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Build
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          target: google_apis
-          arch: x86_64
-          profile: Galaxy Nexus
-          script: |
-            ./gradlew build --stacktrace
+        run: ./gradlew build --stacktrace
