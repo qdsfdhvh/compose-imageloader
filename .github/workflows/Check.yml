@@ -96,13 +96,15 @@ jobs:
           gradle-home-cache-cleanup: true
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Accept Android Licenses
-        run: |
-          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
-          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-33;google_apis;x86_64" > /dev/null
-
       - name: Assemble
-        run: ./gradlew assemble --stacktrace
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          target: google_apis
+          arch: x86_64
+          profile: Galaxy Nexus
+          script: |
+            ./gradlew assemble --stacktrace
 
   build:
     needs: spotless
@@ -129,10 +131,12 @@ jobs:
           gradle-home-cache-cleanup: true
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Accept Android Licenses
-        run: |
-          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
-          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-33;google_apis;x86_64" > /dev/null
-
       - name: Build
-        run: ./gradlew build --stacktrace
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          target: google_apis
+          arch: x86_64
+          profile: Galaxy Nexus
+          script: |
+            ./gradlew build --stacktrace
