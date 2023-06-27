@@ -99,6 +99,7 @@ jobs:
       - name: Accept Android Licenses
         run: |
           echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
+          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-33;google_apis;x86_64" > /dev/null
 
       - name: Assemble
         run: ./gradlew assemble --stacktrace
@@ -131,6 +132,7 @@ jobs:
       - name: Accept Android Licenses
         run: |
           echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
+          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-33;google_apis;x86_64" > /dev/null
 
       - name: Build
         run: ./gradlew build --stacktrace
