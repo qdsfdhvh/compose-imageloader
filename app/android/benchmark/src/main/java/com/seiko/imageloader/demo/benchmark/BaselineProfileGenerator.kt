@@ -20,20 +20,6 @@ class BaselineProfileGenerator {
                 pressHome()
                 startActivityAndWait()
                 device.waitForIdle()
-                device.run {
-                    findObject(By.text("Network")).click()
-                    waitForIdle()
-                    findObject(By.desc("back")).click()
-                    waitForIdle()
-                    findObject(By.text("Gif")).click()
-                    waitForIdle()
-                    findObject(By.desc("back")).click()
-                    waitForIdle()
-                    findObject(By.text("Svg")).click()
-                    waitForIdle()
-                    findObject(By.desc("back")).click()
-                    waitForIdle()
-                }
             },
         )
 }

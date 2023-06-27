@@ -34,10 +34,10 @@ android {
         }
     }
     testOptions.managedDevices.devices {
-        maybeCreate<ManagedVirtualDevice>("pixel6Api31").apply {
+        create<ManagedVirtualDevice>("pixel6Api33").apply {
             device = "Pixel 6"
-            apiLevel = 31
-            systemImageSource = "aosp"
+            apiLevel = 33
+            systemImageSource = "google"
         }
     }
     targetProjectPath = ":app:android"
@@ -47,19 +47,19 @@ android {
 baselineProfile {
     // This specifies the managed devices to use that you run the tests on. The default
     // is none.
-    managedDevices += "pixel6Api31"
+    managedDevices += "pixel6Api33"
 
     // This enables using connected devices to generate profiles. The default is true.
     // When using connected devices, they must be rooted or API 33 and higher.
     useConnectedDevices = false
 
     // Set to true to see the emulator, useful for debugging. Only enabled locally
-    enableEmulatorDisplay = false
+    // enableEmulatorDisplay = false
 }
 
 dependencies {
     implementation(libs.androidx.junit)
-    implementation(libs.androidx.espresso.core)
+    // implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.uiautomator)
     implementation(libs.androidx.benchmark.macro.junit4)
     implementation(libs.androidx.profileinstaller)
