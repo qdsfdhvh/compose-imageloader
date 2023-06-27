@@ -96,12 +96,9 @@ jobs:
           gradle-home-cache-cleanup: true
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Setup Android SDKs
+      - name: Accept Android Licenses
         run: |
-          sdkmanager --licenses
-          sdkmanager "system-images;android-33;google_apis;x86_64"
-          sdkmanager "platforms;android-%ANDROID_BUILD_VERSION%"
-          sdkmanager "build-tools;%ANDROID_TOOLS_VERSION%"
+          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
 
       - name: Assemble
         run: ./gradlew assemble --stacktrace
@@ -131,12 +128,9 @@ jobs:
           gradle-home-cache-cleanup: true
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Setup Android SDKs
+      - name: Accept Android Licenses
         run: |
-          sdkmanager --licenses
-          sdkmanager "system-images;android-33;google_apis;x86_64"
-          sdkmanager "platforms;android-%ANDROID_BUILD_VERSION%"
-          sdkmanager "build-tools;%ANDROID_TOOLS_VERSION%"
+          echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
 
       - name: Build
         run: ./gradlew build --stacktrace
