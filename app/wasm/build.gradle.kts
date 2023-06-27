@@ -26,7 +26,7 @@ kotlin {
         @Suppress("UNUSED_VARIABLE")
         val wasmMain by getting {
             dependencies {
-                // implementation(projects.app.common)
+                implementation(projects.app.common)
                 implementation(compose.runtime)
                 implementation(compose.ui)
                 implementation(compose.foundation)

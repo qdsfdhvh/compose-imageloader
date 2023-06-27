@@ -1,7 +1,7 @@
 plugins {
     id("project-kmp")
     kotlin("plugin.serialization")
-    alias(libs.plugins.moko.resources)
+    // alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -17,9 +17,9 @@ kotlin {
 
                 api(projects.imageLoader)
                 implementation(projects.extension.blur)
-                implementation(projects.extension.mokoResources)
+                // implementation(projects.extension.mokoResources)
 
-                implementation(libs.moko.resources)
+                // implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.kermit)
@@ -52,20 +52,20 @@ android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = "com.seiko.imageloader.demo"
-}
-
-// workaround
-tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "macosArm64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "macosX64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
+// multiplatformResources {
+//     multiplatformResourcesPackage = "com.seiko.imageloader.demo"
+// }
+//
+// // workaround
+// tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
+//     dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+// }
+// tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
+//     dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+// }
+// tasks.matching { it.name == "macosArm64ProcessResources" }.configureEach {
+//     dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+// }
+// tasks.matching { it.name == "macosX64ProcessResources" }.configureEach {
+//     dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+// }

@@ -6,6 +6,7 @@ pluginManagement {
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/bootstrap")
     }
     includeBuild("build-logic")
 }
@@ -15,11 +16,13 @@ dependencyResolutionManagement {
     // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
+        mavenLocal()
         mavenCentral()
         maven("https://repo1.maven.org/maven2")
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/bootstrap")
     }
 }
 
@@ -40,8 +43,8 @@ rootProject.name = "compose-imageLoader"
 include(
     ":image-loader",
     ":extension:blur",
-    ":extension:imageio",
-    ":extension:moko-resources",
+    // ":extension:imageio",
+    // ":extension:moko-resources",
     ":app:common",
     ":app:android",
     ":app:desktop",
