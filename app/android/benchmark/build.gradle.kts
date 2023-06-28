@@ -63,3 +63,9 @@ dependencies {
     implementation(libs.androidx.benchmark.macro.junit4)
     implementation(libs.androidx.profileinstaller)
 }
+
+// workaround for baselineProfiles
+tasks.matching { it.name == "pixel6proApi31NonMinifiedBenchmarkAndroidTest" }.configureEach {
+    dependsOn(tasks.matching { it.name == "mergeNonMinifiedReleaseTestResultProtos" })
+    dependsOn(tasks.matching { it.name == "collectNonMinifiedReleaseBaselineProfile" })
+}
