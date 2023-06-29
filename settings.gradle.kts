@@ -17,7 +17,6 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap") // TODO remove this line
         maven("https://jitpack.io")
     }
 }
