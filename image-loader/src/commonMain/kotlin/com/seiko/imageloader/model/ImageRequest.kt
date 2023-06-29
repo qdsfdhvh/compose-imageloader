@@ -17,14 +17,9 @@ class ImageRequest internal constructor(
     val extra: ExtraData,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
-    internal val eventListener: List<ImageRequestEventListener>?,
     val placeholderPainter: (@Composable () -> Painter)?,
     val errorPainter: (@Composable () -> Painter)?,
 ) {
-    internal fun call(event: ImageRequestEvent) {
-        eventListener?.forEach { it.invoke(event) }
-    }
-
     fun newBuilder(block: ImageRequestBuilder.() -> Unit) =
         ImageRequestBuilder(this).apply(block).build()
 }
@@ -36,7 +31,6 @@ class ImageRequestBuilder {
     private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit>
     private var componentBuilder: ComponentRegistryBuilder?
     private var interceptors: MutableList<Interceptor>?
-    private var eventListener: MutableList<ImageRequestEventListener>?
     private var placeholderPainter: (@Composable () -> Painter)?
     private var errorPainter: (@Composable () -> Painter)?
 
@@ -46,7 +40,6 @@ class ImageRequestBuilder {
         optionsBuilders = mutableListOf()
         componentBuilder = null
         interceptors = null
-        eventListener = null
         placeholderPainter = null
         errorPainter = null
     }
@@ -57,7 +50,7 @@ class ImageRequestBuilder {
         optionsBuilders = request.optionsBuilders.toMutableList()
         componentBuilder = request.components?.newBuilder()
         interceptors = request.interceptors?.toMutableList()
-        eventListener = request.eventListener?.toMutableList()
+        // eventListener = request.eventListener?.toMutableList()
         placeholderPainter = request.placeholderPainter
         errorPainter = request.errorPainter
     }
@@ -90,10 +83,6 @@ class ImageRequestBuilder {
         (interceptors ?: mutableListOf<Interceptor>().also { interceptors = it }).add(interceptor)
     }
 
-    fun eventListener(listener: (ImageRequestEvent) -> Unit) {
-        (eventListener ?: mutableListOf<ImageRequestEventListener>().also { eventListener = it }).add(listener)
-    }
-
     fun extra(builder: ExtraDataBuilder.() -> Unit) {
         extraData = extraData
             ?.takeUnless { it.isEmpty() }
@@ -116,7 +105,6 @@ class ImageRequestBuilder {
         components = componentBuilder?.build(),
         interceptors = interceptors,
         extra = extraData ?: EmptyExtraData,
-        eventListener = eventListener,
         placeholderPainter = placeholderPainter,
         errorPainter = errorPainter,
     )

@@ -1,18 +1,27 @@
 package com.seiko.imageloader
 
 import androidx.compose.runtime.Immutable
-import com.seiko.imageloader.intercept.RealInterceptorChain
+import com.seiko.imageloader.intercept.InterceptorChainImpl
+import com.seiko.imageloader.model.ImageAction
+import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
-import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.util.ioDispatcher
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlin.coroutines.CoroutineContext
 
 @Immutable
 interface ImageLoader {
     val config: ImageLoaderConfig
-    suspend fun execute(request: ImageRequest): ImageResult
+    fun async(request: ImageRequest): Flow<ImageAction>
+    suspend fun execute(request: ImageRequest): ImageResult {
+        return async(request).filterIsInstance<ImageResult>().first()
+    }
 }
 
 fun ImageLoader(
@@ -28,20 +37,15 @@ private class RealImageLoader(
     private val requestCoroutineContext: CoroutineContext,
     override val config: ImageLoaderConfig,
 ) : ImageLoader {
-    override suspend fun execute(request: ImageRequest): ImageResult {
-        return withContext(requestCoroutineContext) {
-            runCatching {
-                request.call(ImageRequestEvent.Prepare)
-                RealInterceptorChain(
-                    initialRequest = request,
-                    config = config,
-                ).proceed(request)
-            }.getOrElse {
-                ImageResult.Error(
-                    request = request,
-                    error = it,
-                )
-            }
-        }
-    }
+    override fun async(request: ImageRequest) = flow {
+        emit(ImageEvent.Start)
+        val chain = InterceptorChainImpl(
+            initialRequest = request,
+            config = config,
+            flowCollector = this,
+        )
+        emit(chain.proceed(request))
+    }.catch {
+        emit(ImageResult.Error(it))
+    }.flowOn(requestCoroutineContext)
 }

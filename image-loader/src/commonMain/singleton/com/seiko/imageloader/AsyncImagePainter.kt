@@ -17,16 +17,16 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
-import com.seiko.imageloader.model.ImageRequestEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.util.w
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 
 @Composable
@@ -208,8 +208,13 @@ class AsyncImagePainter(
         (painter as? RememberObserver)?.onRemembered()
 
         rememberJob = snapshotFlow { request }
-            .mapLatest { imageLoader.execute(updateRequest(request)) }
-            .onEach(::updateImage)
+            .flatMapLatest { imageLoader.async(updateRequest(request)) }
+            .onEach { action ->
+                when (action) {
+                    is ImageEvent -> requestState = ImageRequestState.Loading(action)
+                    is ImageResult -> updateImageResult(action)
+                }
+            }
             .launchIn(imageLoader.config.imageScope)
     }
 
@@ -237,13 +242,10 @@ class AsyncImagePainter(
                     scale = contentScale.toScale()
                 }
             }
-            eventListener {
-                requestState = ImageRequestState.Loading(it)
-            }
         }
     }
 
-    private fun updateImage(input: ImageResult) {
+    private fun updateImageResult(input: ImageResult) {
         requestState = when (input) {
             is ImageResult.Bitmap -> {
                 updatePainter(input.bitmap.toPainter(filterQuality))
@@ -301,7 +303,7 @@ sealed interface ImageRequestState {
     data class Failure(val error: Throwable) : ImageRequestState
 
     @Immutable
-    data class Loading(val event: ImageRequestEvent = ImageRequestEvent.Prepare) : ImageRequestState
+    data class Loading(val event: ImageEvent = ImageEvent.Start) : ImageRequestState
 }
 
 private object EmptyPainter : Painter() {

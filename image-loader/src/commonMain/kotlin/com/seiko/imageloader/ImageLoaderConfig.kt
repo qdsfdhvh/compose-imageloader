@@ -1,6 +1,8 @@
 package com.seiko.imageloader
 
+import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
+import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.intercept.InterceptorsBuilder
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.OptionsBuilder
@@ -11,8 +13,9 @@ import kotlinx.coroutines.CoroutineScope
 class ImageLoaderConfig internal constructor(
     val imageScope: CoroutineScope,
     val defaultOptions: Options,
-    val engine: ImageLoaderEngine,
     val logger: Logger,
+    val componentRegistry: ComponentRegistry,
+    val interceptors: List<Interceptor>,
 )
 
 class ImageLoaderConfigBuilder internal constructor() {
@@ -47,10 +50,8 @@ class ImageLoaderConfigBuilder internal constructor() {
         imageScope = imageScope,
         logger = logger,
         defaultOptions = optionsBuilder.build(),
-        engine = ImageLoaderEngine(
-            interceptors = interceptorsBuilder.build(),
-            componentRegistry = componentsBuilder.build(),
-        ),
+        interceptors = interceptorsBuilder.build(),
+        componentRegistry = componentsBuilder.build(),
     )
 }
 
