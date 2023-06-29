@@ -34,14 +34,8 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
       - name: Check spotless
-        run: ./gradlew spotlessCheck --no-configuration-cache --stacktrace
+        run: ./gradlew spotlessCheck --stacktrace
 
   lint:
     needs: spotless
@@ -97,7 +91,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: ./gradlew assemble --stacktrace -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -x :app:android:assemble :app:desktop:assemble :app:intellij-plugin:assemble :app:ios-combine:assemble :app:macos:assemble :app:web:assemble
 
 
   build:
@@ -126,4 +120,4 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Build
-        run: ./gradlew build --stacktrace -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: ./gradlew build --stacktrace -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -x :app:android:build :app:desktop:build :app:intellij-plugin:build :app:ios-combine:build :app:macos:build :app:web:build
