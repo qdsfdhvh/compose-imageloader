@@ -75,3 +75,15 @@ tasks.dokkaHtmlMultiModule {
     moduleVersion.set(Versions.Project.version)
     outputDirectory.set(rootDir.resolve("docs/static/api"))
 }
+
+gradle.taskGraph.whenReady {
+    if (project.hasProperty("noAppApple")) {
+        allTasks.asSequence()
+            .filter {
+                it.path.startsWith(":app:ios-combine") || it.path.startsWith(":app:macos")
+            }
+            .forEach {
+                it.enabled = false
+            }
+    }
+}

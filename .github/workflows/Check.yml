@@ -91,7 +91,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -x :app:android:assemble :app:desktop:assemble :app:intellij-plugin:assemble :app:ios-combine:assemble :app:macos:assemble :app:web:assemble
+        run: ./gradlew assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
 
   build:
@@ -120,4 +120,4 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Build
-        run: ./gradlew build --stacktrace -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -x :app:android:build :app:desktop:build :app:intellij-plugin:build :app:ios-combine:build :app:macos:build :app:web:build
+        run: ./gradlew build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
