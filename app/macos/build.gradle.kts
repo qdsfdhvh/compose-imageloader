@@ -30,7 +30,7 @@ kotlin {
             }
         }
     }
-
+    @Suppress("UNUSED_VARIABLE")
     sourceSets {
         val macosMain by creating {
             dependencies {

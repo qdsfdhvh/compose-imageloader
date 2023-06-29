@@ -16,13 +16,13 @@ object Versions {
 
     object Android {
         const val min = 21
-        const val compile = 33
+        const val compile = 34
         const val target = compile
     }
 
     object Java {
-        const val jvmTarget = "11"
-        val target = JavaVersion.VERSION_11
+        const val jvmTarget = "17"
+        val target = JavaVersion.VERSION_17
         val source = JavaVersion.VERSION_17
     }
 }
