@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.plugin.serialization) apply false
     alias(libs.plugins.composeJb) apply false
@@ -35,15 +36,14 @@ allprojects {
         }
     }
 
-    group = "io.github.qdsfdhvh"
-    version = Versions.Project.version
-
     plugins.withId("com.vanniktech.maven.publish.base") {
         mavenPublishing {
             publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
             signAllPublications()
             @Suppress("UnstableApiUsage")
             pom {
+                group = "io.github.qdsfdhvh"
+                version = Versions.Project.version
                 name.set("compose-imageLoader")
                 description.set("Compose ImageLoader.")
                 url.set("https://github.com/qdsfdhvh/compose-imageLoader")
@@ -74,4 +74,16 @@ allprojects {
 tasks.dokkaHtmlMultiModule {
     moduleVersion.set(Versions.Project.version)
     outputDirectory.set(rootDir.resolve("docs/static/api"))
+}
+
+gradle.taskGraph.whenReady {
+    if (project.hasProperty("noAppApple")) {
+        allTasks.asSequence()
+            .filter {
+                it.path.startsWith(":app:ios-combine") || it.path.startsWith(":app:macos")
+            }
+            .forEach {
+                it.enabled = false
+            }
+    }
 }

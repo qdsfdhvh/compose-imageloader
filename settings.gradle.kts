@@ -42,6 +42,7 @@ include(
     ":extension:moko-resources",
     ":app:common",
     ":app:android",
+    ":app:android:benchmark",
     ":app:desktop",
     ":app:ios-combine",
     ":app:macos",

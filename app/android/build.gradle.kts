@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.compose")
+    alias(libs.plugins.baselineProfile)
 }
 
 android {
@@ -24,10 +25,22 @@ android {
                 "proguard-rules.pro",
             )
         }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+        }
     }
     compileOptions {
         sourceCompatibility = Versions.Java.source
         targetCompatibility = Versions.Java.target
+    }
+}
+
+baselineProfile {
+    filter {
+        include("com.seiko.imageloader.demo.**")
     }
 }
 
@@ -38,4 +51,5 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    baselineProfile(projects.app.android.benchmark)
 }
