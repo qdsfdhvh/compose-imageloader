@@ -1,5 +1,6 @@
 package com.seiko.imageloader.util
 
+import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,3 +33,6 @@ internal expect val defaultFileSystem: FileSystem?
 
 internal val defaultImageScope: CoroutineScope
     get() = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+internal val httpEngineFactory: () -> HttpClient
+    get() = { HttpClient(httpEngine) }
