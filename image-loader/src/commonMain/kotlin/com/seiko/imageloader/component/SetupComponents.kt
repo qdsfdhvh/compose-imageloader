@@ -7,30 +7,23 @@ import com.seiko.imageloader.component.keyer.KtorUrlKeyer
 import com.seiko.imageloader.component.mapper.Base64Mapper
 import com.seiko.imageloader.component.mapper.KtorUrlMapper
 import com.seiko.imageloader.component.mapper.StringUriMapper
-import com.seiko.imageloader.util.httpEngine
+import com.seiko.imageloader.util.httpEngineFactory
 import io.ktor.client.HttpClient
 
 fun ComponentRegistryBuilder.setupKtorComponents(
-    httpClient: () -> HttpClient = { HttpClient(httpEngine) },
+    httpClient: () -> HttpClient = httpEngineFactory,
 ) {
-    // Mappers
     add(KtorUrlMapper())
-    // Keyers
     add(KtorUrlKeyer())
-    // Fetchers
     add(KtorUrlFetcher.Factory(httpClient))
 }
 
 fun ComponentRegistryBuilder.setupBase64Components() {
-    // Mappers
     add(Base64Mapper())
-    // Fetchers
     add(Base64Fetcher.Factory())
 }
 
 fun ComponentRegistryBuilder.setupCommonComponents() {
-    // Mappers
     add(StringUriMapper())
-    // Fetchers
     add(BitmapFetcher.Factory())
 }
