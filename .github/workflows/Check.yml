@@ -91,8 +91,8 @@ jobs:
 #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
-      - name: Clean Managed Devices
-        run: ./gradlew cleanManagedDevices --unused-only
+#      - name: Clean Managed Devices
+#        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
         run: ./gradlew assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
@@ -124,8 +124,8 @@ jobs:
 #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
-      - name: Clean Managed Devices
-        run: ./gradlew cleanManagedDevices --unused-only
+#      - name: Clean Managed Devices
+#        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
         run: ./gradlew build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
