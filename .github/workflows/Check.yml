@@ -84,11 +84,11 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
       - name: Clean Managed Devices
@@ -117,11 +117,11 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
       - name: Clean Managed Devices
