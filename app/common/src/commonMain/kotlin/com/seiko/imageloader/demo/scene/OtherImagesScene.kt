@@ -82,7 +82,6 @@ private fun TestSvgImage(url: String) {
     Image(
         painter = rememberImageActionPainter(
             request = remember { ImageRequest(url) },
-            // contentScale = ContentScale.FillWidth,
         ),
         contentDescription = null,
         modifier = Modifier
