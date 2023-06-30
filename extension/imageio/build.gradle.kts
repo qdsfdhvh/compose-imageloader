@@ -1,17 +1,23 @@
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
 }
 
-dependencies {
-    implementation(projects.imageLoader)
-    // svg
-    implementation("com.twelvemonkeys.imageio:imageio-batik:3.9.4")
-    implementation("org.apache.xmlgraphics:batik-transcoder:1.16")
-}
-
-java {
-    sourceCompatibility = Versions.Java.source
-    targetCompatibility = Versions.Java.target
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
+        }
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(projects.imageLoader)
+                // svg
+                implementation("com.twelvemonkeys.imageio:imageio-batik:3.9.4")
+                implementation("org.apache.xmlgraphics:batik-transcoder:1.16")
+            }
+        }
+    }
 }

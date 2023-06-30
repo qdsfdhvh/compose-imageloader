@@ -84,18 +84,19 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
-      - name: Clean Managed Devices
-        run: ./gradlew cleanManagedDevices --unused-only
+#      - name: Clean Managed Devices
+#        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        # i don't care `yarn.lock` change.
+        run: ./gradlew kotlinUpgradeYarnLock assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
 
   build:
@@ -117,15 +118,16 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
-      - name: Clean Managed Devices
-        run: ./gradlew cleanManagedDevices --unused-only
+#      - name: Clean Managed Devices
+#        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
-        run: ./gradlew build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        # i don't care `yarn.lock` change.
+        run: ./gradlew kotlinUpgradeYarnLock build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"

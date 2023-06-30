@@ -7,7 +7,9 @@ import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.util.defaultFileSystem
 import okio.FileSystem
 
-class InterceptorsBuilder {
+internal typealias Interceptors = List<Interceptor>
+
+class InterceptorsBuilder internal constructor() {
 
     private val interceptors = mutableListOf<Interceptor>()
     private var memoryCache: (() -> MemoryCache)? = null
@@ -44,7 +46,7 @@ class InterceptorsBuilder {
         diskCache = block
     }
 
-    internal fun build(): List<Interceptor> {
+    internal fun build(): Interceptors {
         return interceptors + if (useDefaultInterceptors) {
             listOfNotNull(
                 MappedInterceptor(),
