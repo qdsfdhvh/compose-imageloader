@@ -13,7 +13,7 @@ import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.option.Scale
 
 @Composable
-inline fun rememberImageAction(
+fun rememberImageAction(
     url: String,
     imageLoader: ImageLoader = LocalImageLoader.current,
 ): State<ImageAction> {
@@ -22,7 +22,7 @@ inline fun rememberImageAction(
 }
 
 @Composable
-inline fun rememberImageAction(
+fun rememberImageAction(
     resId: Int,
     imageLoader: ImageLoader = LocalImageLoader.current,
 ): State<ImageAction> {
@@ -31,7 +31,7 @@ inline fun rememberImageAction(
 }
 
 @Composable
-inline fun rememberImageActionPainter(
+fun rememberImageActionPainter(
     url: String,
     imageLoader: ImageLoader = LocalImageLoader.current,
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
@@ -41,7 +41,7 @@ inline fun rememberImageActionPainter(
 }
 
 @Composable
-inline fun rememberImageActionPainter(
+fun rememberImageActionPainter(
     resId: Int,
     imageLoader: ImageLoader = LocalImageLoader.current,
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
