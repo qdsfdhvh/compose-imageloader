@@ -33,7 +33,7 @@ private fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         commonConfig()
         components {
-            setupDefaultComponents(imageScope)
+            setupDefaultComponents()
         }
         interceptor {
             memoryCacheConfig {

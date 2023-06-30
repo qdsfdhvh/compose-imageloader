@@ -36,7 +36,7 @@ private fun generateImageLoader(): ImageLoader {
         commonConfig()
         components {
             // add(ImageIODecoder.Factory())
-            setupDefaultComponents(imageScope)
+            setupDefaultComponents()
         }
         interceptor {
             memoryCacheConfig {

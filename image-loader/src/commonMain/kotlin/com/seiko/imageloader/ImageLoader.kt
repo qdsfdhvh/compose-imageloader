@@ -19,6 +19,8 @@ import kotlin.coroutines.CoroutineContext
 interface ImageLoader {
     val config: ImageLoaderConfig
     fun async(request: ImageRequest): Flow<ImageAction>
+
+    @Deprecated("", ReplaceWith("Use imageloader.async(request)"))
     suspend fun execute(request: ImageRequest): ImageResult {
         return async(request).filterIsInstance<ImageResult>().first()
     }

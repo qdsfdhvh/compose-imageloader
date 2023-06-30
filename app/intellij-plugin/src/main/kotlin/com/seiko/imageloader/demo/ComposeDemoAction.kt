@@ -3,10 +3,6 @@ package com.seiko.imageloader.demo
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.awt.ComposePanel
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.application.CoroutineSupport
-import com.intellij.openapi.application.ModalityState
-import com.intellij.openapi.application.asContextElement
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
@@ -17,7 +13,6 @@ import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.demo.util.LocalResLoader
 import com.seiko.imageloader.demo.util.ResLoader
 import com.seiko.imageloader.demo.util.commonConfig
-import kotlinx.coroutines.CoroutineScope
 import javax.swing.JComponent
 
 class ComposeDemoAction : DumbAwareAction() {
@@ -51,14 +46,9 @@ class ComposeDemoAction : DumbAwareAction() {
         @Suppress("UnstableApiUsage")
         private fun generateImageLoader(): ImageLoader {
             return ImageLoader {
-                imageScope = CoroutineScope(
-                    project.service<CoroutineSupport>().edtDispatcher() + ModalityState.any().asContextElement(),
-                )
                 commonConfig()
                 components {
-                    setupDefaultComponents(
-                        imageScope = imageScope,
-                    )
+                    setupDefaultComponents()
                 }
                 interceptor {
                     memoryCacheConfig {

@@ -20,14 +20,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import com.seiko.imageloader.ImageRequestState
 import com.seiko.imageloader.demo.model.Image
 import com.seiko.imageloader.demo.util.NullDataInterceptor
 import com.seiko.imageloader.demo.util.decodeJson
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.model.blur
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImageAction
+import com.seiko.imageloader.rememberImageActionPainter
 
 @Composable
 fun BackButton(onBack: () -> Unit) {
@@ -79,28 +80,27 @@ fun ImageItem(
                 }
             }
         }
-        val painter = rememberAsyncImagePainter(request)
+        val action by rememberImageAction(request)
+        val painter = rememberImageActionPainter(action)
         Image(
             painter = painter,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
-        when (val requestState = painter.requestState) {
-            is ImageRequestState.Loading -> {
-                when (requestState.event) {
-                    ImageEvent.StartWithDisk,
-                    ImageEvent.StartWithFetch,
-                    -> {
-                        CircularProgressIndicator()
-                    }
-                    else -> Unit
-                }
+        when (val current = action) {
+            is ImageEvent.StartWithDisk,
+            is ImageEvent.StartWithFetch,
+            -> {
+                CircularProgressIndicator()
             }
-            is ImageRequestState.Failure -> {
-                Text(requestState.error.message ?: "Error")
+            is ImageResult.Source -> {
+                Text("image result is source")
             }
-            ImageRequestState.Success -> Unit
+            is ImageResult.Error -> {
+                Text(current.error.message ?: "Error")
+            }
+            else -> Unit
         }
     }
 }
