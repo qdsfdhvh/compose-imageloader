@@ -7,6 +7,8 @@ HSPLcom/seiko/imageloader/demo/AppKt$App$1$1;-><init>(Landroidx/compose/runtime/
 HSPLcom/seiko/imageloader/demo/AppKt$App$1$1;->invoke(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 Lcom/seiko/imageloader/demo/AppKt$App$1$1$1;
 HSPLcom/seiko/imageloader/demo/AppKt$App$1$1$1;-><init>(Landroidx/compose/runtime/MutableState;)V
+Lcom/seiko/imageloader/demo/AppKt$App$2;
+HSPLcom/seiko/imageloader/demo/AppKt$App$2;-><init>(Ljava/lang/Object;III)V
 Lcom/seiko/imageloader/demo/AppKt$HomeScene$1;
 HSPLcom/seiko/imageloader/demo/AppKt$HomeScene$1;-><init>(ILkotlin/jvm/functions/Function1;)V
 HPLcom/seiko/imageloader/demo/AppKt$HomeScene$1;->invoke(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -14,7 +16,7 @@ Lcom/seiko/imageloader/demo/AppKt$HomeScene$1$1$1$2;
 HPLcom/seiko/imageloader/demo/AppKt$HomeScene$1$1$1$2;-><init>(ILjava/lang/Object;)V
 HPLcom/seiko/imageloader/demo/AppKt$HomeScene$1$1$1$2;->invoke(Landroidx/compose/foundation/layout/RowScope;Landroidx/compose/runtime/Composer;I)V
 HPLcom/seiko/imageloader/demo/AppKt$HomeScene$1$1$1$2;->invoke(Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;)Landroidx/compose/ui/Modifier;
-HPLcom/seiko/imageloader/demo/AppKt$HomeScene$1$1$1$2;->invoke(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+HSPLcom/seiko/imageloader/demo/AppKt$HomeScene$1$1$1$2;->invoke(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 Lcom/seiko/imageloader/demo/AppKt$HomeScene$2;
 HSPLcom/seiko/imageloader/demo/AppKt$HomeScene$2;-><init>(IILjava/lang/Object;)V
 Lcom/seiko/imageloader/demo/ComposableSingletons$AppKt;
