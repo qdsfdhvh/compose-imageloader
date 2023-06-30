@@ -1,5 +1,6 @@
 package com.seiko.imageloader.util
 
+import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,11 +16,7 @@ import org.jetbrains.skia.Codec
 internal class GifPainter(
     private val codec: Codec,
     private val repeatCount: Int = Options.REPEAT_INFINITE,
-) : Painter(), AnimationPainter {
-
-    private val bitmap = Bitmap().apply {
-        allocPixels(codec.imageInfo)
-    }
+) : Painter(), AnimationPainter, RememberObserver {
 
     private val durations = codec.framesInfo.map { it.duration * 1_000_000 }
     private val totalDuration = durations.sum()
@@ -28,14 +25,17 @@ internal class GifPainter(
     private var frame by mutableStateOf(0)
     private var loopIteration = -1
 
+    private var bitmapCache: Bitmap? = null
     private var intSizeCache: IntSize? = null
 
     override val intrinsicSize: Size
         get() = Size(codec.width.toFloat(), codec.height.toFloat())
 
     override fun DrawScope.onDraw() {
-        codec.readPixels(bitmap, frame, frame - 1)
-        drawImage(bitmap.asComposeImageBitmap(), dstSize = recycleIntSize(size))
+        bitmapCache?.let { bitmap ->
+            codec.readPixels(bitmap, frame, frame - 1)
+            drawImage(bitmap.asComposeImageBitmap(), dstSize = recycleIntSize(size))
+        }
     }
 
     private fun recycleIntSize(size: Size): IntSize {
@@ -70,5 +70,25 @@ internal class GifPainter(
             if (t >= time) return frame
         }
         error("Unexpected")
+    }
+
+    override fun onRemembered() {
+        bitmapCache = Bitmap().apply {
+            allocPixels(codec.imageInfo)
+        }
+    }
+
+    override fun onAbandoned() {
+        clear()
+    }
+
+    override fun onForgotten() {
+        clear()
+    }
+
+    private fun clear() {
+        bitmapCache?.close()
+        bitmapCache = null
+        intSizeCache = null
     }
 }
