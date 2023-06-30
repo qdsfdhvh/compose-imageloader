@@ -80,9 +80,7 @@ fun OtherImagesScene(
 @Composable
 private fun TestSvgImage(url: String) {
     Image(
-        painter = rememberImageActionPainter(
-            request = remember { ImageRequest(url) },
-        ),
+        painter = rememberImageActionPainter(url),
         contentDescription = null,
         modifier = Modifier
             .size(50.dp)
