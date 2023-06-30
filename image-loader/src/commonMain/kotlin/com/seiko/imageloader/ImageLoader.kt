@@ -20,7 +20,7 @@ interface ImageLoader {
     val config: ImageLoaderConfig
     fun async(request: ImageRequest): Flow<ImageAction>
 
-    @Deprecated("", ReplaceWith("Use imageloader.async(request)"))
+    @Deprecated("", ReplaceWith("Use imageloader.async(request).filterIsInstance<ImageResult>().first()"))
     suspend fun execute(request: ImageRequest): ImageResult {
         return async(request).filterIsInstance<ImageResult>().first()
     }
