@@ -15,10 +15,10 @@ class ImageRequest internal constructor(
     val data: Any,
     val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     val extra: ExtraData,
-    internal val components: ComponentRegistry?,
-    internal val interceptors: List<Interceptor>?,
     val placeholderPainter: (@Composable () -> Painter)?,
     val errorPainter: (@Composable () -> Painter)?,
+    internal val components: ComponentRegistry?,
+    internal val interceptors: List<Interceptor>?,
 ) {
     fun newBuilder(block: ImageRequestBuilder.() -> Unit) =
         ImageRequestBuilder(this).apply(block).build()
@@ -27,32 +27,31 @@ class ImageRequest internal constructor(
 class ImageRequestBuilder {
 
     private var data: Any?
-    private var extraData: ExtraData?
     private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit>
-    private var componentBuilder: ComponentRegistryBuilder?
-    private var interceptors: MutableList<Interceptor>?
+    private var extraData: ExtraData?
     private var placeholderPainter: (@Composable () -> Painter)?
     private var errorPainter: (@Composable () -> Painter)?
+    private var componentBuilder: ComponentRegistryBuilder?
+    private var interceptors: MutableList<Interceptor>?
 
     internal constructor() {
         data = null
-        extraData = null
         optionsBuilders = mutableListOf()
-        componentBuilder = null
-        interceptors = null
+        extraData = null
         placeholderPainter = null
         errorPainter = null
+        componentBuilder = null
+        interceptors = null
     }
 
     internal constructor(request: ImageRequest) {
         data = request.data
-        extraData = request.extra
         optionsBuilders = request.optionsBuilders.toMutableList()
-        componentBuilder = request.components?.newBuilder()
-        interceptors = request.interceptors?.toMutableList()
-        // eventListener = request.eventListener?.toMutableList()
+        extraData = request.extra
         placeholderPainter = request.placeholderPainter
         errorPainter = request.errorPainter
+        componentBuilder = request.components?.newBuilder()
+        interceptors = request.interceptors?.toMutableList()
     }
 
     fun data(data: Any?) {
@@ -102,11 +101,11 @@ class ImageRequestBuilder {
     internal fun build() = ImageRequest(
         data = data ?: NullRequestData,
         optionsBuilders = optionsBuilders,
-        components = componentBuilder?.build(),
-        interceptors = interceptors,
         extra = extraData ?: EmptyExtraData,
         placeholderPainter = placeholderPainter,
         errorPainter = errorPainter,
+        components = componentBuilder?.build(),
+        interceptors = interceptors,
     )
 }
 
