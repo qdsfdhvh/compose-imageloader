@@ -36,14 +36,15 @@ allprojects {
         }
     }
 
+    group = "io.github.qdsfdhvh"
+    version = Versions.Project.version
+
     plugins.withId("com.vanniktech.maven.publish.base") {
         mavenPublishing {
             publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
             signAllPublications()
             @Suppress("UnstableApiUsage")
             pom {
-                group = "io.github.qdsfdhvh"
-                version = Versions.Project.version
                 name.set("compose-imageLoader")
                 description.set("Compose ImageLoader.")
                 url.set("https://github.com/qdsfdhvh/compose-imageLoader")
