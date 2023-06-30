@@ -53,7 +53,7 @@ class OptionsBuilder {
         premultipliedAlpha = true
         retryIfDiskDecodeError = true
         imageConfig = Options.ImageConfig.ARGB_8888
-        scale = Scale.AUTO
+        scale = Scale.FILL
         sizeResolver = SizeResolver.Unspecified
         memoryCachePolicy = CachePolicy.ENABLED
         diskCachePolicy = CachePolicy.ENABLED
