@@ -30,7 +30,6 @@ kotlin {
                 implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.exifinterface)
-                implementation(libs.accompanist.drawablepainter)
                 implementation(libs.androidsvg)
             }
         }
