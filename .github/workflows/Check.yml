@@ -95,7 +95,7 @@ jobs:
 #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: ./gradlew kotlinUpgradeYarnLock assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
 
   build:
@@ -128,4 +128,4 @@ jobs:
 #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
-        run: ./gradlew build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: ./gradlew kotlinUpgradeYarnLock build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
