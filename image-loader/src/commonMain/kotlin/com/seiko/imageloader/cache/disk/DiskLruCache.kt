@@ -1,7 +1,6 @@
 package com.seiko.imageloader.cache.disk
 
 import com.seiko.imageloader.cache.disk.DiskLruCache.Editor
-import com.seiko.imageloader.util.AtomicBoolean
 import com.seiko.imageloader.util.LockObject
 import com.seiko.imageloader.util.createFile
 import com.seiko.imageloader.util.deleteContents
@@ -126,7 +125,7 @@ internal class DiskLruCache(
     private val journalFile = directory / JOURNAL_FILE
     private val journalFileTmp = directory / JOURNAL_FILE_TMP
     private val journalFileBackup = directory / JOURNAL_FILE_BACKUP
-    private val lruEntries = LinkedHashMap<String, Entry>(5, 0.75f)
+    private val lruEntries = LinkedHashMap<String, Entry>(0, 0.75f)
     private val cleanupScope = CoroutineScope(SupervisorJob() + cleanupDispatcher.limitedParallelism(1))
     private var size = 0L
     private var operationsSinceRewrite = 0
@@ -531,9 +530,6 @@ internal class DiskLruCache(
             return true
         }
 
-        // Prevent the edit from completing normally.
-        entry.currentEditor?.detach()
-
         for (i in 0 until valueCount) {
             fileSystem.delete(entry.cleanFiles[i])
             size -= entry.lengths[i]
@@ -569,10 +565,8 @@ internal class DiskLruCache(
 
         // Copying for concurrent iteration.
         for (entry in lruEntries.values.toTypedArray()) {
-            if (entry.currentEditor != null) {
-                // Prevent the edit from completing normally.
-                entry.currentEditor?.detach()
-            }
+            // Prevent the edit from completing normally.
+            entry.currentEditor?.detach()
         }
 
         trimToSize()
@@ -582,13 +576,13 @@ internal class DiskLruCache(
         closed = true
     }
 
-    // override fun flush() = synchronized(syncObject) {
-    //     if (!initialized) return
-    //
-    //     checkNotClosed()
-    //     trimToSize()
-    //     journalWriter!!.flush()
-    // }
+    fun flush() = synchronized(syncObject) {
+        if (!initialized) return
+
+        checkNotClosed()
+        trimToSize()
+        journalWriter!!.flush()
+    }
 
     private fun trimToSize() {
         while (size > maxSize) {
@@ -661,17 +655,18 @@ internal class DiskLruCache(
     }
 
     /** A snapshot of the values for an entry. */
-    inner class Snapshot(private val entry: Entry) : Closeable {
+    inner class Snapshot(val entry: Entry) : Closeable {
 
-        private val closed = AtomicBoolean(false)
+        private var closed = false
 
         fun file(index: Int): Path {
-            check(!closed.get()) { "snapshot is closed" }
+            check(!closed) { "snapshot is closed" }
             return entry.cleanFiles[index]
         }
 
         override fun close() {
-            if (closed.compareAndSet(false, true)) {
+            if (!closed) {
+                closed = true
                 synchronized(syncObject) {
                     entry.lockingSnapshotCount--
                     if (entry.lockingSnapshotCount == 0 && entry.zombie) {

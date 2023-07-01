@@ -22,21 +22,22 @@ interface DiskCache {
     val fileSystem: FileSystem
 
     /**
-     * Get the entry associated with [key].
+     * Read the entry associated with [key].
      *
-     * IMPORTANT: **You must** call either [Snapshot.close] or [Snapshot.closeAndEdit] when finished
-     * reading the snapshot. An open snapshot prevents editing the entry or deleting it on disk.
+     * IMPORTANT: **You must** call either [Snapshot.close] or [Snapshot.closeAndOpenEditor] when
+     * finished reading the snapshot. An open snapshot prevents opening a new [Editor] or deleting
+     * the entry on disk.
      */
-    operator fun get(key: String): Snapshot?
+    fun openSnapshot(key: String): Snapshot?
 
     /**
-     * Edit the entry associated with [key].
+     * Write to the entry associated with [key].
      *
-     * IMPORTANT: **You must** call one of [Editor.commit], [Editor.commitAndGet], or [Editor.abort]
-     * to complete the edit. An open editor prevents opening new [Snapshot]s or opening a new
-     * [Editor].
+     * IMPORTANT: **You must** call one of [Editor.commit], [Editor.commitAndOpenSnapshot], or
+     * [Editor.abort] to complete the edit. An open editor prevents opening a new [Snapshot],
+     * opening a new [Editor], or deleting the entry on disk.
      */
-    fun edit(key: String): Editor?
+    fun openEditor(key: String): Editor?
 
     /**
      * Delete the entry referenced by [key].
@@ -65,8 +66,8 @@ interface DiskCache {
         /** Close the snapshot to allow editing. */
         override fun close()
 
-        /** Close the snapshot and call [edit] for this entry atomically. */
-        fun closeAndEdit(): Editor?
+        /** Close the snapshot and call [openEditor] for this entry atomically. */
+        fun closeAndOpenEditor(): Editor?
     }
 
     /**
@@ -89,8 +90,8 @@ interface DiskCache {
         /** Commit the edit so the changes are visible to readers. */
         fun commit()
 
-        /** Commit the edit and open a new [Snapshot] atomically. */
-        fun commitAndGet(): Snapshot?
+        /** Commit the write and call [openSnapshot] for this entry atomically. */
+        fun commitAndOpenSnapshot(): Snapshot?
 
         /** Abort the edit. Any written data will be discarded. */
         fun abort()
