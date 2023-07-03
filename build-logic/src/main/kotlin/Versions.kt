@@ -10,7 +10,7 @@ object Versions {
         private const val monir = "5"
 
         // backwards compatible bug fixes
-        private const val path = "2"
+        private const val path = "3"
         const val version = "$major.$monir.$path"
     }
 
@@ -21,8 +21,8 @@ object Versions {
     }
 
     object Java {
-        const val jvmTarget = "17"
-        val target = JavaVersion.VERSION_17
-        val source = JavaVersion.VERSION_17
+        const val jvmTarget = "11"
+        val target = JavaVersion.VERSION_11
+        val source = JavaVersion.VERSION_11
     }
 }
