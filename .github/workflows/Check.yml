@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - release
     paths-ignore:
       - '**.md'
   pull_request:
@@ -34,17 +35,8 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
       - name: Check spotless
-        run: ./gradlew spotlessCheck --no-configuration-cache --stacktrace
-
-      - name: Assemble
-        run: ./gradlew assemble --stacktrace
+        run: ./gradlew spotlessCheck --stacktrace
 
   lint:
     needs: spotless
@@ -76,7 +68,7 @@ jobs:
 
   assemble:
     needs: spotless
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -93,18 +85,24 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      # Cleans managed device if previously settle and space currently is not available
+#      - name: Clean Managed Devices
+#        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace
+        # i don't care `yarn.lock` change.
+        run: ./gradlew kotlinUpgradeYarnLock assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
 
   build:
     needs: spotless
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -121,11 +119,16 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      # Cleans managed device if previously settle and space currently is not available
+#      - name: Clean Managed Devices
+#        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
-        run: ./gradlew build --stacktrace
+        # i don't care `yarn.lock` change.
+        run: ./gradlew kotlinUpgradeYarnLock build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"

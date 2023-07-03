@@ -7,7 +7,7 @@ class MappedInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val options = chain.options
-        val logger = chain.config.logger
+        val logger = chain.logger
 
         val mappedData = chain.components.map(request.data, options)
         logger.d(

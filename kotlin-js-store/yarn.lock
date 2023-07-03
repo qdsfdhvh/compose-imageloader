@@ -257,6 +257,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/http-errors@*":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/http-errors/-/http-errors-2.0.1.tgz#20172f9578b225f6c7da63446f56d4ce108d5a65"
+  integrity sha512-/K3ds8TRAfBvi5vfjuz8y6+GiAYBZ0x4tXv1Av6CWBWn0IlADc+ZX9pMq7oU0fNQPnBwIZl3rmeLp6SBApbxSQ==
+
 "@types/http-proxy@^1.17.8":
   version "1.17.11"
   resolved "https://registry.yarnpkg.com/@types/http-proxy/-/http-proxy-1.17.11.tgz#0ca21949a5588d55ac2b659b69035c84bd5da293"
@@ -332,10 +337,11 @@
     "@types/express" "*"
 
 "@types/serve-static@*", "@types/serve-static@^1.13.10":
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.15.1.tgz#86b1753f0be4f9a1bee68d459fcda5be4ea52b5d"
-  integrity sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ==
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.15.2.tgz#3e5419ecd1e40e7405d34093f10befb43f63381a"
+  integrity sha512-J2LqtvFYCzaj8pVYKw8klQXrLLk7TBZmQ4ShlcdkELFKGwGMfevMLneMMRkMgZxotOD9wg497LpC7O8PcvAmfw==
   dependencies:
+    "@types/http-errors" "*"
     "@types/mime" "*"
     "@types/node" "*"
 
@@ -347,9 +353,9 @@
     "@types/node" "*"
 
 "@types/ws@^8.5.1":
-  version "8.5.4"
-  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.4.tgz#bb10e36116d6e570dd943735f86c933c1587b8a5"
-  integrity sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==
+  version "8.5.5"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.5.tgz#af587964aa06682702ee6dcbc7be41a80e4b28eb"
+  integrity sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==
   dependencies:
     "@types/node" "*"
 
@@ -1421,7 +1427,7 @@ fs-extra@^8.1.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-monkey@^1.0.3:
+fs-monkey@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/fs-monkey/-/fs-monkey-1.0.4.tgz#ee8c1b53d3fe8bb7e5d2c5c5dfc0168afdd2f747"
   integrity sha512-INM/fWAxMICjttnD0DX1rBvinKskj5G1w+oy/pnm9u/tSlnBrzFonJMcalKJ30P8RRsPzKcCG7Q8l0jx5Fh9YQ==
@@ -1549,9 +1555,9 @@ hpack.js@^2.1.6:
     wbuf "^1.1.0"
 
 html-entities@^2.3.2:
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-2.3.4.tgz#c65db1302652a0a2986f216ef911df65015dc1ac"
-  integrity sha512-TtiHkpRBqP40OzizVWjwBPBsiqchEZxAg/nys6D6lIpdoVLo7sWZ/5Sf/s4UaBHQ6pzUzEr3NiItvEoO46sPtQ==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-2.4.0.tgz#edd0cee70402584c8c76cc2c0556db09d1f45061"
+  integrity sha512-igBTJcNNNhvZFRtm8uA6xMY6xYleeDwn3PeBCkDz7tHttv4F2hsDI2aPgNERWzvRcNYHNT3ymRaQzllmXj4YsQ==
 
 http-deceiver@^1.2.7:
   version "1.2.7"
@@ -1867,14 +1873,6 @@ karma-chrome-launcher@3.1.1:
   dependencies:
     which "^1.2.1"
 
-karma-firefox-launcher@2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/karma-firefox-launcher/-/karma-firefox-launcher-2.1.2.tgz#9a38cc783c579a50f3ed2a82b7386186385cfc2d"
-  integrity sha512-VV9xDQU1QIboTrjtGVD4NCfzIH7n01ZXqy/qpBhnOeGVOkG5JYPEm8kuSd7psHE6WouZaQ9Ool92g8LFweSNMA==
-  dependencies:
-    is-wsl "^2.2.0"
-    which "^2.0.1"
-
 karma-mocha@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/karma-mocha/-/karma-mocha-2.0.1.tgz#4b0254a18dfee71bdbe6188d9a6861bf86b0cd7d"
@@ -2001,11 +1999,11 @@ media-typer@0.3.0:
   integrity sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==
 
 memfs@^3.4.3:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/memfs/-/memfs-3.5.2.tgz#3367cb58940e45224a7e377015b37f55a831b3ac"
-  integrity sha512-4kbWXbVZ+LU4XFDS2CuA7frnwz2HxCMB/0yOXc86q7aCQrfWKkL11t6al1e2CsVC7uhnBNTQ1TfUsAxVauO9IQ==
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/memfs/-/memfs-3.6.0.tgz#d7a2110f86f79dd950a8b6df6d57bc984aa185f6"
+  integrity sha512-EGowvkkgbMcIChjMTMkESFDbZeSh8xZ7kNSF0hAiAN4Jh6jgHCRS0Ga/+C8y6Au+oqpezRHCfPsmJ2+DwAgiwQ==
   dependencies:
-    fs-monkey "^1.0.3"
+    fs-monkey "^1.0.4"
 
 merge-descriptors@1.0.1:
   version "1.0.1"

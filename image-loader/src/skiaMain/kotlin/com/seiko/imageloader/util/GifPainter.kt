@@ -1,90 +1,40 @@
 package com.seiko.imageloader.util
 
 import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.IntSize
 import com.seiko.imageloader.option.Options
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.yield
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Codec
-import kotlin.time.Duration.Companion.milliseconds
 
 internal class GifPainter(
     private val codec: Codec,
-    private val imageScope: CoroutineScope,
     private val repeatCount: Int = Options.REPEAT_INFINITE,
-) : Painter(), RememberObserver {
+) : Painter(), AnimationPainter, RememberObserver {
+
+    private val durations = codec.framesInfo.map { it.duration * 1_000_000 }
+    private val totalDuration = durations.sum()
+
+    private var startTime = -1L
+    private var frame by mutableStateOf(0)
+    private var loopIteration = -1
 
     private var bitmapCache: Bitmap? = null
     private var intSizeCache: IntSize? = null
 
-    private var drawImageBitmap = mutableStateOf<ImageBitmap?>(null)
-
-    private var rememberJob: Job? = null
-
     override val intrinsicSize: Size
         get() = Size(codec.width.toFloat(), codec.height.toFloat())
 
-    override fun onRemembered() {
-        // Short circuit if we're already remembered.
-        if (rememberJob != null) return
-
-        rememberJob = gifImageFlow()
-            .onEach { drawImageBitmap.value = it }
-            .launchIn(imageScope)
-    }
-
-    private fun gifImageFlow() = flow {
-        yield()
-        when {
-            codec.framesInfo.isEmpty() -> Unit
-            codec.framesInfo.size == 1 -> {
-                emit(getImageBitmap(codec, 0))
-            }
-            else -> {
-                var loopIteration = -1
-                while (repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount) {
-                    for ((index, frame) in codec.framesInfo.withIndex()) {
-                        emit(getImageBitmap(codec, index))
-                        delay(frame.duration.milliseconds)
-                    }
-                }
-            }
-        }
-    }
-
-    override fun onAbandoned() {
-        clear()
-    }
-
-    override fun onForgotten() {
-        clear()
-    }
-
-    private fun clear() {
-        if (rememberJob == null) return
-        rememberJob?.cancel()
-        rememberJob = null
-        drawImageBitmap.value = null
-        bitmapCache?.close()
-        bitmapCache = null
-        intSizeCache = null
-    }
-
     override fun DrawScope.onDraw() {
-        drawImageBitmap.value?.let { image ->
-            drawImage(image, dstSize = recycleIntSize(size))
+        bitmapCache?.let { bitmap ->
+            codec.readPixels(bitmap, frame, frame - 1)
+            drawImage(bitmap.asComposeImageBitmap(), dstSize = recycleIntSize(size))
         }
     }
 
@@ -101,22 +51,44 @@ internal class GifPainter(
         return intSize
     }
 
-    private fun getImageBitmap(codec: Codec, frameIndex: Int): ImageBitmap {
-        return recycleBitmap(codec).apply {
-            codec.readPixels(this, frameIndex, frameIndex - 1)
-        }.asComposeImageBitmap().also {
-            it.prepareToDraw()
+    override fun isPlay(): Boolean {
+        return repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount
+    }
+
+    override fun update(nanoTime: Long) {
+        if (startTime == -1L) {
+            startTime = nanoTime
+        }
+        frame = frameOf(time = (nanoTime - startTime) % totalDuration)
+    }
+
+    // WARNING: it is not optimal
+    private fun frameOf(time: Long): Int {
+        var t = 0
+        for (frame in durations.indices) {
+            t += durations[frame]
+            if (t >= time) return frame
+        }
+        error("Unexpected")
+    }
+
+    override fun onRemembered() {
+        bitmapCache = Bitmap().apply {
+            allocPixels(codec.imageInfo)
         }
     }
 
-    private fun recycleBitmap(codec: Codec): Bitmap {
-        val bitmap = bitmapCache ?: Bitmap().also {
-            it.allocPixels(codec.imageInfo)
-            bitmapCache = it
-        }
-        if (bitmap.width != codec.width && bitmap.height != codec.height) {
-            bitmap.allocPixels(codec.imageInfo)
-        }
-        return bitmap
+    override fun onAbandoned() {
+        clear()
+    }
+
+    override fun onForgotten() {
+        clear()
+    }
+
+    private fun clear() {
+        bitmapCache?.close()
+        bitmapCache = null
+        intSizeCache = null
     }
 }

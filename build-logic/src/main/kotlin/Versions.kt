@@ -10,19 +10,19 @@ object Versions {
         private const val monir = "5"
 
         // backwards compatible bug fixes
-        private const val path = "1"
+        private const val path = "3"
         const val version = "$major.$monir.$path"
     }
 
     object Android {
         const val min = 21
-        const val compile = 33
+        const val compile = 34
         const val target = compile
     }
 
     object Java {
         const val jvmTarget = "11"
         val target = JavaVersion.VERSION_11
-        val source = JavaVersion.VERSION_17
+        val source = JavaVersion.VERSION_11
     }
 }

@@ -40,7 +40,7 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PASSWORD }}
 
   release:
-    needs: publish_maven
+    needs: publish
     runs-on: ubuntu-latest
 
     steps:

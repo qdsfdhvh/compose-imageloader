@@ -2,6 +2,7 @@ plugins {
     id("project-kmp")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.baselineProfile)
 }
 
 kotlin {
@@ -29,7 +30,6 @@ kotlin {
                 implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.exifinterface)
-                implementation(libs.accompanist.drawablepainter)
                 implementation(libs.androidsvg)
             }
         }
@@ -65,4 +65,17 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader"
+}
+
+baselineProfile {
+    baselineProfileOutputDir = "../../src/androidMain/generated/baselineProfiles"
+    filter {
+        include("com.seiko.imageloader.**")
+        exclude("com.seiko.imageloader.demo.**")
+        exclude("com.seiko.imageloader.util.Logger")
+    }
+}
+
+dependencies {
+    baselineProfile(projects.app.android.benchmark)
 }

@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.plugin.serialization) apply false
     alias(libs.plugins.composeJb) apply false
@@ -90,4 +91,18 @@ allprojects {
 tasks.dokkaHtmlMultiModule {
     moduleVersion.set(Versions.Project.version)
     outputDirectory.set(rootDir.resolve("docs/static/api"))
+}
+
+gradle.taskGraph.whenReady {
+    if (project.hasProperty("noAppApple")) {
+        allTasks.asSequence()
+            .filter {
+                it.path.startsWith(":app:ios-combine") ||
+                    it.path.startsWith(":app:macos") ||
+                    it.path.startsWith(":app:web")
+            }
+            .forEach {
+                it.enabled = false
+            }
+    }
 }

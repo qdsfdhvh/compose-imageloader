@@ -6,9 +6,10 @@ class ProjectKmpPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
+                // top android library https://stackoverflow.com/questions/64775638/kotlin-multiplatform-publish-android-library-failing
+                apply("com.android.library")
                 apply("org.jetbrains.kotlin.multiplatform")
                 apply("org.jetbrains.compose")
-                apply("com.android.library")
             }
             kotlin {
                 android {
