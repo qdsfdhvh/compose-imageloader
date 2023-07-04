@@ -82,6 +82,12 @@ jobs:
       - name: Test
         run: ./gradlew test --stacktrace
 
+      - name: Upload build reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-reports
+          path: '**/build/reports'
+
   assemble:
     needs: spotless
     runs-on: macos-latest
@@ -101,15 +107,15 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-#      - name: Setup Gradle
-#        uses: gradle/gradle-build-action@v2
-#        with:
-#          gradle-home-cache-cleanup: true
-#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+      #      - name: Setup Gradle
+      #        uses: gradle/gradle-build-action@v2
+      #        with:
+      #          gradle-home-cache-cleanup: true
+      #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
-#      - name: Clean Managed Devices
-#        run: ./gradlew cleanManagedDevices --unused-only
+      #      - name: Clean Managed Devices
+      #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
         # i don't care `yarn.lock` change.
@@ -134,15 +140,15 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-#      - name: Setup Gradle
-#        uses: gradle/gradle-build-action@v2
-#        with:
-#          gradle-home-cache-cleanup: true
-#          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+      #      - name: Setup Gradle
+      #        uses: gradle/gradle-build-action@v2
+      #        with:
+      #          gradle-home-cache-cleanup: true
+      #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       # Cleans managed device if previously settle and space currently is not available
-#      - name: Clean Managed Devices
-#        run: ./gradlew cleanManagedDevices --unused-only
+      #      - name: Clean Managed Devices
+      #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
         # i don't care `yarn.lock` change.
