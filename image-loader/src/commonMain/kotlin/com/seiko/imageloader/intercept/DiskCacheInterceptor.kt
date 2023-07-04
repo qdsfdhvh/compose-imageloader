@@ -87,7 +87,7 @@ class DiskCacheInterceptor(
         cacheKey: String,
     ): DiskCache.Snapshot? {
         return if (options.diskCachePolicy.readEnabled) {
-            diskCache[cacheKey]
+            diskCache.openSnapshot(cacheKey)
         } else {
             null
         }
@@ -103,14 +103,14 @@ class DiskCacheInterceptor(
             snapshot?.closeQuietly()
             return null
         }
-        val editor = snapshot?.closeAndEdit()
-            ?: diskCache.edit(cacheKey)
+        val editor = snapshot?.closeAndOpenEditor()
+            ?: diskCache.openEditor(cacheKey)
             ?: return null
         try {
             fileSystem.write(editor.data) {
                 writeAll(source)
             }
-            return editor.commitAndGet()
+            return editor.commitAndOpenSnapshot()
         } catch (e: Exception) {
             editor.abortQuietly()
             throw e

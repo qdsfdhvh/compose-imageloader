@@ -18,6 +18,13 @@ kotlin {
                 api(libs.uri.kmp)
             }
         }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.okio.fakefilesystem)
+            }
+        }
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)

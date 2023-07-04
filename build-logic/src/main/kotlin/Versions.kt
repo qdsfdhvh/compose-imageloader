@@ -23,6 +23,6 @@ object Versions {
     object Java {
         const val jvmTarget = "11"
         val target = JavaVersion.VERSION_11
-        val source = JavaVersion.VERSION_11
+        val source = JavaVersion.VERSION_17
     }
 }
