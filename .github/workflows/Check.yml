@@ -57,14 +57,30 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
       - name: Lint
         run: ./gradlew lint --stacktrace
+
+  test:
+    needs: spotless
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Test
+        run: ./gradlew test --stacktrace
 
   assemble:
     needs: spotless
@@ -98,7 +114,6 @@ jobs:
       - name: Assemble
         # i don't care `yarn.lock` change.
         run: ./gradlew kotlinUpgradeYarnLock assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-
 
   build:
     needs: spotless
