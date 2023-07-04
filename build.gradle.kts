@@ -83,7 +83,9 @@ gradle.taskGraph.whenReady {
             .filter {
                 it.path.startsWith(":app:ios-combine") ||
                     it.path.startsWith(":app:macos") ||
-                    it.path.startsWith(":app:web")
+                    it.path.startsWith(":app:web") ||
+                    // TODO remove when this fix https://github.com/JetBrains/compose-multiplatform/issues/3135
+                    it.path.startsWith(":image-loader:linkDebugTestIos")
             }
             .forEach {
                 it.enabled = false
