@@ -34,7 +34,7 @@ private fun generateImageLoader(): ImageLoader {
                 // Set the max size to 25% of the app's available memory.
                 maxSizePercent(0.25)
             }
-            diskCacheConfig(FakeFileSystem()) {
+            diskCacheConfig(FakeFileSystem().apply { emulateUnix() }) {
                 directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY)
                 maxSizeBytes(256L * 1024 * 1024) // 256MB
             }
