@@ -83,11 +83,22 @@ gradle.taskGraph.whenReady {
             .filter {
                 it.path.startsWith(":app:ios-combine") ||
                     it.path.startsWith(":app:macos") ||
-                    it.path.startsWith(":app:web") ||
-                    // TODO remove when this fix https://github.com/JetBrains/compose-multiplatform/issues/3135
-                    it.path.startsWith(":image-loader:linkDebugTestIos")
+                    it.path.startsWith(":app:web")
             }
             .forEach {
+                it.enabled = false
+            }
+        // TODO remove when this fix https://github.com/JetBrains/compose-multiplatform/issues/3135
+        allTasks.asSequence()
+            .filter {
+                it.path in listOf(
+                    ":image-loader:linkDebugTestIosSimulatorArm64",
+                    ":image-loader:linkDebugTestIosArm64",
+                    ":image-loader:linkDebugTestIosX64",
+                    ":image-loader:linkDebugTestMacosArm64",
+                    ":image-loader:linkDebugTestMacosX64",
+                )
+            }.forEach {
                 it.enabled = false
             }
     }

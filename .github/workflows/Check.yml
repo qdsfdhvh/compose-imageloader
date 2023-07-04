@@ -118,8 +118,7 @@ jobs:
       #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
-        # i don't care `yarn.lock` change.
-        run: ./gradlew kotlinUpgradeYarnLock assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: ./gradlew assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
   build:
     needs: spotless
@@ -151,5 +150,4 @@ jobs:
       #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
-        # i don't care `yarn.lock` change.
-        run: ./gradlew kotlinUpgradeYarnLock build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: ./gradlew build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
