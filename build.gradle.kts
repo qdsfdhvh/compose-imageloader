@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.roborazzi) apply false
     id("build-logic") apply false
 }
 

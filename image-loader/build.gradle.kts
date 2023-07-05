@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)
+    alias(libs.plugins.roborazzi)
 }
 
 kotlin {
@@ -21,8 +22,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.okio.fakefilesystem)
+                implementation(libs.bundles.test.common)
             }
         }
         val jvmMain by getting {
@@ -38,6 +38,15 @@ kotlin {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.exifinterface)
                 implementation(libs.androidsvg)
+            }
+        }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(compose.foundation)
+                implementation(compose.ui)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.uiTestJUnit4)
+                implementation(libs.bundles.test.android)
             }
         }
         val desktopMain by getting {
@@ -70,8 +79,14 @@ kotlin {
     }
 }
 
+@Suppress("UnstableApiUsage")
 android {
     namespace = "io.github.qdsfdhvh.imageloader"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 baselineProfile {
