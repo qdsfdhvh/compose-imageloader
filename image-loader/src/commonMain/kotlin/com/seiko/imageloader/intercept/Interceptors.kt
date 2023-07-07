@@ -4,6 +4,10 @@ import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
+import com.seiko.imageloader.cache.memory.MemoryKey
+import com.seiko.imageloader.cache.memory.MemoryValue
+import com.seiko.imageloader.identityHashCode
+import com.seiko.imageloader.size
 import com.seiko.imageloader.util.defaultFileSystem
 import okio.FileSystem
 
@@ -12,7 +16,7 @@ internal typealias Interceptors = List<Interceptor>
 class InterceptorsBuilder internal constructor() {
 
     private val interceptors = mutableListOf<Interceptor>()
-    private var memoryCache: (() -> MemoryCache)? = null
+    private var memoryCache: (() -> MemoryCache<MemoryKey, MemoryValue>)? = null
     private var diskCache: (() -> DiskCache)? = null
 
     var useDefaultInterceptors = true
@@ -25,11 +29,17 @@ class InterceptorsBuilder internal constructor() {
         this.interceptors.addAll(interceptors)
     }
 
-    fun memoryCacheConfig(block: MemoryCacheBuilder.() -> Unit) {
-        memoryCache = { MemoryCache(block) }
+    fun memoryCacheConfig(block: MemoryCacheBuilder<MemoryKey, MemoryValue>.() -> Unit) {
+        memoryCache = {
+            MemoryCache(
+                valueHashProvider = { it.identityHashCode },
+                valueSizeProvider = { it.size },
+                block = block,
+            )
+        }
     }
 
-    fun memoryCache(block: () -> MemoryCache) {
+    fun memoryCache(block: () -> MemoryCache<MemoryKey, MemoryValue>) {
         memoryCache = block
     }
 
