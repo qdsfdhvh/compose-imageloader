@@ -1,7 +1,6 @@
 package com.seiko.imageloader.cache.memory
 
 import com.seiko.imageloader.Bitmap
-import com.seiko.imageloader.identityHashCode
 import com.seiko.imageloader.size
 
 class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
@@ -48,7 +47,7 @@ fun <K : Any, V : Any> MemoryCache(
     block: MemoryCacheBuilder<K, V>.() -> Unit,
 ) = MemoryCacheBuilder<K, V>(
     valueHashProvider = valueHashProvider,
-    valueSizeProvider = valueSizeProvider
+    valueSizeProvider = valueSizeProvider,
 ).apply(block).build()
 
 typealias MemoryKey = String

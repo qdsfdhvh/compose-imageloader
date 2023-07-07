@@ -40,7 +40,6 @@ internal open class EmptyStrongMemoryCache<K : Any, V : Any>(
 
     override fun remove(key: K) = false
     override fun evictAll() = Unit
-
 }
 
 /** A [StrongMemoryCache] implementation backed by an [LruCache]. */

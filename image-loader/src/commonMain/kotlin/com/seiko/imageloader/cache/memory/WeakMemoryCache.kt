@@ -69,8 +69,8 @@ internal open class RealWeakMemoryCache<K : Any, V : Any>(
                 for (index in cacheValues.indices) {
                     val cacheValue = cacheValues[index]
                     if (size >= cacheValue.size) {
-                        if (cacheValue.identityHashCode == identityHashCode
-                            && cacheValue.value.get() === value
+                        if (cacheValue.identityHashCode == identityHashCode &&
+                            cacheValue.value.get() === value
                         ) {
                             cacheValues[index] = newCacheValue
                         } else {
