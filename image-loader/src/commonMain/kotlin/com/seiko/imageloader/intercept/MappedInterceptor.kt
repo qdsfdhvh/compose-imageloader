@@ -10,10 +10,12 @@ class MappedInterceptor : Interceptor {
         val logger = chain.logger
 
         val mappedData = chain.components.map(request.data, options)
-        logger.d(
-            tag = "MappedInterceptor",
-            data = request.data,
-        ) { "map -> $mappedData" }
+        if (mappedData !== request.data) {
+            logger.d(
+                tag = "MappedInterceptor",
+                data = request.data,
+            ) { "map -> $mappedData" }
+        }
 
         val newRequest = request.newBuilder { data(mappedData) }
         return chain.proceed(newRequest)
