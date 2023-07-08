@@ -1,6 +1,12 @@
 package com.seiko.imageloader.cache.memory
 
-class MemoryCacheBuilder internal constructor() {
+import com.seiko.imageloader.Bitmap
+import com.seiko.imageloader.size
+
+class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
+    private val valueHashProvider: (V) -> Int,
+    private val valueSizeProvider: (V) -> Int,
+) {
 
     private var maxSizeBytes = 0
     private var strongReferencesEnabled = true
@@ -19,24 +25,31 @@ class MemoryCacheBuilder internal constructor() {
         weakReferencesEnabled = enable
     }
 
-    internal fun build(): MemoryCache {
-        val weakMemoryCache = if (weakReferencesEnabled) {
-            RealWeakMemoryCache()
+    internal fun build(): MemoryCache<K, V> {
+        val weakMemoryCache: WeakMemoryCache<K, V> = if (weakReferencesEnabled) {
+            RealWeakMemoryCache(valueHashProvider)
         } else {
-            EmptyWeakMemoryCache
+            EmptyWeakMemoryCache()
         }
-        val strongMemoryCache = if (strongReferencesEnabled) {
-            if (maxSizeBytes > 0) {
-                RealStrongMemoryCache(maxSizeBytes, weakMemoryCache)
+        val strongMemoryCache: StrongMemoryCache<K, V> =
+            if (strongReferencesEnabled && maxSizeBytes > 0) {
+                RealStrongMemoryCache(maxSizeBytes, weakMemoryCache, valueSizeProvider)
             } else {
-                EmptyStrongMemoryCache(weakMemoryCache)
+                EmptyStrongMemoryCache(weakMemoryCache, valueSizeProvider)
             }
-        } else {
-            EmptyStrongMemoryCache(weakMemoryCache)
-        }
         return RealMemoryCache(strongMemoryCache, weakMemoryCache)
     }
 }
 
-fun MemoryCache(block: MemoryCacheBuilder.() -> Unit) =
-    MemoryCacheBuilder().apply(block).build()
+fun <K : Any, V : Any> MemoryCache(
+    valueHashProvider: (V) -> Int,
+    valueSizeProvider: (V) -> Int,
+    block: MemoryCacheBuilder<K, V>.() -> Unit,
+) = MemoryCacheBuilder<K, V>(
+    valueHashProvider = valueHashProvider,
+    valueSizeProvider = valueSizeProvider,
+).apply(block).build()
+
+typealias MemoryKey = String
+
+typealias MemoryValue = Bitmap

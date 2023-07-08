@@ -12,7 +12,7 @@ import com.seiko.imageloader.util.d
 import com.seiko.imageloader.util.w
 
 class MemoryCacheInterceptor(
-    memoryCache: () -> MemoryCache,
+    memoryCache: () -> MemoryCache<MemoryKey, MemoryValue>,
 ) : Interceptor {
 
     private val memoryCache by lazy(memoryCache)
@@ -42,7 +42,6 @@ class MemoryCacheInterceptor(
                 data = request.data,
             ) { "read memory cache." }
             return ImageResult.Bitmap(
-                // request = request,
                 bitmap = memoryCacheValue,
             )
         }
