@@ -58,8 +58,8 @@ fun rememberImageResultPainter(
         is ImageResult.Bitmap -> remember(filterQuality) {
             result.bitmap.toPainter(filterQuality)
         }
-        is ImageResult.Image -> remember(filterQuality) {
-            result.image.toPainter(filterQuality)
+        is ImageResult.Image -> remember {
+            result.image.toPainter()
         }
         is ImageResult.Error,
         is ImageResult.Source,
