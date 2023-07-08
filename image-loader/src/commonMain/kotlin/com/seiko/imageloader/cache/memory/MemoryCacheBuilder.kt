@@ -1,7 +1,6 @@
 package com.seiko.imageloader.cache.memory
 
 import com.seiko.imageloader.Bitmap
-import com.seiko.imageloader.size
 
 class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
     private val valueHashProvider: (V) -> Int,
@@ -26,11 +25,12 @@ class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
     }
 
     internal fun build(): MemoryCache<K, V> {
-        val weakMemoryCache: WeakMemoryCache<K, V> = if (weakReferencesEnabled) {
-            RealWeakMemoryCache(valueHashProvider)
-        } else {
-            EmptyWeakMemoryCache()
-        }
+        val weakMemoryCache: WeakMemoryCache<K, V> =
+            if (weakReferencesEnabled) {
+                RealWeakMemoryCache(valueHashProvider)
+            } else {
+                EmptyWeakMemoryCache()
+            }
         val strongMemoryCache: StrongMemoryCache<K, V> =
             if (strongReferencesEnabled && maxSizeBytes > 0) {
                 RealStrongMemoryCache(maxSizeBytes, weakMemoryCache, valueSizeProvider)
