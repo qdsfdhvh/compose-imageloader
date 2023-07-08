@@ -30,21 +30,6 @@ fun rememberImageAction(
 
 @Composable
 fun rememberImageActionPainter(
-    request: ImageRequest,
-    imageLoader: ImageLoader = LocalImageLoader.current,
-    filterQuality: FilterQuality = DefaultFilterQuality,
-): Painter {
-    val action by rememberImageAction(request, imageLoader)
-    return rememberImageActionPainter(
-        action = action,
-        filterQuality = filterQuality,
-        placeholderPainter = request.placeholderPainter,
-        errorPainter = request.errorPainter,
-    )
-}
-
-@Composable
-fun rememberImageActionPainter(
     action: ImageAction,
     filterQuality: FilterQuality = DefaultFilterQuality,
     placeholderPainter: (@Composable () -> Painter)? = null,

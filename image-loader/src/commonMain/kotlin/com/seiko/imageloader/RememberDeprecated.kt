@@ -10,17 +10,20 @@ import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.option.Scale
 
-@Deprecated("rememberImagePainter is deprecated", replaceWith = ReplaceWith("rememberImageActionPainter"))
+@Deprecated(
+    message = "move contentScale into ImageRequest",
+    replaceWith = ReplaceWith("ImageRequest { scale(contentScale.toScale()) }"),
+)
 @Composable
 fun rememberImagePainter(
     url: String,
+    contentScale: ContentScale,
     imageLoader: ImageLoader = LocalImageLoader.current,
-    contentScale: ContentScale = ContentScale.Fit,
     filterQuality: FilterQuality = DefaultFilterQuality,
     placeholderPainter: (@Composable () -> Painter)? = null,
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
-    val action by rememberImageAction(
+    return rememberImagePainter(
         request = remember(url, contentScale) {
             ImageRequest {
                 data(url)
@@ -28,26 +31,24 @@ fun rememberImagePainter(
             }
         },
         imageLoader = imageLoader,
-    )
-    return rememberImageActionPainter(
-        action = action,
         filterQuality = filterQuality,
-        placeholderPainter = placeholderPainter,
-        errorPainter = errorPainter,
     )
 }
 
-@Deprecated("rememberImagePainter is deprecated", replaceWith = ReplaceWith("rememberImageActionPainter"))
+@Deprecated(
+    message = "move contentScale into ImageRequest",
+    replaceWith = ReplaceWith("ImageRequest { scale(contentScale.toScale()) }"),
+)
 @Composable
 fun rememberImagePainter(
     resId: Int,
+    contentScale: ContentScale,
     imageLoader: ImageLoader = LocalImageLoader.current,
-    contentScale: ContentScale = ContentScale.Fit,
     filterQuality: FilterQuality = DefaultFilterQuality,
     placeholderPainter: (@Composable () -> Painter)? = null,
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
-    val action by rememberImageAction(
+    return rememberImagePainter(
         request = remember(resId, contentScale) {
             ImageRequest {
                 data(resId)
@@ -55,32 +56,33 @@ fun rememberImagePainter(
             }
         },
         imageLoader = imageLoader,
-    )
-    return rememberImageActionPainter(
-        action = action,
         filterQuality = filterQuality,
-        placeholderPainter = placeholderPainter,
-        errorPainter = errorPainter,
     )
 }
 
-@Deprecated("rememberImagePainter is deprecated", replaceWith = ReplaceWith("rememberImageActionPainter"))
+@Deprecated(
+    message = "move contentScale into ImageRequest",
+    replaceWith = ReplaceWith("ImageRequest { scale(contentScale.toScale()) }"),
+)
 @Composable
 fun rememberImagePainter(
     request: ImageRequest,
+    contentScale: ContentScale,
     imageLoader: ImageLoader = LocalImageLoader.current,
-    contentScale: ContentScale = ContentScale.Fit,
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): Painter {
-    val newRequest = remember(request) {
-        request.newBuilder {
-            scale(contentScale.toScale())
-        }
-    }
-    return rememberImageActionPainter(newRequest, imageLoader, filterQuality)
+    return rememberImagePainter(
+        request = remember(request) {
+            request.newBuilder {
+                scale(contentScale.toScale())
+            }
+        },
+        imageLoader = imageLoader,
+        filterQuality = filterQuality,
+    )
 }
 
-@Deprecated("rememberAsyncImagePainter is deprecated", replaceWith = ReplaceWith("rememberImageActionPainter"))
+@Deprecated("Use rememberImageAction&rememberImageActionPainter or rememberImagePainter")
 @Composable
 fun rememberAsyncImagePainter(
     url: String,
@@ -94,14 +96,11 @@ fun rememberAsyncImagePainter(
             scale(contentScale.toScale())
         }
     }
-    return rememberImageActionPainter(
-        request = request,
-        imageLoader = imageLoader,
-        filterQuality = filterQuality,
-    )
+    val action by rememberImageAction(request, imageLoader)
+    return rememberImageActionPainter(action, filterQuality)
 }
 
-@Deprecated("rememberAsyncImagePainter is deprecated", replaceWith = ReplaceWith("rememberImageActionPainter"))
+@Deprecated("Use rememberImageAction&rememberImageActionPainter or rememberImagePainter")
 @Composable
 fun rememberAsyncImagePainter(
     resId: Int,
@@ -115,14 +114,11 @@ fun rememberAsyncImagePainter(
             scale(contentScale.toScale())
         }
     }
-    return rememberImageActionPainter(
-        request = request,
-        imageLoader = imageLoader,
-        filterQuality = filterQuality,
-    )
+    val action by rememberImageAction(request, imageLoader)
+    return rememberImageActionPainter(action, filterQuality)
 }
 
-@Deprecated("rememberAsyncImagePainter is deprecated", replaceWith = ReplaceWith("rememberImageActionPainter"))
+@Deprecated("Use rememberImageAction&rememberImageActionPainter or rememberImagePainter")
 @Composable
 fun rememberAsyncImagePainter(
     request: ImageRequest,
@@ -135,11 +131,8 @@ fun rememberAsyncImagePainter(
             scale(contentScale.toScale())
         }
     }
-    return rememberImageActionPainter(
-        request = newRequest,
-        imageLoader = imageLoader,
-        filterQuality = filterQuality,
-    )
+    val action by rememberImageAction(newRequest, imageLoader)
+    return rememberImageActionPainter(action, filterQuality)
 }
 
 fun ContentScale.toScale() = when (this) {
