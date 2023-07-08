@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.demo.MR
-import com.seiko.imageloader.rememberImageActionPainter
+import com.seiko.imageloader.rememberImagePainter
 
 @Composable
 fun OtherImagesScene(
@@ -78,7 +78,7 @@ fun OtherImagesScene(
 @Composable
 private fun TestSvgImage(url: String) {
     Image(
-        painter = rememberImageActionPainter(url),
+        painter = rememberImagePainter(url),
         contentDescription = null,
         modifier = Modifier
             .size(50.dp)
