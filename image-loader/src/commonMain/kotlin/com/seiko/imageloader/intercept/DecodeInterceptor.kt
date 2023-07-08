@@ -22,7 +22,7 @@ class DecodeInterceptor : Interceptor {
                 runCatching {
                     decode(chain.components, result, options)
                 }.fold(
-                    onSuccess = { it.toImageResult(request) },
+                    onSuccess = { it.toImageResult() },
                     onFailure = {
                         if (options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
                             val noDiskCacheRequest = request.newBuilder {
@@ -38,32 +38,13 @@ class DecodeInterceptor : Interceptor {
                             }
                             proceed(chain, noDiskCacheRequest)
                         } else {
-                            ImageResult.Error(
-                                request = request,
-                                error = it,
-                            )
+                            ImageResult.Error(it)
                         }
                     },
                 )
             }
-
             else -> result
         }
-    }
-
-    private fun DecodeResult.toImageResult(request: ImageRequest) = when (this) {
-        is DecodeResult.Bitmap -> ImageResult.Bitmap(
-            request = request,
-            bitmap = bitmap,
-        )
-        is DecodeResult.Image -> ImageResult.Image(
-            request = request,
-            image = image,
-        )
-        is DecodeResult.Painter -> ImageResult.Painter(
-            request = request,
-            painter = painter,
-        )
     }
 
     private suspend fun decode(
@@ -85,4 +66,10 @@ class DecodeInterceptor : Interceptor {
         }
         return decodeResult
     }
+}
+
+private fun DecodeResult.toImageResult() = when (this) {
+    is DecodeResult.Bitmap -> ImageResult.Bitmap(bitmap = bitmap)
+    is DecodeResult.Image -> ImageResult.Image(image = image)
+    is DecodeResult.Painter -> ImageResult.Painter(painter = painter)
 }

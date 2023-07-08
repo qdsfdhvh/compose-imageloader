@@ -1,8 +1,6 @@
 package com.seiko.imageloader.cache.memory
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.seiko.imageloader.Bitmap
-import com.seiko.imageloader.identityHashCode
 import com.seiko.imageloader.util.LockObject
 import com.seiko.imageloader.util.WeakReference
 import com.seiko.imageloader.util.firstNotNullOfOrNullIndices
@@ -14,75 +12,84 @@ import com.seiko.imageloader.util.synchronized
  *
  * Bitmaps are added to [WeakMemoryCache] when they're removed from [StrongMemoryCache].
  */
-internal interface WeakMemoryCache {
-    val keys: Set<MemoryKey>
-    fun get(key: MemoryKey): MemoryValue?
-    fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int)
-    fun remove(key: MemoryKey): Boolean
-    fun clearMemory()
+internal interface WeakMemoryCache<K, V> {
+    val keys: Set<K>
+    fun get(key: K): V?
+    fun set(key: K, value: V, size: Int)
+    fun remove(key: K): Boolean
+    fun evictAll()
 }
 
 /** A [WeakMemoryCache] implementation that holds no references. */
-internal object EmptyWeakMemoryCache : WeakMemoryCache {
-    override val keys get(): Set<MemoryKey> = emptySet()
-    override fun get(key: MemoryKey): MemoryValue? = null
-    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int) = Unit
-    override fun remove(key: MemoryKey) = false
-    override fun clearMemory() = Unit
+internal open class EmptyWeakMemoryCache<K, V> : WeakMemoryCache<K, V> {
+    override val keys get(): Set<Nothing> = emptySet()
+    override fun get(key: K): V? = null
+    override fun set(key: K, value: V, size: Int) = Unit
+    override fun remove(key: K) = false
+    override fun evictAll() = Unit
 }
 
 /** A [WeakMemoryCache] implementation backed by a [LinkedHashMap]. */
-internal class RealWeakMemoryCache : WeakMemoryCache {
+internal open class RealWeakMemoryCache<K : Any, V : Any>(
+    private val valueHashProvider: (V) -> Int,
+) : WeakMemoryCache<K, V> {
 
-    internal val cache = LinkedHashMap<MemoryKey, ArrayList<InternalValue>>()
+    internal val cache = LinkedHashMap<K, ArrayList<InternalValue<V>>>()
     private var operationsSinceCleanUp = 0
 
     private val syncObject = LockObject()
 
-    override val keys: Set<MemoryKey>
+    override val keys: Set<K>
         get() = synchronized(syncObject) { cache.keys.toSet() }
 
-    override fun get(key: MemoryKey): MemoryValue? = synchronized(syncObject) {
+    override fun get(key: K): V? = synchronized(syncObject) {
         val values = cache[key] ?: return null
 
         // Find the first bitmap that hasn't been collected.
         val value = values.firstNotNullOfOrNullIndices { value ->
-            value.image.get()
+            value.value.get()
         }
 
         cleanUpIfNecessary()
         return value
     }
 
-    override fun set(key: MemoryKey, image: Bitmap, extras: Map<String, Any>, size: Int) = synchronized(syncObject) {
-        val values = cache.getOrPut(key) { arrayListOf() }
+    override fun set(key: K, value: V, size: Int) =
+        synchronized(syncObject) {
+            val cacheValues = cache.getOrPut(key) { arrayListOf() }
 
-        // Insert the value into the list sorted descending by size.
-        run {
-            val identityHashCode = image.identityHashCode
-            val newValue = InternalValue(identityHashCode, WeakReference(image), extras, size)
-            for (index in values.indices) {
-                val value = values[index]
-                if (size >= value.size) {
-                    if (value.identityHashCode == identityHashCode && value.image.get() === image) {
-                        values[index] = newValue
-                    } else {
-                        values.add(index, newValue)
+            // Insert the value into the list sorted descending by size.
+            run {
+                val identityHashCode = valueHashProvider(value)
+                val newCacheValue = InternalValue(
+                    identityHashCode = identityHashCode,
+                    value = WeakReference(value),
+                    size = size,
+                )
+                for (index in cacheValues.indices) {
+                    val cacheValue = cacheValues[index]
+                    if (size >= cacheValue.size) {
+                        if (cacheValue.identityHashCode == identityHashCode &&
+                            cacheValue.value.get() === value
+                        ) {
+                            cacheValues[index] = newCacheValue
+                        } else {
+                            cacheValues.add(index, newCacheValue)
+                        }
+                        return@run
                     }
-                    return@run
                 }
+                cacheValues += newCacheValue
             }
-            values += newValue
+
+            cleanUpIfNecessary()
         }
 
-        cleanUpIfNecessary()
-    }
-
-    override fun remove(key: MemoryKey): Boolean = synchronized(syncObject) {
+    override fun remove(key: K): Boolean = synchronized(syncObject) {
         return cache.remove(key) != null
     }
 
-    override fun clearMemory() = synchronized(syncObject) {
+    override fun evictAll() = synchronized(syncObject) {
         operationsSinceCleanUp = 0
         cache.clear()
     }
@@ -104,12 +111,12 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
 
             if (list.count() <= 1) {
                 // Typically, the list will only contain 1 item. Handle this case in an optimal way here.
-                if (list.firstOrNull()?.image?.get() == null) {
+                if (list.firstOrNull()?.value?.get() == null) {
                     iterator.remove()
                 }
             } else {
                 // Iterate over the list of values and delete individual entries that have been collected.
-                list.removeIfIndices { it.image.get() == null }
+                list.removeIfIndices { it.value.get() == null }
 
                 if (list.isEmpty()) {
                     iterator.remove()
@@ -118,10 +125,9 @@ internal class RealWeakMemoryCache : WeakMemoryCache {
         }
     }
 
-    internal class InternalValue(
+    internal class InternalValue<V : Any>(
         val identityHashCode: Int,
-        val image: WeakReference<Bitmap>,
-        val extras: Map<String, Any>,
+        val value: WeakReference<V>,
         val size: Int,
     )
 

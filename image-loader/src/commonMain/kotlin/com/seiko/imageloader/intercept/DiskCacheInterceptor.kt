@@ -3,7 +3,7 @@ package com.seiko.imageloader.intercept
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.model.DataSource
-import com.seiko.imageloader.model.ImageRequestEvent
+import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.closeQuietly
@@ -23,7 +23,7 @@ class DiskCacheInterceptor(
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val options = chain.options
-        val logger = chain.config.logger
+        val logger = chain.logger
 
         val cacheKey = chain.components.key(request.data, options, Keyer.Type.Disk)
             ?: return chain.proceed(request)
@@ -38,18 +38,17 @@ class DiskCacheInterceptor(
             ) { "read disk cache error:" }
         }.getOrNull()
 
-        request.call(ImageRequestEvent.ReadDiskCache(snapshot != null))
         if (snapshot != null) {
             logger.d(
                 tag = "DiskCacheInterceptor",
                 data = request.data,
             ) { "read disk cache" }
             return ImageResult.Source(
-                request = request,
                 source = snapshot.source(),
                 dataSource = DataSource.Disk,
             )
         }
+        chain.emit(ImageEvent.StartWithDisk)
 
         val result = chain.proceed(request)
         when (result) {
@@ -88,7 +87,7 @@ class DiskCacheInterceptor(
         cacheKey: String,
     ): DiskCache.Snapshot? {
         return if (options.diskCachePolicy.readEnabled) {
-            diskCache[cacheKey]
+            diskCache.openSnapshot(cacheKey)
         } else {
             null
         }
@@ -104,14 +103,14 @@ class DiskCacheInterceptor(
             snapshot?.closeQuietly()
             return null
         }
-        val editor = snapshot?.closeAndEdit()
-            ?: diskCache.edit(cacheKey)
+        val editor = snapshot?.closeAndOpenEditor()
+            ?: diskCache.openEditor(cacheKey)
             ?: return null
         try {
             fileSystem.write(editor.data) {
                 writeAll(source)
             }
-            return editor.commitAndGet()
+            return editor.commitAndOpenSnapshot()
         } catch (e: Exception) {
             editor.abortQuietly()
             throw e

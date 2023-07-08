@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import androidx.core.content.ContextCompat
 
-fun MemoryCacheBuilder.maxSizePercent(
+fun <K : Any, V : Any> MemoryCacheBuilder<K, V>.maxSizePercent(
     context: Context,
     percent: Double = context.defaultMemoryCacheSizePercent(),
 ) {

@@ -24,9 +24,6 @@ data class Options internal constructor(
 
     enum class ImageConfig {
         ALPHA_8,
-
-        // RGB_565,
-        // ARGB_4444,
         ARGB_8888,
         RGBA_F16,
         HARDWARE,
@@ -56,7 +53,7 @@ class OptionsBuilder {
         premultipliedAlpha = true
         retryIfDiskDecodeError = true
         imageConfig = Options.ImageConfig.ARGB_8888
-        scale = Scale.AUTO
+        scale = Scale.FILL
         sizeResolver = SizeResolver.Unspecified
         memoryCachePolicy = CachePolicy.ENABLED
         diskCachePolicy = CachePolicy.ENABLED

@@ -4,12 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
-import com.seiko.imageloader.demo.util.LocalResLoader
-import com.seiko.imageloader.demo.util.ResLoader
 import com.seiko.imageloader.demo.util.commonConfig
 import com.seiko.imageloader.option.androidContext
 import okio.Path.Companion.toOkioPath
@@ -19,8 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CompositionLocalProvider(
-                LocalImageLoader provides generateImageLoader(),
-                LocalResLoader provides ResLoader { this },
+                LocalImageLoader provides remember { generateImageLoader() },
             ) {
                 App()
             }

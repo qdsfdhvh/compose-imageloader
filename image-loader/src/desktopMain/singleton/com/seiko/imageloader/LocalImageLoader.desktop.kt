@@ -24,7 +24,7 @@ actual fun createImageLoaderProvidableCompositionLocal() = ImageLoaderProvidable
     delegate = staticCompositionLocalOf {
         ImageLoader {
             components {
-                setupDefaultComponents(imageScope)
+                setupDefaultComponents()
             }
         }
     },

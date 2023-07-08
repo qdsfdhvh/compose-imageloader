@@ -5,14 +5,14 @@ import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
 import com.seiko.imageloader.component.keyer.Keyer
-import com.seiko.imageloader.model.ImageRequestEvent
+import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.d
 import com.seiko.imageloader.util.w
 
 class MemoryCacheInterceptor(
-    memoryCache: () -> MemoryCache,
+    memoryCache: () -> MemoryCache<MemoryKey, MemoryValue>,
 ) : Interceptor {
 
     private val memoryCache by lazy(memoryCache)
@@ -20,7 +20,7 @@ class MemoryCacheInterceptor(
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val options = chain.options
-        val logger = chain.config.logger
+        val logger = chain.logger
 
         val cacheKey = chain.components.key(request.data, options, Keyer.Type.Memory)
             ?: return chain.proceed(request)
@@ -34,15 +34,14 @@ class MemoryCacheInterceptor(
                 throwable = it,
             ) { "read memory cache error:" }
         }.getOrNull()
+        chain.emit(ImageEvent.StartWithMemory)
 
-        request.call(ImageRequestEvent.ReadMemoryCache(memoryCacheValue != null))
         if (memoryCacheValue != null) {
             logger.d(
                 tag = "MemoryCacheInterceptor",
                 data = request.data,
             ) { "read memory cache." }
             return ImageResult.Bitmap(
-                request = request,
                 bitmap = memoryCacheValue,
             )
         }

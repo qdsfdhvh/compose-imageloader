@@ -18,6 +18,13 @@ kotlin {
                 api(libs.uri.kmp)
             }
         }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.okio.fakefilesystem)
+            }
+        }
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
@@ -30,7 +37,6 @@ kotlin {
                 implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.exifinterface)
-                implementation(libs.accompanist.drawablepainter)
                 implementation(libs.androidsvg)
             }
         }
