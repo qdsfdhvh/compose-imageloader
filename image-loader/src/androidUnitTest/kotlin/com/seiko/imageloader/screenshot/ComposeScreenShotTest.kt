@@ -29,14 +29,14 @@ class ComposeScreenShotTest {
         captureRoot = composeTestRule.onRoot(),
         options = RoborazziRule.Options(
             outputDirectoryPath = "src/androidUnitTest/snapshots/images",
-        )
+        ),
     )
 
     @Test
     fun loadImage() {
         composeTestRule.setContent {
             Spacer(
-                Modifier.size(100.dp).background(Color.Red)
+                Modifier.size(100.dp).background(Color.Red),
             )
         }
     }
