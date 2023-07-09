@@ -18,6 +18,7 @@ import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.rememberImagePainter
+import kotlinx.coroutines.delay
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,14 +43,14 @@ class ComposeScreenShotTest {
     )
 
     @Test
-    fun loadImage() {
+    fun test_load_image() {
         val url = "https://example.com/url.jpg"
         val imageLoader = ImageLoader {
             interceptor {
                 useDefaultInterceptors = false
                 addInterceptor(
                     Interceptor { chain ->
-                        val color = if (url == chain.request.data) Color.Green else Color.Red
+                        val color = if (url == chain.request.data) Color.Green else Color.Blue
                         ImageResult.Painter(ColorPainter(color))
                     },
                 )
@@ -64,11 +65,58 @@ class ComposeScreenShotTest {
                 )
                 Spacer(Modifier.width(8.dp))
                 Image(
-                    rememberImagePainter("aa", imageLoader),
-                    contentDescription = "red",
+                    rememberImagePainter("", imageLoader),
+                    contentDescription = "blue",
                     modifier = Modifier.size(100.dp),
                 )
             }
+        }
+    }
+
+    @Test
+    fun test_placeholder_painter() {
+        val imageLoader = ImageLoader {
+            interceptor {
+                useDefaultInterceptors = false
+                addInterceptor {
+                    delay(100)
+                    ImageResult.Painter(ColorPainter(Color.Green))
+                }
+            }
+        }
+        composeTestRule.setContent {
+            Image(
+                rememberImagePainter(
+                    "",
+                    imageLoader,
+                    placeholderPainter = { ColorPainter(Color.Gray) },
+                ),
+                contentDescription = "placeholder",
+                modifier = Modifier.size(100.dp),
+            )
+        }
+    }
+
+    @Test
+    fun test_error_painter() {
+        val imageLoader = ImageLoader {
+            interceptor {
+                useDefaultInterceptors = false
+                addInterceptor {
+                    ImageResult.Error(RuntimeException("error"))
+                }
+            }
+        }
+        composeTestRule.setContent {
+            Image(
+                rememberImagePainter(
+                    "",
+                    imageLoader,
+                    errorPainter = { ColorPainter(Color.Red) },
+                ),
+                contentDescription = "error",
+                modifier = Modifier.size(100.dp),
+            )
         }
     }
 }

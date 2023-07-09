@@ -7,6 +7,7 @@ import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.cache.memory.MemoryValue
 import com.seiko.imageloader.identityHashCode
+import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.size
 import com.seiko.imageloader.util.defaultFileSystem
 import okio.FileSystem
@@ -20,6 +21,10 @@ class InterceptorsBuilder internal constructor() {
     private var diskCache: (() -> DiskCache)? = null
 
     var useDefaultInterceptors = true
+
+    fun addInterceptor(block: suspend (chain: Interceptor.Chain) -> ImageResult) {
+        interceptors.add(Interceptor(block))
+    }
 
     fun addInterceptor(interceptor: Interceptor) {
         interceptors.add(interceptor)
