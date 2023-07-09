@@ -7,10 +7,10 @@ object Versions {
         private const val major = "1"
 
         // functionality in a backwards compatible manner
-        private const val monir = "5"
+        private const val monir = "6"
 
         // backwards compatible bug fixes
-        private const val path = "3"
+        private const val path = "0"
         const val version = "$major.$monir.$path"
     }
 
