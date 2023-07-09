@@ -28,3 +28,8 @@ interface Interceptor {
         suspend fun proceed(request: ImageRequest): ImageResult
     }
 }
+
+inline fun Interceptor(crossinline block: suspend (chain: Interceptor.Chain) -> ImageResult) =
+    object : Interceptor {
+        override suspend fun intercept(chain: Interceptor.Chain): ImageResult = block(chain)
+    }
