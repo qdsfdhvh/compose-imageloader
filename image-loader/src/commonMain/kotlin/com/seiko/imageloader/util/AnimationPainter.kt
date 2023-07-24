@@ -4,5 +4,5 @@ interface AnimationPainter {
 
     fun isPlay(): Boolean
 
-    fun update(nanoTime: Long)
+    fun update(frameTimeMillis: Long)
 }
