@@ -11,7 +11,7 @@ import okio.Path.Companion.toPath
 import platform.AppKit.NSApp
 import platform.AppKit.NSApplication
 import platform.Foundation.NSCachesDirectory
-import platform.Foundation.NSFileManager
+import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSUserDomainMask
 
 fun main() {
@@ -45,11 +45,9 @@ private fun generateImageLoader(): ImageLoader {
 }
 
 private fun getCacheDir(): String {
-    return NSFileManager.defaultManager.URLForDirectory(
+    return NSSearchPathForDirectoriesInDomains(
         NSCachesDirectory,
         NSUserDomainMask,
-        null,
         true,
-        null,
-    )!!.path.orEmpty()
+    ).first() as String
 }
