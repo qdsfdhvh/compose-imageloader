@@ -1,8 +1,8 @@
 package com.seiko.imageloader.component
 
-import com.seiko.imageloader.util.httpEngineFactory
 import io.ktor.client.HttpClient
 
-expect fun ComponentRegistryBuilder.setupDefaultComponents(
-    httpClient: () -> HttpClient = httpEngineFactory,
-)
+// httpClient: () -> HttpClient = httpEngineFactory will be crash: Backend Internal error: Exception during IR lowering
+expect fun ComponentRegistryBuilder.setupDefaultComponents()
+
+expect fun ComponentRegistryBuilder.setupDefaultComponents(httpClient: () -> HttpClient)

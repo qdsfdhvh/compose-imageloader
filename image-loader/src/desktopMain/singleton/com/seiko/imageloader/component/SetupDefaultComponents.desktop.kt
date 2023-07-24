@@ -4,9 +4,13 @@ import androidx.compose.ui.unit.Density
 import com.seiko.imageloader.util.httpEngineFactory
 import io.ktor.client.HttpClient
 
-actual fun ComponentRegistryBuilder.setupDefaultComponents(
-    httpClient: () -> HttpClient,
-) {
+actual fun ComponentRegistryBuilder.setupDefaultComponents() {
+    setupDefaultComponents(
+        density = Density(2f),
+    )
+}
+
+actual fun ComponentRegistryBuilder.setupDefaultComponents(httpClient: () -> HttpClient) {
     setupDefaultComponents(
         density = Density(2f),
         httpClient = httpClient,

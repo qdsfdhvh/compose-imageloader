@@ -6,9 +6,14 @@ import com.seiko.imageloader.component.decoder.BitmapFactoryDecoder
 import com.seiko.imageloader.util.httpEngineFactory
 import io.ktor.client.HttpClient
 
-actual fun ComponentRegistryBuilder.setupDefaultComponents(
-    httpClient: () -> HttpClient,
-) {
+actual fun ComponentRegistryBuilder.setupDefaultComponents() {
+    setupDefaultComponents(
+        context = null,
+        density = null,
+    )
+}
+
+actual fun ComponentRegistryBuilder.setupDefaultComponents(httpClient: () -> HttpClient) {
     setupDefaultComponents(
         context = null,
         density = null,
