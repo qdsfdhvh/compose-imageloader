@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQ
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.model.ImageRequest
-import com.seiko.imageloader.option.Scale
+import com.seiko.imageloader.option.toScale
 
 @Deprecated(
     message = "move contentScale into ImageRequest",
@@ -133,9 +133,4 @@ fun rememberAsyncImagePainter(
     }
     val action by rememberImageAction(newRequest, imageLoader)
     return rememberImageActionPainter(action, filterQuality)
-}
-
-fun ContentScale.toScale() = when (this) {
-    ContentScale.Fit, ContentScale.Inside -> Scale.FIT
-    else -> Scale.FILL
 }
