@@ -36,7 +36,7 @@ fun NetworkImagesScene(
             }
         },
     ) { innerPadding ->
-        val images = rememberImageList(imageJsonData)
+        val images by rememberImageList(imageJsonData)
         LazyVerticalGrid(
             GridCells.Fixed(3),
             Modifier.padding(innerPadding).fillMaxSize(),

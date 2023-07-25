@@ -14,6 +14,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -29,6 +30,8 @@ import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.model.blur
 import com.seiko.imageloader.rememberImageAction
 import com.seiko.imageloader.rememberImageActionPainter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun BackButton(onBack: () -> Unit) {
@@ -106,11 +109,10 @@ fun ImageItem(
 }
 
 @Composable
-fun rememberImageList(content: String): List<Image> {
-    val images: List<Image> by produceState(emptyList()) {
-        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+fun rememberImageList(content: String): State<List<Image>> {
+    return produceState(emptyList()) {
+        value = withContext(Dispatchers.Default) {
             content.decodeJson()
         }
     }
-    return images
 }

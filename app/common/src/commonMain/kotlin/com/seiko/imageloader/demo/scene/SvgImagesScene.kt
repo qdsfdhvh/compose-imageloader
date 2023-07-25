@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.seiko.imageloader.demo.data.imageJsonDataSvg
 
@@ -18,7 +19,7 @@ fun SvgImagesScene(
         onBack = onBack,
         title = { Text("Svg") },
     ) { innerPadding ->
-        val images = rememberImageList(imageJsonDataSvg)
+        val images by rememberImageList(imageJsonDataSvg)
         LazyVerticalGrid(
             GridCells.Fixed(3),
             Modifier.padding(innerPadding).fillMaxSize(),
