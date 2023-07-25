@@ -24,10 +24,12 @@ fun rememberImagePainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return rememberImagePainter(
-        request = remember(url, contentScale) {
+        request = remember(url, contentScale, placeholderPainter, errorPainter) {
             ImageRequest {
                 data(url)
                 scale(contentScale.toScale())
+                placeholderPainter?.let { placeholderPainter(it) }
+                errorPainter?.let { errorPainter(it) }
             }
         },
         imageLoader = imageLoader,
@@ -49,10 +51,12 @@ fun rememberImagePainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return rememberImagePainter(
-        request = remember(resId, contentScale) {
+        request = remember(resId, contentScale, placeholderPainter, errorPainter) {
             ImageRequest {
                 data(resId)
                 scale(contentScale.toScale())
+                placeholderPainter?.let { placeholderPainter(it) }
+                errorPainter?.let { errorPainter(it) }
             }
         },
         imageLoader = imageLoader,
@@ -86,8 +90,8 @@ fun rememberImagePainter(
 @Composable
 fun rememberAsyncImagePainter(
     url: String,
-    imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
+    imageLoader: ImageLoader = LocalImageLoader.current,
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): Painter {
     val request = remember(url) {
@@ -104,8 +108,8 @@ fun rememberAsyncImagePainter(
 @Composable
 fun rememberAsyncImagePainter(
     resId: Int,
-    imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
+    imageLoader: ImageLoader = LocalImageLoader.current,
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): Painter {
     val request = remember(resId) {
@@ -122,8 +126,8 @@ fun rememberAsyncImagePainter(
 @Composable
 fun rememberAsyncImagePainter(
     request: ImageRequest,
-    imageLoader: ImageLoader = LocalImageLoader.current,
     contentScale: ContentScale = ContentScale.Fit,
+    imageLoader: ImageLoader = LocalImageLoader.current,
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): Painter {
     val newRequest = remember(request) {
