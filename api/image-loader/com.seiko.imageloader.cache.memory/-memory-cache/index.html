@@ -34,7 +34,7 @@
     <div class="library-name">
 <a href="../../../index.html">
 <span>compose-imageLoader</span>            </a>    </div>
-    <div>1.5.1
+    <div>1.6.0
     </div>
     <div class="pull-right d-flex">
         <div class="filter-section" id="filter-section">
@@ -53,7 +53,7 @@
   <div class="breadcrumbs"><a href="../../index.html">image-loader</a><span class="delimiter">/</span><a href="../index.html">com.seiko.imageloader.cache.memory</a><span class="delimiter">/</span><span class="current">MemoryCache</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Memory</span><wbr><span><span>Cache</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">MemoryCache</a></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">MemoryCache</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">K</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html">V</a><span class="token operator">&gt;</span></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -70,7 +70,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="keys.html">keys</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../index.html#49594741%2FClasslikes%2F-940786642">MemoryKey</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The keys present in the cache.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="keys.html">keys</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">K</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The keys present in the cache.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -124,47 +124,47 @@
               </div>
             </div>
           </div>
-<a data-name="1739673421%2FFunctions%2F-940786642" anchor-label="get" id="1739673421%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+<a data-name="-1507279865%2FFunctions%2F-940786642" anchor-label="get" id="-1507279865%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
           <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get.html"><span><span>get</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1739673421%2FFunctions%2F-940786642"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1507279865%2FFunctions%2F-940786642"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="../index.html#49594741%2FClasslikes%2F-940786642">MemoryKey</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html#-27270685%2FClasslikes%2F-940786642">MemoryValue</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the <a href="../index.html#-27270685%2FClasslikes%2F-940786642">MemoryValue</a> associated with <a href="../index.html#49594741%2FClasslikes%2F-940786642">MemoryKey</a>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="index.html">K</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">V</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the <a href="index.html">V</a> associated with <a href="index.html">K</a>.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1003035611%2FFunctions%2F-940786642" anchor-label="remove" id="1003035611%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+<a data-name="484950293%2FFunctions%2F-940786642" anchor-label="remove" id="484950293%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
           <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="remove.html"><span><span>remove</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1003035611%2FFunctions%2F-940786642"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="484950293%2FFunctions%2F-940786642"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="remove.html"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="../index.html#49594741%2FClasslikes%2F-940786642">MemoryKey</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Remove the <a href="../index.html#-27270685%2FClasslikes%2F-940786642">MemoryValue</a> referenced by <a href="../index.html#49594741%2FClasslikes%2F-940786642">MemoryKey</a>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="remove.html"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="index.html">K</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Remove the <a href="index.html">V</a> referenced by <a href="index.html">K</a>.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="599479607%2FFunctions%2F-940786642" anchor-label="set" id="599479607%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
+<a data-name="-351149902%2FFunctions%2F-940786642" anchor-label="set" id="-351149902%2FFunctions%2F-940786642" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain"></a>
           <div class="table-row" data-filterable-current=":image-loader:dokkaHtmlPartial/commonMain" data-filterable-set=":image-loader:dokkaHtmlPartial/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="set.html"><span><span>set</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="599479607%2FFunctions%2F-940786642"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-351149902%2FFunctions%2F-940786642"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="../index.html#49594741%2FClasslikes%2F-940786642">MemoryKey</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="../index.html#-27270685%2FClasslikes%2F-940786642">MemoryValue</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Set the <a href="../index.html#-27270685%2FClasslikes%2F-940786642">MemoryValue</a> associated with <a href="../index.html#49594741%2FClasslikes%2F-940786642">MemoryKey</a>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":image-loader:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="index.html">K</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="index.html">V</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Set the <a href="index.html">V</a> associated with <a href="index.html">K</a>.</p></div></div></div>
                 </div>
               </div>
             </div>
