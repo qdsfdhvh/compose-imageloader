@@ -4,27 +4,20 @@
 
 ```kotlin
 ImageReuqest {
-    data()
+    data(url)
     size(SizeResolver)
     scale(Scale)
     options {
-        
     }
     compontents {
-        
     }
     addInterceptor()
-    eventListener { event: ImageRequestEvent ->
-        
-    }
     extra {
-        
+        put("key", "value")
     }
     placeholderPainter {
-        
     }
     errorPainter {
-        put("key", "value") 
     }
 }
 ```

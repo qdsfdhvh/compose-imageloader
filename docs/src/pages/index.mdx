@@ -11,11 +11,10 @@
 ```kotlin
 @Composeable
 fun Content() {
-    val url = "https://..."
-    val painter = rememberAsyncImagePainter(url)
+    val painter = rememberImagePainter("https://...")
     Image(
         painter = painter,
-        contentDescription = null,
+        contentDescription = "image",
     )
 }
 ```

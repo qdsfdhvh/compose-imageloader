@@ -18,7 +18,7 @@ internal class GifPainter(
     private val repeatCount: Int = Options.REPEAT_INFINITE,
 ) : Painter(), AnimationPainter, RememberObserver {
 
-    private val durations = codec.framesInfo.map { it.duration * 1_000_000 }
+    private val durations = codec.framesInfo.map { it.duration }
     private val totalDuration = durations.sum()
 
     private var startTime = -1L
@@ -55,11 +55,11 @@ internal class GifPainter(
         return repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount
     }
 
-    override fun update(nanoTime: Long) {
+    override fun update(frameTimeMillis: Long) {
         if (startTime == -1L) {
-            startTime = nanoTime
+            startTime = frameTimeMillis
         }
-        frame = frameOf(time = (nanoTime - startTime) % totalDuration)
+        frame = frameOf(time = (frameTimeMillis - startTime) % totalDuration)
     }
 
     // WARNING: it is not optimal

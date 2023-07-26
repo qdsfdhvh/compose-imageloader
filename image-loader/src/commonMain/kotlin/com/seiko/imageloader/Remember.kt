@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.withFrameNanos
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -68,8 +67,8 @@ fun rememberImageResultPainter(
         if (painter is AnimationPainter) {
             LaunchedEffect(painter) {
                 while (painter.isPlay()) {
-                    withFrameNanos { nanoTime ->
-                        painter.update(nanoTime)
+                    withFrameMillis { frameTimeMillis ->
+                        painter.update(frameTimeMillis)
                     }
                 }
             }
