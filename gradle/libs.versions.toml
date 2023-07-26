@@ -18,7 +18,7 @@ okio = "3.4.0"
 uri-kmp = "0.0.12"
 kermit = "2.0.0-RC4"
 androidsvg = "1.4"
-benchmark = "1.2.0-beta01"
+benchmark = "1.2.0-beta02"
 junit = "1.1.5"
 uiautomator = "2.2.0"
 
