@@ -17,17 +17,17 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-+                api("io.github.qdsfdhvh:image-loader:1.6.0")
++                api("io.github.qdsfdhvh:image-loader:1.6.1")
                 // optional - Moko Resources Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.6.0")
++                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.6.1")
                 // optional - Blur Interceptor (only support bitmap)
-+                api("io.github.qdsfdhvh:image-loader-extension-blur:1.6.0")
++                api("io.github.qdsfdhvh:image-loader-extension-blur:1.6.1")
             }
         }
         val jvmMain by getting {
             dependencies {
                 // optional - ImageIO Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.6.0")
++                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.6.1")
             }
         }
     }
