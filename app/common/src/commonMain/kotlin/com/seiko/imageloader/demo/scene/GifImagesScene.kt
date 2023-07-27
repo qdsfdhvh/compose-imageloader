@@ -36,7 +36,7 @@ fun GifImagesScene(
             }
         },
     ) { innerPadding ->
-        val images = rememberImageList(imageJsonDataGif)
+        val images by rememberImageList(imageJsonDataGif)
         LazyVerticalGrid(
             GridCells.Fixed(3),
             Modifier.padding(innerPadding).fillMaxSize(),

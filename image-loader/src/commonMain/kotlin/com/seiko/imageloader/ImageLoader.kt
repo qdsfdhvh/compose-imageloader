@@ -17,7 +17,6 @@ import kotlin.coroutines.CoroutineContext
 
 @Immutable
 interface ImageLoader {
-    val config: ImageLoaderConfig
     fun async(request: ImageRequest): Flow<ImageAction>
 
     @Deprecated("", ReplaceWith("Use imageloader.async(request).filterIsInstance<ImageResult>().first()"))
@@ -37,7 +36,7 @@ fun ImageLoader(
 @Immutable
 private class RealImageLoader(
     private val requestCoroutineContext: CoroutineContext,
-    override val config: ImageLoaderConfig,
+    private val config: ImageLoaderConfig,
 ) : ImageLoader {
     override fun async(request: ImageRequest) = flow {
         emit(ImageEvent.Start)
