@@ -52,7 +52,7 @@ internal class GifPainter(
     }
 
     override fun isPlay(): Boolean {
-        return repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount
+        return totalDuration > 0 && (repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount)
     }
 
     override fun update(frameTimeMillis: Long) {
