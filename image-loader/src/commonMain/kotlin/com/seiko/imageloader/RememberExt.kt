@@ -15,7 +15,7 @@ fun rememberImageAction(
     url: String,
     imageLoader: ImageLoader = LocalImageLoader.current,
 ): State<ImageAction> {
-    val request = remember { ImageRequest(url) }
+    val request = remember(url) { ImageRequest(url) }
     return rememberImageAction(request, imageLoader)
 }
 
@@ -24,7 +24,7 @@ fun rememberImageAction(
     resId: Int,
     imageLoader: ImageLoader = LocalImageLoader.current,
 ): State<ImageAction> {
-    val request = remember { ImageRequest(resId) }
+    val request = remember(resId) { ImageRequest(resId) }
     return rememberImageAction(request, imageLoader)
 }
 
@@ -36,7 +36,7 @@ fun rememberImagePainter(
     placeholderPainter: (@Composable () -> Painter)? = null,
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
-    val request = remember { ImageRequest(url) }
+    val request = remember(url) { ImageRequest(url) }
     return rememberImagePainter(
         request = request,
         imageLoader = imageLoader,
@@ -54,7 +54,7 @@ fun rememberImagePainter(
     placeholderPainter: (@Composable () -> Painter)? = null,
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
-    val request = remember { ImageRequest(resId) }
+    val request = remember(resId) { ImageRequest(resId) }
     return rememberImagePainter(
         request = request,
         imageLoader = imageLoader,
