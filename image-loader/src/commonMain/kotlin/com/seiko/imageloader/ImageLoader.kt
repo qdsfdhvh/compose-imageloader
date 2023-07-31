@@ -23,6 +23,8 @@ interface ImageLoader {
     suspend fun execute(request: ImageRequest): ImageResult {
         return async(request).filterIsInstance<ImageResult>().first()
     }
+
+    companion object
 }
 
 fun ImageLoader(
