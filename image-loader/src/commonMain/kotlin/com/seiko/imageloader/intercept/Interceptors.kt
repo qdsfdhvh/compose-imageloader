@@ -13,26 +13,58 @@ import com.seiko.imageloader.util.defaultFileSystem
 import com.seiko.imageloader.util.forEachIndices
 import okio.FileSystem
 
-internal typealias Interceptors = List<Interceptor>
+class Interceptors internal constructor(
+    internal val useDefaultInterceptors: Boolean,
+    internal val interceptorList: List<Interceptor>,
+    internal val memoryCaches: List<MemoryCacheWrapper<*>>,
+    internal val diskCache: (() -> DiskCache)?,
+) {
+    val list: List<Interceptor> by lazy {
+        if (useDefaultInterceptors) {
+            interceptorList + buildList {
+                add(MappedInterceptor())
+                memoryCaches.forEachIndices { wrapper ->
+                    add(wrapper.toInterceptor())
+                }
+                add(DecodeInterceptor())
+                diskCache?.let {
+                    add(DiskCacheInterceptor(it))
+                }
+                add(FetchInterceptor())
+            }
+        } else {
+            interceptorList
+        }
+    }
+}
 
 class InterceptorsBuilder internal constructor() {
 
-    private val interceptors = mutableListOf<Interceptor>()
+    private val interceptorList = mutableListOf<Interceptor>()
     private val memoryCaches = mutableListOf<MemoryCacheWrapper<*>>()
     private var diskCache: (() -> DiskCache)? = null
 
     var useDefaultInterceptors = true
 
+    fun takeFrom(interceptors: Interceptors) {
+        useDefaultInterceptors = interceptors.useDefaultInterceptors
+        interceptorList.clear()
+        interceptorList.addAll(interceptors.interceptorList)
+        memoryCaches.clear()
+        memoryCaches.addAll(interceptors.memoryCaches)
+        diskCache = interceptors.diskCache
+    }
+
     fun addInterceptor(block: suspend (chain: Interceptor.Chain) -> ImageResult) {
-        interceptors.add(Interceptor(block))
+        interceptorList.add(Interceptor(block))
     }
 
     fun addInterceptor(interceptor: Interceptor) {
-        interceptors.add(interceptor)
+        interceptorList.add(interceptor)
     }
 
     fun addInterceptors(interceptors: Collection<Interceptor>) {
-        this.interceptors.addAll(interceptors)
+        interceptorList.addAll(interceptors)
     }
 
     fun memoryCacheConfig(
@@ -121,32 +153,23 @@ class InterceptorsBuilder internal constructor() {
     }
 
     internal fun build(): Interceptors {
-        return if (useDefaultInterceptors) {
-            interceptors + buildList {
-                add(MappedInterceptor())
-                memoryCaches.forEachIndices { wrapper ->
-                    add(wrapper.toInterceptor())
-                }
-                add(DecodeInterceptor())
-                diskCache?.let {
-                    add(DiskCacheInterceptor(it))
-                }
-                add(FetchInterceptor())
-            }
-        } else {
-            interceptors
-        }
-    }
-
-    private class MemoryCacheWrapper<T>(
-        val memoryCache: () -> MemoryCache<MemoryKey, T>,
-        val mapToMemoryValue: (ImageResult) -> T?,
-        val mapToImageResult: (T) -> ImageResult?,
-    ) {
-        fun toInterceptor() = MemoryCacheInterceptor(
-            memoryCache = memoryCache,
-            mapToMemoryValue = mapToMemoryValue,
-            mapToImageResult = mapToImageResult,
+        return Interceptors(
+            useDefaultInterceptors = useDefaultInterceptors,
+            interceptorList = interceptorList,
+            memoryCaches = memoryCaches,
+            diskCache = diskCache,
         )
     }
+}
+
+internal class MemoryCacheWrapper<T>(
+    val memoryCache: () -> MemoryCache<MemoryKey, T>,
+    val mapToMemoryValue: (ImageResult) -> T?,
+    val mapToImageResult: (T) -> ImageResult?,
+) {
+    fun toInterceptor() = MemoryCacheInterceptor(
+        memoryCache = memoryCache,
+        mapToMemoryValue = mapToMemoryValue,
+        mapToImageResult = mapToImageResult,
+    )
 }
