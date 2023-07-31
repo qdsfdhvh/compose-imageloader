@@ -36,6 +36,15 @@ val ImageLoader.Companion.Default: ImageLoader
                     } else {
                         imageResult
                     }
+                    when (imageResult) {
+                        is ImageResult.Image,
+                        is ImageResult.Painter,
+                        -> imageResult
+                        is ImageResult.Bitmap -> null
+                        is ImageResult.Source,
+                        is ImageResult.Error,
+                        -> null
+                    }
                 },
                 mapToImageResult = { it },
             ) {

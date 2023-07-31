@@ -45,26 +45,21 @@ class MemoryCacheInterceptor<T>(
         }
 
         val result = chain.proceed(request)
-        when (result) {
-            is ImageResult.Bitmap -> {
-                runCatching {
-                    writeValueToMemory(options, cacheKey, result)
-                }.onFailure {
-                    logger.w(
-                        tag = "MemoryCacheInterceptor",
-                        data = request.data,
-                        throwable = it,
-                    ) { "write memory cache error:" }
-                }.onSuccess { success ->
-                    if (success) {
-                        logger.d(
-                            tag = "MemoryCacheInterceptor",
-                            data = request.data,
-                        ) { "write memory cache." }
-                    }
-                }
+        runCatching {
+            writeValueToMemory(options, cacheKey, result)
+        }.onFailure {
+            logger.w(
+                tag = "MemoryCacheInterceptor",
+                data = request.data,
+                throwable = it,
+            ) { "write memory cache error:" }
+        }.onSuccess { success ->
+            if (success) {
+                logger.d(
+                    tag = "MemoryCacheInterceptor",
+                    data = request.data,
+                ) { "write memory cache." }
             }
-            else -> Unit
         }
         return result
     }
