@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.staticCompositionLocalOf
 
 actual class ImageLoaderProvidableCompositionLocal constructor(
     val delegate: ProvidableCompositionLocal<ImageLoader>,
@@ -18,9 +17,3 @@ actual class ImageLoaderProvidableCompositionLocal constructor(
         return delegate provides value
     }
 }
-
-actual fun createImageLoaderProvidableCompositionLocal() = ImageLoaderProvidableCompositionLocal(
-    delegate = staticCompositionLocalOf {
-        ImageLoader.Default
-    },
-)
