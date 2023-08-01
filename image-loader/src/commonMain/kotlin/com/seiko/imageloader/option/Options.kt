@@ -93,7 +93,9 @@ class OptionsBuilder {
         diskCachePolicy = options.diskCachePolicy
         playAnimate = options.playAnimate
         _repeatCount = options.repeatCount
-        extraData = options.extra
+        extra {
+            putAll(options.extra)
+        }
     }
 
     fun extra(builder: ExtraDataBuilder.() -> Unit) {
