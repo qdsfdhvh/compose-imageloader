@@ -31,11 +31,6 @@ val ImageLoader.Companion.Default: ImageLoader
                 valueHashProvider = { it.hashCode() },
                 valueSizeProvider = { 1 },
                 mapToMemoryValue = { imageResult ->
-                    if (imageResult is ImageResult.Bitmap) {
-                        null
-                    } else {
-                        imageResult
-                    }
                     when (imageResult) {
                         is ImageResult.Image,
                         is ImageResult.Painter,
