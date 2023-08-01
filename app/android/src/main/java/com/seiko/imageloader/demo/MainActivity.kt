@@ -5,13 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import com.seiko.imageloader.DefaultAndroid
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
-import com.seiko.imageloader.cache.memory.maxSizePercent
-import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.demo.util.commonConfig
-import com.seiko.imageloader.option.androidContext
-import okio.Path.Companion.toOkioPath
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,23 +24,27 @@ class MainActivity : ComponentActivity() {
 
     private fun generateImageLoader(): ImageLoader {
         return ImageLoader {
+            takeFrom(ImageLoader.DefaultAndroid(applicationContext))
             commonConfig()
-            options {
-                androidContext(applicationContext)
-            }
-            components {
-                setupDefaultComponents()
-            }
-            interceptor {
-                memoryCacheConfig {
-                    // Set the max size to 25% of the app's available memory.
-                    maxSizePercent(applicationContext, 0.25)
-                }
-                diskCacheConfig {
-                    directory(cacheDir.resolve("image_cache").toOkioPath())
-                    maxSizeBytes(512L * 1024 * 1024) // 512MB
-                }
-            }
         }
+        // return ImageLoader {
+        //     commonConfig()
+        //     options {
+        //         androidContext(applicationContext)
+        //     }
+        //     components {
+        //         setupDefaultComponents()
+        //     }
+        //     interceptor {
+        //         memoryCacheConfig {
+        //             // Set the max size to 25% of the app's available memory.
+        //             maxSizePercent(applicationContext, 0.25)
+        //         }
+        //         diskCacheConfig {
+        //             directory(cacheDir.resolve("image_cache").toOkioPath())
+        //             maxSizeBytes(512L * 1024 * 1024) // 512MB
+        //         }
+        //     }
+        // }
     }
 }

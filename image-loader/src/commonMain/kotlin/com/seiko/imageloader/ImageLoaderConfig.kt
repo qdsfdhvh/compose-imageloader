@@ -2,17 +2,17 @@ package com.seiko.imageloader
 
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
-import com.seiko.imageloader.intercept.Interceptor
+import com.seiko.imageloader.intercept.Interceptors
 import com.seiko.imageloader.intercept.InterceptorsBuilder
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.OptionsBuilder
 import com.seiko.imageloader.util.Logger
 
 class ImageLoaderConfig internal constructor(
-    val defaultOptions: Options,
     val logger: Logger,
+    val defaultOptions: Options,
     val componentRegistry: ComponentRegistry,
-    val interceptors: List<Interceptor>,
+    val interceptors: Interceptors,
 )
 
 class ImageLoaderConfigBuilder internal constructor() {
@@ -22,6 +22,23 @@ class ImageLoaderConfigBuilder internal constructor() {
     private val interceptorsBuilder = InterceptorsBuilder()
     private val componentsBuilder = ComponentRegistryBuilder()
     private val optionsBuilder = OptionsBuilder()
+
+    inline fun takeFrom(imageLoader: ImageLoader) {
+        takeFrom(imageLoader.config)
+    }
+
+    fun takeFrom(config: ImageLoaderConfig) {
+        logger = config.logger
+        options {
+            takeFrom(config.defaultOptions)
+        }
+        components {
+            takeFrom(config.componentRegistry)
+        }
+        interceptor {
+            takeFrom(config.interceptors)
+        }
+    }
 
     fun interceptor(builder: InterceptorsBuilder.() -> Unit) {
         interceptorsBuilder.run(builder)

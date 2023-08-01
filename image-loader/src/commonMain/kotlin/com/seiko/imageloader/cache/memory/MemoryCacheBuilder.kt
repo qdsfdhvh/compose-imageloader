@@ -1,7 +1,5 @@
 package com.seiko.imageloader.cache.memory
 
-import com.seiko.imageloader.Bitmap
-
 class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
     private val valueHashProvider: (V) -> Int,
     private val valueSizeProvider: (V) -> Int,
@@ -51,5 +49,3 @@ fun <K : Any, V : Any> MemoryCache(
 ).apply(block).build()
 
 typealias MemoryKey = String
-
-typealias MemoryValue = Bitmap
