@@ -51,13 +51,13 @@ fun rememberImageResultPainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return when (result) {
-        is ImageResult.Painter -> remember {
+        is ImageResult.Painter -> remember(result) {
             result.painter
         }
-        is ImageResult.Bitmap -> remember(filterQuality) {
+        is ImageResult.Bitmap -> remember(result, filterQuality) {
             result.bitmap.toPainter(filterQuality)
         }
-        is ImageResult.Image -> remember {
+        is ImageResult.Image -> remember(result) {
             result.image.toPainter()
         }
         is ImageResult.Error,

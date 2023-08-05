@@ -10,7 +10,6 @@ kotlin {
     @Suppress("UNUSED_VARIABLE")
     sourceSets {
         val commonMain by getting {
-            kotlin.srcDir("src/commonMain/singleton")
             dependencies {
                 api(compose.ui)
                 api(libs.kotlinx.coroutines.core)
@@ -31,7 +30,6 @@ kotlin {
             }
         }
         val androidMain by getting {
-            kotlin.srcDir("src/androidMain/singleton")
             dependencies {
                 implementation(libs.kotlinx.coroutines.android)
                 implementation(libs.androidx.core.ktx)
@@ -50,13 +48,9 @@ kotlin {
             }
         }
         val desktopMain by getting {
-            kotlin.srcDir("src/desktopMain/singleton")
             dependencies {
                 implementation(libs.kotlinx.coroutines.swing)
             }
-        }
-        val darwinMain by getting {
-            kotlin.srcDir("src/darwinMain/singleton")
         }
         val appleMain by getting {
             dependencies {
@@ -75,6 +69,17 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.collection)
             }
+        }
+        val noAndroidMain by creating {
+            dependsOn(commonMain)
+            desktopMain.dependsOn(this)
+            appleMain.dependsOn(this)
+            jsMain.dependsOn(this)
+        }
+    }
+    sourceSets.forEach {
+        if (it.name.endsWith("Main")) {
+            it.kotlin.srcDir("src/${it.name}/singleton")
         }
     }
 }

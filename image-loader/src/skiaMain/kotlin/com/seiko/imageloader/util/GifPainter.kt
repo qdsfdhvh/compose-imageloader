@@ -87,6 +87,9 @@ internal class GifPainter(
     }
 
     private fun clear() {
+        startTime = -1
+        frame = 0
+        loopIteration = -1
         bitmapCache?.close()
         bitmapCache = null
         intSizeCache = null
