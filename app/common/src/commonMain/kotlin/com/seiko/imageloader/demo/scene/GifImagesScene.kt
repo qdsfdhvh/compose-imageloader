@@ -8,9 +8,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PauseCircle
-import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +15,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.seiko.imageloader.demo.data.imageJsonDataGif
+import com.seiko.imageloader.demo.icon.rememberPauseCircle
+import com.seiko.imageloader.demo.icon.rememberPlayCircle
 
 @Composable
 fun GifImagesScene(
@@ -30,7 +29,7 @@ fun GifImagesScene(
         floatingActionButton = {
             FloatingActionButton({ playAnime = !playAnime }) {
                 Icon(
-                    if (playAnime) Icons.Outlined.PauseCircle else Icons.Outlined.PlayCircle,
+                    if (playAnime) rememberPauseCircle() else rememberPlayCircle(),
                     contentDescription = "play anime",
                 )
             }

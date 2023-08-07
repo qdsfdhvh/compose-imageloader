@@ -13,7 +13,6 @@ kotlin {
                 api(compose.foundation)
                 api(compose.ui)
                 api(compose.material)
-                api(compose.materialIconsExtended)
 
                 api(projects.imageLoader)
                 implementation(projects.extension.blur)
