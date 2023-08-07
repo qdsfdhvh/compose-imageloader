@@ -78,17 +78,17 @@ class ProjectKmpPlugin : Plugin<Project> {
                         dependsOn(jvmTest)
                         dependsOn(skiaTest)
                     }
-                    val jsNativeMain = maybeCreate("jsNativeMain").apply {
+                    val darwinMain = maybeCreate("darwinMain").apply {
                         dependsOn(skiaMain)
                     }
-                    val jsNativeTest = maybeCreate("jsNativeTest").apply {
+                    val darwinTest = maybeCreate("darwinTest").apply {
                         dependsOn(skiaTest)
                     }
                     val appleMain = maybeCreate("appleMain").apply {
-                        dependsOn(jsNativeMain)
+                        dependsOn(darwinMain)
                     }
                     val appleTest = maybeCreate("appleTest").apply {
-                        dependsOn(jsNativeTest)
+                        dependsOn(darwinTest)
                     }
                     val iosMain = maybeCreate("iosMain").apply {
                         dependsOn(appleMain)
@@ -133,7 +133,7 @@ class ProjectKmpPlugin : Plugin<Project> {
                         dependsOn(macosTest)
                     }
                     val jsWasmMain = maybeCreate("jsWasmMain").apply {
-                        dependsOn(jsNativeMain)
+                        dependsOn(darwinMain)
                     }
                     val jsMain = getByName("jsMain").apply {
                         dependsOn(jsWasmMain)
@@ -142,7 +142,7 @@ class ProjectKmpPlugin : Plugin<Project> {
                         }
                     }
                     val jsTest = getByName("jsTest").apply {
-                        dependsOn(jsNativeTest)
+                        dependsOn(darwinTest)
                     }
                     val wasmMain = getByName("wasmMain").apply {
                         dependsOn(jsWasmMain)
@@ -151,7 +151,7 @@ class ProjectKmpPlugin : Plugin<Project> {
                         }
                     }
                     val wasmTest = getByName("wasmTest").apply {
-                        dependsOn(jsNativeTest)
+                        dependsOn(darwinTest)
                     }
                 }
             }
