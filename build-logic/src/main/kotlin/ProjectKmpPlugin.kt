@@ -12,7 +12,7 @@ class ProjectKmpPlugin : Plugin<Project> {
                 apply("org.jetbrains.compose")
             }
             kotlin {
-                android {
+                androidTarget {
                     publishLibraryVariants("debug", "release")
                 }
                 jvm("desktop") {
@@ -26,22 +26,8 @@ class ProjectKmpPlugin : Plugin<Project> {
                 macosX64()
                 macosArm64()
                 js(IR) {
-                    nodejs {
-                        testTask {
-                            useMocha {
-                                timeout = "8000"
-                            }
-                        }
-                    }
-                    browser {
-                        testTask {
-                            testLogging.showStandardStreams = true
-                            useKarma {
-                                useChromeHeadless()
-                                useFirefox()
-                            }
-                        }
-                    }
+                    nodejs()
+                    browser()
                 }
                 @OptIn(ExperimentalWasmDsl::class)
                 wasm {
@@ -135,23 +121,21 @@ class ProjectKmpPlugin : Plugin<Project> {
                     val jsWasmMain = maybeCreate("jsWasmMain").apply {
                         dependsOn(darwinMain)
                     }
+                    val jsWasmTest = maybeCreate("jsWasmTest").apply {
+                        dependsOn(darwinTest)
+                    }
                     val jsMain = getByName("jsMain").apply {
                         dependsOn(jsWasmMain)
-                        dependencies {
-                            implementation(kotlin("stdlib-js"))
-                        }
                     }
                     val jsTest = getByName("jsTest").apply {
-                        dependsOn(darwinTest)
+                        dependsOn(jsWasmTest)
                     }
                     val wasmMain = getByName("wasmMain").apply {
+                        dependsOn(commonMain)
                         dependsOn(jsWasmMain)
-                        dependencies {
-                            implementation(kotlin("stdlib-wasm"))
-                        }
                     }
                     val wasmTest = getByName("wasmTest").apply {
-                        dependsOn(darwinTest)
+                        dependsOn(jsWasmTest)
                     }
                 }
             }

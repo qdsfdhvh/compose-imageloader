@@ -1,5 +1,6 @@
 package com.seiko.imageloader.demo.util
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 val JSON = Json {

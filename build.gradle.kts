@@ -19,6 +19,10 @@ allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = Versions.Java.jvmTarget
+            freeCompilerArgs += listOf(
+                "-opt-in=kotlin.ExperimentalUnsignedTypes",
+                "-Xskip-prerelease-check",
+            )
         }
     }
 

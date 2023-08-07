@@ -8,7 +8,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.headers
-import co.touchlab.kermit.Logger as DebugLogger
+// import co.touchlab.kermit.Logger as DebugLogger
 
 val customKtorUrlFetcher = KtorUrlFetcher.Factory {
     HttpClient(httpEngine) {
@@ -21,7 +21,7 @@ val customKtorUrlFetcher = KtorUrlFetcher.Factory {
             level = LogLevel.HEADERS
             logger = object : Logger {
                 override fun log(message: String) {
-                    DebugLogger.d(tag = "HttpClient") { message }
+                    // DebugLogger.d(tag = "HttpClient") { message }
                 }
             }
         }

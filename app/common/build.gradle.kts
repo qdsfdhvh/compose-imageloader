@@ -13,7 +13,7 @@ kotlin {
                 api(compose.foundation)
                 api(compose.ui)
                 api(compose.material)
-                api(compose.materialIconsExtended)
+                // api(compose.materialIconsExtended)
 
                 api(projects.imageLoader)
                 implementation(projects.extension.blur)
@@ -22,7 +22,7 @@ kotlin {
                 // implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.client.logging)
-                implementation(libs.kermit)
+                // implementation(libs.kermit)
             }
         }
         val androidMain by getting {

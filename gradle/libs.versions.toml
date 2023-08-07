@@ -1,5 +1,5 @@
 [versions]
-agp = "8.1.0"
+agp = "8.0.2"
 compose-jb = "1.4.0-dev-wasm08"
 kotlin = "1.9.0-dev-6976"
 kotlinx-coroutines = "1.7.0-RC-wasm0"
@@ -15,7 +15,7 @@ dokka = "1.8.20"
 moko-resources = "0.23.0"
 ktor = "2.3.3-wasm0"
 okio = "3.5.0"
-uri-kmp = "0.0.12"
+uri-kmp = "0.0.13"
 kermit = "2.0.0-RC4"
 androidsvg = "1.4"
 benchmark = "1.2.0-beta02"
@@ -76,6 +76,8 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+ktor-client-js-js = { module = "io.ktor:ktor-client-js-js", version.ref = "ktor" }
+ktor-client-js-wasm = { module = "io.ktor:ktor-client-js-wasm", version.ref = "ktor" }
 
 uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 moko-resources = { module = "dev.icerock.moko:resources", version.ref = "moko-resources" }
@@ -90,7 +92,7 @@ plugins = [
 ]
 test-common = [
     "kotlinx-coroutines-test",
-    "okio-fakefilesystem",
+#    "okio-fakefilesystem",
 ]
 test-android = [
     "junit",

@@ -1,0 +1,24 @@
+root = true
+
+[*]
+indent_style = space
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[{*.kt,*.kts}]
+indent_size = 4
+ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
+
+# These options can keep to use single name import
+ij_kotlin_name_count_to_use_star_import = 2147483647
+ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
+
+# @see https://youtrack.jetbrains.com/issue/KTIJ-21944
+ij_kotlin_blank_lines_around_block_when_branches = 0
+ij_kotlin_line_break_after_multiline_when_entry = false
+
+# @see https://pinterest.github.io/ktlint/rules/standard/
+ktlint_standard_filename = disabled
+ktlint_standard_enum-entry-name-case = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled

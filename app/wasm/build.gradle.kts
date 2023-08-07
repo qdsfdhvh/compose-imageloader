@@ -15,7 +15,7 @@ kotlin {
                     open = mapOf(
                         "app" to mapOf(
                             "name" to "google chrome",
-                        )
+                        ),
                     ),
                 )
             }
@@ -29,8 +29,6 @@ kotlin {
                 implementation(projects.app.common)
                 implementation(compose.runtime)
                 implementation(compose.ui)
-                implementation(compose.foundation)
-                implementation(compose.material)
             }
         }
     }
@@ -41,3 +39,7 @@ compose.experimental {
     }
 }
 
+// // See https://youtrack.jetbrains.com/issue/KT-57203 related issue
+// tasks.named("wasmDevelopmentExecutableCompileSync") {
+//    dependsOn("wasmBrowserProductionWebpack")
+// }

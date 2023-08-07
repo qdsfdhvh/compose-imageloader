@@ -57,30 +57,25 @@ kotlin {
                 implementation(libs.ktor.client.darwin)
             }
         }
-        val jsMain by getting {
+        val jsWasmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
             }
         }
-        val wasmMain by getting {
-            dependencies {
-
-            }
-        }
-        val noJsMain by creating {
+        val noJsWasmMain by creating {
             dependsOn(commonMain)
             jvmMain.dependsOn(this)
             appleMain.dependsOn(this)
             dependencies {
                 implementation(libs.androidx.collection)
+                implementation("org.jetbrains.kotlinx:atomicfu:0.21.0-wasm0")
             }
         }
         val noAndroidMain by creating {
             dependsOn(commonMain)
             desktopMain.dependsOn(this)
             appleMain.dependsOn(this)
-            jsMain.dependsOn(this)
-            wasmMain.dependsOn(this)
+            jsWasmMain.dependsOn(this)
         }
     }
     sourceSets.forEach {
