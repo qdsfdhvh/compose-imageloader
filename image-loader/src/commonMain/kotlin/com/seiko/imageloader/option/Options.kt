@@ -48,6 +48,12 @@ class OptionsBuilder {
     private var _repeatCount: Int
     private var extraData: ExtraData?
 
+    var repeatCount: Int
+        get() = _repeatCount
+        set(value) {
+            _repeatCount = maxOf(value, Options.REPEAT_INFINITE)
+        }
+
     internal constructor() {
         allowInexactSize = false
         premultipliedAlpha = true
@@ -76,11 +82,21 @@ class OptionsBuilder {
         extraData = options.extra
     }
 
-    var repeatCount: Int
-        get() = _repeatCount
-        set(value) {
-            _repeatCount = maxOf(value, Options.REPEAT_INFINITE)
+    fun takeFrom(options: Options) {
+        allowInexactSize = options.allowInexactSize
+        premultipliedAlpha = options.premultipliedAlpha
+        retryIfDiskDecodeError = options.retryIfDiskDecodeError
+        imageConfig = options.imageConfig
+        scale = options.scale
+        sizeResolver = options.sizeResolver
+        memoryCachePolicy = options.memoryCachePolicy
+        diskCachePolicy = options.diskCachePolicy
+        playAnimate = options.playAnimate
+        _repeatCount = options.repeatCount
+        extra {
+            putAll(options.extra)
         }
+    }
 
     fun extra(builder: ExtraDataBuilder.() -> Unit) {
         extraData = extraData

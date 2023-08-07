@@ -14,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.asAndroidColorFilter
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -32,7 +31,7 @@ actual class Image(
 @Suppress("NOTHING_TO_INLINE")
 inline fun Drawable.toImage() = Image(this)
 
-actual fun Image.toPainter(filterQuality: FilterQuality): Painter {
+actual fun Image.toPainter(): Painter {
     return when (drawable) {
         is ColorDrawable -> ColorPainter(Color(drawable.color))
         else -> DrawablePainter(drawable.mutate())

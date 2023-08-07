@@ -14,8 +14,8 @@ internal class InterceptorChainHelper(
     val logger get() = config.logger
 
     private val interceptors by lazy {
-        initialImageRequest.interceptors?.plus(config.interceptors)
-            ?: config.interceptors
+        initialImageRequest.interceptors?.plus(config.interceptors.list)
+            ?: config.interceptors.list
     }
 
     val components by lazy {

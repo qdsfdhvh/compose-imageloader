@@ -9,6 +9,8 @@ import okio.FileSystem
 
 expect class WeakReference<T : Any>(referred: T) {
     fun get(): T?
+
+    fun clear()
 }
 
 expect class AtomicBoolean(referred: Boolean) {

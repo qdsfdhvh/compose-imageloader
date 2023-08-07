@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.withFrameNanos
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -26,21 +25,6 @@ fun rememberImageAction(
     return remember(request, imageLoader) {
         imageLoader.async(request)
     }.collectAsState(ImageEvent.Start)
-}
-
-@Composable
-fun rememberImageActionPainter(
-    request: ImageRequest,
-    imageLoader: ImageLoader = LocalImageLoader.current,
-    filterQuality: FilterQuality = DefaultFilterQuality,
-): Painter {
-    val action by rememberImageAction(request, imageLoader)
-    return rememberImageActionPainter(
-        action = action,
-        filterQuality = filterQuality,
-        placeholderPainter = request.placeholderPainter,
-        errorPainter = request.errorPainter,
-    )
 }
 
 @Composable
@@ -67,14 +51,14 @@ fun rememberImageResultPainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return when (result) {
-        is ImageResult.Painter -> remember {
+        is ImageResult.Painter -> remember(result) {
             result.painter
         }
-        is ImageResult.Bitmap -> remember(filterQuality) {
+        is ImageResult.Bitmap -> remember(result, filterQuality) {
             result.bitmap.toPainter(filterQuality)
         }
-        is ImageResult.Image -> remember(filterQuality) {
-            result.image.toPainter(filterQuality)
+        is ImageResult.Image -> remember(result) {
+            result.image.toPainter()
         }
         is ImageResult.Error,
         is ImageResult.Source,
@@ -83,8 +67,8 @@ fun rememberImageResultPainter(
         if (painter is AnimationPainter) {
             LaunchedEffect(painter) {
                 while (painter.isPlay()) {
-                    withFrameNanos { nanoTime ->
-                        painter.update(nanoTime)
+                    withFrameMillis { frameTimeMillis ->
+                        painter.update(frameTimeMillis)
                     }
                 }
             }

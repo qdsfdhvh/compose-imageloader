@@ -1,7 +1,6 @@
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -12,6 +11,7 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.roborazzi) apply false
     id("build-logic") apply false
 }
 
@@ -102,6 +102,19 @@ gradle.taskGraph.whenReady {
                     it.path.startsWith(":app:web")
             }
             .forEach {
+                it.enabled = false
+            }
+        // TODO remove when this fix https://github.com/JetBrains/compose-multiplatform/issues/3135
+        allTasks.asSequence()
+            .filter {
+                it.path in listOf(
+                    ":image-loader:linkDebugTestIosSimulatorArm64",
+                    ":image-loader:linkDebugTestIosArm64",
+                    ":image-loader:linkDebugTestIosX64",
+                    ":image-loader:linkDebugTestMacosArm64",
+                    ":image-loader:linkDebugTestMacosX64",
+                )
+            }.forEach {
                 it.enabled = false
             }
     }
