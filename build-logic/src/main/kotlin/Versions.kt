@@ -11,7 +11,7 @@ object Versions {
 
         // backwards compatible bug fixes
         private const val path = "4"
-        const val version = "$major.$monir.$path"
+        const val version = "$major.$monir.$path-wasm0"
     }
 
     object Android {
