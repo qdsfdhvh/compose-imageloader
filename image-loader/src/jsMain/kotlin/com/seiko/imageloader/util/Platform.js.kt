@@ -1,6 +1,5 @@
 package com.seiko.imageloader.util
 
-import androidx.compose.runtime.AtomicReference
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.js.Js
 
@@ -23,17 +22,6 @@ actual class WeakReference<T : Any> actual constructor(referred: T) {
             strongRefFallback = referred
             weakRef = null
         }
-    }
-}
-
-actual class AtomicBoolean actual constructor(referred: Boolean) {
-
-    private var atomic = AtomicReference(referred)
-
-    actual fun get(): Boolean = atomic.get()
-
-    actual fun compareAndSet(expect: Boolean, update: Boolean): Boolean {
-        return atomic.compareAndSet(expect, update)
     }
 }
 
