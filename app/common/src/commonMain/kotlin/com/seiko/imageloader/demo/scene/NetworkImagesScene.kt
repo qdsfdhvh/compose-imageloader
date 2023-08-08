@@ -8,9 +8,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +15,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.seiko.imageloader.demo.data.imageJsonData
+import com.seiko.imageloader.demo.icon.rememberVisibility
+import com.seiko.imageloader.demo.icon.rememberVisibilityOff
 
 @Composable
 fun NetworkImagesScene(
@@ -30,7 +29,7 @@ fun NetworkImagesScene(
         floatingActionButton = {
             FloatingActionButton({ showBlur = !showBlur }) {
                 Icon(
-                    if (showBlur) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                    if (showBlur) rememberVisibilityOff() else rememberVisibility(),
                     contentDescription = "show blur",
                 )
             }
