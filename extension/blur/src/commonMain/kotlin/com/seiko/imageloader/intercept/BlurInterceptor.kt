@@ -11,7 +11,9 @@ class BlurInterceptor : Interceptor {
         val result = chain.proceed(request)
         if (result is ImageResult.Bitmap) {
             val blurEffects = request.blurEffects ?: return result
-            return result.copy(bitmap = blur(result.bitmap, blurEffects.radius))
+            return ImageResult.Bitmap(
+                bitmap = blur(result.bitmap, blurEffects.radius),
+            )
         }
         return result
     }
