@@ -59,6 +59,7 @@ kotlin {
                 enableLanguageFeature(LanguageFeature.ContextReceivers.name)
             }
             dependencies {
+                implementation(compose.desktop.currentOs)
                 implementation(libs.bundles.test.desktop)
             }
         }
@@ -89,7 +90,7 @@ kotlin {
     }
     sourceSets.all {
         if (name.endsWith("Main")) {
-            kotlin.srcDir("src/${name}/singleton")
+            kotlin.srcDir("src/$name/singleton")
         }
     }
 }

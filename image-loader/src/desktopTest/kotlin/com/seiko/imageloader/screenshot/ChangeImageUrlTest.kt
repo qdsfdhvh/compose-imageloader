@@ -4,7 +4,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.runDesktopComposeUiTest
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.InternalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziContext
@@ -25,7 +25,7 @@ class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun test_image_change() = runComposeUiTest {
+    fun test_image_change() = runDesktopComposeUiTest(width = 80, height = 80) {
         setContent {
             TestUI()
         }
@@ -36,7 +36,7 @@ class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
         onRoot().captureRoboImage(
             roborazziOptions = roborazziOptions,
         )
-        (0..2).forEach {
+        (0..2).forEach { _ ->
             onNodeWithTag(BUTTON_TAG).performClick()
             onRoot().captureRoboImage(
                 roborazziOptions = roborazziOptions,
