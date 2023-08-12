@@ -32,7 +32,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [32])
-class ChangeImageUrlTest {
+class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
@@ -49,24 +49,9 @@ class ChangeImageUrlTest {
 
     @Test
     fun test_image_change() {
-        val imageLoader = ImageLoader {
-            interceptor {
-                useDefaultInterceptors = false
-                addInterceptor {
-                    val color = when (it.request.data as Int) {
-                        0 -> Color.White
-                        1 -> Color.Blue
-                        2 -> Color.Green
-                        3 -> Color.Gray
-                        else -> Color.Red // no display
-                    }
-                    ImageResult.Painter(ColorPainter(color))
-                }
-            }
-        }
         try {
             composeTestRule.setContent {
-                ImageChangeFunction(imageLoader)
+                TestUI()
             }
             (0 until 3).forEach { _ ->
                 composeTestRule
@@ -76,23 +61,5 @@ class ChangeImageUrlTest {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    @Composable
-    private fun ImageChangeFunction(
-        imageLoader: ImageLoader,
-    ) {
-        var index by remember { mutableStateOf(0) }
-        Image(
-            rememberImagePainter(index, imageLoader),
-            contentDescription = "change url",
-            modifier = Modifier.size(80.dp)
-                .testTag(BUTTON_TAG)
-                .clickable { index++ },
-        )
-    }
-
-    companion object {
-        private const val BUTTON_TAG = "MyComposeButton"
     }
 }
