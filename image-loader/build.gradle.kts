@@ -87,9 +87,9 @@ kotlin {
             jsMain.dependsOn(this)
         }
     }
-    sourceSets.forEach {
-        if (it.name.endsWith("Main")) {
-            it.kotlin.srcDir("src/${it.name}/singleton")
+    sourceSets.all {
+        if (name.endsWith("Main")) {
+            kotlin.srcDir("src/${name}/singleton")
         }
     }
 }
