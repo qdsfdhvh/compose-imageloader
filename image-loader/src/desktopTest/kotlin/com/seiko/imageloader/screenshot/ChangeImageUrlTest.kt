@@ -1,13 +1,27 @@
 package com.seiko.imageloader.screenshot
 
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+import com.github.takahirom.roborazzi.InternalRoborazziApi
+import com.github.takahirom.roborazzi.RoborazziContext
 import com.github.takahirom.roborazzi.RoborazziOptions
 import io.github.takahirom.roborazzi.captureRoboImage
+import org.junit.Before
 import org.junit.Test
 
 class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
+
+    @OptIn(ExperimentalRoborazziApi::class, InternalRoborazziApi::class)
+    @Before
+    fun initRoborazziConfig() {
+        RoborazziContext.setRuleOverrideOutputDirectory(
+            outputDirectory = "src/desktopTest/snapshots/images",
+        )
+    }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
@@ -20,8 +34,13 @@ class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
             compareOptions = RoborazziOptions.CompareOptions(changeThreshold = 0F),
         )
         onRoot().captureRoboImage(
-            // filePath = "src/desktopTest/snapshots/images/1.png",
             roborazziOptions = roborazziOptions,
         )
+        (0..2).forEach {
+            onNodeWithTag(BUTTON_TAG).performClick()
+            onRoot().captureRoboImage(
+                roborazziOptions = roborazziOptions,
+            )
+        }
     }
 }
