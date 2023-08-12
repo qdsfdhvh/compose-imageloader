@@ -20,7 +20,7 @@ import com.seiko.imageloader.rememberImagePainter
 abstract class ChangeImageUrlCommonTest {
 
     @Composable
-    fun TestUI() {
+    protected fun TestUI() {
         val imageLoader = remember {
             ImageLoader {
                 interceptor {
