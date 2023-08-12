@@ -20,33 +20,24 @@ class ImageRequest internal constructor(
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
 ) {
-    fun newBuilder(block: ImageRequestBuilder.() -> Unit) =
-        ImageRequestBuilder(this).apply(block).build()
+    @Deprecated("", ReplaceWith("ImageRequest(request) {}"))
+    fun newBuilder(block: ImageRequestBuilder.() -> Unit) = ImageRequest(this, block)
 }
 
-class ImageRequestBuilder {
+class ImageRequestBuilder internal constructor() {
 
-    private var data: Any?
-    private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit>
-    private var extraData: ExtraData?
-    private var placeholderPainter: (@Composable () -> Painter)?
-    private var errorPainter: (@Composable () -> Painter)?
-    private var componentBuilder: ComponentRegistryBuilder?
-    private var interceptors: MutableList<Interceptor>?
+    private var data: Any? = null
+    private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit> = mutableListOf()
+    private var extraData: ExtraData? = null
+    private var placeholderPainter: (@Composable () -> Painter)? = null
+    private var errorPainter: (@Composable () -> Painter)? = null
+    private var componentBuilder: ComponentRegistryBuilder? = null
+    private var interceptors: MutableList<Interceptor>? = null
 
-    internal constructor() {
-        data = null
-        optionsBuilders = mutableListOf()
-        extraData = null
-        placeholderPainter = null
-        errorPainter = null
-        componentBuilder = null
-        interceptors = null
-    }
-
-    internal constructor(request: ImageRequest) {
+    fun takeFrom(request: ImageRequest) {
         data = request.data
-        optionsBuilders = request.optionsBuilders.toMutableList()
+        optionsBuilders.clear()
+        optionsBuilders.addAll(request.optionsBuilders)
         extraData = request.extra
         placeholderPainter = request.placeholderPainter
         errorPainter = request.errorPainter
@@ -111,6 +102,12 @@ class ImageRequestBuilder {
 
 fun ImageRequest(block: ImageRequestBuilder.() -> Unit) =
     ImageRequestBuilder().apply(block).build()
+
+fun ImageRequest(request: ImageRequest, block: ImageRequestBuilder.() -> Unit) =
+    ImageRequestBuilder().apply {
+        takeFrom(request)
+        block.invoke(this)
+    }.build()
 
 fun ImageRequest(data: Any) = ImageRequest {
     data(data)

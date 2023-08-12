@@ -19,8 +19,9 @@ data class Options internal constructor(
     val repeatCount: Int,
     val extra: ExtraData,
 ) {
-    fun newBuilder(block: OptionsBuilder.() -> Unit) =
-        OptionsBuilder(this).apply(block).build()
+
+    @Deprecated("", ReplaceWith("Options(options) {}"))
+    fun newBuilder(block: OptionsBuilder.() -> Unit) = Options(this, block)
 
     enum class ImageConfig {
         ALPHA_8,
@@ -34,53 +35,25 @@ data class Options internal constructor(
     }
 }
 
-class OptionsBuilder {
+class OptionsBuilder internal constructor() {
 
-    var allowInexactSize: Boolean
-    var premultipliedAlpha: Boolean
-    var retryIfDiskDecodeError: Boolean
-    var imageConfig: Options.ImageConfig
-    var scale: Scale
-    var sizeResolver: SizeResolver
-    var memoryCachePolicy: CachePolicy
-    var diskCachePolicy: CachePolicy
-    var playAnimate: Boolean
-    private var _repeatCount: Int
-    private var extraData: ExtraData?
+    var allowInexactSize: Boolean = false
+    var premultipliedAlpha: Boolean = true
+    var retryIfDiskDecodeError: Boolean = true
+    var imageConfig: Options.ImageConfig = Options.ImageConfig.ARGB_8888
+    var scale: Scale = Scale.FILL
+    var sizeResolver: SizeResolver = SizeResolver.Unspecified
+    var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
+    var diskCachePolicy: CachePolicy = CachePolicy.ENABLED
+    var playAnimate: Boolean = true
+    private var _repeatCount: Int = Options.REPEAT_INFINITE
+    private var extraData: ExtraData? = null
 
     var repeatCount: Int
         get() = _repeatCount
         set(value) {
             _repeatCount = maxOf(value, Options.REPEAT_INFINITE)
         }
-
-    internal constructor() {
-        allowInexactSize = false
-        premultipliedAlpha = true
-        retryIfDiskDecodeError = true
-        imageConfig = Options.ImageConfig.ARGB_8888
-        scale = Scale.FILL
-        sizeResolver = SizeResolver.Unspecified
-        memoryCachePolicy = CachePolicy.ENABLED
-        diskCachePolicy = CachePolicy.ENABLED
-        playAnimate = true
-        _repeatCount = Options.REPEAT_INFINITE
-        extraData = null
-    }
-
-    internal constructor(options: Options) {
-        allowInexactSize = options.allowInexactSize
-        premultipliedAlpha = options.premultipliedAlpha
-        retryIfDiskDecodeError = options.retryIfDiskDecodeError
-        imageConfig = options.imageConfig
-        scale = options.scale
-        sizeResolver = options.sizeResolver
-        memoryCachePolicy = options.memoryCachePolicy
-        diskCachePolicy = options.diskCachePolicy
-        playAnimate = options.playAnimate
-        _repeatCount = options.repeatCount
-        extraData = options.extra
-    }
 
     fun takeFrom(options: Options) {
         allowInexactSize = options.allowInexactSize
@@ -123,3 +96,9 @@ class OptionsBuilder {
 
 fun Options(block: OptionsBuilder.() -> Unit = {}) =
     OptionsBuilder().apply(block).build()
+
+fun Options(options: Options, block: OptionsBuilder.() -> Unit = {}) =
+    OptionsBuilder().apply {
+        takeFrom(options)
+        block.invoke(this)
+    }.build()
