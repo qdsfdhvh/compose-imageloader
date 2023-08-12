@@ -30,6 +30,7 @@ poko = "0.13.1"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 composeJb = { id = "org.jetbrains.compose", version.ref = "compose-jb" }
@@ -38,7 +39,6 @@ publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 moko-resources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko-resources" }
 baselineProfile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
-androidTest = { id = "com.android.test", version.ref = "agp" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 poko = { id = "dev.drewhamilton.poko", version.ref = "poko" }
 
