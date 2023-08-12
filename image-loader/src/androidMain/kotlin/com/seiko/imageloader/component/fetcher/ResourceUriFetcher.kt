@@ -17,6 +17,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.eygraber.uri.Uri
+import com.seiko.imageloader.Poko
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
@@ -117,7 +118,7 @@ class ResourceUriFetcher private constructor(
         }
     }
 
-    data class Metadata(
+    @Poko class Metadata(
         val packageName: String,
         @DrawableRes val resId: Int,
         val density: Int,

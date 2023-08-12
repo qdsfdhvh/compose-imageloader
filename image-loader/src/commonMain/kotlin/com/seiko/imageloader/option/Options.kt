@@ -1,12 +1,13 @@
 package com.seiko.imageloader.option
 
+import com.seiko.imageloader.Poko
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
 import com.seiko.imageloader.model.ExtraDataBuilder
 import com.seiko.imageloader.model.extraData
 
-data class Options internal constructor(
+@Poko class Options internal constructor(
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,

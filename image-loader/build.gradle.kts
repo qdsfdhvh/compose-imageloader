@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.poko)
 }
 
 kotlin {
@@ -105,4 +106,8 @@ baselineProfile {
 
 dependencies {
     baselineProfile(projects.app.android.benchmark)
+}
+
+poko {
+    pokoAnnotation.set("com.seiko.imageloader.Poko")
 }

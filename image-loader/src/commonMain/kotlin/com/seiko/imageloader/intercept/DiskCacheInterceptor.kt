@@ -72,8 +72,10 @@ class DiskCacheInterceptor(
                         tag = "DiskCacheInterceptor",
                         data = request.data,
                     ) { "write disk cache" }
-                    return result.copy(
+                    return ImageResult.Source(
                         source = snapshot.source(),
+                        dataSource = result.dataSource,
+                        extra = result.extra,
                     )
                 }
             }
