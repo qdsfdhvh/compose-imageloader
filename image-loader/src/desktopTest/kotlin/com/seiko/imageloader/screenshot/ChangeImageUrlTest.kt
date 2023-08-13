@@ -1,41 +1,31 @@
 package com.seiko.imageloader.screenshot
 
-import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.runDesktopComposeUiTest
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.InternalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziContext
 import com.github.takahirom.roborazzi.RoborazziOptions
-import com.github.takahirom.roborazzi.captureRoboImage
+import io.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@RunWith(AndroidJUnit4::class)
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [32])
 class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
-
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @OptIn(ExperimentalRoborazziApi::class, InternalRoborazziApi::class)
     @Before
     fun initRoborazziConfig() {
         RoborazziContext.setRuleOverrideOutputDirectory(
-            outputDirectory = "src/androidUnitTest/snapshots/images",
+            outputDirectory = "src/desktopTest/snapshots/images",
         )
     }
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
-    fun test_image_change() = with(composeTestRule) {
+    fun test_image_change() = runDesktopComposeUiTest(width = 80, height = 80) {
         setContent {
             TestUI()
         }

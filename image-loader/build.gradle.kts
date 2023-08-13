@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.config.LanguageFeature
+
 plugins {
     id("project-kmp")
     alias(libs.plugins.publish)
@@ -23,6 +25,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.bundles.test.common)
+                implementation(compose.foundation)
+                implementation(compose.ui)
             }
         }
         val jvmMain by getting {
@@ -41,8 +45,6 @@ kotlin {
         }
         val androidUnitTest by getting {
             dependencies {
-                implementation(compose.foundation)
-                implementation(compose.ui)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.uiTestJUnit4)
                 implementation(libs.bundles.test.android)
@@ -51,6 +53,15 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(libs.kotlinx.coroutines.swing)
+            }
+        }
+        val desktopTest by getting {
+            languageSettings {
+                enableLanguageFeature(LanguageFeature.ContextReceivers.name)
+            }
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.bundles.test.desktop)
             }
         }
         val appleMain by getting {
@@ -78,9 +89,9 @@ kotlin {
             jsMain.dependsOn(this)
         }
     }
-    sourceSets.forEach {
-        if (it.name.endsWith("Main")) {
-            it.kotlin.srcDir("src/${it.name}/singleton")
+    sourceSets.all {
+        if (name.endsWith("Main")) {
+            kotlin.srcDir("src/$name/singleton")
         }
     }
 }
