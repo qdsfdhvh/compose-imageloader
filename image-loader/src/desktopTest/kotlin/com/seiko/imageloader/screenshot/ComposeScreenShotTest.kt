@@ -37,7 +37,7 @@ class ComposeScreenShotTest : ComposeScreenShotCommonTest() {
         TestErrorPainterUI()
     }
 
-    protected fun runMyDesktopComposeUiTest(
+    private fun runMyDesktopComposeUiTest(
         width: Int = 100,
         height: Int = 100,
         content: @Composable () -> Unit,
