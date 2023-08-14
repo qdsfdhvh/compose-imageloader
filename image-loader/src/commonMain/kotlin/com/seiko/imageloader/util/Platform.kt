@@ -13,11 +13,6 @@ expect class WeakReference<T : Any>(referred: T) {
     fun clear()
 }
 
-expect class AtomicBoolean(referred: Boolean) {
-    fun get(): Boolean
-    fun compareAndSet(expect: Boolean, update: Boolean): Boolean
-}
-
 expect class LockObject()
 
 internal expect inline fun <R> synchronized(lock: LockObject, block: () -> R): R
