@@ -2,6 +2,7 @@ plugins {
     id("app.android.application")
     id("app.kotlin.android")
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.baselineProfile)
 }
 
 android {
@@ -34,7 +35,5 @@ dependencies {
     implementation(projects.app.common)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.junit)
-    androidTestImplementation(libs.androidx.test.espresso)
+    baselineProfile(projects.app.android.benchmark)
 }

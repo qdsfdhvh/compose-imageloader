@@ -17,9 +17,6 @@ fun Project.configureAndroid() {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_11
         }
-        sourceSets.getByName("main") {
-            manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        }
     }
 }
 
