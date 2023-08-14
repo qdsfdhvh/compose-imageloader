@@ -27,6 +27,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.bundles.test.common)
+                implementation(compose.foundation)
                 implementation(compose.ui)
             }
         }
