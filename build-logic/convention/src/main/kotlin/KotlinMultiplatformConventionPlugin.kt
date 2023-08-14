@@ -31,6 +31,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                         withJvm()
                     }
                     group("skia") {
+                        withJvm()
                         group("darwin") {
                             group("apple") {
                                 group("ios") {
@@ -45,7 +46,6 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                             }
                             withJs()
                         }
-                        withJvm()
                     }
                 }
             }
