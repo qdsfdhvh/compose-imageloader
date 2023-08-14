@@ -1,5 +1,6 @@
 plugins {
-    id("project-kmp")
+    id("app.android.library")
+    id("app.kotlin.multiplatform")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
 }
@@ -22,12 +23,4 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader.blur"
-    compileSdk = Versions.Android.compile
-    defaultConfig {
-        minSdk = Versions.Android.min
-    }
-    compileOptions {
-        sourceCompatibility = Versions.Java.source
-        targetCompatibility = Versions.Java.target
-    }
 }

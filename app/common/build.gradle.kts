@@ -1,6 +1,8 @@
 plugins {
-    id("project-kmp")
-    kotlin("plugin.serialization")
+    id("app.android.library")
+    id("app.kotlin.multiplatform")
+    alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.moko.resources)
 }
 
@@ -56,15 +58,13 @@ multiplatformResources {
 }
 
 // workaround
-tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "macosArm64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "macosX64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+listOf(
+    "iosSimulatorArm64ProcessResources",
+    "iosX64ProcessResources",
+    "macosArm64ProcessResources",
+    "macosX64ProcessResources",
+).forEach { name ->
+    tasks.matching { it.name == name }.configureEach {
+        dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+    }
 }

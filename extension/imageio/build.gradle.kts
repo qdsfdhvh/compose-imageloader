@@ -1,15 +1,11 @@
 plugins {
-    kotlin("multiplatform")
+    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
 }
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
-        }
-    }
+    jvm()
     sourceSets {
         commonMain {
             dependencies {
