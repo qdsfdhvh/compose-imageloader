@@ -1,7 +1,9 @@
 import org.jetbrains.kotlin.config.LanguageFeature
 
 plugins {
-    id("project-kmp")
+    id("app.android.library")
+    id("app.kotlin.multiplatform")
+    alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)

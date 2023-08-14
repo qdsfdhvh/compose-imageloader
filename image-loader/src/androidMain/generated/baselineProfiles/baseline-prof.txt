@@ -155,7 +155,6 @@ Lcom/seiko/imageloader/component/fetcher/KtorUrlFetcher$Factory;
 HSPLcom/seiko/imageloader/component/fetcher/KtorUrlFetcher$Factory;-><clinit>()V
 HSPLcom/seiko/imageloader/component/fetcher/KtorUrlFetcher$Factory;-><init>(Lkotlin/jvm/functions/Function0;)V
 Lcom/seiko/imageloader/component/fetcher/MokoResourceFetcher$Factory;
-HSPLcom/seiko/imageloader/component/fetcher/MokoResourceFetcher$Factory;-><clinit>()V
 HSPLcom/seiko/imageloader/component/fetcher/MokoResourceFetcher$Factory;-><init>()V
 Lcom/seiko/imageloader/component/fetcher/ResourceUriFetcher$Factory;
 HSPLcom/seiko/imageloader/component/fetcher/ResourceUriFetcher$Factory;-><clinit>()V
@@ -194,7 +193,6 @@ Lcom/seiko/imageloader/component/mapper/StringUriMapper;
 HSPLcom/seiko/imageloader/component/mapper/StringUriMapper;-><clinit>()V
 HSPLcom/seiko/imageloader/component/mapper/StringUriMapper;-><init>()V
 Lcom/seiko/imageloader/intercept/BlurInterceptor;
-HSPLcom/seiko/imageloader/intercept/BlurInterceptor;-><clinit>()V
 HSPLcom/seiko/imageloader/intercept/BlurInterceptor;-><init>()V
 Lcom/seiko/imageloader/intercept/Interceptor;
 Lcom/seiko/imageloader/intercept/Interceptors;

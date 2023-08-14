@@ -11,8 +11,6 @@ import okio.source
 
 actual typealias WeakReference<T> = java.lang.ref.WeakReference<T>
 
-actual typealias AtomicBoolean = java.util.concurrent.atomic.AtomicBoolean
-
 actual typealias LockObject = Any
 
 internal actual inline fun <R> synchronized(lock: LockObject, block: () -> R): R {
