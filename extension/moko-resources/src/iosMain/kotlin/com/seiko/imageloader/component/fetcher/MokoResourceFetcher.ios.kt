@@ -9,6 +9,7 @@ import dev.icerock.moko.resources.FileResource
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.getUIColor
 import kotlinx.cinterop.DoubleVarOf
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
@@ -24,6 +25,7 @@ internal actual suspend fun AssetResource.toFetchResult(options: Options): Fetch
     return (this as FileResource).toFetchResult(options)
 }
 
+@OptIn(ExperimentalForeignApi::class)
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
     val uiColor = getUIColor()
     val color = memScoped {
@@ -60,6 +62,7 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
     )
 }
 
+@OptIn(ExperimentalForeignApi::class)
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
     val uiImage: UIImage = this.toUIImage()
         ?: throw IllegalArgumentException("can't read UIImage of $this")

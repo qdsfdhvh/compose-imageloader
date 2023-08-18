@@ -1,10 +1,12 @@
 package com.seiko.imageloader.cache.disk
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import okio.Path
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSFileSystemFreeSize
 import platform.Foundation.NSNumber
 
+@OptIn(ExperimentalForeignApi::class)
 internal actual fun directorySize(directory: Path): Long {
     val fileAttributes = NSFileManager.defaultManager.attributesOfFileSystemForPath(directory.toString(), null)
     val number = fileAttributes?.get(NSFileSystemFreeSize) as? NSNumber
