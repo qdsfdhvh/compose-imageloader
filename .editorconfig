@@ -1,14 +1,17 @@
 root = true
 
 [*]
-indent_style = space
 charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-
-[{*.kt,*.kts}]
 indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{kt, kts}]
 ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
+
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
 
 # These options can keep to use single name import
 ij_kotlin_name_count_to_use_star_import = 2147483647
