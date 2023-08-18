@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -9,13 +10,11 @@ kotlin {
         binaries.executable()
     }
     sourceSets {
-        val jsMain by getting {
+        commonMain {
             dependencies {
                 implementation(projects.app.common)
                 implementation(compose.runtime)
                 implementation(libs.okio.fakefilesystem)
-                implementation(npm("path-browserify", "^1.0.1"))
-                implementation(npm("os-browserify", "^0.3.0"))
             }
         }
     }
