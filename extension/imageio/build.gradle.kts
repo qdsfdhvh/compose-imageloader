@@ -12,7 +12,7 @@ kotlin {
                 implementation(projects.imageLoader)
                 // svg
                 implementation("com.twelvemonkeys.imageio:imageio-batik:3.9.4")
-                implementation("org.apache.xmlgraphics:batik-transcoder:1.16")
+                implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
             }
         }
     }
