@@ -1,21 +1,61 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+out/
+build/
+
+# Eclipse project files
+.classpath
+.project
+
+# IDEA/Android Studio project files, because
+# the project can be imported from settings.gradle.kts
 *.iml
+.idea/*
+!.idea/copyright
+!.idea/codeInsightSettings.xml
+# Keep the code styles.
+!/.idea/codeStyles
+/.idea/codeStyles/*
+!/.idea/codeStyles/Project.xml
+!/.idea/codeStyles/codeStyleConfig.xml
+!/.idea/icon*.svg
+!/.idea/kotlinc.xml
+!/.idea/vcs.xml
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Gradle cache
 .gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
+
+# Sandbox stuff
+_sandbox
+
+# Android Studio captures folder
+captures/
+Footer
 .externalNativeBuild
 .cxx
-local.properties
-/.idea
 
+# iOS
+.DS_Store
+xcuserdata
+DerivedData
+
+# Publish
 publish.properties
 *.gpg
-build/
+
+# Moko
 moko-resources-generated.js
