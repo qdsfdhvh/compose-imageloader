@@ -23,20 +23,48 @@ class ImageLoaderConfigBuilder internal constructor() {
     private val componentsBuilder = ComponentRegistryBuilder()
     private val optionsBuilder = OptionsBuilder()
 
-    inline fun takeFrom(imageLoader: ImageLoader) {
-        takeFrom(imageLoader.config)
+    inline fun takeFrom(
+        imageLoader: ImageLoader,
+        clearOptionsExtraData: Boolean = false,
+        clearComponents: Boolean = false,
+        clearInterceptors: Boolean = false,
+        clearMemoryCaches: Boolean = false,
+    ) {
+        takeFrom(
+            config = imageLoader.config,
+            clearOptionsExtraData = clearOptionsExtraData,
+            clearComponents = clearComponents,
+            clearInterceptors = clearInterceptors,
+            clearMemoryCaches = clearMemoryCaches,
+        )
     }
 
-    fun takeFrom(config: ImageLoaderConfig) {
+    fun takeFrom(
+        config: ImageLoaderConfig,
+        clearOptionsExtraData: Boolean = false,
+        clearComponents: Boolean = false,
+        clearInterceptors: Boolean = false,
+        clearMemoryCaches: Boolean = false,
+    ) {
         logger = config.logger
         options {
-            takeFrom(config.defaultOptions)
+            takeFrom(
+                options = config.defaultOptions,
+                clearOptionsExtraData = clearOptionsExtraData,
+            )
         }
         components {
-            takeFrom(config.componentRegistry)
+            takeFrom(
+                componentRegistry = config.componentRegistry,
+                clearComponents = clearComponents,
+            )
         }
         interceptor {
-            takeFrom(config.interceptors)
+            takeFrom(
+                interceptors = config.interceptors,
+                clearInterceptors = clearInterceptors,
+                clearMemoryCaches = clearMemoryCaches,
+            )
         }
     }
 

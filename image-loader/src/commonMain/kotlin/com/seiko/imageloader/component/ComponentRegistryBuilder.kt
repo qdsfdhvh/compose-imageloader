@@ -12,15 +12,20 @@ class ComponentRegistryBuilder(
     private val decoderFactories: MutableList<Decoder.Factory> = mutableListOf(),
 ) {
 
-    fun takeFrom(componentRegistry: ComponentRegistry) {
+    fun takeFrom(
+        componentRegistry: ComponentRegistry,
+        clearComponents: Boolean = false,
+    ) {
         componentRegistry.newBuilder().let {
-            mappers.clear()
+            if (clearComponents) {
+                mappers.clear()
+                keyers.clear()
+                fetcherFactories.clear()
+                decoderFactories.clear()
+            }
             mappers.addAll(it.mappers)
-            keyers.clear()
             keyers.addAll(it.keyers)
-            fetcherFactories.clear()
             fetcherFactories.addAll(it.fetcherFactories)
-            decoderFactories.clear()
             decoderFactories.addAll(it.decoderFactories)
         }
     }
