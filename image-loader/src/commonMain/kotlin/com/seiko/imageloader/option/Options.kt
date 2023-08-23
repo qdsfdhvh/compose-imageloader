@@ -56,7 +56,10 @@ class OptionsBuilder internal constructor() {
             _repeatCount = maxOf(value, Options.REPEAT_INFINITE)
         }
 
-    fun takeFrom(options: Options) {
+    fun takeFrom(
+        options: Options,
+        clearOptionsExtraData: Boolean = false,
+    ) {
         allowInexactSize = options.allowInexactSize
         premultipliedAlpha = options.premultipliedAlpha
         retryIfDiskDecodeError = options.retryIfDiskDecodeError
@@ -68,6 +71,9 @@ class OptionsBuilder internal constructor() {
         playAnimate = options.playAnimate
         _repeatCount = options.repeatCount
         extra {
+            if (clearOptionsExtraData) {
+                clear()
+            }
             putAll(options.extra)
         }
     }
