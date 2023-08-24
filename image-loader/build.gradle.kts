@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.config.LanguageFeature
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
-    alias(libs.plugins.compose.multiplatform)
+    id("app.compose.multiplatform")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)

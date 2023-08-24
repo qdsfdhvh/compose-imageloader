@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.compose.multiplatform)
+    id("app.compose.multiplatform")
     alias(libs.plugins.moko.resources)
 }
 

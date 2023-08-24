@@ -1,7 +1,7 @@
 [versions]
 agp = "8.1.0"
-compose-multiplatform = "1.5.0-rc02"
-kotlin = "1.9.0"
+compose-multiplatform = "1.5.0-rc04"
+kotlin = "1.9.10"
 kotlinx-coroutines = "1.7.3"
 kotlinx-serialization = "1.5.1"
 androidx-core-ktx = "1.10.1"
@@ -50,6 +50,7 @@ poko = { id = "dev.drewhamilton.poko", version.ref = "poko" }
 [libraries]
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradlePlugin-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
@@ -96,6 +97,7 @@ androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg
 logic-plugins = [
     "gradlePlugin-android",
     "gradlePlugin-kotlin",
+    "gradlePlugin-compose",
 ]
 test-common = [
     "kotlinx-coroutines-test",

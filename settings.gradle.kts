@@ -3,8 +3,8 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://androidx.dev/storage/compose-compiler/repository/")
     }
     includeBuild("build-logic")
 }
@@ -15,8 +15,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://repo1.maven.org/maven2")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://androidx.dev/storage/compose-compiler/repository/")
         maven("https://jitpack.io")
     }
 }
