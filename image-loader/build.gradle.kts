@@ -47,8 +47,7 @@ kotlin {
         }
         val androidUnitTest by getting {
             dependencies {
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.uiTestJUnit4)
+                implementation(compose.desktop.uiTestJUnit4)
                 implementation(libs.bundles.test.android)
             }
         }
