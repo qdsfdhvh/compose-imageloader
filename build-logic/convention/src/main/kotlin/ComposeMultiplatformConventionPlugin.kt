@@ -9,8 +9,8 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
             apply("org.jetbrains.compose")
         }
         extensions.configure<ComposeExtension> {
-            kotlinCompilerPlugin.set(dependencies.compiler.forKotlin("1.9.0"))
-            kotlinCompilerPluginArgs.add("suppressKotlinVersionCompatibilityCheck=1.9.10")
+            // https://github.com/JetBrains/compose-multiplatform/issues/3570
+            kotlinCompilerPlugin.set("1.5.2-beta01")
         }
     }
 }
