@@ -62,7 +62,11 @@ kotlin {
             }
             dependencies {
                 implementation(compose.desktop.currentOs)
-                implementation(libs.bundles.test.desktop)
+                implementation(compose.desktop.uiTestJUnit4)
+                implementation(libs.roborazzi.compose.desktop.get().toString()) {
+                    exclude("org.jetbrains.compose.ui", "ui-test-junit4-desktop")
+                    exclude("org.jetbrains.compose.ui", "ui-graphics-desktop")
+                }
             }
         }
         val appleMain by getting {
