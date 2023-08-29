@@ -3,7 +3,7 @@ plugins {
     id("app.kotlin.multiplatform")
     id("app.compose.multiplatform")
     alias(libs.plugins.kotlin.plugin.serialization)
-    // alias(libs.plugins.moko.resources)
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -53,9 +53,9 @@ android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
 }
 
-// multiplatformResources {
-//     multiplatformResourcesPackage = "com.seiko.imageloader.demo"
-// }
+multiplatformResources {
+    multiplatformResourcesPackage = "com.seiko.imageloader.demo"
+}
 
 // workaround
 listOf(
