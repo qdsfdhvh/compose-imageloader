@@ -27,6 +27,8 @@ kotlin {
             }
         }
         val androidMain by getting {
+            // https://github.com/icerockdev/moko-resources/issues/531
+            dependsOn(commonMain)
             dependencies {
                 implementation(libs.ktor.client.cio)
             }
