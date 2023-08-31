@@ -14,12 +14,12 @@ import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.component.keyer.UriKeyer
 import com.seiko.imageloader.component.mapper.ResourceIntMapper
 import com.seiko.imageloader.component.mapper.ResourceUriMapper
+import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
 
 fun ComponentRegistryBuilder.setupAndroidComponents(
     context: Context? = null,
     density: Density? = context?.let { Density(it) },
-    maxImageSize: Int = BitmapFactoryDecoder.DEFAULT_MAX_IMAGE_SIZE,
-    maxParallelism: Int = BitmapFactoryDecoder.DEFAULT_MAX_PARALLELISM,
+    maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
 ) {
     // Mappers
     add(ResourceUriMapper(context))
@@ -37,7 +37,6 @@ fun ComponentRegistryBuilder.setupAndroidComponents(
     add(
         BitmapFactoryDecoder.Factory(
             context = context,
-            maxImageSize = maxImageSize,
             maxParallelism = maxParallelism,
         ),
     )

@@ -6,9 +6,12 @@ import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
-import com.seiko.imageloader.util.DecodeUtils
+import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
 import com.seiko.imageloader.util.ExifData
 import com.seiko.imageloader.util.ExifUtils
+import com.seiko.imageloader.util.calculateDstSize
+import com.seiko.imageloader.util.calculateInSampleSize
+import com.seiko.imageloader.util.computeSizeMultiplier
 import com.seiko.imageloader.util.isRotated
 import com.seiko.imageloader.util.isSwapped
 import com.seiko.imageloader.util.toBitmapConfig
@@ -20,7 +23,6 @@ import okio.Buffer
 import okio.ForwardingSource
 import okio.Source
 import okio.buffer
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 /** The base [Decoder] that uses [BitmapFactory] to decode a given [ImageSource]. */
@@ -28,8 +30,7 @@ class BitmapFactoryDecoder private constructor(
     private val context: Context,
     private val source: DecodeSource,
     private val options: Options,
-    private val maxImageSize: Int,
-    private val parallelismLock: Semaphore = Semaphore(Int.MAX_VALUE),
+    private val parallelismLock: Semaphore,
 ) : Decoder {
 
     override suspend fun decode() = parallelismLock.withPermit {
@@ -117,19 +118,9 @@ class BitmapFactoryDecoder private constructor(
         // EXIF transformations (but before sampling).
         val srcWidth = if (exifData.isSwapped) outHeight else outWidth
         val srcHeight = if (exifData.isSwapped) outWidth else outHeight
-        var dstWidth = srcWidth
-        var dstHeight = srcHeight
-        if (max(dstWidth, dstHeight) > maxImageSize) {
-            if (dstWidth >= dstHeight) {
-                dstHeight = ((maxImageSize.toFloat() / srcWidth.toFloat()) * dstHeight).toInt()
-                dstWidth = maxImageSize
-            } else {
-                dstWidth = ((maxImageSize.toFloat() / srcWidth.toFloat()) * dstWidth).toInt()
-                dstHeight = maxImageSize
-            }
-        }
+        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, options.maxImageSize)
         // Calculate the image's sample size.
-        inSampleSize = DecodeUtils.calculateInSampleSize(
+        inSampleSize = calculateInSampleSize(
             srcWidth = srcWidth,
             srcHeight = srcHeight,
             dstWidth = dstWidth,
@@ -138,11 +129,11 @@ class BitmapFactoryDecoder private constructor(
         )
 
         // Calculate the image's density scaling multiple.
-        var scale = DecodeUtils.computeSizeMultiplier(
-            srcWidth = srcWidth / inSampleSize.toDouble(),
-            srcHeight = srcHeight / inSampleSize.toDouble(),
-            dstWidth = dstWidth.toDouble(),
-            dstHeight = dstHeight.toDouble(),
+        var scale = computeSizeMultiplier(
+            srcWidth = srcWidth / inSampleSize,
+            srcHeight = srcHeight / inSampleSize,
+            dstWidth = dstWidth,
+            dstHeight = dstHeight,
             scale = options.scale,
         )
 
@@ -167,7 +158,6 @@ class BitmapFactoryDecoder private constructor(
 
     class Factory(
         private val context: Context? = null,
-        private val maxImageSize: Int = DEFAULT_MAX_IMAGE_SIZE,
         maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
     ) : Decoder.Factory {
 
@@ -178,7 +168,6 @@ class BitmapFactoryDecoder private constructor(
                 context = context ?: options.androidContext,
                 source = source,
                 options = options,
-                maxImageSize = maxImageSize,
                 parallelismLock = parallelismLock,
             )
         }
@@ -198,10 +187,5 @@ class BitmapFactoryDecoder private constructor(
                 throw e
             }
         }
-    }
-
-    internal companion object {
-        internal const val DEFAULT_MAX_PARALLELISM = 4
-        internal const val DEFAULT_MAX_IMAGE_SIZE = 4096
     }
 }

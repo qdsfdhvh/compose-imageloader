@@ -2,7 +2,7 @@ package com.seiko.imageloader.component
 
 import android.content.Context
 import androidx.compose.ui.unit.Density
-import com.seiko.imageloader.component.decoder.BitmapFactoryDecoder
+import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
 import com.seiko.imageloader.util.httpEngineFactory
 import io.ktor.client.HttpClient
 
@@ -24,8 +24,7 @@ actual fun ComponentRegistryBuilder.setupDefaultComponents(httpClient: () -> Htt
 fun ComponentRegistryBuilder.setupDefaultComponents(
     context: Context? = null,
     density: Density? = context?.let { Density(it) },
-    maxImageSize: Int = BitmapFactoryDecoder.DEFAULT_MAX_IMAGE_SIZE,
-    maxParallelism: Int = BitmapFactoryDecoder.DEFAULT_MAX_PARALLELISM,
+    maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
     httpClient: () -> HttpClient = httpEngineFactory,
 ) {
     setupKtorComponents(httpClient)
@@ -35,7 +34,6 @@ fun ComponentRegistryBuilder.setupDefaultComponents(
     setupAndroidComponents(
         context = context,
         density = density,
-        maxImageSize = maxImageSize,
         maxParallelism = maxParallelism,
     )
 }
