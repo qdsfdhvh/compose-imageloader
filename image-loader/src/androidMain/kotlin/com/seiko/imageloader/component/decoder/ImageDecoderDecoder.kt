@@ -21,8 +21,10 @@ import com.seiko.imageloader.util.isAnimatedWebP
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
+import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import okio.FileSystem
+import okio.Path
 import okio.Path.Companion.toOkioPath
 import okio.buffer
 import java.io.File
@@ -44,11 +46,11 @@ class ImageDecoderDecoder private constructor(
     private val enforceMinimumFrameDelay: Boolean = true,
 ) : Decoder {
 
-    override suspend fun decode(): DecodeResult {
-        val decoder = source.toImageDecoderSource()
+    override suspend fun decode(): DecodeResult = runInterruptible {
         var imageDecoder: ImageDecoder? = null
+        val wrapSource = WrapDecodeSource(source)
         val drawable = try {
-            decoder.decodeDrawable { _, _ ->
+            wrapSource.toImageDecoderSource().decodeDrawable { _, _ ->
                 // Capture the image decoder to manually close it later.
                 imageDecoder = this
 
@@ -57,8 +59,9 @@ class ImageDecoderDecoder private constructor(
             }
         } finally {
             imageDecoder?.close()
+            wrapSource.close()
         }
-        return DecodeResult.Image(
+        DecodeResult.Image(
             image = wrapDrawable(drawable).toImage(),
         )
     }
@@ -73,7 +76,7 @@ class ImageDecoderDecoder private constructor(
         }
     }
 
-    private fun DecodeSource.toImageDecoderSource(): ImageDecoder.Source {
+    private fun WrapDecodeSource.toImageDecoderSource(): ImageDecoder.Source {
         when (val metadata = extra.metadata) {
             is AssetUriFetcher.MetaData -> {
                 return ImageDecoder.createSource(context.assets, metadata.fileName)
@@ -87,19 +90,12 @@ class ImageDecoderDecoder private constructor(
                 }
             }
         }
-
         val source = wrapBufferedSource(source)
         return when {
             SDK_INT >= 31 -> ImageDecoder.createSource(source.readByteArray())
             SDK_INT == 30 -> ImageDecoder.createSource(ByteBuffer.wrap(source.readByteArray()))
             // https://issuetracker.google.com/issues/139371066
-            else -> {
-                val temp = File.createTempFile("tmp", null)
-                FileSystem.SYSTEM.write(temp.toOkioPath()) {
-                    writeAll(source)
-                }
-                ImageDecoder.createSource(temp)
-            }
+            else -> ImageDecoder.createSource(tempPath.toFile())
         }
     }
 
@@ -142,6 +138,29 @@ class ImageDecoderDecoder private constructor(
 
         // Wrap AnimatedImageDrawable in a ScaleDrawable so it always scales to fill its bounds.
         return ScaleDrawable(baseDrawable, options.scale)
+    }
+
+    private class WrapDecodeSource(private val decodeSource: DecodeSource) {
+        val extra get() = decodeSource.extra
+        val source get() = decodeSource.source
+
+        private val fileSystem get() = FileSystem.SYSTEM
+        private var _tempPath: Path? = null
+
+        private fun createTempPath(): Path {
+            val temp = File.createTempFile("tmp", null).toOkioPath()
+            fileSystem.write(temp) {
+                writeAll(source)
+            }
+            return temp
+        }
+
+        val tempPath: Path
+            get() = _tempPath ?: createTempPath().also { _tempPath = it }
+
+        fun close() {
+            _tempPath?.let(fileSystem::delete)
+        }
     }
 
     class Factory(
