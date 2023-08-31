@@ -4,7 +4,9 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 import kotlinx.atomicfu.locks.SynchronizedObject
 import okio.FileSystem
+import kotlin.experimental.ExperimentalNativeApi
 
+@OptIn(ExperimentalNativeApi::class)
 actual typealias WeakReference<T> = kotlin.native.ref.WeakReference<T>
 
 actual typealias LockObject = SynchronizedObject

@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.15.0"
     java
     id("app.kotlin.jvm")
-    alias(libs.plugins.compose.multiplatform)
+    id("app.compose.multiplatform")
     idea
 }
 

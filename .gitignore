@@ -30,7 +30,6 @@ build/
 !/.idea/codeStyles/Project.xml
 !/.idea/codeStyles/codeStyleConfig.xml
 !/.idea/icon*.svg
-!/.idea/kotlinc.xml
 !/.idea/vcs.xml
 
 # Local configuration file (sdk path, etc)

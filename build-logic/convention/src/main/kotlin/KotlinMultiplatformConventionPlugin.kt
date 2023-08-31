@@ -10,7 +10,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             apply("org.jetbrains.kotlin.multiplatform")
         }
         extensions.configure<KotlinMultiplatformExtension> {
-            android {
+            androidTarget {
                 publishLibraryVariants("debug", "release")
             }
             jvm("desktop")
@@ -27,7 +27,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             targetHierarchy.custom {
                 common {
                     group("jvm") {
-                        withAndroid()
+                        withAndroidTarget()
                         withJvm()
                     }
                     group("skia") {

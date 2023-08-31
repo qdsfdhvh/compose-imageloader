@@ -50,5 +50,9 @@ gradlePlugin {
             id = "app.android.test"
             implementationClass = "AndroidTestConventionPlugin"
         }
+        register("composeMultiplatform") {
+            id = "app.compose.multiplatform"
+            implementationClass = "ComposeMultiplatformConventionPlugin"
+        }
     }
 }

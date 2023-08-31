@@ -118,7 +118,14 @@ jobs:
       #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: |
+          ./gradlew kotlinUpgradeYarnLock \
+            :image-loader:assemble \
+            :extension:blur:assemble \
+            :extension:imageio:assemble \
+            :extension:moko-resources:assemble \
+            --stacktrace -PnoAppApple \
+            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
   build:
     needs: spotless
@@ -150,4 +157,11 @@ jobs:
       #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
-        run: ./gradlew build --stacktrace -PnoAppApple -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+        run: |
+          ./gradlew kotlinUpgradeYarnLock \
+            :image-loader:build \
+            :extension:blur:build \
+            :extension:imageio:build \
+            :extension:moko-resources:build \
+            --stacktrace -PnoAppApple \
+            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"

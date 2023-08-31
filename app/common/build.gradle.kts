@@ -1,7 +1,7 @@
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
-    alias(libs.plugins.compose.multiplatform)
+    id("app.compose.multiplatform")
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.moko.resources)
 }
@@ -27,6 +27,8 @@ kotlin {
             }
         }
         val androidMain by getting {
+            // https://github.com/icerockdev/moko-resources/issues/531
+            dependsOn(commonMain)
             dependencies {
                 implementation(libs.ktor.client.cio)
             }

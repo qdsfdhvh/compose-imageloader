@@ -1,7 +1,7 @@
 plugins {
     id("app.android.application")
     id("app.kotlin.android")
-    alias(libs.plugins.compose.multiplatform)
+    id("app.compose.multiplatform")
     alias(libs.plugins.baselineProfile)
 }
 

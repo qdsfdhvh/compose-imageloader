@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.config.LanguageFeature
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
-    alias(libs.plugins.compose.multiplatform)
+    id("app.compose.multiplatform")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)
@@ -47,8 +47,7 @@ kotlin {
         }
         val androidUnitTest by getting {
             dependencies {
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.uiTestJUnit4)
+                implementation(compose.desktop.uiTestJUnit4)
                 implementation(libs.bundles.test.android)
             }
         }
@@ -63,7 +62,11 @@ kotlin {
             }
             dependencies {
                 implementation(compose.desktop.currentOs)
-                implementation(libs.bundles.test.desktop)
+                implementation(compose.desktop.uiTestJUnit4)
+                implementation(libs.roborazzi.compose.desktop.get().toString()) {
+                    exclude("org.jetbrains.compose.ui", "ui-test-junit4-desktop")
+                    exclude("org.jetbrains.compose.ui", "ui-graphics-desktop")
+                }
             }
         }
         val appleMain by getting {
