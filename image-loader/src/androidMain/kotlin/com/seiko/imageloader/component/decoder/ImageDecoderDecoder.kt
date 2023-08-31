@@ -16,13 +16,16 @@ import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.ScaleDrawable
+import com.seiko.imageloader.util.closeQuietly
 import com.seiko.imageloader.util.isAnimatedHeif
 import com.seiko.imageloader.util.isAnimatedWebP
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.toBitmapConfig
+import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import okio.FileSystem
+import okio.Path
 import okio.Path.Companion.toOkioPath
 import okio.buffer
 import java.io.File
@@ -44,11 +47,11 @@ class ImageDecoderDecoder private constructor(
     private val enforceMinimumFrameDelay: Boolean = true,
 ) : Decoder {
 
-    override suspend fun decode(): DecodeResult {
-        val decoder = source.toImageDecoderSource()
+    override suspend fun decode(): DecodeResult = runInterruptible {
         var imageDecoder: ImageDecoder? = null
+        val wrapDecodeSource = WrapDecodeSource(source, cacheDirFactory = { context.safeCacheDir })
         val drawable = try {
-            decoder.decodeDrawable { _, _ ->
+            wrapDecodeSource.toImageDecoderSource().decodeDrawable { _, _ ->
                 // Capture the image decoder to manually close it later.
                 imageDecoder = this
 
@@ -57,8 +60,9 @@ class ImageDecoderDecoder private constructor(
             }
         } finally {
             imageDecoder?.close()
+            wrapDecodeSource.close()
         }
-        return DecodeResult.Image(
+        DecodeResult.Image(
             image = wrapDrawable(drawable).toImage(),
         )
     }
@@ -73,7 +77,7 @@ class ImageDecoderDecoder private constructor(
         }
     }
 
-    private fun DecodeSource.toImageDecoderSource(): ImageDecoder.Source {
+    private fun WrapDecodeSource.toImageDecoderSource(): ImageDecoder.Source {
         when (val metadata = extra.metadata) {
             is AssetUriFetcher.MetaData -> {
                 return ImageDecoder.createSource(context.assets, metadata.fileName)
@@ -87,19 +91,12 @@ class ImageDecoderDecoder private constructor(
                 }
             }
         }
-
         val source = wrapBufferedSource(source)
         return when {
             SDK_INT >= 31 -> ImageDecoder.createSource(source.readByteArray())
             SDK_INT == 30 -> ImageDecoder.createSource(ByteBuffer.wrap(source.readByteArray()))
             // https://issuetracker.google.com/issues/139371066
-            else -> {
-                val temp = File.createTempFile("tmp", null)
-                FileSystem.SYSTEM.write(temp.toOkioPath()) {
-                    writeAll(source)
-                }
-                ImageDecoder.createSource(temp)
-            }
+            else -> ImageDecoder.createSource(tempPath.toFile())
         }
     }
 
@@ -144,6 +141,35 @@ class ImageDecoderDecoder private constructor(
         return ScaleDrawable(baseDrawable, options.scale)
     }
 
+    private class WrapDecodeSource(
+        private val decodeSource: DecodeSource,
+        private val cacheDirFactory: () -> File,
+    ) {
+        val extra get() = decodeSource.extra
+        val source get() = decodeSource.source
+
+        private val fileSystem get() = FileSystem.SYSTEM
+        private var _tempPath: Path? = null
+
+        private fun createTempPath(): Path {
+            val parentDir = cacheDirFactory.invoke()
+            check(parentDir.isDirectory) { "cacheDirectory must be a directory." }
+            val temp = File.createTempFile("tmp", null, parentDir).toOkioPath()
+            fileSystem.write(temp) {
+                writeAll(source)
+            }
+            return temp
+        }
+
+        val tempPath: Path
+            get() = _tempPath ?: createTempPath().also { _tempPath = it }
+
+        fun close() {
+            _tempPath?.let(fileSystem::delete)
+            source.closeQuietly()
+        }
+    }
+
     class Factory(
         private val context: Context? = null,
         private val enforceMinimumFrameDelay: Boolean = true,
@@ -165,3 +191,10 @@ class ImageDecoderDecoder private constructor(
         }
     }
 }
+
+/** https://github.com/coil-kt/coil/issues/675 */
+private val Context.safeCacheDir: File
+    get() {
+        val cacheDir = checkNotNull(cacheDir) { "cacheDir == null" }
+        return cacheDir.apply { mkdirs() }
+    }
