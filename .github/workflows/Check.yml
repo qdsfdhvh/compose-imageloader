@@ -120,7 +120,10 @@ jobs:
       - name: Assemble
         run: |
           ./gradlew kotlinUpgradeYarnLock \
-            assemble \
+            :image-loader:assemble \
+            :extension:blur:assemble \
+            :extension:imageio:assemble \
+            :extension:moko-resources:assemble \
             --stacktrace -PnoAppApple \
             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
@@ -156,6 +159,9 @@ jobs:
       - name: Build
         run: |
           ./gradlew kotlinUpgradeYarnLock \
-            build \
+            :image-loader:build \
+            :extension:blur:build \
+            :extension:imageio:build \
+            :extension:moko-resources:build \
             --stacktrace -PnoAppApple \
             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
