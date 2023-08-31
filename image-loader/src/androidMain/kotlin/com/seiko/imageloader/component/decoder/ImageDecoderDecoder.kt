@@ -48,9 +48,9 @@ class ImageDecoderDecoder private constructor(
 
     override suspend fun decode(): DecodeResult = runInterruptible {
         var imageDecoder: ImageDecoder? = null
-        val wrapSource = WrapDecodeSource(source)
+        val wrapDecodeSource = WrapDecodeSource(source, cacheDirFactory = { context.safeCacheDir })
         val drawable = try {
-            wrapSource.toImageDecoderSource().decodeDrawable { _, _ ->
+            wrapDecodeSource.toImageDecoderSource().decodeDrawable { _, _ ->
                 // Capture the image decoder to manually close it later.
                 imageDecoder = this
 
@@ -59,7 +59,7 @@ class ImageDecoderDecoder private constructor(
             }
         } finally {
             imageDecoder?.close()
-            wrapSource.close()
+            wrapDecodeSource.close()
         }
         DecodeResult.Image(
             image = wrapDrawable(drawable).toImage(),
@@ -140,7 +140,10 @@ class ImageDecoderDecoder private constructor(
         return ScaleDrawable(baseDrawable, options.scale)
     }
 
-    private class WrapDecodeSource(private val decodeSource: DecodeSource) {
+    private class WrapDecodeSource(
+        private val decodeSource: DecodeSource,
+        private val cacheDirFactory: () -> File,
+    ) {
         val extra get() = decodeSource.extra
         val source get() = decodeSource.source
 
@@ -148,7 +151,9 @@ class ImageDecoderDecoder private constructor(
         private var _tempPath: Path? = null
 
         private fun createTempPath(): Path {
-            val temp = File.createTempFile("tmp", null).toOkioPath()
+            val parentDir = cacheDirFactory.invoke()
+            check(parentDir.isDirectory) { "cacheDirectory must be a directory." }
+            val temp = File.createTempFile("tmp", null, parentDir).toOkioPath()
             fileSystem.write(temp) {
                 writeAll(source)
             }
@@ -184,3 +189,10 @@ class ImageDecoderDecoder private constructor(
         }
     }
 }
+
+/** https://github.com/coil-kt/coil/issues/675 */
+private val Context.safeCacheDir: File
+    get() {
+        val cacheDir = checkNotNull(cacheDir) { "cacheDir == null" }
+        return cacheDir.apply { mkdirs() }
+    }
