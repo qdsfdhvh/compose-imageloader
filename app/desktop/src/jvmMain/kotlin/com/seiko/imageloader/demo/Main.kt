@@ -14,7 +14,7 @@ import java.io.File
 fun main() {
     application {
         Window(
-            title = "PreCompose Sample",
+            title = "Image Sample",
             onCloseRequest = {
                 exitApplication()
             },
