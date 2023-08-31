@@ -16,6 +16,7 @@ import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.ScaleDrawable
+import com.seiko.imageloader.util.closeQuietly
 import com.seiko.imageloader.util.isAnimatedHeif
 import com.seiko.imageloader.util.isAnimatedWebP
 import com.seiko.imageloader.util.isGif
@@ -165,6 +166,7 @@ class ImageDecoderDecoder private constructor(
 
         fun close() {
             _tempPath?.let(fileSystem::delete)
+            source.closeQuietly()
         }
     }
 
