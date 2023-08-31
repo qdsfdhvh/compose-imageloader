@@ -6,6 +6,7 @@ import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
 import com.seiko.imageloader.model.ExtraDataBuilder
 import com.seiko.imageloader.model.extraData
+import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
 
 @Poko class Options internal constructor(
     val allowInexactSize: Boolean,
@@ -18,6 +19,7 @@ import com.seiko.imageloader.model.extraData
     val diskCachePolicy: CachePolicy,
     val playAnimate: Boolean,
     val repeatCount: Int,
+    val maxImageSize: Int,
     val extra: ExtraData,
 ) {
 
@@ -48,6 +50,7 @@ class OptionsBuilder internal constructor() {
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED
     var playAnimate: Boolean = true
     private var _repeatCount: Int = Options.REPEAT_INFINITE
+    var maxImageSize = DEFAULT_MAX_IMAGE_SIZE
     private var extraData: ExtraData? = null
 
     var repeatCount: Int
@@ -70,6 +73,7 @@ class OptionsBuilder internal constructor() {
         diskCachePolicy = options.diskCachePolicy
         playAnimate = options.playAnimate
         _repeatCount = options.repeatCount
+        maxImageSize = options.maxImageSize
         extra {
             if (clearOptionsExtraData) {
                 clear()
@@ -97,6 +101,7 @@ class OptionsBuilder internal constructor() {
         diskCachePolicy = diskCachePolicy,
         playAnimate = playAnimate,
         repeatCount = repeatCount,
+        maxImageSize = maxImageSize,
         extra = extraData ?: EmptyExtraData,
     )
 }
