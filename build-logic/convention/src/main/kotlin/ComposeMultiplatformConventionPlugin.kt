@@ -10,7 +10,7 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
         }
         extensions.configure<ComposeExtension> {
             // https://github.com/JetBrains/compose-multiplatform/issues/3570
-            kotlinCompilerPlugin.set("1.5.2-beta01")
+            // kotlinCompilerPlugin.set("1.5.2-beta01")
         }
     }
 }
