@@ -1,26 +1,20 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlin.multiplatform)
+    id("app.compose.multiplatform")
 }
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = Versions.Java.jvmTarget
-        }
-    }
-    @Suppress("UNUSED_VARIABLE")
+    jvm()
     sourceSets {
-        val jvmMain by getting {
+        commonMain {
             dependencies {
                 implementation(projects.app.common)
                 implementation(projects.extension.imageio)
                 implementation(compose.desktop.currentOs)
             }
         }
-        val jvmTest by getting
     }
 }
 

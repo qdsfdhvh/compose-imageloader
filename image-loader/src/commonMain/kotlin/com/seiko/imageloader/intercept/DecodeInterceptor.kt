@@ -25,7 +25,7 @@ class DecodeInterceptor : Interceptor {
                     onSuccess = { it.toImageResult() },
                     onFailure = {
                         if (options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
-                            val noDiskCacheRequest = request.newBuilder {
+                            val noDiskCacheRequest = ImageRequest(request) {
                                 options {
                                     retryIfDiskDecodeError = false
                                     diskCachePolicy = when (options.diskCachePolicy) {

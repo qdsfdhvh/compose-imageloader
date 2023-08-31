@@ -1,12 +1,13 @@
 plugins {
-    kotlin("multiplatform")
-    kotlin("native.cocoapods")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlin.multiplatform)
+    id("app.compose.multiplatform")
     alias(libs.plugins.moko.resources)
+    kotlin("native.cocoapods")
 }
 
 kotlin {
-    ios()
+    iosX64()
+    iosArm64()
     iosSimulatorArm64()
     sourceSets {
         commonMain {

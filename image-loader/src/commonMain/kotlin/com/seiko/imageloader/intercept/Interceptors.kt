@@ -46,11 +46,19 @@ class InterceptorsBuilder internal constructor() {
 
     var useDefaultInterceptors = true
 
-    fun takeFrom(interceptors: Interceptors) {
+    fun takeFrom(
+        interceptors: Interceptors,
+        clearInterceptors: Boolean = false,
+        clearMemoryCaches: Boolean = false,
+    ) {
         useDefaultInterceptors = interceptors.useDefaultInterceptors
-        interceptorList.clear()
+        if (clearInterceptors) {
+            interceptorList.clear()
+        }
+        if (clearMemoryCaches) {
+            memoryCaches.clear()
+        }
         interceptorList.addAll(interceptors.interceptorList)
-        memoryCaches.clear()
         memoryCaches.addAll(interceptors.memoryCaches)
         diskCache = interceptors.diskCache
     }

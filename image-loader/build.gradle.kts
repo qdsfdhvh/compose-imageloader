@@ -1,9 +1,14 @@
+import org.jetbrains.kotlin.config.LanguageFeature
+
 plugins {
-    id("project-kmp")
+    id("app.android.library")
+    id("app.kotlin.multiplatform")
+    id("app.compose.multiplatform")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.poko)
 }
 
 kotlin {
@@ -22,6 +27,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.bundles.test.common)
+                implementation(compose.foundation)
+                implementation(compose.ui)
             }
         }
         val jvmMain by getting {
@@ -40,16 +47,26 @@ kotlin {
         }
         val androidUnitTest by getting {
             dependencies {
-                implementation(compose.foundation)
-                implementation(compose.ui)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.uiTestJUnit4)
+                implementation(compose.desktop.uiTestJUnit4)
                 implementation(libs.bundles.test.android)
             }
         }
         val desktopMain by getting {
             dependencies {
                 implementation(libs.kotlinx.coroutines.swing)
+            }
+        }
+        val desktopTest by getting {
+            languageSettings {
+                enableLanguageFeature(LanguageFeature.ContextReceivers.name)
+            }
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(compose.desktop.uiTestJUnit4)
+                implementation(libs.roborazzi.compose.desktop.get().toString()) {
+                    exclude("org.jetbrains.compose.ui", "ui-test-junit4-desktop")
+                    exclude("org.jetbrains.compose.ui", "ui-graphics-desktop")
+                }
             }
         }
         val appleMain by getting {
@@ -77,9 +94,9 @@ kotlin {
             jsMain.dependsOn(this)
         }
     }
-    sourceSets.forEach {
-        if (it.name.endsWith("Main")) {
-            it.kotlin.srcDir("src/${it.name}/singleton")
+    sourceSets.all {
+        if (name.endsWith("Main")) {
+            kotlin.srcDir("src/$name/singleton")
         }
     }
 }
@@ -105,4 +122,8 @@ baselineProfile {
 
 dependencies {
     baselineProfile(projects.app.android.benchmark)
+}
+
+poko {
+    pokoAnnotation.set("com.seiko.imageloader.Poko")
 }

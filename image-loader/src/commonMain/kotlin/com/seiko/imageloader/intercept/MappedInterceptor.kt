@@ -1,5 +1,6 @@
 package com.seiko.imageloader.intercept
 
+import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.util.d
 
@@ -17,7 +18,7 @@ class MappedInterceptor : Interceptor {
             ) { "map -> $mappedData" }
         }
 
-        val newRequest = request.newBuilder { data(mappedData) }
+        val newRequest = ImageRequest(request) { data(mappedData) }
         return chain.proceed(newRequest)
     }
 }

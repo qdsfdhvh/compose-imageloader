@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.decoder
 
+import com.seiko.imageloader.Poko
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 
@@ -13,15 +14,15 @@ interface Decoder {
 }
 
 sealed interface DecodeResult {
-    data class Bitmap(
+    @Poko class Bitmap(
         val bitmap: com.seiko.imageloader.Bitmap,
     ) : DecodeResult
 
-    data class Image(
+    @Poko class Image(
         val image: com.seiko.imageloader.Image,
     ) : DecodeResult
 
-    data class Painter(
+    @Poko class Painter(
         val painter: androidx.compose.ui.graphics.painter.Painter,
     ) : DecodeResult
 }

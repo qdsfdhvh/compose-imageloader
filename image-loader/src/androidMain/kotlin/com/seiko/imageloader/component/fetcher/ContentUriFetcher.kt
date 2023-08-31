@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import androidx.annotation.VisibleForTesting
 import com.eygraber.uri.Uri
 import com.eygraber.uri.toAndroidUri
+import com.seiko.imageloader.Poko
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
@@ -94,5 +95,5 @@ class ContentUriFetcher private constructor(
         private fun isApplicable(data: Uri) = data.scheme == SCHEME_CONTENT
     }
 
-    data class Metadata(val uri: AndroidUri)
+    @Poko class Metadata(val uri: AndroidUri)
 }

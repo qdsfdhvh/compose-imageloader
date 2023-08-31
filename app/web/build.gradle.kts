@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlin.multiplatform)
+    id("app.compose.multiplatform")
+    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -8,15 +9,19 @@ kotlin {
         browser()
         binaries.executable()
     }
+    @Suppress("UNUSED_VARIABLE")
     sourceSets {
-        val jsMain by getting {
+        val commonMain by getting {
             dependencies {
                 implementation(projects.app.common)
                 implementation(compose.runtime)
                 implementation(libs.okio.fakefilesystem)
-                implementation(npm("path-browserify", "^1.0.1"))
-                implementation(npm("os-browserify", "^0.3.0"))
+                implementation(libs.moko.resources)
             }
+        }
+        val jsMain by getting {
+            // https://github.com/icerockdev/moko-resources/issues/531
+            dependsOn(commonMain)
         }
     }
 }

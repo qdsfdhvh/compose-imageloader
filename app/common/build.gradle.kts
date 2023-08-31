@@ -1,6 +1,8 @@
 plugins {
-    id("project-kmp")
-    kotlin("plugin.serialization")
+    id("app.android.library")
+    id("app.kotlin.multiplatform")
+    id("app.compose.multiplatform")
+    alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.moko.resources)
 }
 
@@ -13,7 +15,6 @@ kotlin {
                 api(compose.foundation)
                 api(compose.ui)
                 api(compose.material)
-                api(compose.materialIconsExtended)
 
                 api(projects.imageLoader)
                 implementation(projects.extension.blur)
@@ -26,6 +27,8 @@ kotlin {
             }
         }
         val androidMain by getting {
+            // https://github.com/icerockdev/moko-resources/issues/531
+            dependsOn(commonMain)
             dependencies {
                 implementation(libs.ktor.client.cio)
             }
@@ -57,15 +60,13 @@ multiplatformResources {
 }
 
 // workaround
-tasks.matching { it.name == "iosSimulatorArm64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "iosX64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "macosArm64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
-}
-tasks.matching { it.name == "macosX64ProcessResources" }.configureEach {
-    dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+listOf(
+    "iosSimulatorArm64ProcessResources",
+    "iosX64ProcessResources",
+    "macosArm64ProcessResources",
+    "macosX64ProcessResources",
+).forEach { name ->
+    tasks.matching { it.name == name }.configureEach {
+        dependsOn(tasks.matching { it.name == "generateMRcommonMain" })
+    }
 }

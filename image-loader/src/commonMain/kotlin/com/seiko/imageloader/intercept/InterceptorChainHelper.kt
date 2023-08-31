@@ -24,7 +24,7 @@ internal class InterceptorChainHelper(
     }
 
     fun getOptions(request: ImageRequest): Options {
-        return config.defaultOptions.newBuilder {
+        return Options(config.defaultOptions) {
             request.optionsBuilders.forEach { builder ->
                 builder.invoke(this)
             }

@@ -77,7 +77,7 @@ fun rememberImagePainter(
 ): Painter {
     return rememberImagePainter(
         request = remember(request) {
-            request.newBuilder {
+            ImageRequest(request) {
                 scale(contentScale.toScale())
             }
         },
@@ -131,7 +131,7 @@ fun rememberAsyncImagePainter(
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): Painter {
     val newRequest = remember(request) {
-        request.newBuilder {
+        ImageRequest(request) {
             scale(contentScale.toScale())
         }
     }

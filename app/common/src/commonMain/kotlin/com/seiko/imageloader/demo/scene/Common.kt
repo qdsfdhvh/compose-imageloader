@@ -80,6 +80,7 @@ fun ImageItem(
                 // }
                 options {
                     playAnimate = playAnime
+                    maxImageSize = 100
                 }
             }
         }

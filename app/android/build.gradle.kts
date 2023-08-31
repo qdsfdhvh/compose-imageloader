@@ -1,17 +1,14 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.compose")
+    id("app.android.application")
+    id("app.kotlin.android")
+    id("app.compose.multiplatform")
     alias(libs.plugins.baselineProfile)
 }
 
 android {
     namespace = "com.seiko.imageloader.demo"
-    compileSdk = Versions.Android.compile
     defaultConfig {
         applicationId = "com.seiko.imageloader.demo"
-        minSdk = Versions.Android.min
-        targetSdk = Versions.Android.target
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -32,10 +29,6 @@ android {
             isDebuggable = false
         }
     }
-    compileOptions {
-        sourceCompatibility = Versions.Java.source
-        targetCompatibility = Versions.Java.target
-    }
 }
 
 baselineProfile {
@@ -46,10 +39,7 @@ baselineProfile {
 
 dependencies {
     implementation(projects.app.common)
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     baselineProfile(projects.app.android.benchmark)
 }

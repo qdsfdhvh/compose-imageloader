@@ -1,43 +1,32 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.androidTest) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.plugin.serialization) apply false
-    alias(libs.plugins.composeJb) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.compose.multiplatform) apply false
+    alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.spotless)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.roborazzi) apply false
-    id("build-logic") apply false
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        targetExclude("**/build/")
+        ktlint(libs.versions.ktlint.get())
+    }
+    kotlinGradle {
+        target("**/*.gradle.kts")
+        targetExclude("**/build/")
+        ktlint(libs.versions.ktlint.get())
+    }
 }
 
 allprojects {
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = Versions.Java.jvmTarget
-        }
-    }
-
-    apply(plugin = "com.diffplug.spotless")
-    spotless {
-        kotlin {
-            target("**/*.kt")
-            targetExclude("**/build/")
-            ktlint(libs.versions.ktlint.get().toString())
-        }
-        kotlinGradle {
-            target("**/*.gradle.kts")
-            targetExclude("**/build/")
-            ktlint(libs.versions.ktlint.get().toString())
-        }
-    }
-
     group = "io.github.qdsfdhvh"
-    version = Versions.Project.version
+    version = ProjectVersion.version
 
     plugins.withId("com.vanniktech.maven.publish.base") {
         mavenPublishing {
@@ -73,8 +62,20 @@ allprojects {
 }
 
 tasks.dokkaHtmlMultiModule {
-    moduleVersion.set(Versions.Project.version)
+    moduleVersion.set(ProjectVersion.version)
     outputDirectory.set(rootDir.resolve("docs/static/api"))
+}
+
+object ProjectVersion {
+    // incompatible API changes
+    private const val major = "1"
+
+    // functionality in a backwards compatible manner
+    private const val monir = "6"
+
+    // backwards compatible bug fixes
+    private const val path = "5"
+    const val version = "$major.$monir.$path"
 }
 
 gradle.taskGraph.whenReady {
@@ -86,19 +87,6 @@ gradle.taskGraph.whenReady {
                     it.path.startsWith(":app:web")
             }
             .forEach {
-                it.enabled = false
-            }
-        // TODO remove when this fix https://github.com/JetBrains/compose-multiplatform/issues/3135
-        allTasks.asSequence()
-            .filter {
-                it.path in listOf(
-                    ":image-loader:linkDebugTestIosSimulatorArm64",
-                    ":image-loader:linkDebugTestIosArm64",
-                    ":image-loader:linkDebugTestIosX64",
-                    ":image-loader:linkDebugTestMacosArm64",
-                    ":image-loader:linkDebugTestMacosX64",
-                )
-            }.forEach {
                 it.enabled = false
             }
     }

@@ -8,6 +8,7 @@ import dev.icerock.moko.resources.ColorResource
 import dev.icerock.moko.resources.FileResource
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.getNSColor
+import kotlinx.cinterop.ExperimentalForeignApi
 import okio.FileSystem
 import okio.Path.Companion.toPath
 import okio.buffer
@@ -46,6 +47,7 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
     )
 }
 
+@OptIn(ExperimentalForeignApi::class)
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
     val nsImage: NSImage = this.toNSImage()
         ?: throw IllegalArgumentException("can't read NSImage of $this")

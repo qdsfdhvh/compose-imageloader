@@ -2,7 +2,6 @@ package com.seiko.imageloader.util
 
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.js.Js
-import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
@@ -26,17 +25,6 @@ actual class WeakReference<T : Any> actual constructor(referred: T) {
             strongRefFallback = referred
             weakRef = null
         }
-    }
-}
-
-actual class AtomicBoolean actual constructor(referred: Boolean) {
-
-    private val atomic = atomic(referred)
-
-    actual fun get() = atomic.value
-
-    actual fun compareAndSet(expect: Boolean, update: Boolean): Boolean {
-        return atomic.compareAndSet(expect, update)
     }
 }
 

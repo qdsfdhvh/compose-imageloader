@@ -29,10 +29,10 @@ import com.seiko.imageloader.transform.PixelOpacity
  *
  * NOTE: Prefer using [ImageDecoderDecoder] and [AnimatedImageDrawable] on API 28 and above.
  */
-internal class MovieDrawable @JvmOverloads constructor(
+internal class MovieDrawable(
     private val movie: Movie,
-    val config: Bitmap.Config = Bitmap.Config.ARGB_8888,
-    val scale: Scale = Scale.FIT,
+    val config: Bitmap.Config,
+    val scale: Scale,
 ) : Drawable(), Animatable2Compat {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
@@ -217,8 +217,7 @@ internal class MovieDrawable @JvmOverloads constructor(
         val movieHeight = movie.height()
         if (movieWidth <= 0 || movieHeight <= 0) return
 
-        softwareScale = DecodeUtils
-            .computeSizeMultiplier(movieWidth, movieHeight, boundsWidth, boundsHeight, scale)
+        softwareScale = computeSizeMultiplier(movieWidth, movieHeight, boundsWidth, boundsHeight, scale)
             .run { if (isSoftwareScalingEnabled) this else coerceAtMost(1.0) }
             .toFloat()
         val bitmapWidth = (softwareScale * movieWidth).toInt()
@@ -234,8 +233,7 @@ internal class MovieDrawable @JvmOverloads constructor(
             hardwareDx = 0f
             hardwareDy = 0f
         } else {
-            hardwareScale = DecodeUtils
-                .computeSizeMultiplier(bitmapWidth, bitmapHeight, boundsWidth, boundsHeight, scale)
+            hardwareScale = computeSizeMultiplier(bitmapWidth, bitmapHeight, boundsWidth, boundsHeight, scale)
                 .toFloat()
             hardwareDx = bounds.left + (boundsWidth - hardwareScale * bitmapWidth) / 2
             hardwareDy = bounds.top + (boundsHeight - hardwareScale * bitmapHeight) / 2
