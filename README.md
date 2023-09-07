@@ -17,17 +17,17 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-+                api("io.github.qdsfdhvh:image-loader:1.6.5")
++                api("io.github.qdsfdhvh:image-loader:1.6.6")
                 // optional - Moko Resources Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.6.5")
++                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.6.6")
                 // optional - Blur Interceptor (only support bitmap)
-+                api("io.github.qdsfdhvh:image-loader-extension-blur:1.6.5")
++                api("io.github.qdsfdhvh:image-loader-extension-blur:1.6.6")
             }
         }
         val jvmMain by getting {
             dependencies {
                 // optional - ImageIO Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.6.5")
++                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.6.6")
             }
         }
     }
@@ -79,6 +79,8 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
+            // cache 100 success image result, without bitmap
+            defaultImageResultMemoryCache()
             memoryCacheConfig {
                 // Set the max size to 25% of the app's available memory.
                 maxSizePercent(context, 0.25)
@@ -101,6 +103,8 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
+            // cache 100 success image result, without bitmap
+            defaultImageResultMemoryCache()
             memoryCacheConfig {
                 maxSizeBytes(32 * 1024 * 1024) // 32MB
             }
@@ -130,13 +134,15 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
        interceptor {
-            memoryCacheConfig {
-                maxSizeBytes(32 * 1024 * 1024) // 32MB
-            }
-            diskCacheConfig {
-                directory(getCacheDir().toPath().resolve("image_cache"))
-                maxSizeBytes(512L * 1024 * 1024) // 512MB
-            }
+           // cache 100 success image result, without bitmap
+           defaultImageResultMemoryCache()
+           memoryCacheConfig {
+               maxSizeBytes(32 * 1024 * 1024) // 32MB
+           }
+           diskCacheConfig {
+               directory(getCacheDir().toPath().resolve("image_cache"))
+               maxSizeBytes(512L * 1024 * 1024) // 512MB
+           }
         }
     }
 }
@@ -166,7 +172,7 @@ val imageRequest = ImageRequest {
         set("key_int", 11)
     }
 }
-val newImageRequest = imageRequest.newBuilder {
+val newImageRequest = ImageRequest(imageRequest) {
     // ...
 }
 ```
