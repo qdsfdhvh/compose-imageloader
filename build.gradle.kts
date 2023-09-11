@@ -59,6 +59,22 @@ allprojects {
             }
         }
     }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            if (findProperty("myapp.enableComposeCompilerReports") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
+                )
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
+                )
+            }
+        }
+    }
 }
 
 tasks.dokkaHtmlMultiModule {
@@ -74,7 +90,7 @@ object ProjectVersion {
     private const val monir = "6"
 
     // backwards compatible bug fixes
-    private const val path = "6"
+    private const val path = "7"
     const val version = "$major.$monir.$path"
 }
 
