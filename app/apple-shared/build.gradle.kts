@@ -17,14 +17,14 @@ kotlin {
         }
     }
     cocoapods {
-        name = "combine"
+        name = "shared"
         version = "1.0.0"
         summary = "Shared code for the sample"
         homepage = "https://github.com/qdsfdhvh/compose-imageloader"
-        ios.deploymentTarget = "16.0"
+        ios.deploymentTarget = "14.0"
         podfile = project.file("../ios/Podfile")
         framework {
-            baseName = "combine"
+            baseName = "shared"
             isStatic = true
         }
     }

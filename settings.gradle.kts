@@ -42,7 +42,7 @@ include(
     ":app:android",
     ":app:android:benchmark",
     ":app:desktop",
-    ":app:ios-combine",
+    ":app:apple-shared",
     ":app:macos",
     ":app:web",
     ":app:intellij-plugin",
