@@ -3,7 +3,7 @@ package com.seiko.imageloader.demo
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ComposeUIViewController
-import com.seiko.imageloader.DefaultIOS
+import com.seiko.imageloader.DefaultApple
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.demo.util.commonConfig
@@ -20,7 +20,7 @@ fun MainViewController(): UIViewController = ComposeUIViewController {
 
 private fun generateImageLoader(): ImageLoader {
     return ImageLoader {
-        takeFrom(ImageLoader.DefaultIOS)
+        takeFrom(ImageLoader.DefaultApple)
         commonConfig()
     }
     // return ImageLoader {
