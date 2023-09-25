@@ -19,6 +19,9 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             iosSimulatorArm64()
             macosX64()
             macosArm64()
+            tvosX64()
+            tvosArm64()
+            tvosSimulatorArm64()
             js(IR) {
                 browser()
                 nodejs()
@@ -42,6 +45,11 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                                 group("macos") {
                                     withMacosX64()
                                     withMacosArm64()
+                                }
+                                group("tvos") {
+                                    withTvosX64()
+                                    withTvosArm64()
+                                    withTvosSimulatorArm64()
                                 }
                             }
                             withJs()
