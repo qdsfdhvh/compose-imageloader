@@ -56,8 +56,6 @@ internal class NinePatchPainter(
     private var colorFilter: ColorFilter? = null
 
     override fun DrawScope.onDraw() {
-        println("source offset: [$widthLeft, $heightTop, $widthRight, $heightBottom]")
-
         if (image.width < ninePatchData.right || image.height < ninePatchData.bottom) {
             println("incorrect bitmap")
             return
@@ -65,23 +63,17 @@ internal class NinePatchPainter(
 
         val drawWidth = this@onDraw.size.width.roundToInt()
         val drawHeight = this@onDraw.size.height.roundToInt()
-        println("draw size: $drawWidth x $drawHeight")
 
         val factor = min(drawWidth / image.width.toFloat(), drawHeight / image.height.toFloat())
-        println("factor $factor")
-
         val drawScale = min(maxFactor, factor * scale)
-        println("drawScale: $drawScale")
 
         val scaleLeft = (widthLeft * drawScale).roundToInt()
         val scaleRight = (widthRight * drawScale).roundToInt()
         val scaleTop = (heightTop * drawScale).roundToInt()
         val scaleBottom = (heightBottom * drawScale).roundToInt()
-        println("draw offset: [$scaleLeft, $scaleTop, $scaleRight, $scaleBottom]")
 
         val scaleWidth = max(1, drawWidth - scaleLeft - scaleRight)
         val scaleHeight = max(1, drawHeight - scaleTop - scaleBottom)
-        println("center scale size: $scaleWidth x $scaleHeight")
 
         // Center
         drawImage(
