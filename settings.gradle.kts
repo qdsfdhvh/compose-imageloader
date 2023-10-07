@@ -38,6 +38,7 @@ include(
     ":extension:blur",
     ":extension:imageio",
     ":extension:moko-resources",
+    ":extension:nine-patch",
     ":app:common",
     ":app:android",
     ":app:android:benchmark",
