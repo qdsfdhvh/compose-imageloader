@@ -1,34 +1,12 @@
 package com.seiko.imageloader.model
 
-import androidx.compose.ui.graphics.FilterQuality
-
-fun ImageRequestBuilder.ninePatchCenterRect(centerRect: NinePatchCenterRect) {
+fun ImageRequestBuilder.ninePatch(block: NinePatchDataBuilder.() -> Unit) {
     extra {
-        set(KEY_NINE_PATCH_CENTER_RECT, centerRect)
+        set(KEY_NINE_PATCH_DATA, NinePatchData(block))
     }
 }
 
-fun ImageRequestBuilder.ninePatchScale(scale: Float) {
-    extra {
-        set(KEY_NINE_PATCH_SCALE, scale)
-    }
-}
+internal val ImageRequest.ninePatchData: NinePatchData?
+    get() = extra[KEY_NINE_PATCH_DATA] as? NinePatchData
 
-fun ImageRequestBuilder.ninePatchFilterQuality(filterQuality: FilterQuality) {
-    extra {
-        set(KEY_NINE_PATCH_SCALE, filterQuality)
-    }
-}
-
-internal val ImageRequest.ninePatchCenterRect: NinePatchCenterRect?
-    get() = extra[KEY_NINE_PATCH_CENTER_RECT] as? NinePatchCenterRect
-
-internal val ImageRequest.ninePatchScale: Float?
-    get() = extra[KEY_NINE_PATCH_SCALE] as? Float
-
-internal val ImageRequest.ninePatchFilterQuality: FilterQuality?
-    get() = extra[KEY_NINE_PATCH_FILTER_QUALITY] as? FilterQuality
-
-private const val KEY_NINE_PATCH_CENTER_RECT = "KEY_NINE_PATCH_CENTER_RECT"
-private const val KEY_NINE_PATCH_SCALE = "KEY_NINE_PATCH_SCALE"
-private const val KEY_NINE_PATCH_FILTER_QUALITY = "KEY_NINE_PATCH_FILTER_QUALITY"
+private const val KEY_NINE_PATCH_DATA = "KEY_NINE_PATCH_DATA"

@@ -1,11 +1,8 @@
 package com.seiko.imageloader.intercept
 
-import androidx.compose.ui.graphics.FilterQuality
 import com.seiko.imageloader.asImageBitmap
 import com.seiko.imageloader.model.ImageResult
-import com.seiko.imageloader.model.ninePatchCenterRect
-import com.seiko.imageloader.model.ninePatchFilterQuality
-import com.seiko.imageloader.model.ninePatchScale
+import com.seiko.imageloader.model.ninePatchData
 import com.seiko.imageloader.util.NinePatchPainter
 
 // only support Bitmap
@@ -14,15 +11,11 @@ class NinePatchInterceptor : Interceptor {
         val request = chain.request
         val result = chain.proceed(request)
         if (result is ImageResult.Bitmap) {
-            val centerSlice = request.ninePatchCenterRect ?: return result
-            val scale = request.ninePatchScale ?: 1f
-            val filterQuality = request.ninePatchFilterQuality ?: FilterQuality.Medium
+            val centerSlice = request.ninePatchData ?: return result
             return ImageResult.Painter(
                 painter = NinePatchPainter(
                     image = result.bitmap.asImageBitmap(),
-                    centerSlice = centerSlice,
-                    scale = scale,
-                    filterQuality = filterQuality,
+                    ninePatchData = centerSlice,
                 ),
             )
         }

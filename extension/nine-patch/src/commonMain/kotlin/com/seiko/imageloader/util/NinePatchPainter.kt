@@ -2,42 +2,41 @@ package com.seiko.imageloader.util
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.toSize
-import com.seiko.imageloader.model.NinePatchCenterRect
+import com.seiko.imageloader.model.NinePatchData
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
 internal class NinePatchPainter(
     private val image: ImageBitmap,
-    private val centerSlice: NinePatchCenterRect,
-    private val scale: Float = 1f,
-    private val filterQuality: FilterQuality = FilterQuality.Medium,
+    private val ninePatchData: NinePatchData,
 ) : Painter() {
 
-    private val centerWidth = max(1, centerSlice.width)
-    private val centerHeight = max(1, centerSlice.height)
-    private val widthLeft = centerSlice.left
-    private val widthRight = image.width - centerSlice.right
-    private val heightTop = centerSlice.top
-    private val heightBottom = image.height - centerSlice.bottom
+    private val scale get() = ninePatchData.scale
+    private val filterQuality get() = ninePatchData.filterQuality,
+
+    private val centerWidth = max(1, ninePatchData.width)
+    private val centerHeight = max(1, ninePatchData.height)
+    private val widthLeft = ninePatchData.left
+    private val widthRight = image.width - ninePatchData.right
+    private val heightTop = ninePatchData.top
+    private val heightBottom = image.height - ninePatchData.bottom
 
     // Source Offset
     private val offsetTopLeft = IntOffset.Zero
     private val offsetTop = IntOffset(widthLeft, 0)
-    private val offsetTopRight = IntOffset(centerSlice.right, 0)
+    private val offsetTopRight = IntOffset(ninePatchData.right, 0)
     private val offsetLeft = IntOffset(0, heightTop)
-    private val offsetCenter = IntOffset(centerSlice.left, heightTop)
-    private val offsetRight = IntOffset(centerSlice.right, heightTop)
-    private val offsetBottomLeft = IntOffset(0, centerSlice.bottom)
-    private val offsetBottom = IntOffset(centerSlice.left, centerSlice.bottom)
-    private val offsetBottomRight = IntOffset(centerSlice.right, centerSlice.bottom)
+    private val offsetCenter = IntOffset(ninePatchData.left, heightTop)
+    private val offsetRight = IntOffset(ninePatchData.right, heightTop)
+    private val offsetBottomLeft = IntOffset(0, ninePatchData.bottom)
+    private val offsetBottom = IntOffset(ninePatchData.left, ninePatchData.bottom)
+    private val offsetBottomRight = IntOffset(ninePatchData.right, ninePatchData.bottom)
 
     // Source Size
     private val sizeTopLeft = IntSize(widthLeft, heightTop)
@@ -50,31 +49,42 @@ internal class NinePatchPainter(
     private val sizeBottom = IntSize(centerWidth, heightBottom)
     private val sizeBottomRight = IntSize(widthRight, heightBottom)
 
-    private val size: IntSize = IntSize(image.width, image.height) // validateSize(IntOffset.Zero, surfaceSize)
     private var alpha: Float = 1.0f
     private var colorFilter: ColorFilter? = null
 
     override fun DrawScope.onDraw() {
-        if (image.width < centerSlice.right || image.height < centerSlice.bottom) {
+        println("source offset: [$widthLeft, $heightTop, $widthRight, $heightBottom]")
+
+        if (image.width < ninePatchData.right || image.height < ninePatchData.bottom) {
             println("incorrect bitmap")
             return
         }
+
         val drawWidth = this@onDraw.size.width.roundToInt()
         val drawHeight = this@onDraw.size.height.roundToInt()
+        println("draw size: $drawWidth x $drawHeight")
+
         val factor = min(drawWidth / image.width.toFloat(), drawHeight / image.height.toFloat())
-        val drawScale = min(1f, factor * scale)
-        val scaleLeft = max(1, (widthLeft * drawScale).toInt())
-        val scaleRight = max(1, (widthRight * drawScale).toInt())
-        val scaleTop = max(1, (heightTop * drawScale).toInt())
-        val scaleBottom = max(1, (heightBottom * drawScale).toInt())
+        println("factor $factor")
+
+        val drawScale = factor * scale
+        println("drawScale: $drawScale")
+
+        val scaleLeft = (widthLeft * drawScale).roundToInt()
+        val scaleRight = (widthRight * drawScale).roundToInt()
+        val scaleTop = (heightTop * drawScale).roundToInt()
+        val scaleBottom = (heightBottom * drawScale).roundToInt()
+        println("draw offset: [$scaleLeft, $scaleTop, $scaleRight, $scaleBottom]")
+
         val scaleWidth = max(1, drawWidth - scaleLeft - scaleRight)
         val scaleHeight = max(1, drawHeight - scaleTop - scaleBottom)
+        println("center scale size: $scaleWidth x $scaleHeight")
 
         // Center
         drawImage(
             image,
-            offsetCenter,
-            sizeCenter,
+            srcOffset = offsetCenter,
+            srcSize = sizeCenter,
             dstOffset = IntOffset(scaleLeft, scaleTop),
             dstSize = IntSize(scaleWidth, scaleHeight),
             alpha = alpha,
@@ -84,8 +94,8 @@ internal class NinePatchPainter(
         // Top
         drawImage(
             image,
-            offsetTop,
-            sizeTop,
+            srcOffset = offsetTop,
+            srcSize = sizeTop,
             dstOffset = IntOffset(scaleLeft, 0),
             dstSize = IntSize(scaleWidth, scaleTop),
             alpha = alpha,
@@ -95,8 +105,8 @@ internal class NinePatchPainter(
         // Left
         drawImage(
             image,
-            offsetLeft,
-            sizeLeft,
+            srcOffset = offsetLeft,
+            srcSize = sizeLeft,
             dstOffset = IntOffset(0, scaleTop),
             dstSize = IntSize(scaleLeft, scaleHeight),
             alpha = alpha,
@@ -106,8 +116,8 @@ internal class NinePatchPainter(
         // Right
         drawImage(
             image,
-            offsetRight,
-            sizeRight,
+            srcOffset = offsetRight,
+            srcSize = sizeRight,
             dstOffset = IntOffset(drawWidth - scaleRight, scaleTop),
             dstSize = IntSize(scaleRight, scaleHeight),
             alpha = alpha,
@@ -117,8 +127,8 @@ internal class NinePatchPainter(
         // Bottom
         drawImage(
             image,
-            offsetBottom,
-            sizeBottom,
+            srcOffset = offsetBottom,
+            srcSize = sizeBottom,
             dstOffset = IntOffset(scaleLeft, drawHeight - scaleBottom),
             dstSize = IntSize(scaleWidth, scaleBottom),
             alpha = alpha,
@@ -128,8 +138,8 @@ internal class NinePatchPainter(
         // TopLeft
         drawImage(
             image,
-            offsetTopLeft,
-            sizeTopLeft,
+            srcOffset = offsetTopLeft,
+            srcSize = sizeTopLeft,
             dstOffset = IntOffset.Zero,
             dstSize = IntSize(scaleLeft, scaleTop),
             alpha = alpha,
@@ -139,7 +149,7 @@ internal class NinePatchPainter(
         // TopRight
         drawImage(
             image,
-            offsetTopRight,
+            srcOffset = offsetTopRight,
             sizeTopRight,
             dstOffset = IntOffset(drawWidth - scaleRight, 0),
             dstSize = IntSize(scaleRight, scaleTop),
@@ -150,8 +160,8 @@ internal class NinePatchPainter(
         // BottomLeft
         drawImage(
             image,
-            offsetBottomLeft,
-            sizeBottomLeft,
+            srcOffset = offsetBottomLeft,
+            srcSize = sizeBottomLeft,
             dstOffset = IntOffset(0, drawHeight - scaleBottom),
             dstSize = IntSize(scaleLeft, scaleBottom),
             alpha = alpha,
@@ -161,8 +171,8 @@ internal class NinePatchPainter(
         // BottomRight
         drawImage(
             image,
-            offsetBottomRight,
-            sizeBottomRight,
+            srcOffset = offsetBottomRight,
+            srcSize = sizeBottomRight,
             dstOffset = IntOffset(drawWidth - scaleRight, drawHeight - scaleBottom),
             dstSize = IntSize(scaleRight, scaleBottom),
             alpha = alpha,
@@ -171,7 +181,8 @@ internal class NinePatchPainter(
         )
     }
 
-    override val intrinsicSize: Size get() = size.toSize()
+    override val intrinsicSize: Size
+        get() = Size.Unspecified
 
     override fun applyAlpha(alpha: Float): Boolean {
         this.alpha = alpha
@@ -187,7 +198,7 @@ internal class NinePatchPainter(
         if (this === other) return true
         if (other !is NinePatchPainter) return false
         if (image != other.image) return false
-        if (centerSlice != other.centerSlice) return false
+        if (ninePatchData != other.ninePatchData) return false
         if (scale != other.scale) return false
         if (filterQuality != other.filterQuality) return false
         return true
@@ -195,14 +206,13 @@ internal class NinePatchPainter(
 
     override fun hashCode(): Int {
         var result = image.hashCode()
-        result = 31 * result + centerSlice.hashCode()
-        result = 31 * result + size.hashCode()
+        result = 31 * result + ninePatchData.hashCode()
         result = 31 * result + scale.hashCode()
         result = 31 * result + filterQuality.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "NinePathPainter(image=$image, centerSlice=$centerSlice, scale=$scale)"
+        return "NinePathPainter(image=$image, ninePatchData=$ninePatchData, scale=$scale)"
     }
 }
