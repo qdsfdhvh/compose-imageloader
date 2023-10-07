@@ -19,6 +19,7 @@ internal class NinePatchPainter(
 
     private val scale get() = ninePatchData.scale
     private val skipPadding get() = ninePatchData.skipPadding
+    private val maxFactor get() = ninePatchData.maxFactor
     private val filterQuality get() = ninePatchData.filterQuality
 
     private val centerWidth = ninePatchData.right - ninePatchData.left
@@ -69,7 +70,7 @@ internal class NinePatchPainter(
         val factor = min(drawWidth / image.width.toFloat(), drawHeight / image.height.toFloat())
         println("factor $factor")
 
-        val drawScale = factor * scale
+        val drawScale = min(maxFactor, factor * scale)
         println("drawScale: $drawScale")
 
         val scaleLeft = (widthLeft * drawScale).roundToInt()

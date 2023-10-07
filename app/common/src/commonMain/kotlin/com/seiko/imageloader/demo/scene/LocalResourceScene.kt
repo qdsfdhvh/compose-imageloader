@@ -47,6 +47,7 @@ fun LocalResourceScene(
                                     left = 42
                                     right = 42 + 2
                                     skipPadding = 1
+                                    maxFactor = 1f
                                 }
                             }
                         },

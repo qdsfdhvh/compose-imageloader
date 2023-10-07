@@ -9,6 +9,7 @@ data class NinePatchData internal constructor(
     val bottom: Int,
     val scale: Float,
     val skipPadding: Int,
+    val maxFactor: Float,
     val filterQuality: FilterQuality,
 )
 
@@ -50,6 +51,12 @@ class NinePatchDataBuilder internal constructor() {
             field = value
         }
 
+    var maxFactor: Float = Float.MAX_VALUE
+        set(value) {
+            check(value > 0f) { "maxFactor must > 0" }
+            field = value
+        }
+
     var filterQuality: FilterQuality = FilterQuality.Medium
 
     fun build(): NinePatchData {
@@ -62,6 +69,7 @@ class NinePatchDataBuilder internal constructor() {
             bottom = bottom,
             scale = scale,
             skipPadding = skipPadding,
+            maxFactor = maxFactor,
             filterQuality = filterQuality,
         )
     }
