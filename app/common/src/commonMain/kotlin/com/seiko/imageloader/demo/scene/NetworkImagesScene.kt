@@ -45,7 +45,6 @@ fun NetworkImagesScene(
             items(images) { image ->
                 ImageItem(
                     data = image.imageUrl,
-                    // blurRadius = if (showBlur) 15 else 0,
                     block = remember(showBlur) {
                         {
                             if (showBlur) {

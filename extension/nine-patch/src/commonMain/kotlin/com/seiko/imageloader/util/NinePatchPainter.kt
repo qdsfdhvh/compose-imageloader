@@ -18,36 +18,38 @@ internal class NinePatchPainter(
 ) : Painter() {
 
     private val scale get() = ninePatchData.scale
+    private val skipPadding get() = ninePatchData.skipPadding
     private val filterQuality get() = ninePatchData.filterQuality
 
-    private val centerWidth = ninePatchData.width
-    private val centerHeight = ninePatchData.height
+    private val centerWidth = ninePatchData.right - ninePatchData.left
+    private val centerHeight = ninePatchData.bottom - ninePatchData.top
+
     private val widthLeft = ninePatchData.left
     private val widthRight = image.width - ninePatchData.right
     private val heightTop = ninePatchData.top
     private val heightBottom = image.height - ninePatchData.bottom
 
     // Source Offset
-    private val offsetTopLeft = IntOffset.Zero
-    private val offsetTop = IntOffset(widthLeft, 0)
-    private val offsetTopRight = IntOffset(ninePatchData.right, 0)
-    private val offsetLeft = IntOffset(0, heightTop)
+    private val offsetTopLeft = IntOffset(skipPadding, skipPadding)
+    private val offsetTop = IntOffset(widthLeft, skipPadding)
+    private val offsetTopRight = IntOffset(ninePatchData.right, skipPadding)
+    private val offsetLeft = IntOffset(skipPadding, heightTop)
     private val offsetCenter = IntOffset(ninePatchData.left, heightTop)
     private val offsetRight = IntOffset(ninePatchData.right, heightTop)
-    private val offsetBottomLeft = IntOffset(0, ninePatchData.bottom)
+    private val offsetBottomLeft = IntOffset(skipPadding, ninePatchData.bottom)
     private val offsetBottom = IntOffset(ninePatchData.left, ninePatchData.bottom)
     private val offsetBottomRight = IntOffset(ninePatchData.right, ninePatchData.bottom)
 
     // Source Size
     private val sizeTopLeft = IntSize(widthLeft, heightTop)
     private val sizeTop = IntSize(centerWidth, heightTop)
-    private val sizeTopRight = IntSize(widthRight, heightTop)
+    private val sizeTopRight = IntSize(widthRight - skipPadding, heightTop)
     private val sizeLeft = IntSize(widthLeft, centerHeight)
     private val sizeCenter = IntSize(centerWidth, centerHeight)
-    private val sizeRight = IntSize(widthRight, centerHeight)
-    private val sizeBottomLeft = IntSize(widthLeft, heightBottom)
-    private val sizeBottom = IntSize(centerWidth, heightBottom)
-    private val sizeBottomRight = IntSize(widthRight, heightBottom)
+    private val sizeRight = IntSize(widthRight - skipPadding, centerHeight)
+    private val sizeBottomLeft = IntSize(widthLeft, heightBottom - skipPadding)
+    private val sizeBottom = IntSize(centerWidth, heightBottom - skipPadding)
+    private val sizeBottomRight = IntSize(widthRight - skipPadding, heightBottom - skipPadding)
 
     private var alpha: Float = 1.0f
     private var colorFilter: ColorFilter? = null

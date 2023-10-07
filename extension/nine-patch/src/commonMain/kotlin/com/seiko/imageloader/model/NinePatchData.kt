@@ -10,10 +10,7 @@ data class NinePatchData internal constructor(
     val scale: Float,
     val skipPadding: Int,
     val filterQuality: FilterQuality,
-) {
-    val width: Int get() = right - left
-    val height: Int get() = bottom - top
-}
+)
 
 class NinePatchDataBuilder internal constructor() {
 
