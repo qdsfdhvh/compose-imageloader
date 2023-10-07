@@ -18,10 +18,10 @@ internal class NinePatchPainter(
 ) : Painter() {
 
     private val scale get() = ninePatchData.scale
-    private val filterQuality get() = ninePatchData.filterQuality,
+    private val filterQuality get() = ninePatchData.filterQuality
 
-    private val centerWidth = max(1, ninePatchData.width)
-    private val centerHeight = max(1, ninePatchData.height)
+    private val centerWidth = ninePatchData.width
+    private val centerHeight = ninePatchData.height
     private val widthLeft = ninePatchData.left
     private val widthRight = image.width - ninePatchData.right
     private val heightTop = ninePatchData.top
