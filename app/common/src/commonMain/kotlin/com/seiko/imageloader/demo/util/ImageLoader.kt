@@ -8,6 +8,7 @@ import com.seiko.imageloader.ImageLoaderConfigBuilder
 import com.seiko.imageloader.component.fetcher.MokoResourceFetcher
 import com.seiko.imageloader.intercept.BlurInterceptor
 import com.seiko.imageloader.intercept.Interceptor
+import com.seiko.imageloader.intercept.NinePatchInterceptor
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.model.NullRequestData
 import com.seiko.imageloader.util.LogPriority
@@ -52,6 +53,7 @@ fun ImageLoaderConfigBuilder.commonConfig() {
         add(MokoResourceFetcher.Factory())
     }
     interceptor {
+        addInterceptor(NinePatchInterceptor())
         addInterceptor(BlurInterceptor())
     }
 }

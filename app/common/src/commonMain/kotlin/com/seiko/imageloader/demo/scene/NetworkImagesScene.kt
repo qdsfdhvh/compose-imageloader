@@ -11,12 +11,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.seiko.imageloader.demo.data.imageJsonData
 import com.seiko.imageloader.demo.icon.rememberVisibility
 import com.seiko.imageloader.demo.icon.rememberVisibilityOff
+import com.seiko.imageloader.model.blur
 
 @Composable
 fun NetworkImagesScene(
@@ -43,7 +45,14 @@ fun NetworkImagesScene(
             items(images) { image ->
                 ImageItem(
                     data = image.imageUrl,
-                    blurRadius = if (showBlur) 15 else 0,
+                    // blurRadius = if (showBlur) 15 else 0,
+                    block = remember(showBlur) {
+                        {
+                            if (showBlur) {
+                                blur(15)
+                            }
+                        }
+                    },
                 )
             }
         }
