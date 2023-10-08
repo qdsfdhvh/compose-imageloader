@@ -194,16 +194,12 @@ internal class NinePatchPainter(
         if (other !is NinePatchPainter) return false
         if (image != other.image) return false
         if (ninePatchData != other.ninePatchData) return false
-        if (scale != other.scale) return false
-        if (filterQuality != other.filterQuality) return false
         return true
     }
 
     override fun hashCode(): Int {
         var result = image.hashCode()
         result = 31 * result + ninePatchData.hashCode()
-        result = 31 * result + scale.hashCode()
-        result = 31 * result + filterQuality.hashCode()
         return result
     }
 
