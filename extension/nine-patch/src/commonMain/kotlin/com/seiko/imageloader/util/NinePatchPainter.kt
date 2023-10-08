@@ -22,8 +22,9 @@ internal class NinePatchPainter(
     private val maxFactor get() = ninePatchData.maxFactor
     private val filterQuality get() = ninePatchData.filterQuality
 
-    private val centerWidth = ninePatchData.right - ninePatchData.left
-    private val centerHeight = ninePatchData.bottom - ninePatchData.top
+    // must have value for center size
+    private val centerWidth = max(1, ninePatchData.right - ninePatchData.left)
+    private val centerHeight = max(1, ninePatchData.bottom - ninePatchData.top)
 
     private val widthLeft = ninePatchData.left
     private val widthRight = image.width - ninePatchData.right
