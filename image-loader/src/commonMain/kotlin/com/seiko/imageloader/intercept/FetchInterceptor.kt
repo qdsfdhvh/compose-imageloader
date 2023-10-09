@@ -13,7 +13,9 @@ class FetchInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val options = chain.options
-        chain.emit(ImageEvent.StartWithFetch)
+        if (!request.skipEvent) {
+            chain.emit(ImageEvent.StartWithFetch)
+        }
         return runCatching {
             fetch(chain.components, request, options)
         }.fold(

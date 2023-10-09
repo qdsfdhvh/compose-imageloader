@@ -49,7 +49,9 @@ private class RealImageLoader(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun async(requestFlow: Flow<ImageRequest>) = requestFlow
         .transformLatest { request ->
-            emit(ImageEvent.Start)
+            if (!request.skipEvent) {
+                emit(ImageEvent.Start)
+            }
             val chain = InterceptorChainImpl(
                 initialRequest = request,
                 config = config,

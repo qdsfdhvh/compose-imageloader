@@ -34,8 +34,9 @@ class MemoryCacheInterceptor<T>(
                 throwable = it,
             ) { "read memory cache error:" }
         }.getOrNull()
-        chain.emit(ImageEvent.StartWithMemory)
-
+        if (!request.skipEvent) {
+            chain.emit(ImageEvent.StartWithMemory)
+        }
         if (cachedImageResult != null) {
             logger.d(
                 tag = "MemoryCacheInterceptor",
