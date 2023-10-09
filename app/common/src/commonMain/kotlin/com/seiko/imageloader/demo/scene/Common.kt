@@ -16,9 +16,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -73,20 +75,24 @@ fun ImageItem(
     block: (ImageRequestBuilder.() -> Unit)? = null,
 ) {
     Box(modifier, Alignment.Center) {
-        val request = remember(data, block) {
-            ImageRequest {
-                data(data)
-                addInterceptor(NullDataInterceptor)
-                // components {
-                //     add(customKtorUrlFetcher)
-                // }
-                options {
-                    maxImageSize = 512
+        val dataState by rememberUpdatedState(data)
+        val blockState by rememberUpdatedState(block)
+        val requestState = remember {
+            derivedStateOf {
+                ImageRequest {
+                    data(dataState)
+                    addInterceptor(NullDataInterceptor)
+                    // components {
+                    //     add(customKtorUrlFetcher)
+                    // }
+                    options {
+                        maxImageSize = 512
+                    }
+                    blockState?.invoke(this)
                 }
-                block?.invoke(this)
             }
         }
-        val action by rememberImageAction(request)
+        val action by rememberImageAction(requestState)
         val painter = rememberImageActionPainter(action)
         Image(
             painter = painter,
