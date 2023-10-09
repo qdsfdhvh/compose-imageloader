@@ -16,16 +16,7 @@ class FetchInterceptor : Interceptor {
         if (!request.skipEvent) {
             chain.emit(ImageEvent.StartWithFetch)
         }
-        return runCatching {
-            fetch(chain.components, request, options)
-        }.fold(
-            onSuccess = {
-                it.toImageResult()
-            },
-            onFailure = {
-                ImageResult.Error(it)
-            },
-        )
+        return fetch(chain.components, request, options).toImageResult()
     }
 
     private suspend fun fetch(

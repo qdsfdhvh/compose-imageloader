@@ -7,6 +7,7 @@ import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.util.ioDispatcher
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -59,6 +60,8 @@ private class RealImageLoader(
             )
             emit(chain.proceed(request))
         }.catch {
-            emit(ImageResult.Error(it))
+            if (it !is CancellationException) {
+                emit(ImageResult.Error(it))
+            }
         }.flowOn(requestCoroutineContext)
 }
