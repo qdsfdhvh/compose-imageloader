@@ -66,12 +66,15 @@ class ImageLoaderTest {
             emit(ImageRequest("3") { skipEvent = true })
         }
         imageLoader.async(requestFlow).test {
+            // 1
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
             assertEquals(ImageResult.Painter(resultPainter1), awaitItem())
+            // 2
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
             assertEquals(ImageResult.Painter(resultPainter2), awaitItem())
+            // 3
             assertEquals(ImageResult.Painter(resultPainter3), awaitItem())
             awaitComplete()
         }
