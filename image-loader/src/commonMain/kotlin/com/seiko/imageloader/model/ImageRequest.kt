@@ -17,6 +17,7 @@ class ImageRequest internal constructor(
     val extra: ExtraData,
     val placeholderPainter: (@Composable () -> Painter)?,
     val errorPainter: (@Composable () -> Painter)?,
+    val skipEvent: Boolean,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
 ) {
@@ -33,6 +34,7 @@ class ImageRequestBuilder internal constructor() {
     private var errorPainter: (@Composable () -> Painter)? = null
     private var componentBuilder: ComponentRegistryBuilder? = null
     private var interceptors: MutableList<Interceptor>? = null
+    var skipEvent: Boolean = false
 
     fun takeFrom(request: ImageRequest) {
         data = request.data
@@ -43,6 +45,7 @@ class ImageRequestBuilder internal constructor() {
         errorPainter = request.errorPainter
         componentBuilder = request.components?.newBuilder()
         interceptors = request.interceptors?.toMutableList()
+        skipEvent = request.skipEvent
     }
 
     fun data(data: Any?) {
@@ -95,6 +98,7 @@ class ImageRequestBuilder internal constructor() {
         extra = extraData ?: EmptyExtraData,
         placeholderPainter = placeholderPainter,
         errorPainter = errorPainter,
+        skipEvent = skipEvent,
         components = componentBuilder?.build(),
         interceptors = interceptors,
     )
@@ -103,12 +107,24 @@ class ImageRequestBuilder internal constructor() {
 fun ImageRequest(block: ImageRequestBuilder.() -> Unit) =
     ImageRequestBuilder().apply(block).build()
 
-fun ImageRequest(request: ImageRequest, block: ImageRequestBuilder.() -> Unit) =
-    ImageRequestBuilder().apply {
-        takeFrom(request)
-        block.invoke(this)
-    }.build()
+inline fun ImageRequest(
+    request: ImageRequest,
+    crossinline block: ImageRequestBuilder.() -> Unit,
+) = ImageRequest {
+    takeFrom(request)
+    block.invoke(this)
+}
 
-fun ImageRequest(data: Any) = ImageRequest {
+inline fun ImageRequest(
+    data: Any,
+    crossinline block: ImageRequestBuilder.() -> Unit,
+) = ImageRequest {
+    data(data)
+    block.invoke(this)
+}
+
+inline fun ImageRequest(request: ImageRequest) = request
+
+inline fun ImageRequest(data: Any) = ImageRequest {
     data(data)
 }

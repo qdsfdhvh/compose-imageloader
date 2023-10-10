@@ -3,9 +3,7 @@ package com.seiko.imageloader.demo
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -16,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.demo.scene.GifImagesScene
+import com.seiko.imageloader.demo.scene.LocalResourceScene
 import com.seiko.imageloader.demo.scene.NetworkImagesScene
 import com.seiko.imageloader.demo.scene.OtherImagesScene
 import com.seiko.imageloader.demo.scene.PokemonScene
@@ -32,7 +30,7 @@ import com.seiko.imageloader.demo.scene.SvgImagesScene
 @Composable
 fun App(modifier: Modifier = Modifier) {
     ComposeImageLoaderTheme {
-        var currentRoute by remember { mutableStateOf<Route>(Route.Home) }
+        var currentRoute by remember { mutableStateOf(Route.Home) }
         fun onBack() {
             currentRoute = Route.Home
         }
@@ -45,8 +43,9 @@ fun App(modifier: Modifier = Modifier) {
                 Route.Network -> NetworkImagesScene(::onBack)
                 Route.Gif -> GifImagesScene(::onBack)
                 Route.Svg -> SvgImagesScene(::onBack)
-                Route.Other -> OtherImagesScene(::onBack)
                 Route.Pokemon -> PokemonScene(::onBack)
+                Route.LocalResource -> LocalResourceScene(::onBack)
+                Route.Other -> OtherImagesScene(::onBack)
             }
         }
     }
@@ -70,45 +69,26 @@ private fun HomeScene(
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
             modifier = Modifier.padding(innerPadding).fillMaxSize(),
         ) {
-            val routes = remember {
-                listOf(
-                    Route.Network,
-                    Route.Gif,
-                    Route.Svg,
-                    Route.Other,
-                    Route.Pokemon,
-                )
-            }
-            routes.forEach { route ->
-                key(route) {
-                    Button({ onNavigate(route) }) {
-                        Text(route.name)
-                    }
-                    Spacer(Modifier.height(8.dp))
+            remember {
+                Route.entries.filterNot { it == Route.Home }
+            }.forEach { route ->
+                Button({ onNavigate(route) }) {
+                    Text(route.name)
                 }
             }
         }
     }
 }
 
-private val Route.name: String
-    get() = when (this) {
-        Route.Home -> "Home"
-        Route.Network -> "Network"
-        Route.Gif -> "Gif"
-        Route.Svg -> "Svg"
-        Route.Other -> "Other"
-        Route.Pokemon -> "Pokemon"
-    }
-
-private sealed interface Route {
-    object Home : Route
-    object Network : Route
-    object Gif : Route
-    object Svg : Route
-    object Other : Route
-    object Pokemon : Route
+private enum class Route {
+    Home,
+    Network,
+    Gif,
+    Svg,
+    Pokemon,
+    LocalResource,
+    Other,
 }

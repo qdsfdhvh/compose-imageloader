@@ -48,8 +48,9 @@ class DiskCacheInterceptor(
                 dataSource = DataSource.Disk,
             )
         }
-        chain.emit(ImageEvent.StartWithDisk)
-
+        if (!request.skipEvent) {
+            chain.emit(ImageEvent.StartWithDisk)
+        }
         val result = chain.proceed(request)
         when (result) {
             is ImageResult.Source -> {

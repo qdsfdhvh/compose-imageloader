@@ -19,6 +19,7 @@ kotlin {
                 api(projects.imageLoader)
                 implementation(projects.extension.blur)
                 implementation(projects.extension.mokoResources)
+                implementation(projects.extension.ninePatch)
 
                 implementation(libs.moko.resources)
                 implementation(libs.kotlinx.serialization.json)
