@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
-import com.seiko.imageloader.demo.MR
 import com.seiko.imageloader.demo.data.imageJsonData
 import com.seiko.imageloader.rememberImagePainter
 
@@ -104,24 +103,6 @@ fun OtherImagesScene(
             }
             item {
                 ImageItem("https://ipfs.io/ipfs/bafybeigk7niz7mzg4lykydiqhq5i7clmy7ybr6y5omn4uqh7ptihlrdtli")
-            }
-            item {
-                Text("Moko Resource")
-            }
-            item {
-                ImageItem(MR.files.cat)
-            }
-            item {
-                ImageItem(MR.files.collection_logo)
-            }
-            item {
-                ImageItem(MR.images.car_black)
-            }
-            item {
-                ImageItem(MR.colors.valueColor)
-            }
-            item {
-                ImageItem(MR.colors.valueColor2)
             }
         }
     }

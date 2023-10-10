@@ -38,7 +38,7 @@ class DecodeInterceptor : Interceptor {
                             }
                             proceed(chain, noDiskCacheRequest)
                         } else {
-                            ImageResult.Error(it)
+                            throw it
                         }
                     },
                 )

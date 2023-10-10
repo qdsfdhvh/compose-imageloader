@@ -20,7 +20,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.14.1"
+    id("com.gradle.enterprise") version "3.15.1"
 }
 
 gradleEnterprise {
@@ -38,6 +38,7 @@ include(
     ":extension:blur",
     ":extension:imageio",
     ":extension:moko-resources",
+    ":extension:nine-patch",
     ":app:common",
     ":app:android",
     ":app:android:benchmark",

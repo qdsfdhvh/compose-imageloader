@@ -1,34 +1,35 @@
 [versions]
-agp = "8.1.1"
-compose-multiplatform = "1.5.1"
+agp = "8.1.2"
+compose-multiplatform = "1.5.3"
 kotlin = "1.9.10"
 kotlinx-coroutines = "1.7.3"
 kotlinx-serialization = "1.6.0"
 androidx-core-ktx = "1.12.0"
-androidx-collection = "1.3.0-rc01"
+androidx-collection = "1.3.0"
 androidx-appcompat = "1.6.1"
 androidx-exifinterface = "1.3.6"
-androidx-activity-compose = "1.7.2"
+androidx-activity-compose = "1.8.0"
 androidx-lifecycle-runtime-ktx = "2.6.2"
-spotless = "6.21.0"
+spotless = "6.22.0"
 ktlint = "0.50.0"
 publish = "0.25.3"
 dokka = "1.9.0"
 moko-resources = "0.23.0"
-ktor = "2.3.4"
-okio = "3.5.0"
-uri-kmp = "0.0.14"
-kermit = "2.0.0-RC5"
+ktor = "2.3.5"
+okio = "3.6.0"
+uri-kmp = "0.0.15"
+kermit = "2.0.1"
 androidsvg = "1.4"
-benchmark = "1.2.0-beta05"
+benchmark = "1.2.0-rc02"
 junit = "4.13.2"
 androidx-test-junit = "1.1.5"
 androidx-test-espresso = "3.5.1"
 androidx-test-uiautomator = "2.2.0"
 profileinstaller = "1.3.1"
-roborazzi = "1.6.0-alpha-3"
+roborazzi = "1.6.0-rc-1"
 robolectric = "4.10.3"
 poko = "0.15.0"
+turbine = "1.0.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -92,6 +93,7 @@ uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 moko-resources = { module = "dev.icerock.moko:resources", version.ref = "moko-resources" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
 logic-plugins = [
@@ -102,6 +104,7 @@ logic-plugins = [
 test-common = [
     "kotlinx-coroutines-test",
     "okio-fakefilesystem",
+    "turbine",
 ]
 test-android = [
     "junit",

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -15,19 +16,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import com.seiko.imageloader.demo.model.Image
 import com.seiko.imageloader.demo.util.NullDataInterceptor
 import com.seiko.imageloader.demo.util.decodeJson
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.model.ImageRequestBuilder
 import com.seiko.imageloader.model.ImageResult
-import com.seiko.imageloader.model.blur
 import com.seiko.imageloader.rememberImageAction
 import com.seiko.imageloader.rememberImageActionPainter
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +49,7 @@ fun BackScene(
     onBack: () -> Unit,
     title: @Composable () -> Unit,
     floatingActionButton: @Composable () -> Unit = {},
+    backgroundColor: Color = MaterialTheme.colors.background,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
@@ -57,6 +62,7 @@ fun BackScene(
             )
         },
         floatingActionButton = floatingActionButton,
+        backgroundColor = backgroundColor,
         content = content,
     )
 }
@@ -64,32 +70,34 @@ fun BackScene(
 @Composable
 fun ImageItem(
     data: Any,
-    blurRadius: Int = 0,
-    playAnime: Boolean = true,
+    modifier: Modifier = Modifier.aspectRatio(1f),
+    contentScale: ContentScale = ContentScale.Crop,
+    block: (ImageRequestBuilder.() -> Unit)? = null,
 ) {
-    Box(Modifier.aspectRatio(1f), Alignment.Center) {
-        val request = remember(data, blurRadius, playAnime) {
-            ImageRequest {
-                data(data)
-                addInterceptor(NullDataInterceptor)
-                if (blurRadius > 0) {
-                    blur(blurRadius)
-                }
-                // components {
-                //     add(customKtorUrlFetcher)
-                // }
-                options {
-                    playAnimate = playAnime
-                    maxImageSize = 512
+    Box(modifier, Alignment.Center) {
+        val dataState by rememberUpdatedState(data)
+        val blockState by rememberUpdatedState(block)
+        val requestState = remember {
+            derivedStateOf {
+                ImageRequest {
+                    data(dataState)
+                    addInterceptor(NullDataInterceptor)
+                    // components {
+                    //     add(customKtorUrlFetcher)
+                    // }
+                    options {
+                        maxImageSize = 512
+                    }
+                    blockState?.invoke(this)
                 }
             }
         }
-        val action by rememberImageAction(request)
+        val action by rememberImageAction(requestState)
         val painter = rememberImageActionPainter(action)
         Image(
             painter = painter,
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = contentScale,
             modifier = Modifier.fillMaxSize(),
         )
         when (val current = action) {
