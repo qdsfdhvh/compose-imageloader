@@ -36,9 +36,14 @@ class ImageRequestBuilder internal constructor() {
     private var interceptors: MutableList<Interceptor>? = null
     var skipEvent: Boolean = false
 
-    fun takeFrom(request: ImageRequest) {
+    fun takeFrom(
+        request: ImageRequest,
+        clearOptions: Boolean = false,
+    ) {
         data = request.data
-        optionsBuilders.clear()
+        if (clearOptions) {
+            optionsBuilders.clear()
+        }
         optionsBuilders.addAll(request.optionsBuilders)
         extraData = request.extra
         placeholderPainter = request.placeholderPainter
