@@ -4,6 +4,7 @@ import com.seiko.imageloader.ImageLoaderConfig
 import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.takeFrom
 import kotlinx.coroutines.flow.FlowCollector
 
 internal class InterceptorChainHelper(
@@ -25,9 +26,7 @@ internal class InterceptorChainHelper(
 
     fun getOptions(request: ImageRequest): Options {
         return Options(config.defaultOptions) {
-            request.optionsBuilders.forEach { builder ->
-                builder.invoke(this)
-            }
+            takeFrom(request)
         }
     }
 
