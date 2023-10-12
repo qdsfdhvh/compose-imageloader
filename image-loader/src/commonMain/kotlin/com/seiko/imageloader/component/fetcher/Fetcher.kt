@@ -13,6 +13,10 @@ interface Fetcher {
     }
 }
 
+fun Fetcher(block: suspend () -> FetchResult?) = object : Fetcher {
+    override suspend fun fetch(): FetchResult? = block()
+}
+
 sealed interface FetchResult {
     @Poko class Source(
         val source: BufferedSource,

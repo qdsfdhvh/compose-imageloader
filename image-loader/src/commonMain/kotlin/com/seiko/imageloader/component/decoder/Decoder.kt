@@ -13,6 +13,10 @@ interface Decoder {
     }
 }
 
+fun Decoder(block: () -> DecodeResult?) = object : Decoder {
+    override suspend fun decode(): DecodeResult? = block()
+}
+
 sealed interface DecodeResult {
     @Poko class Bitmap(
         val bitmap: com.seiko.imageloader.Bitmap,
