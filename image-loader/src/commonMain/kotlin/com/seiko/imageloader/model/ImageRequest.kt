@@ -13,11 +13,11 @@ import com.seiko.imageloader.option.SizeResolver
 @Immutable
 class ImageRequest internal constructor(
     val data: Any,
-    val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     val extra: ExtraData,
     val placeholderPainter: (@Composable () -> Painter)?,
     val errorPainter: (@Composable () -> Painter)?,
     val skipEvent: Boolean,
+    internal val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
 ) {
