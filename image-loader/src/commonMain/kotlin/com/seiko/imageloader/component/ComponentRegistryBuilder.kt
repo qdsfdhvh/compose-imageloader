@@ -5,29 +5,33 @@ import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.component.mapper.Mapper
 
-class ComponentRegistryBuilder(
+class ComponentRegistryBuilder internal constructor(
     private val mappers: MutableList<Mapper<out Any>> = mutableListOf(),
     private val keyers: MutableList<Keyer> = mutableListOf(),
     private val fetcherFactories: MutableList<Fetcher.Factory> = mutableListOf(),
     private val decoderFactories: MutableList<Decoder.Factory> = mutableListOf(),
 ) {
+    internal constructor(componentRegistry: ComponentRegistry) : this(
+        mappers = componentRegistry.mappers.toMutableList(),
+        keyers = componentRegistry.keyers.toMutableList(),
+        fetcherFactories = componentRegistry.fetcherFactories.toMutableList(),
+        decoderFactories = componentRegistry.decoderFactories.toMutableList(),
+    )
 
     fun takeFrom(
         componentRegistry: ComponentRegistry,
         clearComponents: Boolean = false,
     ) {
-        componentRegistry.newBuilder().let {
-            if (clearComponents) {
-                mappers.clear()
-                keyers.clear()
-                fetcherFactories.clear()
-                decoderFactories.clear()
-            }
-            mappers.addAll(it.mappers)
-            keyers.addAll(it.keyers)
-            fetcherFactories.addAll(it.fetcherFactories)
-            decoderFactories.addAll(it.decoderFactories)
+        if (clearComponents) {
+            mappers.clear()
+            keyers.clear()
+            fetcherFactories.clear()
+            decoderFactories.clear()
         }
+        mappers.addAll(componentRegistry.mappers)
+        keyers.addAll(componentRegistry.keyers)
+        fetcherFactories.addAll(componentRegistry.fetcherFactories)
+        decoderFactories.addAll(componentRegistry.decoderFactories)
     }
 
     fun add(mapper: Mapper<out Any>) {

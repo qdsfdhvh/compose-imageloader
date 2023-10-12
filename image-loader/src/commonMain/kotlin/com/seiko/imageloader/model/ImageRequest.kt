@@ -43,7 +43,7 @@ class ImageRequestBuilder internal constructor() {
         extraData = request.extra
         placeholderPainter = request.placeholderPainter
         errorPainter = request.errorPainter
-        componentBuilder = request.components?.newBuilder()
+        componentBuilder = request.components?.let { ComponentRegistryBuilder(it) }
         interceptors = request.interceptors?.toMutableList()
         skipEvent = request.skipEvent
     }
