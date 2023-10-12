@@ -175,7 +175,7 @@ class ImageDecoderDecoder private constructor(
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
 
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!options.playAnimate) return null
             if (!isApplicable(source.source)) return null
             return ImageDecoderDecoder(

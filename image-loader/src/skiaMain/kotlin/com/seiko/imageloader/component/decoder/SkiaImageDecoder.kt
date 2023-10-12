@@ -54,7 +54,7 @@ class SkiaImageDecoder private constructor(
 
         private val parallelismLock = Semaphore(maxParallelism)
 
-        override suspend fun create(source: DecodeSource, options: Options): Decoder {
+        override fun create(source: DecodeSource, options: Options): Decoder {
             return SkiaImageDecoder(
                 source = source.source,
                 options = options,
