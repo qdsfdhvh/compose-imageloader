@@ -11,6 +11,6 @@ class KtorUrlMapper : Mapper<Url> {
     }
 
     private fun isApplicable(data: String): Boolean {
-        return data.startsWith("http")
+        return data.startsWith("http:") || data.startsWith("https:")
     }
 }
