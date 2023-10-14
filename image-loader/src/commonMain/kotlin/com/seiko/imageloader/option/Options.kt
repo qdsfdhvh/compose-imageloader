@@ -5,6 +5,7 @@ import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
 import com.seiko.imageloader.model.ExtraDataBuilder
+import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
 
@@ -104,6 +105,12 @@ class OptionsBuilder internal constructor() {
         maxImageSize = maxImageSize,
         extra = extraData ?: EmptyExtraData,
     )
+}
+
+internal fun OptionsBuilder.takeFrom(request: ImageRequest) {
+    request.optionsBuilders.forEach { builder ->
+        builder.invoke(this)
+    }
 }
 
 fun Options(block: OptionsBuilder.() -> Unit = {}) =

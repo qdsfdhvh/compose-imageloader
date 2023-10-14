@@ -8,9 +8,13 @@ typealias DecodeSource = ImageResult.Source
 
 interface Decoder {
     suspend fun decode(): DecodeResult?
-    interface Factory {
-        suspend fun create(source: DecodeSource, options: Options): Decoder?
+    fun interface Factory {
+        fun create(source: DecodeSource, options: Options): Decoder?
     }
+}
+
+fun Decoder(block: () -> DecodeResult?) = object : Decoder {
+    override suspend fun decode(): DecodeResult? = block()
 }
 
 sealed interface DecodeResult {

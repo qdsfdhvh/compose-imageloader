@@ -31,7 +31,7 @@ class SvgDecoder private constructor(
     class Factory(
         private val density: Density,
     ) : Decoder.Factory {
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
             return SvgDecoder(
                 source = source.source,

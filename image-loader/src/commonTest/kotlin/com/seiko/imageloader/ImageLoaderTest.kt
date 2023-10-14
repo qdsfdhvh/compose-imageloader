@@ -30,10 +30,10 @@ class ImageLoaderTest {
         resultPainter3 = ColorPainter(Color.Blue)
         imageLoader = ImageLoader {
             components {
-                add { data, _ ->
-                    object : Fetcher {
-                        override suspend fun fetch(): FetchResult {
-                            return FetchResult.Painter(
+                add(
+                    Fetcher.Factory { data, _ ->
+                        Fetcher {
+                            FetchResult.Painter(
                                 when (data) {
                                     "1" -> resultPainter1
                                     "2" -> resultPainter2
@@ -41,8 +41,8 @@ class ImageLoaderTest {
                                 },
                             )
                         }
-                    }
-                }
+                    },
+                )
             }
         }
     }

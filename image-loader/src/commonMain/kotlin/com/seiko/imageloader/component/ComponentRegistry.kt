@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component
 
+import com.seiko.imageloader.Poko
 import com.seiko.imageloader.component.decoder.DecodeSource
 import com.seiko.imageloader.component.decoder.Decoder
 import com.seiko.imageloader.component.fetcher.Fetcher
@@ -8,24 +9,17 @@ import com.seiko.imageloader.component.mapper.Mapper
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.forEachIndices
 
-class ComponentRegistry internal constructor(
-    private val mappers: List<Mapper<out Any>>,
-    private val keyers: List<Keyer>,
-    private val fetcherFactories: List<Fetcher.Factory>,
-    private val decoderFactories: List<Decoder.Factory>,
+@Poko class ComponentRegistry internal constructor(
+    val mappers: List<Mapper<out Any>>,
+    val keyers: List<Keyer>,
+    val fetcherFactories: List<Fetcher.Factory>,
+    val decoderFactories: List<Decoder.Factory>,
 ) {
     internal fun merge(component: ComponentRegistry) = ComponentRegistry(
         mappers = mappers + component.mappers,
         keyers = keyers + component.keyers,
         fetcherFactories = fetcherFactories + component.fetcherFactories,
         decoderFactories = decoderFactories + component.decoderFactories,
-    )
-
-    internal fun newBuilder() = ComponentRegistryBuilder(
-        mappers = mappers.toMutableList(),
-        keyers = keyers.toMutableList(),
-        fetcherFactories = fetcherFactories.toMutableList(),
-        decoderFactories = decoderFactories.toMutableList(),
     )
 
     fun map(data: Any, options: Options): Any {
@@ -55,7 +49,7 @@ class ComponentRegistry internal constructor(
         throw RuntimeException("Unable to create a fetcher that supports: $data")
     }
 
-    suspend fun decode(
+    fun decode(
         source: DecodeSource,
         options: Options,
         startIndex: Int = 0,

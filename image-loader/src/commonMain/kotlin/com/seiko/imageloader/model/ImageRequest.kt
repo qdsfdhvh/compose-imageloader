@@ -13,11 +13,11 @@ import com.seiko.imageloader.option.SizeResolver
 @Immutable
 class ImageRequest internal constructor(
     val data: Any,
-    val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     val extra: ExtraData,
     val placeholderPainter: (@Composable () -> Painter)?,
     val errorPainter: (@Composable () -> Painter)?,
     val skipEvent: Boolean,
+    internal val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
 ) {
@@ -36,14 +36,19 @@ class ImageRequestBuilder internal constructor() {
     private var interceptors: MutableList<Interceptor>? = null
     var skipEvent: Boolean = false
 
-    fun takeFrom(request: ImageRequest) {
+    fun takeFrom(
+        request: ImageRequest,
+        clearOptions: Boolean = false,
+    ) {
         data = request.data
-        optionsBuilders.clear()
+        if (clearOptions) {
+            optionsBuilders.clear()
+        }
         optionsBuilders.addAll(request.optionsBuilders)
         extraData = request.extra
         placeholderPainter = request.placeholderPainter
         errorPainter = request.errorPainter
-        componentBuilder = request.components?.newBuilder()
+        componentBuilder = request.components?.let { ComponentRegistryBuilder(it) }
         interceptors = request.interceptors?.toMutableList()
         skipEvent = request.skipEvent
     }

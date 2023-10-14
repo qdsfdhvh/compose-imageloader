@@ -21,7 +21,7 @@ class ImageIODecoder(
     }
 
     class Factory : Decoder.Factory {
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (isGif(source.source)) return null
             return ImageIODecoder(source.source)
         }
