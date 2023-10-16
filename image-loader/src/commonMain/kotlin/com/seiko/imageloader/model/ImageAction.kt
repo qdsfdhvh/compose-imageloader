@@ -54,7 +54,7 @@ sealed interface ImageResult : ImageAction {
         val source: BufferedSource,
         val dataSource: DataSource,
         val extra: ExtraData = EmptyExtraData,
-    ) : ImageResult, ImageAction.Failure{
+    ) : ImageResult, ImageAction.Failure {
         override val error: Throwable
             get() = IllegalStateException("failure to decode image source")
     }
