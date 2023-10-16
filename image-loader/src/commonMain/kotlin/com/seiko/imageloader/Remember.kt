@@ -57,12 +57,9 @@ fun rememberImageActionPainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return when (action) {
-        is ImageEvent -> placeholderPainter?.invoke() ?: EmptyPainter
-        is ImageResult -> rememberImageResultPainter(
-            result = action,
-            filterQuality = filterQuality,
-            errorPainter = errorPainter,
-        )
+        is ImageAction.Success -> rememberImageSuccessPainter(action, filterQuality)
+        is ImageAction.Loading -> placeholderPainter?.invoke() ?: EmptyPainter
+        is ImageAction.Failure -> errorPainter?.invoke() ?: EmptyPainter
     }
 }
 
@@ -73,18 +70,26 @@ fun rememberImageResultPainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return when (result) {
-        is ImageResult.Painter -> remember(result) {
-            result.painter
+        is ImageAction.Success -> rememberImageSuccessPainter(result, filterQuality)
+        is ImageAction.Failure -> errorPainter?.invoke() ?: EmptyPainter
+    }
+}
+
+@Composable
+fun rememberImageSuccessPainter(
+    action: ImageAction.Success,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+): Painter {
+    return when (action) {
+        is ImageResult.Painter -> remember(action) {
+            action.painter
         }
-        is ImageResult.Bitmap -> remember(result, filterQuality) {
-            result.bitmap.toPainter(filterQuality)
+        is ImageResult.Bitmap -> remember(action, filterQuality) {
+            action.bitmap.toPainter(filterQuality)
         }
-        is ImageResult.Image -> remember(result) {
-            result.image.toPainter()
+        is ImageResult.Image -> remember(action) {
+            action.image.toPainter()
         }
-        is ImageResult.Error,
-        is ImageResult.Source,
-        -> errorPainter?.invoke() ?: EmptyPainter
     }.also { painter ->
         if (painter is AnimationPainter) {
             LaunchedEffect(painter) {
