@@ -16,8 +16,11 @@ class ImageActionTest {
         val action by rememberImageAction(request)
         when_normal_test(action)
         when_image_action_test(action)
+        when_image_action_no_result_test(action)
         when_image_event_test(action)
+        when_image_event_no_result_test(action)
         when_image_result_test(action)
+        when_image_result_success_no_result_failure_test(action)
         when_all_test(action)
     }
 
@@ -44,18 +47,41 @@ class ImageActionTest {
     }
 
     @Composable
+    private fun when_image_action_no_result_test(action: ImageAction) {
+        when (action) {
+            is ImageEvent -> LoadingUI()
+            is ImageAction.Success -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageAction.Failure -> ErrorUI(action.error)
+        }
+    }
+
+    @Composable
     private fun when_image_event_test(action: ImageAction) {
         when (action) {
             is ImageEvent.Start,
             is ImageEvent.StartWithMemory,
             is ImageEvent.StartWithDisk,
-            is ImageEvent.StartWithFetch -> LoadingUI()
+            is ImageEvent.StartWithFetch,
+            -> LoadingUI()
             is ImageResult -> {
                 when (action) {
                     is ImageAction.Success -> SuccessUI(rememberImageSuccessPainter(action))
                     is ImageAction.Failure -> ErrorUI(action.error)
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun when_image_event_no_result_test(action: ImageAction) {
+        when (action) {
+            is ImageEvent.Start,
+            is ImageEvent.StartWithMemory,
+            is ImageEvent.StartWithDisk,
+            is ImageEvent.StartWithFetch,
+            -> LoadingUI()
+            is ImageAction.Success -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageAction.Failure -> ErrorUI(action.error)
         }
     }
 
@@ -72,12 +98,24 @@ class ImageActionTest {
     }
 
     @Composable
+    private fun when_image_result_success_no_result_failure_test(action: ImageAction) {
+        when (action) {
+            is ImageAction.Loading -> LoadingUI()
+            is ImageResult.Image -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.Bitmap -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.Painter -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageAction.Failure -> ErrorUI(action.error)
+        }
+    }
+
+    @Composable
     private fun when_all_test(action: ImageAction) {
         when (action) {
             is ImageEvent.Start,
             is ImageEvent.StartWithMemory,
             is ImageEvent.StartWithDisk,
-            is ImageEvent.StartWithFetch -> LoadingUI()
+            is ImageEvent.StartWithFetch,
+            -> LoadingUI()
             is ImageResult.Image -> SuccessUI(rememberImageSuccessPainter(action))
             is ImageResult.Bitmap -> SuccessUI(rememberImageSuccessPainter(action))
             is ImageResult.Painter -> SuccessUI(rememberImageSuccessPainter(action))
