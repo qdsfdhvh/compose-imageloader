@@ -68,7 +68,7 @@ class DecodeInterceptor : Interceptor {
     }
 }
 
-private fun DecodeResult.toImageResult() = when (this) {
+private fun DecodeResult.toImageResult(): ImageResult = when (this) {
     is DecodeResult.Bitmap -> ImageResult.Bitmap(bitmap = bitmap)
     is DecodeResult.Image -> ImageResult.Image(image = image)
     is DecodeResult.Painter -> ImageResult.Painter(painter = painter)
