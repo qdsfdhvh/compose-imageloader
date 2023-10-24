@@ -118,7 +118,11 @@ class BitmapFactoryDecoder private constructor(
         // EXIF transformations (but before sampling).
         val srcWidth = if (exifData.isSwapped) outHeight else outWidth
         val srcHeight = if (exifData.isSwapped) outWidth else outHeight
-        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, options.maxImageSize)
+        val (dstWidth, dstHeight) =  if (!options.size.isEmpty()) {
+            options.size.run { width.toInt() to height.toInt() }
+        } else {
+            calculateDstSize(srcWidth, srcHeight, options.maxImageSize)
+        }
         // Calculate the image's sample size.
         inSampleSize = calculateInSampleSize(
             srcWidth = srcWidth,

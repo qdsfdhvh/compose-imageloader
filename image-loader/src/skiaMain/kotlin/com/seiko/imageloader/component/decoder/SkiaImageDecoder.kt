@@ -32,7 +32,11 @@ class SkiaImageDecoder private constructor(
     // TODO wait to fix high probability crash on ios
     private fun Image.toBitmap(): Bitmap {
         val bitmap = Bitmap()
-        val (dstWidth, dstHeight) = calculateDstSize(width, height, options.maxImageSize)
+        val (dstWidth, dstHeight) = if (!options.size.isEmpty()) {
+            options.size.run { width.toInt() to height.toInt() }
+        } else {
+            calculateDstSize(width, height, options.maxImageSize)
+        }
         bitmap.allocN32Pixels(dstWidth, dstHeight)
         Canvas(bitmap).use { canvas ->
             canvas.drawImageRect(
