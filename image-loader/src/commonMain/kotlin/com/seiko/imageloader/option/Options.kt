@@ -23,10 +23,6 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
     val maxImageSize: Int,
     val extra: ExtraData,
 ) {
-
-    @Deprecated("", ReplaceWith("Options(options) {}"))
-    fun newBuilder(block: OptionsBuilder.() -> Unit) = Options(this, block)
-
     enum class ImageConfig {
         ALPHA_8,
         ARGB_8888,

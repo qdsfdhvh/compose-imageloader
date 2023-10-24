@@ -26,11 +26,6 @@ interface ImageLoader {
 
     fun async(request: ImageRequest): Flow<ImageAction> = async(flowOf(request))
 
-    @Deprecated("", ReplaceWith("Use imageloader.async(request).filterIsInstance<ImageResult>().first()"))
-    suspend fun execute(request: ImageRequest): ImageResult {
-        return async(request).filterIsInstance<ImageResult>().first()
-    }
-
     companion object
 }
 
