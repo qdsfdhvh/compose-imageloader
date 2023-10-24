@@ -8,13 +8,13 @@
 
 import UIKit
 import SwiftUI
-import combine
+import shared
 
 struct ComposeView : UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> some UIViewController {
         return MainKt.MainViewController()
     }
-    
+
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
     }
 }
