@@ -25,7 +25,7 @@ class ComposeScreenShotTest : ComposeScreenShotCommonTest() {
         captureRoot = composeTestRule.onRoot(),
         options = RoborazziRule.Options(
             captureType = RoborazziRule.CaptureType.LastImage(),
-            outputDirectoryPath = "src/androidUnitTest/snapshots/images",
+            outputDirectoryPath = "build/outputs/roborazzi/android",
         ),
     )
 

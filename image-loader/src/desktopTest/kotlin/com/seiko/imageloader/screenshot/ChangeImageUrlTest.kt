@@ -19,7 +19,7 @@ class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
     @Before
     fun initRoborazziConfig() {
         RoborazziContext.setRuleOverrideOutputDirectory(
-            outputDirectory = "src/desktopTest/snapshots/images",
+            outputDirectory = "build/outputs/roborazzi/desktop",
         )
     }
 
