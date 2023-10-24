@@ -2,20 +2,20 @@ name: CompareScreenshot
 
 on:
   push:
-    paths:
-      - 'image-loader/**'
+    branches:
+      - master
   pull_request:
 
-permissions: {}
+permissions: { }
 
 jobs:
-  test:
+  CompareScreenshot:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     permissions:
-        contents: read # for clone
-        actions: write # for upload-artifact
+      contents: read # for clone
+      actions: write # for upload-artifact
 
     steps:
       - name: Checkout
