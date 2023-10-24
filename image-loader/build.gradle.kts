@@ -31,11 +31,7 @@ kotlin {
                 implementation(compose.ui)
             }
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
-        }
+        val jvmMain by getting
         val androidMain by getting {
             dependencies {
                 implementation(libs.kotlinx.coroutines.android)
@@ -69,16 +65,8 @@ kotlin {
                 }
             }
         }
-        val appleMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
-        }
+        val appleMain by getting
+        val jsMain by getting
         val noJsMain by creating {
             dependsOn(commonMain)
             jvmMain.dependsOn(this)
