@@ -14,6 +14,7 @@ import com.seiko.imageloader.option.SizeResolver
 class ImageRequest internal constructor(
     val data: Any,
     val extra: ExtraData,
+    val sizeResolver: SizeResolver,
     val placeholderPainter: (@Composable () -> Painter)?,
     val errorPainter: (@Composable () -> Painter)?,
     val skipEvent: Boolean,
@@ -28,6 +29,7 @@ class ImageRequest internal constructor(
 class ImageRequestBuilder internal constructor() {
 
     private var data: Any? = null
+    private var sizeResolver: SizeResolver = SizeResolver.Unspecified
     private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit> = mutableListOf()
     private var extraData: ExtraData? = null
     private var placeholderPainter: (@Composable () -> Painter)? = null
@@ -58,9 +60,7 @@ class ImageRequestBuilder internal constructor() {
     }
 
     fun size(sizeResolver: SizeResolver) {
-        optionsBuilders.add {
-            this.sizeResolver = sizeResolver
-        }
+        this.sizeResolver = sizeResolver
     }
 
     fun scale(scale: Scale) {
@@ -99,6 +99,7 @@ class ImageRequestBuilder internal constructor() {
 
     internal fun build() = ImageRequest(
         data = data ?: NullRequestData,
+        sizeResolver = sizeResolver,
         optionsBuilders = optionsBuilders,
         extra = extraData ?: EmptyExtraData,
         placeholderPainter = placeholderPainter,
