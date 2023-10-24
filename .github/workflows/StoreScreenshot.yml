@@ -3,7 +3,7 @@ name: StoreScreenshot
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
 
 permissions: { }
@@ -35,7 +35,7 @@ jobs:
 
       - name: record screenshot
         id: record-test
-        run: ./gradlew recordRoborazziDebug --stacktrace
+        run: ./gradlew recordRoborazzi --stacktrace
 
       - uses: actions/upload-artifact@v3
         if: ${{ always() }}
