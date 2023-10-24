@@ -10,7 +10,7 @@ on:
 permissions: { }
 
 jobs:
-  Comment-CompareScreenshot:
+  comment-compare-screenshot-test:
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
