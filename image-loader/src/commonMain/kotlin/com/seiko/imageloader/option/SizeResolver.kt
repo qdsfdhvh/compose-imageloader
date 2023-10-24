@@ -1,14 +1,26 @@
 package com.seiko.imageloader.option
 
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.DpSize
+import kotlinx.coroutines.CompletableDeferred
 
 interface SizeResolver {
     suspend fun size(): Size
 
     companion object {
         val Unspecified = SizeResolver(Size.Unspecified)
+    }
+}
+
+class AsyncSizeResolver : SizeResolver {
+
+    private val sizeObserver = CompletableDeferred<Size>()
+
+    override suspend fun size(): Size {
+        return sizeObserver.await()
+    }
+
+    fun setSize(size: Size) {
+        sizeObserver.complete(size)
     }
 }
 
