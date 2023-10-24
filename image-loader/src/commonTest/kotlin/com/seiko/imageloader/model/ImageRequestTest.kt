@@ -1,7 +1,6 @@
 package com.seiko.imageloader.model
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.geometry.Size
 import com.seiko.imageloader.EmptyPainter
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.component.decoder.Decoder
@@ -10,7 +9,6 @@ import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.component.mapper.Mapper
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.Scale
-import com.seiko.imageloader.option.SizeResolver
 import com.seiko.imageloader.option.takeFrom
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,7 +29,6 @@ class ImageRequestTest {
 
     @Test
     fun image_request_options_test() {
-        val onePxSizeResolver = SizeResolver(Size(1f, 1f))
         val request = ImageRequest {
             options {
                 allowInexactSize = true
@@ -39,7 +36,6 @@ class ImageRequestTest {
                 retryIfDiskDecodeError = false
                 imageConfig = Options.ImageConfig.ALPHA_8
                 scale = Scale.FIT
-                sizeResolver = onePxSizeResolver
                 memoryCachePolicy = CachePolicy.DISABLED
                 diskCachePolicy = CachePolicy.READ_ONLY
                 repeatCount = 5
@@ -57,7 +53,6 @@ class ImageRequestTest {
         assertFalse(options.retryIfDiskDecodeError)
         assertEquals(options.imageConfig, Options.ImageConfig.ALPHA_8)
         assertEquals(options.scale, Scale.FIT)
-        assertEquals(options.sizeResolver, onePxSizeResolver)
         assertEquals(options.memoryCachePolicy, CachePolicy.DISABLED)
         assertEquals(options.diskCachePolicy, CachePolicy.READ_ONLY)
         assertEquals(options.repeatCount, 5)
