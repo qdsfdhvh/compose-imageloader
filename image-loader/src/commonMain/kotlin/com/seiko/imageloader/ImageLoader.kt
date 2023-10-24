@@ -6,13 +6,12 @@ import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.ioDispatcher
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.transformLatest
@@ -53,8 +52,13 @@ private class RealImageLoader(
             if (!request.skipEvent) {
                 emit(ImageEvent.Start)
             }
+            val initialSize = request.sizeResolver.size()
+            val options = Options(config.defaultOptions) {
+                size = initialSize
+            }
             val chain = InterceptorChainImpl(
                 initialRequest = request,
+                initialOptions = options,
                 config = config,
                 flowCollector = this,
             )
