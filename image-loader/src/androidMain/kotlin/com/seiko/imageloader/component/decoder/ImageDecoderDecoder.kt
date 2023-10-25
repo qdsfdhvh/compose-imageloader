@@ -101,7 +101,7 @@ class ImageDecoderDecoder private constructor(
     }
 
     private fun ImageDecoder.configureImageDecoderProperties() {
-        val config = options.imageConfig.toBitmapConfig()
+        val config = options.bitmapConfig.toBitmapConfig()
         allocator = if (config.isHardware) {
             ImageDecoder.ALLOCATOR_HARDWARE
         } else {

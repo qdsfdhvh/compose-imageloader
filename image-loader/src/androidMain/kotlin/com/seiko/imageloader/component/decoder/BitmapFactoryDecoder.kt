@@ -85,7 +85,7 @@ class BitmapFactoryDecoder private constructor(
 
     /** Compute and set [BitmapFactory.Options.inPreferredConfig]. */
     private fun BitmapFactory.Options.configureConfig(exifData: ExifData) {
-        var config = options.imageConfig.toBitmapConfig()
+        var config = options.bitmapConfig.toBitmapConfig()
 
         // Disable hardware bitmaps if we need to perform EXIF transformations.
         if (exifData.isFlipped || exifData.isRotated) {
