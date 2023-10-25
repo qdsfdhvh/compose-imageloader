@@ -10,9 +10,9 @@ class NinePatchInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val result = chain.proceed(request)
-        if (result is ImageResult.Bitmap) {
+        if (result is ImageResult.OfBitmap) {
             val centerSlice = request.ninePatchData ?: return result
-            return ImageResult.Painter(
+            return ImageResult.OfPainter(
                 painter = NinePatchPainter(
                     image = result.bitmap.asImageBitmap(),
                     ninePatchData = centerSlice,

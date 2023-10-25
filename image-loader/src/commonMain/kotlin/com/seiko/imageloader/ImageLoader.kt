@@ -67,7 +67,7 @@ private class RealImageLoader(
             emit(chain.proceed(request))
         }.catch {
             if (it !is CancellationException) {
-                emit(ImageResult.Error(it))
+                emit(ImageResult.OfError(it))
             }
         }.flowOn(requestCoroutineContext)
 }

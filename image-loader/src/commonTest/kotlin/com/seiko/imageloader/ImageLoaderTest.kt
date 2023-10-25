@@ -33,7 +33,7 @@ class ImageLoaderTest {
                 add(
                     Fetcher.Factory { data, _ ->
                         Fetcher {
-                            FetchResult.Painter(
+                            FetchResult.OfPainter(
                                 when (data) {
                                     "1" -> resultPainter1
                                     "2" -> resultPainter2
@@ -53,7 +53,7 @@ class ImageLoaderTest {
         imageLoader.async(request).test {
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.Painter(resultPainter1), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter1), awaitItem())
             awaitComplete()
         }
     }
@@ -69,13 +69,13 @@ class ImageLoaderTest {
             // 1
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.Painter(resultPainter1), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter1), awaitItem())
             // 2
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.Painter(resultPainter2), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter2), awaitItem())
             // 3
-            assertEquals(ImageResult.Painter(resultPainter3), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter3), awaitItem())
             awaitComplete()
         }
     }

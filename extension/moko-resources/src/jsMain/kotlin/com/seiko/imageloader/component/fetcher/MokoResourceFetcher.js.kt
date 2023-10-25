@@ -14,25 +14,25 @@ import okio.BufferedSource
 import org.khronos.webgl.Int8Array
 
 internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.Source(
+    return FetchResult.OfSource(
         source = fetchToSource(originalPath),
     )
 }
 
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.Painter(
+    return FetchResult.OfPainter(
         painter = ColorPainter(Color(lightColor.argb)),
     )
 }
 
 internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.Source(
+    return FetchResult.OfSource(
         source = fetchToSource(fileUrl),
     )
 }
 
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.Source(
+    return FetchResult.OfSource(
         source = fetchToSource(fileUrl),
     )
 }

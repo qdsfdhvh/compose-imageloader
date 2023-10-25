@@ -62,7 +62,7 @@ class ImageDecoderDecoder private constructor(
             imageDecoder?.close()
             wrapDecodeSource.close()
         }
-        DecodeResult.Image(
+        DecodeResult.OfImage(
             image = wrapDrawable(drawable).toImage(),
         )
     }

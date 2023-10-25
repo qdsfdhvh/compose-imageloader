@@ -43,7 +43,7 @@ class DiskCacheInterceptor(
                 tag = "DiskCacheInterceptor",
                 data = request.data,
             ) { "read disk cache" }
-            return ImageResult.Source(
+            return ImageResult.OfSource(
                 source = snapshot.source(),
                 dataSource = DataSource.Disk,
             )
@@ -53,7 +53,7 @@ class DiskCacheInterceptor(
         }
         val result = chain.proceed(request)
         when (result) {
-            is ImageResult.Source -> {
+            is ImageResult.OfSource -> {
                 snapshot = runCatching {
                     writeToDiskCache(
                         options,
@@ -73,7 +73,7 @@ class DiskCacheInterceptor(
                         tag = "DiskCacheInterceptor",
                         data = request.data,
                     ) { "write disk cache" }
-                    return ImageResult.Source(
+                    return ImageResult.OfSource(
                         source = snapshot.source(),
                         dataSource = result.dataSource,
                         extra = result.extra,

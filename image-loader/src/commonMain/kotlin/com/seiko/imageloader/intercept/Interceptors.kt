@@ -92,8 +92,8 @@ class InterceptorsBuilder internal constructor() {
     }
 
     fun memoryCache(
-        mapToMemoryValue: (ImageResult) -> Bitmap? = { (it as? ImageResult.Bitmap)?.bitmap },
-        mapToImageResult: (Bitmap) -> ImageResult? = { ImageResult.Bitmap(it) },
+        mapToMemoryValue: (ImageResult) -> Bitmap? = { (it as? ImageResult.OfBitmap)?.bitmap },
+        mapToImageResult: (Bitmap) -> ImageResult? = { ImageResult.OfBitmap(it) },
         block: () -> MemoryCache<MemoryKey, Bitmap>,
     ) {
         memoryCaches.add(
