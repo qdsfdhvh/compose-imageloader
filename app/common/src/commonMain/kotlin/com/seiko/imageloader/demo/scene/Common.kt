@@ -106,10 +106,10 @@ fun ImageItem(
             -> {
                 CircularProgressIndicator()
             }
-            is ImageResult.Source -> {
+            is ImageResult.OfSource -> {
                 Text("image result is source")
             }
-            is ImageResult.Error -> {
+            is ImageResult.OfError -> {
                 Text(current.error.message ?: "Error")
             }
             else -> Unit

@@ -23,7 +23,7 @@ class SvgDecoder private constructor(
         val requestSize = options.sizeResolver.run {
             density.size()
         }
-        return DecodeResult.Painter(
+        return DecodeResult.OfPainter(
             painter = SVGPainter(svg, density, requestSize),
         )
     }
