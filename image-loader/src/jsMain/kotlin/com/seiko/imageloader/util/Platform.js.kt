@@ -28,12 +28,6 @@ actual class WeakReference<T : Any> actual constructor(referred: T) {
     }
 }
 
-actual typealias LockObject = Any
-
-internal actual inline fun <R> synchronized(lock: LockObject, block: () -> R): R {
-    return kotlinx.atomicfu.locks.synchronized(lock, block)
-}
-
 internal actual val ioDispatcher: CoroutineDispatcher get() = Dispatchers.Default
 
 internal actual val httpEngine: HttpClientEngine get() = Js.create()

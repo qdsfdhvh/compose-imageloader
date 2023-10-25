@@ -13,10 +13,6 @@ expect class WeakReference<T : Any>(referred: T) {
     fun clear()
 }
 
-expect class LockObject()
-
-internal expect inline fun <R> synchronized(lock: LockObject, block: () -> R): R
-
 internal expect suspend fun ByteReadChannel.source(): BufferedSource
 
 internal expect val ioDispatcher: CoroutineDispatcher
