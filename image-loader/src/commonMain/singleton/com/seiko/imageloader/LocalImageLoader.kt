@@ -54,7 +54,7 @@ fun InterceptorsBuilder.defaultImageResultMemoryCache(
     },
     mapToImageResult: (ImageResult) -> ImageResult? = { it },
 ) {
-    memoryCache(
+    anyMemoryCache(
         mapToMemoryValue = mapToMemoryValue,
         mapToImageResult = mapToImageResult,
     ) {

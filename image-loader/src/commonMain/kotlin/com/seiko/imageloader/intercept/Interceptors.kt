@@ -105,7 +105,7 @@ class InterceptorsBuilder internal constructor() {
         )
     }
 
-    fun <T : Any> memoryCache(
+    fun <T : Any> anyMemoryCache(
         mapToMemoryValue: (ImageResult) -> T?,
         mapToImageResult: (T) -> ImageResult?,
         block: () -> MemoryCache<MemoryKey, T>,
