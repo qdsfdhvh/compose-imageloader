@@ -78,7 +78,7 @@ class BitmapFactoryDecoder private constructor(
 
         // Reverse the EXIF transformations to get the original image.
         val bitmap = ExifUtils.reverseTransformations(outBitmap, exifData)
-        return DecodeResult.OfBitmap(
+        return DecodeResult.Bitmap(
             bitmap = bitmap,
         )
     }

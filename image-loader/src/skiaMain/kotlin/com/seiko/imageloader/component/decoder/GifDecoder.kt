@@ -16,7 +16,7 @@ class GifDecoder private constructor(
         val codec = source.use {
             Codec.makeFromData(Data.makeFromBytes(it.readByteArray()))
         }
-        return DecodeResult.OfPainter(
+        return DecodeResult.Painter(
             painter = GifPainter(
                 codec = codec,
                 repeatCount = options.repeatCount,

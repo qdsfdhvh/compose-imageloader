@@ -29,7 +29,7 @@ abstract class ComposeScreenShotCommonTest {
                     addInterceptor(
                         Interceptor { chain ->
                             val color = if (url == chain.request.data) Color.Green else Color.Blue
-                            ImageResult.OfPainter(ColorPainter(color))
+                            ImageResult.Painter(ColorPainter(color))
                         },
                     )
                 }
@@ -58,7 +58,7 @@ abstract class ComposeScreenShotCommonTest {
                     useDefaultInterceptors = false
                     addInterceptor {
                         delay(100)
-                        ImageResult.OfPainter(ColorPainter(Color.Green))
+                        ImageResult.Painter(ColorPainter(Color.Green))
                     }
                 }
             }
@@ -81,7 +81,7 @@ abstract class ComposeScreenShotCommonTest {
                 interceptor {
                     useDefaultInterceptors = false
                     addInterceptor {
-                        ImageResult.OfError(RuntimeException("error"))
+                        ImageResult.Error(RuntimeException("error"))
                     }
                 }
             }

@@ -73,17 +73,17 @@ fun rememberImageResultPainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return when (result) {
-        is ImageResult.OfPainter -> remember(result) {
+        is ImageResult.Painter -> remember(result) {
             result.painter
         }
-        is ImageResult.OfBitmap -> remember(result, filterQuality) {
+        is ImageResult.Bitmap -> remember(result, filterQuality) {
             result.bitmap.toPainter(filterQuality)
         }
-        is ImageResult.OfImage -> remember(result) {
+        is ImageResult.Image -> remember(result) {
             result.image.toPainter()
         }
-        is ImageResult.OfError,
-        is ImageResult.OfSource,
+        is ImageResult.Error,
+        is ImageResult.Source,
         -> errorPainter?.invoke() ?: EmptyPainter
     }.also { painter ->
         if (painter is AnimationPainter) {

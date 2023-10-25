@@ -64,7 +64,7 @@ class GifDecoder private constructor(
         // Set the animated transformation to be applied on each frame.
         // drawable.setAnimatedTransformation(options.parameters.animatedTransformation())
 
-        DecodeResult.OfImage(
+        DecodeResult.Image(
             image = drawable.toImage(),
         )
     }

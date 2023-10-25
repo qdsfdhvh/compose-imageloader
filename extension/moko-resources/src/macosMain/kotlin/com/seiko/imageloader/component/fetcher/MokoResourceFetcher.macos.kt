@@ -24,7 +24,7 @@ internal actual suspend fun ColorResource.toFetchResult(options: Options): Fetch
     val nsColor = getNSColor()
     val deviceColor = nsColor.colorUsingColorSpace(deviceRGBColorSpace)
         ?: error("can't convert $nsColor to deviceRGBColorSpace")
-    return FetchResult.OfPainter(
+    return FetchResult.Painter(
         painter = ColorPainter(
             Color(
                 red = deviceColor.redComponent.toFloat(),
@@ -42,7 +42,7 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
         ofType = extension,
         inDirectory = "files",
     )!!.toPath()
-    return FetchResult.OfSource(
+    return FetchResult.Source(
         source = FileSystem.SYSTEM.source(path).buffer(),
     )
 }
@@ -56,7 +56,7 @@ internal actual suspend fun ImageResource.toFetchResult(options: Options): Fetch
         context = null,
         hints = null,
     ) ?: throw IllegalArgumentException("can't read CGImage of $this")
-    return FetchResult.OfImage(
+    return FetchResult.Image(
         image = cgImage.toSkiaImage(),
     )
 }
