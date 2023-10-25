@@ -40,7 +40,7 @@ class GifDecoder private constructor(
         val movie: Movie? = bufferedSource.use { Movie.decodeStream(it.inputStream()) }
         check(movie != null && movie.width() > 0 && movie.height() > 0) { "Failed to decode GIF." }
 
-        val config = options.imageConfig.toBitmapConfig()
+        val config = options.bitmapConfig.toBitmapConfig()
         val movieConfig = when {
             // movie.isOpaque && options.allowRgb565 -> Bitmap.Config.RGB_565
             config.isHardware -> Bitmap.Config.ARGB_8888
