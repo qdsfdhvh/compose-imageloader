@@ -46,7 +46,7 @@ internal actual suspend fun ColorResource.toFetchResult(options: Options): Fetch
             alpha = alpha.value.toFloat(),
         )
     }
-    return FetchResult.OfPainter(
+    return FetchResult.Painter(
         painter = ColorPainter(color),
     )
 }
@@ -57,7 +57,7 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
         ofType = extension,
         inDirectory = "files",
     )!!.toPath()
-    return FetchResult.OfSource(
+    return FetchResult.Source(
         source = FileSystem.SYSTEM.source(path).buffer(),
     )
 }
@@ -68,7 +68,7 @@ internal actual suspend fun ImageResource.toFetchResult(options: Options): Fetch
         ?: throw IllegalArgumentException("can't read UIImage of $this")
     val cgImage: CGImageRef = uiImage.CGImage()
         ?: throw IllegalArgumentException("can't read CGImage of $this")
-    return FetchResult.OfImage(
+    return FetchResult.Image(
         image = cgImage.toSkiaImage(),
     )
 }

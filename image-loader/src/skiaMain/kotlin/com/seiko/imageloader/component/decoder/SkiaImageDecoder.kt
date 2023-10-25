@@ -24,7 +24,7 @@ class SkiaImageDecoder private constructor(
         val image = source.use {
             Image.makeFromEncoded(it.readByteArray())
         }
-        DecodeResult.OfBitmap(
+        DecodeResult.Bitmap(
             bitmap = image.toBitmap(),
         )
     }

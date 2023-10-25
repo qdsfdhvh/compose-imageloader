@@ -12,7 +12,7 @@ class FileFetcher private constructor(
     private val data: File,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return FetchResult.OfSource(
+        return FetchResult.Source(
             source = data.source().buffer(),
             extra = extraData {
                 mimeType(getMimeTypeFromExtension(data.extension))

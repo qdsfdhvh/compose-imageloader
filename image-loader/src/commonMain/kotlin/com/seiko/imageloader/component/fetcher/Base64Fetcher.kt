@@ -13,7 +13,7 @@ class Base64Fetcher private constructor(
         return data.split(',').let {
             val contentType = it.firstOrNull()?.removePrefix("data:")?.removeSuffix(";base64")
             val content = it.last()
-            FetchResult.OfSource(
+            FetchResult.Source(
                 source = Buffer().apply {
                     write(content.decodeBase64Bytes())
                 },

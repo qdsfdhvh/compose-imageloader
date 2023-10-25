@@ -46,7 +46,7 @@ class ContentUriFetcher private constructor(
             checkNotNull(stream) { "Unable to open '$data'." }
         }
 
-        return FetchResult.OfSource(
+        return FetchResult.Source(
             source = inputStream.source().buffer(),
             extra = extraData {
                 mimeType(contentResolver.getType(androidUri))

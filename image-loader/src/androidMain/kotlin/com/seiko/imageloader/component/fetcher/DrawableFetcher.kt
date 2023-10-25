@@ -10,11 +10,11 @@ class DrawableFetcher private constructor(
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return if (data is BitmapDrawable) {
-            FetchResult.OfBitmap(
+            FetchResult.Bitmap(
                 bitmap = data.bitmap,
             )
         } else {
-            FetchResult.OfImage(
+            FetchResult.Image(
                 image = data.toImage(),
             )
         }

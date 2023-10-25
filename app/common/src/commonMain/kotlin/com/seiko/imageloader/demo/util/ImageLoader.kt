@@ -66,7 +66,7 @@ object NullDataInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val data = chain.request.data
         if (data === NullRequestData || data is String && data.isEmpty()) {
-            return ImageResult.OfPainter(
+            return ImageResult.Painter(
                 painter = EmptyPainter,
             )
         }

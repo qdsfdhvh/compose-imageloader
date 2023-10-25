@@ -42,12 +42,12 @@ fun InterceptorsBuilder.defaultImageResultMemoryCache(
     valueSizeProvider: (ImageResult) -> Int = { 1 },
     mapToMemoryValue: (ImageResult) -> ImageResult? = {
         when (it) {
-            is ImageResult.OfImage,
-            is ImageResult.OfPainter,
+            is ImageResult.Image,
+            is ImageResult.Painter,
             -> it
-            is ImageResult.OfBitmap -> if (includeBitmap) it else null
-            is ImageResult.OfSource,
-            is ImageResult.OfError,
+            is ImageResult.Bitmap -> if (includeBitmap) it else null
+            is ImageResult.Source,
+            is ImageResult.Error,
             -> null
         }
     },

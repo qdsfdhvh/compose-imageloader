@@ -14,7 +14,7 @@ class ByteBufferFetcher private constructor(
             // Reset the position so we can read the byte buffer again.
             data.position(0)
         }
-        return FetchResult.OfSource(
+        return FetchResult.Source(
             source = source,
         )
     }

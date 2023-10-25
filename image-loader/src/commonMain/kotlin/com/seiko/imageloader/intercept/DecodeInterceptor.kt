@@ -18,7 +18,7 @@ class DecodeInterceptor : Interceptor {
     private suspend fun proceed(chain: Interceptor.Chain, request: ImageRequest): ImageResult {
         val options = chain.options
         return when (val result = chain.proceed(request)) {
-            is ImageResult.OfSource -> {
+            is ImageResult.Source -> {
                 runCatching {
                     decode(chain.components, result, options)
                 }.fold(
@@ -69,7 +69,7 @@ class DecodeInterceptor : Interceptor {
 }
 
 private fun DecodeResult.toImageResult() = when (this) {
-    is DecodeResult.OfBitmap -> ImageResult.OfBitmap(bitmap = bitmap)
-    is DecodeResult.OfImage -> ImageResult.OfImage(image = image)
-    is DecodeResult.OfPainter -> ImageResult.OfPainter(painter = painter)
+    is DecodeResult.Bitmap -> ImageResult.Bitmap(bitmap = bitmap)
+    is DecodeResult.Image -> ImageResult.Image(image = image)
+    is DecodeResult.Painter -> ImageResult.Painter(painter = painter)
 }

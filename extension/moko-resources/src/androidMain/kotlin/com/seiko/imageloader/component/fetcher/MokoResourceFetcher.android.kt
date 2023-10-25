@@ -13,26 +13,26 @@ import okio.buffer
 import okio.source
 
 internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.OfSource(
+    return FetchResult.Source(
         source = getInputStream(options.androidContext).source().buffer(),
     )
 }
 
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.OfPainter(
+    return FetchResult.Painter(
         painter = ColorPainter(Color(getColor(options.androidContext))),
     )
 }
 
 internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.OfSource(
+    return FetchResult.Source(
         source = options.androidContext.resources.openRawResource(rawResId).source().buffer(),
     )
 }
 
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
     val drawable = requireNotNull(getDrawable(options.androidContext))
-    return FetchResult.OfImage(
+    return FetchResult.Image(
         image = drawable.toImage(),
     )
 }

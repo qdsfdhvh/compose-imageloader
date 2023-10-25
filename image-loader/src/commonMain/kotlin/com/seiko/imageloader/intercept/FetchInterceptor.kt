@@ -41,18 +41,18 @@ class FetchInterceptor : Interceptor {
 }
 
 private fun FetchResult.toImageResult() = when (this) {
-    is FetchResult.OfSource -> ImageResult.OfSource(
+    is FetchResult.Source -> ImageResult.Source(
         source = source,
         dataSource = DataSource.Engine,
         extra = extra,
     )
-    is FetchResult.OfBitmap -> ImageResult.OfBitmap(
+    is FetchResult.Bitmap -> ImageResult.Bitmap(
         bitmap = bitmap,
     )
-    is FetchResult.OfImage -> ImageResult.OfImage(
+    is FetchResult.Image -> ImageResult.Image(
         image = image,
     )
-    is FetchResult.OfPainter -> ImageResult.OfPainter(
+    is FetchResult.Painter -> ImageResult.Painter(
         painter = painter,
     )
 }
