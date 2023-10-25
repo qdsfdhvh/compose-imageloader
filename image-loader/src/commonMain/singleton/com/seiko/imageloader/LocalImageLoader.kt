@@ -3,6 +3,7 @@ package com.seiko.imageloader
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.ReadOnlyComposable
+import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.intercept.InterceptorsBuilder
 import com.seiko.imageloader.model.ImageResult
@@ -53,12 +54,16 @@ fun InterceptorsBuilder.defaultImageResultMemoryCache(
     },
     mapToImageResult: (ImageResult) -> ImageResult? = { it },
 ) {
-    anyMemoryCacheConfig(
-        valueHashProvider = valueHashProvider,
-        valueSizeProvider = valueSizeProvider,
+    memoryCache(
         mapToMemoryValue = mapToMemoryValue,
         mapToImageResult = mapToImageResult,
     ) {
-        maxSizeBytes(saveSize)
+        MemoryCache(
+            valueHashProvider = valueHashProvider,
+            valueSizeProvider = valueSizeProvider,
+            block = {
+                maxSizeBytes(saveSize)
+            },
+        )
     }
 }
