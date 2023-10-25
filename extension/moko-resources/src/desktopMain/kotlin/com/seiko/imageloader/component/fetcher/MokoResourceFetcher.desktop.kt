@@ -16,7 +16,7 @@ internal actual suspend fun AssetResource.toFetchResult(options: Options): Fetch
 }
 
 internal actual suspend fun ColorResource.toFetchResult(options: Options): FetchResult? {
-    return FetchResult.Painter(
+    return FetchResult.OfPainter(
         painter = ColorPainter(
             Color(
                 red = lightColor.red,
@@ -31,7 +31,7 @@ internal actual suspend fun ColorResource.toFetchResult(options: Options): Fetch
 internal actual suspend fun FileResource.toFetchResult(options: Options): FetchResult? {
     val stream = resourcesClassLoader.getResourceAsStream(filePath)
         ?: throw FileNotFoundException("Couldn't open resource as stream at: $filePath")
-    return FetchResult.Source(
+    return FetchResult.OfSource(
         source = stream.source().buffer(),
     )
 }
@@ -39,7 +39,7 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
     val stream = resourcesClassLoader.getResourceAsStream(filePath)
         ?: throw FileNotFoundException("Couldn't open resource as stream at: $filePath")
-    return FetchResult.Source(
+    return FetchResult.OfSource(
         source = stream.source().buffer(),
     )
 }

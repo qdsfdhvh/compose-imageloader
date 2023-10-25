@@ -9,9 +9,9 @@ class BlurInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val request = chain.request
         val result = chain.proceed(request)
-        if (result is ImageResult.Bitmap) {
+        if (result is ImageResult.OfBitmap) {
             val blurEffects = request.blurEffects ?: return result
-            return ImageResult.Bitmap(
+            return ImageResult.OfBitmap(
                 bitmap = blur(result.bitmap, blurEffects.radius),
             )
         }
