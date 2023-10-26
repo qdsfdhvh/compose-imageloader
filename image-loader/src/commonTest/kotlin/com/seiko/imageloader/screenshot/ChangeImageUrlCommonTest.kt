@@ -33,7 +33,7 @@ abstract class ChangeImageUrlCommonTest {
                             3 -> Color.Gray
                             else -> Color.Red // no display
                         }
-                        ImageResult.Painter(ColorPainter(color))
+                        ImageResult.OfPainter(ColorPainter(color))
                     }
                 }
             }

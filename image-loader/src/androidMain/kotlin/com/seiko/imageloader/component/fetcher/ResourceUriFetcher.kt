@@ -63,7 +63,7 @@ class ResourceUriFetcher private constructor(
 
             val isVector = drawable.isVector
             if (isVector) {
-                FetchResult.Bitmap(
+                FetchResult.OfBitmap(
                     bitmap = DrawableUtils.convertToBitmap(
                         drawable = drawable,
                         config = options.bitmapConfig.toBitmapConfig(),
@@ -72,18 +72,18 @@ class ResourceUriFetcher private constructor(
                     ),
                 )
             } else if (drawable is BitmapDrawable) {
-                FetchResult.Bitmap(
+                FetchResult.OfBitmap(
                     bitmap = drawable.bitmap,
                 )
             } else {
-                FetchResult.Image(
+                FetchResult.OfImage(
                     image = drawable.toImage(),
                 )
             }
         } else {
             val typedValue = TypedValue()
             val inputStream = resources.openRawResource(resId, typedValue)
-            FetchResult.Source(
+            FetchResult.OfSource(
                 source = inputStream.source().buffer(),
                 extra = extraData {
                     mimeType(mimeType)
