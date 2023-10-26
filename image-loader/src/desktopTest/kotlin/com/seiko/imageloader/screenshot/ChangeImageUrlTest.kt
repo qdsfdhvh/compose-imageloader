@@ -23,7 +23,7 @@ class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
         )
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, ExperimentalRoborazziApi::class)
     @Test
     fun desktop_test_image_change() = runDesktopComposeUiTest(width = 80, height = 80) {
         setContent {
