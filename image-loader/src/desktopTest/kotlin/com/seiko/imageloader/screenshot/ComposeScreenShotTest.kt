@@ -23,17 +23,17 @@ class ComposeScreenShotTest : ComposeScreenShotCommonTest() {
     }
 
     @Test
-    fun test_load_image() = runMyDesktopComposeUiTest(width = 100 + 8 + 100) {
+    fun desktop_test_load_image() = runMyDesktopComposeUiTest(width = 100 + 8 + 100) {
         TestLoadImageUI()
     }
 
     @Test
-    fun test_placeholder_painter() = runMyDesktopComposeUiTest {
+    fun desktop_test_placeholder_painter() = runMyDesktopComposeUiTest {
         TestPlaceholderPainterUI()
     }
 
     @Test
-    fun test_error_painter() = runMyDesktopComposeUiTest {
+    fun desktop_test_error_painter() = runMyDesktopComposeUiTest {
         TestErrorPainterUI()
     }
 
