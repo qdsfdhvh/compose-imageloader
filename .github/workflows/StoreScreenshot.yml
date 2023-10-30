@@ -6,7 +6,7 @@ on:
       - master
   pull_request:
     paths:
-      - 'image-loader/**'
+      - 'image-loader/src/**'
 
 run-name: "StoreScreenshot by ${{ github.actor }}"
 
