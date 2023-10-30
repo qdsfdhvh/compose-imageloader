@@ -11,7 +11,7 @@ internal val Bitmap.safeConfig: Bitmap.Config
 internal val Bitmap.Config.isHardware: Boolean
     get() = Build.VERSION.SDK_INT >= 26 && this == Bitmap.Config.HARDWARE
 
-internal fun BitmapConfig.toBitmapConfig(): Bitmap.Config = when (this) {
+internal fun BitmapConfig.toAndroidConfig(): Bitmap.Config = when (this) {
     BitmapConfig.ALPHA_8 -> Bitmap.Config.ALPHA_8
     BitmapConfig.ARGB_8888 -> Bitmap.Config.ARGB_8888
     BitmapConfig.RGBA_F16 -> if (Build.VERSION.SDK_INT >= 26) {
