@@ -7,9 +7,8 @@ plugins {
 }
 
 kotlin {
-    @Suppress("UNUSED_VARIABLE")
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(compose.runtime)
                 api(compose.foundation)
@@ -27,24 +26,24 @@ kotlin {
                 implementation(libs.kermit)
             }
         }
-        val androidMain by getting {
+        androidMain {
             // https://github.com/icerockdev/moko-resources/issues/531
-            dependsOn(commonMain)
+            dependsOn(commonMain.get())
             dependencies {
                 implementation(libs.ktor.client.cio)
             }
         }
-        val desktopMain by getting {
+        desktopMain {
             dependencies {
                 implementation(libs.ktor.client.cio)
             }
         }
-        val appleMain by getting {
+        appleMain {
             dependencies {
                 implementation(libs.ktor.client.darwin)
             }
         }
-        val jsMain by getting {
+        jsMain {
             dependencies {
                 implementation(libs.ktor.client.js)
             }
