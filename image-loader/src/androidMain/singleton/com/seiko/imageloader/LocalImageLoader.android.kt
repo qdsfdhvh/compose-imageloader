@@ -29,8 +29,7 @@ actual fun createImageLoaderProvidableCompositionLocal() = ImageLoaderProvidable
     delegate = staticCompositionLocalOf { null },
 )
 
-@Suppress("FunctionName")
-fun ImageLoader.Companion.DefaultAndroid(context: Context): ImageLoader {
+fun ImageLoader.Companion.createDefaultAndroid(context: Context): ImageLoader {
     return ImageLoader {
         options {
             androidContext(context.applicationContext)

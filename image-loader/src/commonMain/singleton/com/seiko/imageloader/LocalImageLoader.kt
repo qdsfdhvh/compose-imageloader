@@ -21,8 +21,8 @@ expect class ImageLoaderProvidableCompositionLocal {
 
 expect fun createImageLoaderProvidableCompositionLocal(): ImageLoaderProvidableCompositionLocal
 
-val ImageLoader.Companion.Default: ImageLoader
-    get() = ImageLoader {
+fun ImageLoader.Companion.createDefault(): ImageLoader {
+    return ImageLoader {
         components {
             setupDefaultComponents()
         }
@@ -33,6 +33,7 @@ val ImageLoader.Companion.Default: ImageLoader
             }
         }
     }
+}
 
 // cache 100 image result, without bitmap
 fun InterceptorsBuilder.defaultImageResultMemoryCache(
