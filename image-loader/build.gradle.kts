@@ -13,6 +13,11 @@ plugins {
 
 kotlin {
     sourceSets {
+        all {
+            languageSettings {
+                optIn("kotlin.experimental.ExperimentalNativeApi")
+            }
+        }
         commonMain {
             dependencies {
                 api(compose.ui)
