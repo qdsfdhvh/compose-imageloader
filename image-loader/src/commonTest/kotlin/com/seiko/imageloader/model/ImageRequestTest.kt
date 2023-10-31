@@ -1,6 +1,7 @@
 package com.seiko.imageloader.model
 
 import androidx.compose.runtime.Composable
+import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.EmptyPainter
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.component.decoder.Decoder
@@ -34,7 +35,7 @@ class ImageRequestTest {
                 allowInexactSize = true
                 premultipliedAlpha = false
                 retryIfDiskDecodeError = false
-                imageConfig = Options.ImageConfig.ALPHA_8
+                bitmapConfig = BitmapConfig.ALPHA_8
                 scale = Scale.FIT
                 memoryCachePolicy = CachePolicy.DISABLED
                 diskCachePolicy = CachePolicy.READ_ONLY
@@ -51,7 +52,7 @@ class ImageRequestTest {
         assertTrue(options.allowInexactSize)
         assertFalse(options.premultipliedAlpha)
         assertFalse(options.retryIfDiskDecodeError)
-        assertEquals(options.imageConfig, Options.ImageConfig.ALPHA_8)
+        assertEquals(options.bitmapConfig, BitmapConfig.ALPHA_8)
         assertEquals(options.scale, Scale.FIT)
         assertEquals(options.memoryCachePolicy, CachePolicy.DISABLED)
         assertEquals(options.diskCachePolicy, CachePolicy.READ_ONLY)

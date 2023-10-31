@@ -9,9 +9,8 @@ kotlin {
         browser()
         binaries.executable()
     }
-    @Suppress("UNUSED_VARIABLE")
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(projects.app.common)
                 implementation(compose.runtime)
@@ -19,9 +18,9 @@ kotlin {
                 implementation(libs.moko.resources)
             }
         }
-        val jsMain by getting {
+        getByName("jsMain") {
             // https://github.com/icerockdev/moko-resources/issues/531
-            dependsOn(commonMain)
+            dependsOn(commonMain.get())
         }
     }
 }

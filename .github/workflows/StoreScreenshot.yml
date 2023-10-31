@@ -5,6 +5,10 @@ on:
     branches:
       - master
   pull_request:
+    paths:
+      - 'image-loader/src/**'
+
+run-name: "StoreScreenshot by ${{ github.actor }}"
 
 permissions: { }
 

@@ -20,8 +20,11 @@ class SvgDecoder private constructor(
 
     override suspend fun decode(): DecodeResult {
         val svg = SVG.getFromInputStream(source.source.inputStream())
+        val requestSize = options.sizeResolver.run {
+            density.size()
+        }
         return DecodeResult.OfPainter(
-            painter = SVGPainter(svg, density, options.size),
+            painter = SVGPainter(svg, density, requestSize),
         )
     }
 

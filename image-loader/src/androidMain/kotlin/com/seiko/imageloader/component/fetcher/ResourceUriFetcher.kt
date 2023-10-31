@@ -26,7 +26,7 @@ import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
-import com.seiko.imageloader.util.toBitmapConfig
+import com.seiko.imageloader.util.toAndroidConfig
 import okio.buffer
 import okio.source
 import org.xmlpull.v1.XmlPullParser
@@ -66,7 +66,7 @@ class ResourceUriFetcher private constructor(
                 FetchResult.OfBitmap(
                     bitmap = DrawableUtils.convertToBitmap(
                         drawable = drawable,
-                        config = options.imageConfig.toBitmapConfig(),
+                        config = options.bitmapConfig.toAndroidConfig(),
                         scale = options.scale,
                         allowInexactSize = options.allowInexactSize,
                     ),

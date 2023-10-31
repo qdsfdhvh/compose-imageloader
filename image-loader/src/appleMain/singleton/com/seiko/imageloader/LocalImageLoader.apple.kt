@@ -9,12 +9,12 @@ import platform.Foundation.NSUserDomainMask
 
 actual fun createImageLoaderProvidableCompositionLocal() = ImageLoaderProvidableCompositionLocal(
     delegate = staticCompositionLocalOf {
-        ImageLoader.DefaultIOS
+        ImageLoader.createDefaultIOS()
     },
 )
 
-val ImageLoader.Companion.DefaultIOS: ImageLoader
-    get() = ImageLoader {
+fun ImageLoader.Companion.createDefaultIOS(): ImageLoader {
+    return ImageLoader {
         components {
             setupDefaultComponents()
         }
@@ -29,6 +29,7 @@ val ImageLoader.Companion.DefaultIOS: ImageLoader
             }
         }
     }
+}
 
 private fun getCacheDir(): String {
     return NSSearchPathForDirectoriesInDomains(
