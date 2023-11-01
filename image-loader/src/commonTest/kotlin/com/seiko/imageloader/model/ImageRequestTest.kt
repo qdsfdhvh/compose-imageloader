@@ -14,6 +14,7 @@ import com.seiko.imageloader.option.takeFrom
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -96,5 +97,23 @@ class ImageRequestTest {
         assertEquals(request.components.keyers.first(), keyerFactory)
         assertEquals(request.components.fetcherFactories.first(), fetcherFactory)
         assertEquals(request.components.decoderFactories.first(), decoderFactory)
+    }
+
+    @Test
+    fun image_request_compare_test() {
+        val request1 = ImageRequest {
+            data("aa")
+            skipEvent = true
+        }
+        assertNotEquals(request1, ImageRequest("aa"))
+        assertEquals(request1, ImageRequest("aa") { skipEvent = true })
+        val request2 = ImageRequest {
+            data("aa")
+            extra {
+                put("a", "b")
+            }
+        }
+        assertNotEquals(request2, ImageRequest("aa"))
+        assertEquals(request2, ImageRequest("aa") { extra { put("a", "b") } })
     }
 }

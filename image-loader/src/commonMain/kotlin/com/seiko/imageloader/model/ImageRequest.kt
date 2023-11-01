@@ -3,6 +3,7 @@ package com.seiko.imageloader.model
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.painter.Painter
+import com.seiko.imageloader.Poko
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
@@ -11,6 +12,7 @@ import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
 
 @Immutable
+@Poko
 class ImageRequest internal constructor(
     val data: Any,
     val extra: ExtraData,
