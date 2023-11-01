@@ -86,9 +86,9 @@ fun rememberImageResultPainter(
         is ImageResult.OfSource,
         -> errorPainter?.invoke() ?: EmptyPainter
     }.also { painter ->
-        if (painter is AnimationPainter) {
+        if (painter is AnimationPainter && painter.isPlay()) {
             LaunchedEffect(painter) {
-                while (painter.isPlay()) {
+                while (painter.nextPlay()) {
                     withFrameMillis { frameTimeMillis ->
                         painter.update(frameTimeMillis)
                     }
