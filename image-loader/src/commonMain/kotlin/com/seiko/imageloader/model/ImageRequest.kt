@@ -12,7 +12,6 @@ import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
 
 @Immutable
-@Poko
 class ImageRequest internal constructor(
     val data: Any,
     val extra: ExtraData,
@@ -26,6 +25,32 @@ class ImageRequest internal constructor(
 ) {
     @Deprecated("", ReplaceWith("ImageRequest(request) {}"))
     fun newBuilder(block: ImageRequestBuilder.() -> Unit) = ImageRequest(this, block)
+
+    override fun equals(other: Any?): Boolean {
+        return other is ImageRequest &&
+            data == other.data &&
+            extra == other.extra &&
+            sizeResolver == other.sizeResolver &&
+            placeholderPainter == other.placeholderPainter &&
+            errorPainter == other.errorPainter &&
+            skipEvent == other.skipEvent &&
+            optionsBuilders == other.optionsBuilders &&
+            components == other.components &&
+            interceptors == other.interceptors
+    }
+
+    override fun hashCode(): Int {
+        var result = data.hashCode()
+        result = 31 * result + extra.hashCode()
+        result = 31 * result + sizeResolver.hashCode()
+        result = 31 * result + placeholderPainter.hashCode()
+        result = 31 * result + errorPainter.hashCode()
+        result = 31 * result + skipEvent.hashCode()
+        result = 31 * result + optionsBuilders.hashCode()
+        result = 31 * result + components.hashCode()
+        result = 31 * result + interceptors.hashCode()
+        return result
+    }
 }
 
 class ImageRequestBuilder internal constructor() {
