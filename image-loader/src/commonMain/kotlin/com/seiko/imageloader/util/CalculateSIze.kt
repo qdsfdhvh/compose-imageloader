@@ -19,7 +19,7 @@ internal fun calculateDstSize(
             dstHeight = ((maxImageSize.toFloat() / srcWidth.toFloat()) * dstHeight).toInt()
             dstWidth = maxImageSize
         } else {
-            dstWidth = ((maxImageSize.toFloat() / srcWidth.toFloat()) * dstWidth).toInt()
+            dstWidth = ((maxImageSize.toFloat() / srcHeight.toFloat()) * dstWidth).toInt()
             dstHeight = maxImageSize
         }
     }
