@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.decoder
 
+import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
 import com.seiko.imageloader.util.calculateDstSize
@@ -32,7 +33,7 @@ class SkiaImageDecoder private constructor(
     // TODO wait to fix high probability crash on ios
     private fun Image.toBitmap(): Bitmap {
         val bitmap = Bitmap()
-        val (dstWidth, dstHeight) = if (!options.size.isEmpty()) {
+        val (dstWidth, dstHeight) = if (options.size.isSpecified && !options.size.isEmpty()) {
             options.size.run { width.toInt() to height.toInt() }
         } else {
             calculateDstSize(width, height, options.maxImageSize)
