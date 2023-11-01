@@ -12,7 +12,6 @@ import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Canvas
 import org.jetbrains.skia.Image
 import org.jetbrains.skia.Rect
-import org.jetbrains.skia.SamplingMode
 import org.jetbrains.skia.impl.use
 
 class SkiaImageDecoder private constructor(
@@ -33,20 +32,24 @@ class SkiaImageDecoder private constructor(
     // TODO wait to fix high probability crash on ios
     private fun Image.toBitmap(): Bitmap {
         val bitmap = Bitmap()
-        val (dstWidth, dstHeight) = if (options.size.isSpecified && !options.size.isEmpty()) {
-            options.size.run { width.toInt() to height.toInt() }
+
+        val srcWidth = width
+        val srcHeight = height
+
+        val maxImageSize = if (options.size.isSpecified && !options.size.isEmpty()) {
+            minOf(options.size.width, options.size.height).toInt()
+                .coerceAtMost(options.maxImageSize)
         } else {
-            calculateDstSize(width, height, options.maxImageSize)
+            options.maxImageSize
         }
+        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, maxImageSize)
+
         bitmap.allocN32Pixels(dstWidth, dstHeight)
         Canvas(bitmap).use { canvas ->
             canvas.drawImageRect(
                 this,
-                Rect.makeWH(width.toFloat(), height.toFloat()),
+                Rect.makeWH(srcWidth.toFloat(), srcHeight.toFloat()),
                 Rect.makeWH(dstWidth.toFloat(), dstHeight.toFloat()),
-                SamplingMode.DEFAULT,
-                null,
-                true,
             )
         }
         bitmap.setImmutable()
