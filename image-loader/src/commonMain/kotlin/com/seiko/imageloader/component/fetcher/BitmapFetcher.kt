@@ -7,7 +7,7 @@ class BitmapFetcher private constructor(
     private val data: Bitmap,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
-        return FetchResult.Bitmap(
+        return FetchResult.OfBitmap(
             bitmap = data,
         )
     }

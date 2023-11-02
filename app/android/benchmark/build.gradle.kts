@@ -9,6 +9,7 @@ plugins {
 android {
     namespace = "com.seiko.imageloader.demo.benchmark"
     defaultConfig {
+        minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // TODO temporary until AGP 8.2, which no longer requires this.

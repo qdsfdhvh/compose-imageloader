@@ -12,6 +12,18 @@ internal expect val Bitmap.size: Int
 
 internal expect val Bitmap.identityHashCode: Int
 
+enum class BitmapConfig {
+    ALPHA_8,
+    ARGB_8888,
+    RGBA_F16,
+    HARDWARE,
+    ;
+
+    companion object {
+        val Default = ARGB_8888
+    }
+}
+
 expect fun Bitmap.asImageBitmap(): ImageBitmap
 
 fun Bitmap.toPainter(filterQuality: FilterQuality = DefaultFilterQuality): Painter {

@@ -1,5 +1,6 @@
 package com.seiko.imageloader.option
 
+import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.Poko
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.model.EmptyExtraData
@@ -13,7 +14,7 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,
-    val imageConfig: ImageConfig,
+    val bitmapConfig: BitmapConfig,
     val scale: Scale,
     val sizeResolver: SizeResolver,
     val memoryCachePolicy: CachePolicy,
@@ -23,13 +24,6 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
     val maxImageSize: Int,
     val extra: ExtraData,
 ) {
-    enum class ImageConfig {
-        ALPHA_8,
-        ARGB_8888,
-        RGBA_F16,
-        HARDWARE,
-    }
-
     companion object {
         internal const val REPEAT_INFINITE = -1
     }
@@ -40,7 +34,7 @@ class OptionsBuilder internal constructor() {
     var allowInexactSize: Boolean = false
     var premultipliedAlpha: Boolean = true
     var retryIfDiskDecodeError: Boolean = true
-    var imageConfig: Options.ImageConfig = Options.ImageConfig.ARGB_8888
+    var bitmapConfig: BitmapConfig = BitmapConfig.Default
     var scale: Scale = Scale.FILL
     var sizeResolver: SizeResolver = SizeResolver.Unspecified
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
@@ -63,7 +57,7 @@ class OptionsBuilder internal constructor() {
         allowInexactSize = options.allowInexactSize
         premultipliedAlpha = options.premultipliedAlpha
         retryIfDiskDecodeError = options.retryIfDiskDecodeError
-        imageConfig = options.imageConfig
+        bitmapConfig = options.bitmapConfig
         scale = options.scale
         sizeResolver = options.sizeResolver
         memoryCachePolicy = options.memoryCachePolicy
@@ -91,7 +85,7 @@ class OptionsBuilder internal constructor() {
         allowInexactSize = allowInexactSize,
         premultipliedAlpha = premultipliedAlpha,
         retryIfDiskDecodeError = retryIfDiskDecodeError,
-        imageConfig = imageConfig,
+        bitmapConfig = bitmapConfig,
         scale = scale,
         sizeResolver = sizeResolver,
         memoryCachePolicy = memoryCachePolicy,
