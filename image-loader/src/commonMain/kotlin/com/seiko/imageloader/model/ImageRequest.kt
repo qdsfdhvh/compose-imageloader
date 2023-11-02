@@ -3,7 +3,6 @@ package com.seiko.imageloader.model
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.painter.Painter
-import com.seiko.imageloader.Poko
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
@@ -23,8 +22,6 @@ class ImageRequest internal constructor(
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
 ) {
-    @Deprecated("", ReplaceWith("ImageRequest(request) {}"))
-    fun newBuilder(block: ImageRequestBuilder.() -> Unit) = ImageRequest(this, block)
 
     override fun equals(other: Any?): Boolean {
         return other is ImageRequest &&
