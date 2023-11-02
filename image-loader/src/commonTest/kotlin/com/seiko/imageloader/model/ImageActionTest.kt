@@ -89,11 +89,11 @@ class ImageActionTest {
     private fun when_image_result_test(action: ImageAction) {
         when (action) {
             is ImageEvent -> LoadingUI()
-            is ImageResult.Image -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Bitmap -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Painter -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Error -> ErrorUI(action.error)
-            is ImageResult.Source -> ErrorUI(action.error)
+            is ImageResult.OfImage -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfBitmap -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfPainter -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfError -> ErrorUI(action.error)
+            is ImageResult.OfSource -> ErrorUI(action.error)
         }
     }
 
@@ -101,9 +101,9 @@ class ImageActionTest {
     private fun when_image_result_success_no_result_failure_test(action: ImageAction) {
         when (action) {
             is ImageAction.Loading -> LoadingUI()
-            is ImageResult.Image -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Bitmap -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Painter -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfImage -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfBitmap -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfPainter -> SuccessUI(rememberImageSuccessPainter(action))
             is ImageAction.Failure -> ErrorUI(action.error)
         }
     }
@@ -116,11 +116,11 @@ class ImageActionTest {
             is ImageEvent.StartWithDisk,
             is ImageEvent.StartWithFetch,
             -> LoadingUI()
-            is ImageResult.Image -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Bitmap -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Painter -> SuccessUI(rememberImageSuccessPainter(action))
-            is ImageResult.Error -> ErrorUI(action.error)
-            is ImageResult.Source -> ErrorUI(action.error)
+            is ImageResult.OfImage -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfBitmap -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfPainter -> SuccessUI(rememberImageSuccessPainter(action))
+            is ImageResult.OfError -> ErrorUI(action.error)
+            is ImageResult.OfSource -> ErrorUI(action.error)
         }
     }
 
