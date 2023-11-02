@@ -1,6 +1,9 @@
 package com.seiko.imageloader.model
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.painter.Painter
+import com.seiko.imageloader.Bitmap
+import com.seiko.imageloader.Image
 import com.seiko.imageloader.Poko
 import okio.BufferedSource
 
@@ -26,31 +29,23 @@ sealed interface ImageResult : ImageAction {
 
     @Immutable
     @Poko
-    class Bitmap(
-        val bitmap: com.seiko.imageloader.Bitmap,
-    ) : ImageResult, ImageAction.Success
+    class OfBitmap(val bitmap: Bitmap) : ImageResult, ImageAction.Success
 
     @Immutable
     @Poko
-    class Image(
-        val image: com.seiko.imageloader.Image,
-    ) : ImageResult, ImageAction.Success
+    class OfImage(val image: Image) : ImageResult, ImageAction.Success
 
     @Immutable
     @Poko
-    class Painter(
-        val painter: androidx.compose.ui.graphics.painter.Painter,
-    ) : ImageResult, ImageAction.Success
+    class OfPainter(val painter: Painter) : ImageResult, ImageAction.Success
 
     @Immutable
     @Poko
-    class Error(
-        override val error: Throwable,
-    ) : ImageResult, ImageAction.Failure
+    class OfError(override val error: Throwable) : ImageResult, ImageAction.Failure
 
     @Immutable
     @Poko
-    class Source(
+    class OfSource(
         val source: BufferedSource,
         val dataSource: DataSource,
         val extra: ExtraData = EmptyExtraData,

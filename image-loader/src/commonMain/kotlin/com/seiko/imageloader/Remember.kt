@@ -81,13 +81,13 @@ fun rememberImageSuccessPainter(
     filterQuality: FilterQuality = DefaultFilterQuality,
 ): Painter {
     return when (action) {
-        is ImageResult.Painter -> remember(action) {
+        is ImageResult.OfPainter -> remember(action) {
             action.painter
         }
-        is ImageResult.Bitmap -> remember(action, filterQuality) {
+        is ImageResult.OfBitmap -> remember(action, filterQuality) {
             action.bitmap.toPainter(filterQuality)
         }
-        is ImageResult.Image -> remember(action) {
+        is ImageResult.OfImage -> remember(action) {
             action.image.toPainter()
         }
     }.also { painter ->

@@ -1,11 +1,12 @@
 package com.seiko.imageloader.cache.memory
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.seiko.imageloader.util.LockObject
 import com.seiko.imageloader.util.WeakReference
 import com.seiko.imageloader.util.firstNotNullOfOrNullIndices
 import com.seiko.imageloader.util.removeIfIndices
-import com.seiko.imageloader.util.synchronized
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.internal.SynchronizedObject
+import kotlinx.coroutines.internal.synchronized
 
 /**
  * An in-memory cache that holds weak references to [Painter]s.
@@ -30,6 +31,7 @@ internal open class EmptyWeakMemoryCache<K, V> : WeakMemoryCache<K, V> {
 }
 
 /** A [WeakMemoryCache] implementation backed by a [LinkedHashMap]. */
+@OptIn(InternalCoroutinesApi::class)
 internal open class RealWeakMemoryCache<K : Any, V : Any>(
     private val valueHashProvider: (V) -> Int,
 ) : WeakMemoryCache<K, V> {
@@ -37,7 +39,7 @@ internal open class RealWeakMemoryCache<K : Any, V : Any>(
     internal val cache = LinkedHashMap<K, ArrayList<InternalValue<V>>>()
     private var operationsSinceCleanUp = 0
 
-    private val syncObject = LockObject()
+    private val syncObject = SynchronizedObject()
 
     override val keys: Set<K>
         get() = synchronized(syncObject) { cache.keys.toSet() }

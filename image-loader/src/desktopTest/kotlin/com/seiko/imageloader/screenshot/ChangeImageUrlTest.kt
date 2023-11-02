@@ -19,13 +19,13 @@ class ChangeImageUrlTest : ChangeImageUrlCommonTest() {
     @Before
     fun initRoborazziConfig() {
         RoborazziContext.setRuleOverrideOutputDirectory(
-            outputDirectory = "src/desktopTest/snapshots/images",
+            outputDirectory = "build/outputs/roborazzi/desktop",
         )
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, ExperimentalRoborazziApi::class)
     @Test
-    fun test_image_change() = runDesktopComposeUiTest(width = 80, height = 80) {
+    fun desktop_test_image_change() = runDesktopComposeUiTest(width = 80, height = 80) {
         setContent {
             TestUI()
         }

@@ -5,9 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import com.seiko.imageloader.DefaultAndroid
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
+import com.seiko.imageloader.createDefaultAndroid
 import com.seiko.imageloader.demo.util.commonConfig
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
     private fun generateImageLoader(): ImageLoader {
         return ImageLoader {
-            takeFrom(ImageLoader.DefaultAndroid(applicationContext))
+            takeFrom(ImageLoader.createDefaultAndroid(applicationContext))
             commonConfig()
         }
         // return ImageLoader {

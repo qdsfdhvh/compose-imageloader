@@ -15,7 +15,7 @@ class ImageIODecoder(
         val image = runInterruptible {
             ImageIO.read(source.inputStream())
         }
-        return DecodeResult.Painter(
+        return DecodeResult.OfPainter(
             painter = image.toPainter(),
         )
     }
