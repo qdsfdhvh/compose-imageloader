@@ -12,9 +12,13 @@ plugins {
 }
 
 kotlin {
-    @Suppress("UNUSED_VARIABLE")
     sourceSets {
-        val commonMain by getting {
+        all {
+            languageSettings {
+                optIn("kotlin.experimental.ExperimentalNativeApi")
+            }
+        }
+        commonMain {
             dependencies {
                 api(compose.ui)
                 api(libs.kotlinx.coroutines.core)
@@ -23,7 +27,7 @@ kotlin {
                 api(libs.uri.kmp)
             }
         }
-        val commonTest by getting {
+        commonTest {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.bundles.test.common)
@@ -31,8 +35,7 @@ kotlin {
                 implementation(compose.ui)
             }
         }
-        val jvmMain by getting
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.kotlinx.coroutines.android)
                 implementation(libs.androidx.core.ktx)
@@ -41,18 +44,18 @@ kotlin {
                 implementation(libs.androidsvg)
             }
         }
-        val androidUnitTest by getting {
+        androidUnitTest {
             dependencies {
                 implementation(compose.desktop.uiTestJUnit4)
                 implementation(libs.bundles.test.android)
             }
         }
-        val desktopMain by getting {
+        desktopMain {
             dependencies {
                 implementation(libs.kotlinx.coroutines.swing)
             }
         }
-        val desktopTest by getting {
+        desktopTest {
             languageSettings {
                 enableLanguageFeature(LanguageFeature.ContextReceivers.name)
             }
@@ -65,21 +68,19 @@ kotlin {
                 }
             }
         }
-        val appleMain by getting
-        val jsMain by getting
         val noJsMain by creating {
-            dependsOn(commonMain)
-            jvmMain.dependsOn(this)
-            appleMain.dependsOn(this)
+            dependsOn(commonMain.get())
+            jvmMain.get().dependsOn(this)
+            appleMain.get().dependsOn(this)
             dependencies {
                 implementation(libs.androidx.collection)
             }
         }
         val noAndroidMain by creating {
-            dependsOn(commonMain)
-            desktopMain.dependsOn(this)
-            appleMain.dependsOn(this)
-            jsMain.dependsOn(this)
+            dependsOn(commonMain.get())
+            desktopMain.get().dependsOn(this)
+            appleMain.get().dependsOn(this)
+            jsMain.get().dependsOn(this)
         }
     }
     sourceSets.all {

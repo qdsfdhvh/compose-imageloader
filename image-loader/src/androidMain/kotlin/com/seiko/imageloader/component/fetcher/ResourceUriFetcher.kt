@@ -26,7 +26,7 @@ import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
-import com.seiko.imageloader.util.toBitmapConfig
+import com.seiko.imageloader.util.toAndroidConfig
 import okio.buffer
 import okio.source
 import org.xmlpull.v1.XmlPullParser
@@ -63,27 +63,27 @@ class ResourceUriFetcher private constructor(
 
             val isVector = drawable.isVector
             if (isVector) {
-                FetchResult.Bitmap(
+                FetchResult.OfBitmap(
                     bitmap = DrawableUtils.convertToBitmap(
                         drawable = drawable,
-                        config = options.imageConfig.toBitmapConfig(),
+                        config = options.bitmapConfig.toAndroidConfig(),
                         scale = options.scale,
                         allowInexactSize = options.allowInexactSize,
                     ),
                 )
             } else if (drawable is BitmapDrawable) {
-                FetchResult.Bitmap(
+                FetchResult.OfBitmap(
                     bitmap = drawable.bitmap,
                 )
             } else {
-                FetchResult.Image(
+                FetchResult.OfImage(
                     image = drawable.toImage(),
                 )
             }
         } else {
             val typedValue = TypedValue()
             val inputStream = resources.openRawResource(resId, typedValue)
-            FetchResult.Source(
+            FetchResult.OfSource(
                 source = inputStream.source().buffer(),
                 extra = extraData {
                     mimeType(mimeType)

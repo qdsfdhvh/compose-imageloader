@@ -14,7 +14,7 @@ import com.seiko.imageloader.util.calculateInSampleSize
 import com.seiko.imageloader.util.computeSizeMultiplier
 import com.seiko.imageloader.util.isRotated
 import com.seiko.imageloader.util.isSwapped
-import com.seiko.imageloader.util.toBitmapConfig
+import com.seiko.imageloader.util.toAndroidConfig
 import com.seiko.imageloader.util.toSoftware
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
@@ -78,14 +78,14 @@ class BitmapFactoryDecoder private constructor(
 
         // Reverse the EXIF transformations to get the original image.
         val bitmap = ExifUtils.reverseTransformations(outBitmap, exifData)
-        return DecodeResult.Bitmap(
+        return DecodeResult.OfBitmap(
             bitmap = bitmap,
         )
     }
 
     /** Compute and set [BitmapFactory.Options.inPreferredConfig]. */
     private fun BitmapFactory.Options.configureConfig(exifData: ExifData) {
-        var config = options.imageConfig.toBitmapConfig()
+        var config = options.bitmapConfig.toAndroidConfig()
 
         // Disable hardware bitmaps if we need to perform EXIF transformations.
         if (exifData.isFlipped || exifData.isRotated) {

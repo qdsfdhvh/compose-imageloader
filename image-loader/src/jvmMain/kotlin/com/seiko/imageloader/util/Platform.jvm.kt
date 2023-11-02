@@ -9,12 +9,6 @@ import okio.source
 
 actual typealias WeakReference<T> = java.lang.ref.WeakReference<T>
 
-actual typealias LockObject = Any
-
-internal actual inline fun <R> synchronized(lock: LockObject, block: () -> R): R {
-    return kotlin.synchronized(lock, block)
-}
-
 internal actual suspend fun ByteReadChannel.source(): BufferedSource {
     return toInputStream().source().buffer()
 }

@@ -1,5 +1,10 @@
 package com.seiko.imageloader.util
 
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.internal.SynchronizedObject
+import kotlinx.coroutines.internal.synchronized
+
+@OptIn(InternalCoroutinesApi::class)
 actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
 
     private var _maxSize = 0
@@ -12,7 +17,7 @@ actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
 
     private val map: LinkedHashMap<K, V>
 
-    private val syncObject = LockObject()
+    private val syncObject = SynchronizedObject()
 
     actual fun size() = synchronized(syncObject) { _size }
 
