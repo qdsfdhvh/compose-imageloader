@@ -24,10 +24,6 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
     val maxImageSize: Int,
     val extra: ExtraData,
 ) {
-
-    @Deprecated("", ReplaceWith("Options(options) {}"))
-    fun newBuilder(block: OptionsBuilder.() -> Unit) = Options(this, block)
-
     companion object {
         internal const val REPEAT_INFINITE = -1
     }

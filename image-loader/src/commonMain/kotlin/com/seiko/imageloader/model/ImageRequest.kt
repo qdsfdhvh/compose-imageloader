@@ -20,10 +20,7 @@ class ImageRequest internal constructor(
     internal val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
-) {
-    @Deprecated("", ReplaceWith("ImageRequest(request) {}"))
-    fun newBuilder(block: ImageRequestBuilder.() -> Unit) = ImageRequest(this, block)
-}
+)
 
 class ImageRequestBuilder internal constructor() {
 

@@ -11,8 +11,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.transformLatest
@@ -25,11 +23,6 @@ interface ImageLoader {
     fun async(requestFlow: Flow<ImageRequest>): Flow<ImageAction>
 
     fun async(request: ImageRequest): Flow<ImageAction> = async(flowOf(request))
-
-    @Deprecated("", ReplaceWith("Use imageloader.async(request).filterIsInstance<ImageResult>().first()"))
-    suspend fun execute(request: ImageRequest): ImageResult {
-        return async(request).filterIsInstance<ImageResult>().first()
-    }
 
     companion object
 }
