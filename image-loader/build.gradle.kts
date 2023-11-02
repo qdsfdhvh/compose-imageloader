@@ -35,11 +35,6 @@ kotlin {
                 implementation(compose.ui)
             }
         }
-        jvmMain {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
-        }
         androidMain {
             dependencies {
                 implementation(libs.kotlinx.coroutines.android)
@@ -71,16 +66,6 @@ kotlin {
                     exclude("org.jetbrains.compose.ui", "ui-test-junit4-desktop")
                     exclude("org.jetbrains.compose.ui", "ui-graphics-desktop")
                 }
-            }
-        }
-        appleMain {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-        }
-        jsMain {
-            dependencies {
-                implementation(libs.ktor.client.js)
             }
         }
         val noJsMain by creating {
