@@ -24,7 +24,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                 nodejs()
             }
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
-            targetHierarchy.custom {
+            applyHierarchyTemplate {
                 common {
                     group("jvm") {
                         withAndroidTarget()
