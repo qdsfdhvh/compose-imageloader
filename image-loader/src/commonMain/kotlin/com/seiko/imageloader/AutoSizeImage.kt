@@ -59,8 +59,8 @@ fun AutoSizeImage(
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
     imageLoader: ImageLoader? = null,
-    placeholderPainter: (@Composable () -> Painter)? = request.placeholderPainter,
-    errorPainter: (@Composable () -> Painter)? = request.errorPainter,
+    placeholderPainter: (@Composable () -> Painter)? = null,
+    errorPainter: (@Composable () -> Painter)? = null,
 ) {
     // same with @Composable Image(painter)
     val semantics = if (contentDescription != null) {

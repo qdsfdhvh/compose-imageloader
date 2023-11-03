@@ -1,8 +1,6 @@
 package com.seiko.imageloader.model
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.ComponentRegistryBuilder
 import com.seiko.imageloader.intercept.Interceptor
@@ -15,8 +13,6 @@ class ImageRequest internal constructor(
     val data: Any,
     val extra: ExtraData,
     val sizeResolver: SizeResolver,
-    val placeholderPainter: (@Composable () -> Painter)?,
-    val errorPainter: (@Composable () -> Painter)?,
     val skipEvent: Boolean,
     internal val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     internal val components: ComponentRegistry?,
@@ -28,8 +24,6 @@ class ImageRequest internal constructor(
             data == other.data &&
             extra == other.extra &&
             sizeResolver == other.sizeResolver &&
-            placeholderPainter == other.placeholderPainter &&
-            errorPainter == other.errorPainter &&
             skipEvent == other.skipEvent &&
             optionsBuilders == other.optionsBuilders &&
             components == other.components &&
@@ -40,8 +34,6 @@ class ImageRequest internal constructor(
         var result = data.hashCode()
         result = 31 * result + extra.hashCode()
         result = 31 * result + sizeResolver.hashCode()
-        result = 31 * result + placeholderPainter.hashCode()
-        result = 31 * result + errorPainter.hashCode()
         result = 31 * result + skipEvent.hashCode()
         result = 31 * result + optionsBuilders.hashCode()
         result = 31 * result + components.hashCode()
@@ -56,8 +48,6 @@ class ImageRequestBuilder internal constructor() {
     private var sizeResolver: SizeResolver = SizeResolver.Unspecified
     private val optionsBuilders: MutableList<OptionsBuilder.() -> Unit> = mutableListOf()
     private var extraData: ExtraData? = null
-    private var placeholderPainter: (@Composable () -> Painter)? = null
-    private var errorPainter: (@Composable () -> Painter)? = null
     private var componentBuilder: ComponentRegistryBuilder? = null
     private var interceptors: MutableList<Interceptor>? = null
     var skipEvent: Boolean = false
@@ -72,8 +62,6 @@ class ImageRequestBuilder internal constructor() {
         }
         optionsBuilders.addAll(request.optionsBuilders)
         extraData = request.extra
-        placeholderPainter = request.placeholderPainter
-        errorPainter = request.errorPainter
         componentBuilder = request.components?.let { ComponentRegistryBuilder(it) }
         interceptors = request.interceptors?.toMutableList()
         skipEvent = request.skipEvent
@@ -113,21 +101,11 @@ class ImageRequestBuilder internal constructor() {
             ?: extraData(builder)
     }
 
-    fun placeholderPainter(loader: @Composable () -> Painter) {
-        placeholderPainter = loader
-    }
-
-    fun errorPainter(loader: @Composable () -> Painter) {
-        errorPainter = loader
-    }
-
     internal fun build() = ImageRequest(
         data = data ?: NullRequestData,
         sizeResolver = sizeResolver,
         optionsBuilders = optionsBuilders,
         extra = extraData ?: EmptyExtraData,
-        placeholderPainter = placeholderPainter,
-        errorPainter = errorPainter,
         skipEvent = skipEvent,
         components = componentBuilder?.build(),
         interceptors = interceptors,
