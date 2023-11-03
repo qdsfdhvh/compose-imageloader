@@ -64,8 +64,6 @@ class ImageRequestTest {
 
     @Test
     fun image_request_other_params_test() {
-        val placeholderPainterFactory = @Composable { EmptyPainter }
-        val errorPainterFactory = @Composable { EmptyPainter }
         val mapperFactory = Mapper { _, _ -> }
         val keyerFactory = Keyer { _, _, _ -> null }
         val fetcherFactory = Fetcher.Factory { _, _ ->
@@ -78,8 +76,6 @@ class ImageRequestTest {
             extra {
                 put("a", "aaa")
             }
-            placeholderPainter(placeholderPainterFactory)
-            errorPainter(errorPainterFactory)
             skipEvent = true
             components {
                 add(mapperFactory)
@@ -89,8 +85,6 @@ class ImageRequestTest {
             }
         }
         assertEquals(request.extra["a"], "aaa")
-        assertEquals(request.placeholderPainter, placeholderPainterFactory)
-        assertEquals(request.errorPainter, errorPainterFactory)
         assertEquals(request.skipEvent, true)
         assertNotNull(request.components)
         assertEquals(request.components.mappers.first(), mapperFactory)
