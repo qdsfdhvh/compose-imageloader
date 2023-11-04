@@ -1,8 +1,6 @@
 package com.seiko.imageloader.model
 
-import androidx.compose.runtime.Composable
 import com.seiko.imageloader.BitmapConfig
-import com.seiko.imageloader.EmptyPainter
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.component.decoder.Decoder
 import com.seiko.imageloader.component.fetcher.Fetcher

@@ -6,9 +6,7 @@ import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
@@ -42,8 +40,6 @@ import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.AsyncSizeResolver
-import com.seiko.imageloader.option.SizeResolver
-import com.seiko.imageloader.option.toScale
 import com.seiko.imageloader.util.AnimationPainter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -72,7 +68,7 @@ fun AutoSizeImage(
         Modifier
     }
     Layout(
-        modifier.then(semantics).clipToBounds().autoSizeNode(
+        modifier.then(semantics).clipToBounds().autoSizeImageNode(
             request = request,
             alignment = alignment,
             contentScale = contentScale,
@@ -87,7 +83,7 @@ fun AutoSizeImage(
     }
 }
 
-private fun Modifier.autoSizeNode(
+private fun Modifier.autoSizeImageNode(
     request: ImageRequest,
     alignment: Alignment,
     contentScale: ContentScale,
@@ -117,6 +113,7 @@ private data class AutoSizeImageNodeElement(
     private val placeholderPainter: Painter?,
     private val errorPainter: Painter?,
 ) : ModifierNodeElement<AutoSizeImageNode>() {
+
     override fun create(): AutoSizeImageNode {
         return AutoSizeImageNode(
             request = request,
@@ -167,8 +164,6 @@ private class AutoSizeImageNode(
     private var errorPainter: Painter?,
 ) : Modifier.Node(), LayoutModifierNode, DrawModifierNode, CompositionLocalConsumerModifierNode {
 
-    private var request: ImageRequest = modifyRequest(request)
-
     private var currentImageJob: Job? = null
     private var currentPlayerJob: Job? = null
 
@@ -180,6 +175,8 @@ private class AutoSizeImageNode(
     private var hasFixedSize: Boolean = false
     private var isReset: Boolean = false
 
+    private var request: ImageRequest = modifyRequest(request, cachedSize)
+
     override val shouldAutoInvalidate: Boolean
         get() = false
 
@@ -189,17 +186,13 @@ private class AutoSizeImageNode(
         launchImage()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        clear()
-    }
-
     override fun onReset() {
         super.onReset()
         isReset = true
     }
 
-    private fun clear() {
+    override fun onDetach() {
+        super.onDetach()
         // if this node is reset from pool, not need to reset size
         if (!isReset) {
             hasFixedSize = false
@@ -218,7 +211,7 @@ private class AutoSizeImageNode(
         placeholderPainter: Painter?,
         errorPainter: Painter?,
     ) {
-        val finalRequest = modifyRequest(request)
+        val finalRequest = modifyRequest(request, cachedSize)
         val isRequestChange = this.request != finalRequest
 
         this.request = finalRequest
@@ -232,21 +225,6 @@ private class AutoSizeImageNode(
 
         if (isAttached && isRequestChange) {
             launchImage()
-        }
-    }
-
-    private fun modifyRequest(request: ImageRequest): ImageRequest {
-        return if (request.sizeResolver == SizeResolver.Unspecified) {
-            ImageRequest(request) {
-                if (cachedSize.isSpecified && !cachedSize.isEmpty()) {
-                    size(SizeResolver(cachedSize))
-                } else {
-                    size(AsyncSizeResolver())
-                }
-                scale(contentScale.toScale())
-            }
-        } else {
-            request
         }
     }
 
@@ -380,11 +358,6 @@ private class AutoSizeImageNode(
             scaledSize,
         )
     }
-
-    private data class CachedPositionAndSize(
-        val position: Offset,
-        val size: Size,
-    )
 
     override fun equals(other: Any?): Boolean {
         return (other is AutoSizeImageNode) &&
