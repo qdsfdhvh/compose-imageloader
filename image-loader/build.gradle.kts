@@ -90,6 +90,13 @@ kotlin {
             kotlin.srcDir("src/$name/singleton")
         }
     }
+    targets.all {
+        compilations.all {
+            compilerOptions.configure {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+        }
+    }
 }
 
 @Suppress("UnstableApiUsage")
