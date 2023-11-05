@@ -1,4 +1,4 @@
-package com.seiko.imageloader.compose
+package com.seiko.imageloader.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver

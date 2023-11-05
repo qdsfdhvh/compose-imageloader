@@ -1,4 +1,4 @@
-package com.seiko.imageloader.compose
+package com.seiko.imageloader.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.layout.Measurable
@@ -201,3 +202,8 @@ internal fun modifyRequest(
         request
     }
 }
+
+internal data class CachedPositionAndSize(
+    val position: Offset,
+    val size: Size,
+)
