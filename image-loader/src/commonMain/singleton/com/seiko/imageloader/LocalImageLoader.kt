@@ -3,14 +3,12 @@ package com.seiko.imageloader
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.staticCompositionLocalOf
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.intercept.InterceptorsBuilder
 import com.seiko.imageloader.model.ImageResult
 
-// TODO need to update
-val LocalImageLoader = staticCompositionLocalOf<ImageLoader> { error("please provide ImageLoader first.") }
+val LocalImageLoader = createImageLoaderProvidableCompositionLocal()
 
 // maybe it's no longer needed here
 expect class ImageLoaderProvidableCompositionLocal {
