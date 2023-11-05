@@ -19,7 +19,6 @@ kotlin {
             }
         }
         commonMain {
-            kotlin.srcDir("src/$name/compose")
             dependencies {
                 api(compose.foundation)
                 api(compose.ui)

@@ -1,4 +1,4 @@
-package com.seiko.imageloader
+package com.seiko.imageloader.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
@@ -36,10 +36,13 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.toOffset
+import com.seiko.imageloader.ImageLoader
+import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.AsyncSizeResolver
+import com.seiko.imageloader.toPainter
 import com.seiko.imageloader.util.AnimationPainter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -54,9 +57,10 @@ fun AutoSizeImage(
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
-    imageLoader: ImageLoader? = null,
+    imageLoader: ImageLoader = LocalImageLoader.current,
     placeholderPainter: (@Composable () -> Painter)? = null,
     errorPainter: (@Composable () -> Painter)? = null,
+    isOnlyPostFirstEvent: Boolean = true,
 ) {
     // same with @Composable Image(painter)
     val semantics = if (contentDescription != null) {
@@ -77,6 +81,7 @@ fun AutoSizeImage(
             imageLoader = imageLoader,
             placeholderPainter = placeholderPainter?.invoke(),
             errorPainter = errorPainter?.invoke(),
+            isOnlyPostFirstEvent = isOnlyPostFirstEvent,
         ),
     ) { _, constraints ->
         layout(constraints.minWidth, constraints.minHeight) {}
@@ -89,9 +94,10 @@ private fun Modifier.autoSizeImageNode(
     contentScale: ContentScale,
     alpha: Float,
     colorFilter: ColorFilter?,
-    imageLoader: ImageLoader?,
+    imageLoader: ImageLoader,
     placeholderPainter: Painter?,
     errorPainter: Painter?,
+    isOnlyPostFirstEvent: Boolean,
 ): Modifier = this then AutoSizeImageNodeElement(
     request = request,
     alignment = alignment,
@@ -101,6 +107,7 @@ private fun Modifier.autoSizeImageNode(
     imageLoader = imageLoader,
     placeholderPainter = placeholderPainter,
     errorPainter = errorPainter,
+    isOnlyPostFirstEvent = isOnlyPostFirstEvent,
 )
 
 private data class AutoSizeImageNodeElement(
@@ -109,9 +116,10 @@ private data class AutoSizeImageNodeElement(
     private val contentScale: ContentScale,
     private val alpha: Float,
     private val colorFilter: ColorFilter?,
-    private val imageLoader: ImageLoader?,
+    private val imageLoader: ImageLoader,
     private val placeholderPainter: Painter?,
     private val errorPainter: Painter?,
+    private val isOnlyPostFirstEvent: Boolean,
 ) : ModifierNodeElement<AutoSizeImageNode>() {
 
     override fun create(): AutoSizeImageNode {
@@ -137,6 +145,7 @@ private data class AutoSizeImageNodeElement(
             imageLoader = imageLoader,
             placeholderPainter = placeholderPainter,
             errorPainter = errorPainter,
+            isOnlyPostFirstEvent = isOnlyPostFirstEvent,
         )
     }
 
@@ -147,7 +156,7 @@ private data class AutoSizeImageNodeElement(
         properties["contentScale"] = contentScale
         properties["alpha"] = alpha
         properties["colorFilter"] = colorFilter
-        properties["imageLoader"] = imageLoader ?: "Default"
+        properties["imageLoader"] = imageLoader
         properties["placeholderPainter"] = placeholderPainter
         properties["errorPainter"] = errorPainter
     }
@@ -159,7 +168,7 @@ private class AutoSizeImageNode(
     private var contentScale: ContentScale,
     private var alpha: Float,
     private var colorFilter: ColorFilter?,
-    private var imageLoader: ImageLoader?,
+    private var imageLoader: ImageLoader,
     private var placeholderPainter: Painter?,
     private var errorPainter: Painter?,
 ) : Modifier.Node(), LayoutModifierNode, DrawModifierNode, CompositionLocalConsumerModifierNode {
@@ -207,11 +216,16 @@ private class AutoSizeImageNode(
         contentScale: ContentScale,
         alpha: Float,
         colorFilter: ColorFilter?,
-        imageLoader: ImageLoader?,
+        imageLoader: ImageLoader,
         placeholderPainter: Painter?,
         errorPainter: Painter?,
+        isOnlyPostFirstEvent: Boolean,
     ) {
-        val finalRequest = modifyRequest(request, cachedSize)
+        val finalRequest = modifyRequest(
+            request = request,
+            cachedSize = cachedSize,
+            skipEvent = isOnlyPostFirstEvent,
+        )
         val isRequestChange = this.request != finalRequest
 
         this.request = finalRequest
@@ -229,7 +243,6 @@ private class AutoSizeImageNode(
     }
 
     private fun launchImage() {
-        val imageLoader = imageLoader ?: currentValueOf(LocalImageLoader)
         currentImageJob?.cancel()
         currentImageJob = coroutineScope.launch {
             imageLoader.async(request).collect { action ->

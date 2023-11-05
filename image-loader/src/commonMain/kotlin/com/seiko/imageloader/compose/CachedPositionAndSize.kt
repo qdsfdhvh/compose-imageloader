@@ -1,4 +1,4 @@
-package com.seiko.imageloader
+package com.seiko.imageloader.compose
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size

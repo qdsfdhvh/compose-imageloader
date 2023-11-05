@@ -1,4 +1,4 @@
-package com.seiko.imageloader
+package com.seiko.imageloader.compose
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -18,6 +18,8 @@ import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Constraints
+import com.seiko.imageloader.ImageLoader
+import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
@@ -33,6 +35,7 @@ fun AutoSizeBox(
     imageLoader: ImageLoader = LocalImageLoader.current,
     contentAlignment: Alignment = Alignment.Center,
     propagateMinConstraints: Boolean = false,
+    isOnlyPostFirstEvent: Boolean = true,
     content: @Composable BoxScope.(ImageAction) -> Unit,
 ) {
     var action by remember {
@@ -43,6 +46,7 @@ fun AutoSizeBox(
             request = request,
             imageLoader = imageLoader,
             onImageActionChange = { action = it },
+            isOnlyPostFirstEvent = isOnlyPostFirstEvent,
         ),
         contentAlignment = contentAlignment,
         propagateMinConstraints = propagateMinConstraints,
@@ -55,16 +59,19 @@ private fun Modifier.autoSizeBoxNode(
     request: ImageRequest,
     imageLoader: ImageLoader,
     onImageActionChange: (ImageAction) -> Unit,
+    isOnlyPostFirstEvent: Boolean,
 ): Modifier = this then AutoSizeBoxNodeElement(
     request = request,
     imageLoader = imageLoader,
     onImageActionChange = onImageActionChange,
+    isOnlyPostFirstEvent = isOnlyPostFirstEvent,
 )
 
 private data class AutoSizeBoxNodeElement(
     val request: ImageRequest,
     val imageLoader: ImageLoader,
     val onImageActionChange: (ImageAction) -> Unit,
+    val isOnlyPostFirstEvent: Boolean,
 ) : ModifierNodeElement<AutoSizeBoxNode>() {
 
     override fun create(): AutoSizeBoxNode {
@@ -80,6 +87,7 @@ private data class AutoSizeBoxNodeElement(
             request = request,
             imageLoader = imageLoader,
             onImageActionChange = onImageActionChange,
+            isOnlyPostFirstEvent = isOnlyPostFirstEvent,
         )
     }
 
@@ -130,11 +138,16 @@ private class AutoSizeBoxNode(
         request: ImageRequest,
         imageLoader: ImageLoader,
         onImageActionChange: (ImageAction) -> Unit,
+        isOnlyPostFirstEvent: Boolean,
     ) {
-        val finalRequest = modifyRequest(request, cachedSize)
+        val finalRequest = modifyRequest(
+            request = request,
+            cachedSize = cachedSize,
+            skipEvent = isOnlyPostFirstEvent,
+        )
         val isRequestChange = this.request != finalRequest
 
-        this.request = request
+        this.request = finalRequest
         this.imageLoader = imageLoader
         this.onImageActionChange = onImageActionChange
 
@@ -173,6 +186,7 @@ private class AutoSizeBoxNode(
 internal fun modifyRequest(
     request: ImageRequest,
     cachedSize: Size,
+    skipEvent: Boolean = false,
 ): ImageRequest {
     return if (request.sizeResolver == SizeResolver.Unspecified) {
         ImageRequest(request) {
@@ -181,6 +195,7 @@ internal fun modifyRequest(
             } else {
                 size(AsyncSizeResolver())
             }
+            this.skipEvent = skipEvent
         }
     } else {
         request

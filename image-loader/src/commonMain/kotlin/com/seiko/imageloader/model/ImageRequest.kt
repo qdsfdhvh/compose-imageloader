@@ -40,6 +40,17 @@ class ImageRequest internal constructor(
         result = 31 * result + interceptors.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "ImageRequest(" +
+            "data=${data}," +
+            "extra=${extra}," +
+            "sizeResolver=${sizeResolver}," +
+            "skipEvent=${skipEvent}," +
+            "optionsBuilders=${optionsBuilders}," +
+            "components=${components}," +
+            "interceptors=${interceptors})"
+    }
 }
 
 class ImageRequestBuilder internal constructor() {
