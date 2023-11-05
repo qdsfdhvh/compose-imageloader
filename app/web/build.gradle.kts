@@ -18,7 +18,7 @@ kotlin {
                 implementation(libs.moko.resources)
             }
         }
-        getByName("jsMain") {
+        jsMain {
             // https://github.com/icerockdev/moko-resources/issues/531
             dependsOn(commonMain.get())
         }
