@@ -9,21 +9,17 @@ import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.ioDispatcher
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.transformLatest
 import kotlin.coroutines.CoroutineContext
 
 @Immutable
 interface ImageLoader {
     val config: ImageLoaderConfig
 
-    fun async(requestFlow: Flow<ImageRequest>): Flow<ImageAction>
-
-    fun async(request: ImageRequest): Flow<ImageAction> = async(flowOf(request))
+    fun async(request: ImageRequest): Flow<ImageAction>
 
     companion object
 }
@@ -41,26 +37,24 @@ private class RealImageLoader(
     private val requestCoroutineContext: CoroutineContext,
     override val config: ImageLoaderConfig,
 ) : ImageLoader {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun async(requestFlow: Flow<ImageRequest>) = requestFlow
-        .transformLatest { request ->
-            if (!request.skipEvent) {
-                emit(ImageEvent.Start)
-            }
-            val initialSize = request.sizeResolver.size()
-            val options = Options(config.defaultOptions) {
-                size = initialSize
-            }
-            val chain = InterceptorChainImpl(
-                initialRequest = request,
-                initialOptions = options,
-                config = config,
-                flowCollector = this,
-            )
-            emit(chain.proceed(request))
-        }.catch {
-            if (it !is CancellationException) {
-                emit(ImageResult.OfError(it))
-            }
-        }.flowOn(requestCoroutineContext)
+    override fun async(request: ImageRequest) = flow {
+        if (!request.skipEvent) {
+            emit(ImageEvent.Start)
+        }
+        val initialSize = request.sizeResolver.size()
+        val options = Options(config.defaultOptions) {
+            size = initialSize
+        }
+        val chain = InterceptorChainImpl(
+            initialRequest = request,
+            initialOptions = options,
+            config = config,
+            flowCollector = this,
+        )
+        emit(chain.proceed(request))
+    }.catch {
+        if (it !is CancellationException) {
+            emit(ImageResult.OfError(it))
+        }
+    }.flowOn(requestCoroutineContext)
 }
