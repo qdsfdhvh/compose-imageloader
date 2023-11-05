@@ -9,9 +9,9 @@ import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -67,8 +67,7 @@ class ImageLoaderTest {
             emit(ImageRequest("2"))
             emit(ImageRequest("3") { skipEvent = true })
         }
-        @OptIn(ExperimentalCoroutinesApi::class)
-        requestFlow.flatMapLatest { imageLoader.async(it) }.test {
+        requestFlow.transform { emitAll(imageLoader.async(it)) }.test {
             // 1
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
