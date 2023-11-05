@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import com.seiko.imageloader.ui.AutoSizeBox
 import com.seiko.imageloader.demo.model.Image
 import com.seiko.imageloader.demo.util.NullDataInterceptor
 import com.seiko.imageloader.demo.util.decodeJson
@@ -32,6 +31,7 @@ import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageRequestBuilder
 import com.seiko.imageloader.rememberImageSuccessPainter
+import com.seiko.imageloader.ui.AutoSizeBox
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
