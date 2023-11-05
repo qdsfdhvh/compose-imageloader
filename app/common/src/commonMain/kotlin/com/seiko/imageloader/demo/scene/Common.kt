@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -25,15 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import com.seiko.imageloader.compose.AutoSizeBox
 import com.seiko.imageloader.demo.model.Image
 import com.seiko.imageloader.demo.util.NullDataInterceptor
 import com.seiko.imageloader.demo.util.decodeJson
-import com.seiko.imageloader.model.ImageEvent
+import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageRequestBuilder
-import com.seiko.imageloader.model.ImageResult
-import com.seiko.imageloader.rememberImageAction
-import com.seiko.imageloader.rememberImageActionPainter
+import com.seiko.imageloader.rememberImageSuccessPainter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -77,7 +75,7 @@ fun ImageItem(
     Box(modifier, Alignment.Center) {
         val dataState by rememberUpdatedState(data)
         val blockState by rememberUpdatedState(block)
-        val requestState = remember {
+        val request by remember {
             derivedStateOf {
                 ImageRequest {
                     data(dataState)
@@ -92,27 +90,27 @@ fun ImageItem(
                 }
             }
         }
-        val action by rememberImageAction(requestState)
-        val painter = rememberImageActionPainter(action)
-        Image(
-            painter = painter,
-            contentDescription = null,
-            contentScale = contentScale,
-            modifier = Modifier.fillMaxSize(),
-        )
-        when (val current = action) {
-            is ImageEvent.StartWithDisk,
-            is ImageEvent.StartWithFetch,
-            -> {
-                CircularProgressIndicator()
+
+        AutoSizeBox(
+            request,
+            Modifier.matchParentSize(),
+        ) { action ->
+            when (action) {
+                is ImageAction.Loading -> {
+                    CircularProgressIndicator()
+                }
+                is ImageAction.Success -> {
+                    Image(
+                        rememberImageSuccessPainter(action),
+                        contentDescription = "image",
+                        contentScale = contentScale,
+                        modifier = Modifier.matchParentSize(),
+                    )
+                }
+                is ImageAction.Failure -> {
+                    Text(action.error.message ?: "Error")
+                }
             }
-            is ImageResult.OfSource -> {
-                Text("image result is source")
-            }
-            is ImageResult.OfError -> {
-                Text(current.error.message ?: "Error")
-            }
-            else -> Unit
         }
     }
 }
