@@ -1,5 +1,6 @@
 package com.seiko.imageloader.option
 
+import androidx.compose.ui.geometry.Size
 import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.Poko
 import com.seiko.imageloader.cache.CachePolicy
@@ -15,8 +16,8 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,
     val bitmapConfig: BitmapConfig,
+    val size: Size,
     val scale: Scale,
-    val sizeResolver: SizeResolver,
     val memoryCachePolicy: CachePolicy,
     val diskCachePolicy: CachePolicy,
     val playAnimate: Boolean,
@@ -35,8 +36,8 @@ class OptionsBuilder internal constructor() {
     var premultipliedAlpha: Boolean = true
     var retryIfDiskDecodeError: Boolean = true
     var bitmapConfig: BitmapConfig = BitmapConfig.Default
+    var size: Size = Size.Unspecified
     var scale: Scale = Scale.FILL
-    var sizeResolver: SizeResolver = SizeResolver.Unspecified
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED
     var playAnimate: Boolean = true
@@ -58,8 +59,8 @@ class OptionsBuilder internal constructor() {
         premultipliedAlpha = options.premultipliedAlpha
         retryIfDiskDecodeError = options.retryIfDiskDecodeError
         bitmapConfig = options.bitmapConfig
+        size = options.size
         scale = options.scale
-        sizeResolver = options.sizeResolver
         memoryCachePolicy = options.memoryCachePolicy
         diskCachePolicy = options.diskCachePolicy
         playAnimate = options.playAnimate
@@ -86,8 +87,8 @@ class OptionsBuilder internal constructor() {
         premultipliedAlpha = premultipliedAlpha,
         retryIfDiskDecodeError = retryIfDiskDecodeError,
         bitmapConfig = bitmapConfig,
+        size = size,
         scale = scale,
-        sizeResolver = sizeResolver,
         memoryCachePolicy = memoryCachePolicy,
         diskCachePolicy = diskCachePolicy,
         playAnimate = playAnimate,

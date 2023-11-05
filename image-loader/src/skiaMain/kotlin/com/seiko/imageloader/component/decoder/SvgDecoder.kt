@@ -20,11 +20,8 @@ class SvgDecoder private constructor(
         val data = source.use {
             Data.makeFromBytes(it.readByteArray())
         }
-        val requestSize = options.sizeResolver.run {
-            density.size()
-        }
         return DecodeResult.OfPainter(
-            painter = SVGPainter(SVGDOM(data), density, requestSize),
+            painter = SVGPainter(SVGDOM(data), density, options.size),
         )
     }
 

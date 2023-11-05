@@ -58,6 +58,25 @@ fun Content() {
     CompositionLocalProvider(
         LocalImageLoader provides remember { generateImageLoader() },
     ) {
+        // Option 1 on 1.7.0+
+        AutoSizeImage(
+            "https://...",
+            contentDescription = "image",
+        )
+        // Option 2 on 1.7.0+
+        AutoSizeBox("https://...") { action ->
+            when (action) {
+                is ImageAction.Success -> {
+                    Image(
+                        rememberImageSuccessPainter(action),
+                        contentDescription = "image",
+                    )
+                }
+                is ImageAction.Loading -> {}
+                is ImageAction.Failure -> {}
+            }
+        }
+        // Option 3
         val painter = rememberImagePainter("https://..")
         Image(
             painter = painter,
@@ -67,9 +86,13 @@ fun Content() {
 }
 ```
 
+Use priority: `AutoSizeImage` -> `AutoSizeBox` -> `rememberImagePainter`.
+
+`AutoSizeBox` & `AutoSizeImage` are based on **Modifier.Node**, `AutoSizeImage` ≈ `AutoSizeBox` + `Painter`.
+
 #### in Android
 
-```kotlin title="MainActivity.kt"
+```kotlin
 fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         options {
@@ -96,7 +119,7 @@ fun generateImageLoader(): ImageLoader {
 
 #### in Jvm
 
-```kotlin title="Main.kt"
+```kotlin
 fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         components {

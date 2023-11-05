@@ -17,11 +17,13 @@ internal class InterceptorChainImpl(
 
     constructor(
         initialRequest: ImageRequest,
+        initialOptions: Options,
         config: ImageLoaderConfig,
         flowCollector: FlowCollector<ImageAction>,
     ) : this(
         helper = InterceptorChainHelper(
             initialImageRequest = initialRequest,
+            initialOptions = initialOptions,
             config = config,
             flowCollector = flowCollector,
         ),
@@ -36,7 +38,7 @@ internal class InterceptorChainImpl(
     )
 
     override suspend fun proceed(request: ImageRequest): ImageResult {
-        val interceptor = helper.getInterceptor(index)
+        val interceptor = helper.interceptors[index]
         val chain = copy(index = index + 1, request = request)
         return interceptor.intercept(chain)
     }

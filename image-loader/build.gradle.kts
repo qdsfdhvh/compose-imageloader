@@ -20,6 +20,7 @@ kotlin {
         }
         commonMain {
             dependencies {
+                api(compose.foundation)
                 api(compose.ui)
                 api(libs.kotlinx.coroutines.core)
                 api(libs.okio)

@@ -69,8 +69,8 @@ fun rememberImagePainter(
     request: ImageRequest,
     imageLoader: ImageLoader = LocalImageLoader.current,
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
-    placeholderPainter: (@Composable () -> Painter)? = request.placeholderPainter,
-    errorPainter: (@Composable () -> Painter)? = request.errorPainter,
+    placeholderPainter: (@Composable () -> Painter)? = null,
+    errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     val action by rememberImageAction(request, imageLoader)
     return rememberImageActionPainter(

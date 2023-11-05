@@ -21,7 +21,7 @@ internal class GifPainter(
     private val durations = codec.framesInfo.map { it.duration }
     private val totalDuration = durations.sum()
 
-    private var startTime = -1L
+    private var startTimeMillis = -1L
     private var frame by mutableStateOf(0)
     private var loopIteration = -1
 
@@ -52,14 +52,20 @@ internal class GifPainter(
     }
 
     override fun isPlay(): Boolean {
-        return totalDuration > 0 && (repeatCount == Options.REPEAT_INFINITE || loopIteration++ < repeatCount)
+        return totalDuration > 0 && (repeatCount == Options.REPEAT_INFINITE || repeatCount > 0)
+    }
+
+    override fun nextPlay(): Boolean {
+        return totalDuration > 0 && (repeatCount == Options.REPEAT_INFINITE || loopIteration < repeatCount)
     }
 
     override fun update(frameTimeMillis: Long) {
-        if (startTime == -1L) {
-            startTime = frameTimeMillis
+        if (startTimeMillis == -1L) {
+            startTimeMillis = frameTimeMillis
         }
-        frame = frameOf(time = (frameTimeMillis - startTime) % totalDuration)
+        val playTimeMillis = frameTimeMillis - startTimeMillis
+        frame = frameOf(time = playTimeMillis % totalDuration)
+        loopIteration = (playTimeMillis / totalDuration).toInt()
     }
 
     // WARNING: it is not optimal
@@ -87,7 +93,7 @@ internal class GifPainter(
     }
 
     private fun clear() {
-        startTime = -1
+        startTimeMillis = -1
         frame = 0
         loopIteration = -1
         bitmapCache?.close()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
+import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
@@ -118,7 +119,15 @@ class BitmapFactoryDecoder private constructor(
         // EXIF transformations (but before sampling).
         val srcWidth = if (exifData.isSwapped) outHeight else outWidth
         val srcHeight = if (exifData.isSwapped) outWidth else outHeight
-        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, options.maxImageSize)
+
+        val maxImageSize = if (options.size.isSpecified && !options.size.isEmpty()) {
+            minOf(options.size.width, options.size.height).toInt()
+                .coerceAtMost(options.maxImageSize)
+        } else {
+            options.maxImageSize
+        }
+        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, maxImageSize)
+
         // Calculate the image's sample size.
         inSampleSize = calculateInSampleSize(
             srcWidth = srcWidth,
