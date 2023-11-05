@@ -11,9 +11,27 @@
 ```kotlin
 @Composeable
 fun Content() {
-    val painter = rememberImagePainter("https://...")
+    // Option 1 on 1.7.0+
+    AutoSizeImage(
+        "https://...",
+        contentDescription = "image",
+    )
+    // Option 2 on 1.7.0+
+    AutoSizeBox("https://...") { action ->
+        when (action) {
+            is ImageAction.Success -> {
+                Image(
+                    rememberImageSuccessPainter(action),
+                    contentDescription = "image",
+                )
+            }
+            is ImageAction.Loading -> {}
+            is ImageAction.Failure -> {}
+        }
+    }
+    // Option 3
     Image(
-        painter = painter,
+        painter = rememberImagePainter("https://.."),
         contentDescription = "image",
     )
 }
