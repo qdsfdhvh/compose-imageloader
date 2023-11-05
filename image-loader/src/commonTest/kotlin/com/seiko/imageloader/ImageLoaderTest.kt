@@ -9,7 +9,9 @@ import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -30,10 +32,10 @@ class ImageLoaderTest {
         resultPainter3 = ColorPainter(Color.Blue)
         imageLoader = ImageLoader {
             components {
-                add { data, _ ->
-                    object : Fetcher {
-                        override suspend fun fetch(): FetchResult {
-                            return FetchResult.Painter(
+                add(
+                    Fetcher.Factory { data, _ ->
+                        Fetcher {
+                            FetchResult.OfPainter(
                                 when (data) {
                                     "1" -> resultPainter1
                                     "2" -> resultPainter2
@@ -41,8 +43,8 @@ class ImageLoaderTest {
                                 },
                             )
                         }
-                    }
-                }
+                    },
+                )
             }
         }
     }
@@ -53,7 +55,7 @@ class ImageLoaderTest {
         imageLoader.async(request).test {
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.Painter(resultPainter1), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter1), awaitItem())
             awaitComplete()
         }
     }
@@ -65,17 +67,17 @@ class ImageLoaderTest {
             emit(ImageRequest("2"))
             emit(ImageRequest("3") { skipEvent = true })
         }
-        imageLoader.async(requestFlow).test {
+        requestFlow.transform { emitAll(imageLoader.async(it)) }.test {
             // 1
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.Painter(resultPainter1), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter1), awaitItem())
             // 2
             assertEquals(ImageEvent.Start, awaitItem())
             assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.Painter(resultPainter2), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter2), awaitItem())
             // 3
-            assertEquals(ImageResult.Painter(resultPainter3), awaitItem())
+            assertEquals(ImageResult.OfPainter(resultPainter3), awaitItem())
             awaitComplete()
         }
     }

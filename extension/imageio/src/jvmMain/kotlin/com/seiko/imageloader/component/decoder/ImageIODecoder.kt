@@ -15,13 +15,13 @@ class ImageIODecoder(
         val image = runInterruptible {
             ImageIO.read(source.inputStream())
         }
-        return DecodeResult.Painter(
+        return DecodeResult.OfPainter(
             painter = image.toPainter(),
         )
     }
 
     class Factory : Decoder.Factory {
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (isGif(source.source)) return null
             return ImageIODecoder(source.source)
         }

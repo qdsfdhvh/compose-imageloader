@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.keyer
 
+import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
@@ -23,8 +24,8 @@ class KtorUrlKeyer : Keyer {
             if (!options.premultipliedAlpha) {
                 append("-premultipliedAlpha")
             }
-            if (options.imageConfig != Options.ImageConfig.ARGB_8888) {
-                append("-imageConfig=${options.imageConfig}")
+            if (options.bitmapConfig != BitmapConfig.Default) {
+                append("-imageConfig=${options.bitmapConfig}")
             }
             if (options.scale != Scale.FILL) {
                 append("-scale=fit")

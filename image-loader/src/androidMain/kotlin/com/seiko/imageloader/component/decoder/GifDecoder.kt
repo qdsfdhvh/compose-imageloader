@@ -10,7 +10,7 @@ import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.MovieDrawable
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
-import com.seiko.imageloader.util.toBitmapConfig
+import com.seiko.imageloader.util.toAndroidConfig
 import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import okio.buffer
@@ -40,7 +40,7 @@ class GifDecoder private constructor(
         val movie: Movie? = bufferedSource.use { Movie.decodeStream(it.inputStream()) }
         check(movie != null && movie.width() > 0 && movie.height() > 0) { "Failed to decode GIF." }
 
-        val config = options.imageConfig.toBitmapConfig()
+        val config = options.bitmapConfig.toAndroidConfig()
         val movieConfig = when {
             // movie.isOpaque && options.allowRgb565 -> Bitmap.Config.RGB_565
             config.isHardware -> Bitmap.Config.ARGB_8888
@@ -64,7 +64,7 @@ class GifDecoder private constructor(
         // Set the animated transformation to be applied on each frame.
         // drawable.setAnimatedTransformation(options.parameters.animatedTransformation())
 
-        DecodeResult.Image(
+        DecodeResult.OfImage(
             image = drawable.toImage(),
         )
     }
@@ -72,7 +72,7 @@ class GifDecoder private constructor(
     class Factory @JvmOverloads constructor(
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!options.playAnimate) return null
             if (!isGif(source.source)) return null
             return GifDecoder(source, options, enforceMinimumFrameDelay)

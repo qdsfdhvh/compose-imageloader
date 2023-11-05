@@ -20,18 +20,15 @@ class SvgDecoder private constructor(
         val data = source.use {
             Data.makeFromBytes(it.readByteArray())
         }
-        val requestSize = options.sizeResolver.run {
-            density.size()
-        }
-        return DecodeResult.Painter(
-            painter = SVGPainter(SVGDOM(data), density, requestSize),
+        return DecodeResult.OfPainter(
+            painter = SVGPainter(SVGDOM(data), density, options.size),
         )
     }
 
     class Factory(
         private val density: Density,
     ) : Decoder.Factory {
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
             return SvgDecoder(
                 source = source.source,

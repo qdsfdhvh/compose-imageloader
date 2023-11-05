@@ -20,11 +20,8 @@ class SvgDecoder private constructor(
 
     override suspend fun decode(): DecodeResult {
         val svg = SVG.getFromInputStream(source.source.inputStream())
-        val requestSize = options.sizeResolver.run {
-            density.size()
-        }
-        return DecodeResult.Painter(
-            painter = SVGPainter(svg, density, requestSize),
+        return DecodeResult.OfPainter(
+            painter = SVGPainter(svg, density, options.size),
         )
     }
 
@@ -32,7 +29,7 @@ class SvgDecoder private constructor(
         private val density: Density? = null,
     ) : Decoder.Factory {
 
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
             return SvgDecoder(
                 source = source,

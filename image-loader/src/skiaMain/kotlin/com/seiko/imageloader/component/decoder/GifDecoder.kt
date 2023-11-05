@@ -16,7 +16,7 @@ class GifDecoder private constructor(
         val codec = source.use {
             Codec.makeFromData(Data.makeFromBytes(it.readByteArray()))
         }
-        return DecodeResult.Painter(
+        return DecodeResult.OfPainter(
             painter = GifPainter(
                 codec = codec,
                 repeatCount = options.repeatCount,
@@ -25,7 +25,7 @@ class GifDecoder private constructor(
     }
 
     class Factory : Decoder.Factory {
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!options.playAnimate) return null
             if (!isGif(source.source)) return null
             return GifDecoder(source.source, options)

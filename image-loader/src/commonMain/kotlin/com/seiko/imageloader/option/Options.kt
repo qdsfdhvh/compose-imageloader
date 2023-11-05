@@ -1,10 +1,13 @@
 package com.seiko.imageloader.option
 
+import androidx.compose.ui.geometry.Size
+import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.Poko
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
 import com.seiko.imageloader.model.ExtraDataBuilder
+import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
 
@@ -12,9 +15,9 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,
-    val imageConfig: ImageConfig,
+    val bitmapConfig: BitmapConfig,
+    val size: Size,
     val scale: Scale,
-    val sizeResolver: SizeResolver,
     val memoryCachePolicy: CachePolicy,
     val diskCachePolicy: CachePolicy,
     val playAnimate: Boolean,
@@ -22,17 +25,6 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
     val maxImageSize: Int,
     val extra: ExtraData,
 ) {
-
-    @Deprecated("", ReplaceWith("Options(options) {}"))
-    fun newBuilder(block: OptionsBuilder.() -> Unit) = Options(this, block)
-
-    enum class ImageConfig {
-        ALPHA_8,
-        ARGB_8888,
-        RGBA_F16,
-        HARDWARE,
-    }
-
     companion object {
         internal const val REPEAT_INFINITE = -1
     }
@@ -43,9 +35,9 @@ class OptionsBuilder internal constructor() {
     var allowInexactSize: Boolean = false
     var premultipliedAlpha: Boolean = true
     var retryIfDiskDecodeError: Boolean = true
-    var imageConfig: Options.ImageConfig = Options.ImageConfig.ARGB_8888
+    var bitmapConfig: BitmapConfig = BitmapConfig.Default
+    var size: Size = Size.Unspecified
     var scale: Scale = Scale.FILL
-    var sizeResolver: SizeResolver = SizeResolver.Unspecified
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED
     var playAnimate: Boolean = true
@@ -66,9 +58,9 @@ class OptionsBuilder internal constructor() {
         allowInexactSize = options.allowInexactSize
         premultipliedAlpha = options.premultipliedAlpha
         retryIfDiskDecodeError = options.retryIfDiskDecodeError
-        imageConfig = options.imageConfig
+        bitmapConfig = options.bitmapConfig
+        size = options.size
         scale = options.scale
-        sizeResolver = options.sizeResolver
         memoryCachePolicy = options.memoryCachePolicy
         diskCachePolicy = options.diskCachePolicy
         playAnimate = options.playAnimate
@@ -94,9 +86,9 @@ class OptionsBuilder internal constructor() {
         allowInexactSize = allowInexactSize,
         premultipliedAlpha = premultipliedAlpha,
         retryIfDiskDecodeError = retryIfDiskDecodeError,
-        imageConfig = imageConfig,
+        bitmapConfig = bitmapConfig,
+        size = size,
         scale = scale,
-        sizeResolver = sizeResolver,
         memoryCachePolicy = memoryCachePolicy,
         diskCachePolicy = diskCachePolicy,
         playAnimate = playAnimate,
@@ -104,6 +96,12 @@ class OptionsBuilder internal constructor() {
         maxImageSize = maxImageSize,
         extra = extraData ?: EmptyExtraData,
     )
+}
+
+internal fun OptionsBuilder.takeFrom(request: ImageRequest) {
+    request.optionsBuilders.forEach { builder ->
+        builder.invoke(this)
+    }
 }
 
 fun Options(block: OptionsBuilder.() -> Unit = {}) =

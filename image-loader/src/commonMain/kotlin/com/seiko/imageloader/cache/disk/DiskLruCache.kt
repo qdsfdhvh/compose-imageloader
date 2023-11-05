@@ -1,18 +1,19 @@
 package com.seiko.imageloader.cache.disk
 
 import com.seiko.imageloader.cache.disk.DiskLruCache.Editor
-import com.seiko.imageloader.util.LockObject
 import com.seiko.imageloader.util.LruHashMap
 import com.seiko.imageloader.util.createFile
 import com.seiko.imageloader.util.deleteContents
 import com.seiko.imageloader.util.forEachIndices
 import com.seiko.imageloader.util.getOrPut
-import com.seiko.imageloader.util.synchronized
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.internal.SynchronizedObject
+import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
 import okio.BufferedSink
 import okio.Closeable
@@ -69,7 +70,7 @@ import okio.buffer
  * @param valueCount the number of values per cache entry. Must be positive.
  * @param maxSize the maximum number of bytes this cache should use to store.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalCoroutinesApi::class)
 internal class DiskLruCache(
     fileSystem: FileSystem,
     private val directory: Path,
@@ -138,7 +139,7 @@ internal class DiskLruCache(
     private var mostRecentTrimFailed = false
     private var mostRecentRebuildFailed = false
 
-    private val syncObject = LockObject()
+    private val syncObject = SynchronizedObject()
 
     private val fileSystem = object : ForwardingFileSystem(fileSystem) {
         override fun sink(file: Path, mustCreate: Boolean): Sink {

@@ -11,22 +11,30 @@ interface ImageLoader {
 `ImageAction` structure is as follows:
 
 ```kotlin
-sealed interface ImageAction
+sealed interface ImageAction {
+    sealed interface Loading : ImageAction
+    sealed interface Success : ImageAction
+    sealed interface Failure : ImageAction {
+        val error: Throwable
+    }
+}
 
-sealed interface ImageEvent : ImageAction {
-    object Start : ImageEvent
-    object StartWithMemory : ImageEvent
-    object StartWithDisk : ImageEvent
-    object StartWithFetch : ImageEvent
-    data class Progress(val progress: Float) : ImageEvent
+sealed interface ImageEvent : ImageAction.Loading {
+    data object Start : ImageEvent
+    data object StartWithMemory : ImageEvent
+    data object StartWithDisk : ImageEvent
+    data object StartWithFetch : ImageEvent
 }
 
 sealed interface ImageResult : ImageAction {
-    data class Source() : ImageResult
-    data class Bitmap() : ImageResult
-    data class Image() : ImageResult
-    data class Painter() : ImageResult
-    data class Error() : ImageResult
+    data class OfBitmap() : ImageResult, ImageAction.Success
+    data class OfImage() : ImageResult, ImageAction.Success
+    data class OfPainter() :ImageResult, ImageAction.Success
+    data class OfError(override val error: Throwable) : ImageResult, ImageAction.Failure
+    data class OfSource() : ImageResult, ImageAction.Failure {
+        override val error: Throwable
+            get() = IllegalStateException("failure to decode image source")
+    }
 }
 ```
 
@@ -35,7 +43,7 @@ sealed interface ImageResult : ImageAction {
 This is the most center feature of `ImageLoader`, The loading of the entire image is implemented by the default 3 + 2 interceptors:
 
 - **MappedInterceptor**
-- MemoryCacheInterceptor 
+- MemoryCacheInterceptors
 - **DecodeInterceptor**
 - DiskCacheInterceptor
 - **FetchInterceptor**
@@ -95,7 +103,6 @@ ImageLoader {
         retryIfDiskDecodeError = true
         imageConfig = Options.ImageConfig.ARGB_8888
         scale = Scale.AUTO
-        sizeResolver = SizeResolver.Unspecified
         memoryCachePolicy = CachePolicy.ENABLED
         diskCachePolicy = CachePolicy.ENABLED
         playAnimate = true

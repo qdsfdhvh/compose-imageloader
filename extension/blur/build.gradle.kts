@@ -12,8 +12,7 @@ kotlin {
                 implementation(projects.imageLoader)
             }
         }
-        @Suppress("UNUSED_VARIABLE")
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation("com.github.android:renderscript-intrinsics-replacement-toolkit:9a70eae6f1")
             }

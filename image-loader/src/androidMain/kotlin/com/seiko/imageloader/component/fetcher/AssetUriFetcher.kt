@@ -21,7 +21,7 @@ class AssetUriFetcher private constructor(
 
     override suspend fun fetch(): FetchResult {
         val path = data.pathSegments.drop(1).joinToString("/")
-        return FetchResult.Source(
+        return FetchResult.OfSource(
             source = context.assets.open(path).source().buffer(),
             extra = extraData {
                 mimeType(MimeTypeMap.getSingleton().getMimeTypeFromUrl(path))

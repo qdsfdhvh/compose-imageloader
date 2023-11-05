@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.decoder
 
+import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
 import com.seiko.imageloader.util.calculateDstSize
@@ -11,7 +12,6 @@ import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Canvas
 import org.jetbrains.skia.Image
 import org.jetbrains.skia.Rect
-import org.jetbrains.skia.SamplingMode
 import org.jetbrains.skia.impl.use
 
 class SkiaImageDecoder private constructor(
@@ -24,7 +24,7 @@ class SkiaImageDecoder private constructor(
         val image = source.use {
             Image.makeFromEncoded(it.readByteArray())
         }
-        DecodeResult.Bitmap(
+        DecodeResult.OfBitmap(
             bitmap = image.toBitmap(),
         )
     }
@@ -32,16 +32,24 @@ class SkiaImageDecoder private constructor(
     // TODO wait to fix high probability crash on ios
     private fun Image.toBitmap(): Bitmap {
         val bitmap = Bitmap()
-        val (dstWidth, dstHeight) = calculateDstSize(width, height, options.maxImageSize)
+
+        val srcWidth = width
+        val srcHeight = height
+
+        val maxImageSize = if (options.size.isSpecified && !options.size.isEmpty()) {
+            minOf(options.size.width, options.size.height).toInt()
+                .coerceAtMost(options.maxImageSize)
+        } else {
+            options.maxImageSize
+        }
+        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, maxImageSize)
+
         bitmap.allocN32Pixels(dstWidth, dstHeight)
         Canvas(bitmap).use { canvas ->
             canvas.drawImageRect(
                 this,
-                Rect.makeWH(width.toFloat(), height.toFloat()),
+                Rect.makeWH(srcWidth.toFloat(), srcHeight.toFloat()),
                 Rect.makeWH(dstWidth.toFloat(), dstHeight.toFloat()),
-                SamplingMode.DEFAULT,
-                null,
-                true,
             )
         }
         bitmap.setImmutable()
@@ -54,7 +62,7 @@ class SkiaImageDecoder private constructor(
 
         private val parallelismLock = Semaphore(maxParallelism)
 
-        override suspend fun create(source: DecodeSource, options: Options): Decoder {
+        override fun create(source: DecodeSource, options: Options): Decoder {
             return SkiaImageDecoder(
                 source = source.source,
                 options = options,

@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.FilterQuality
@@ -17,27 +16,6 @@ import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.util.AnimationPainter
-import kotlinx.coroutines.flow.Flow
-
-@Composable
-fun rememberImageAction(
-    request: State<ImageRequest>,
-    imageLoader: ImageLoader = LocalImageLoader.current,
-): State<ImageAction> {
-    return remember(request, imageLoader) {
-        imageLoader.async(snapshotFlow { request.value })
-    }.collectAsState(ImageEvent.Start)
-}
-
-@Composable
-fun rememberImageAction(
-    request: Flow<ImageRequest>,
-    imageLoader: ImageLoader = LocalImageLoader.current,
-): State<ImageAction> {
-    return remember(request, imageLoader) {
-        imageLoader.async(request)
-    }.collectAsState(ImageEvent.Start)
-}
 
 @Composable
 fun rememberImageAction(
@@ -57,12 +35,9 @@ fun rememberImageActionPainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return when (action) {
-        is ImageEvent -> placeholderPainter?.invoke() ?: EmptyPainter
-        is ImageResult -> rememberImageResultPainter(
-            result = action,
-            filterQuality = filterQuality,
-            errorPainter = errorPainter,
-        )
+        is ImageAction.Success -> rememberImageSuccessPainter(action, filterQuality)
+        is ImageAction.Loading -> placeholderPainter?.invoke() ?: EmptyPainter
+        is ImageAction.Failure -> errorPainter?.invoke() ?: EmptyPainter
     }
 }
 
@@ -73,22 +48,30 @@ fun rememberImageResultPainter(
     errorPainter: (@Composable () -> Painter)? = null,
 ): Painter {
     return when (result) {
-        is ImageResult.Painter -> remember(result) {
-            result.painter
+        is ImageAction.Success -> rememberImageSuccessPainter(result, filterQuality)
+        is ImageAction.Failure -> errorPainter?.invoke() ?: EmptyPainter
+    }
+}
+
+@Composable
+fun rememberImageSuccessPainter(
+    action: ImageAction.Success,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+): Painter {
+    return when (action) {
+        is ImageResult.OfPainter -> remember(action) {
+            action.painter
         }
-        is ImageResult.Bitmap -> remember(result, filterQuality) {
-            result.bitmap.toPainter(filterQuality)
+        is ImageResult.OfBitmap -> remember(action, filterQuality) {
+            action.bitmap.toPainter(filterQuality)
         }
-        is ImageResult.Image -> remember(result) {
-            result.image.toPainter()
+        is ImageResult.OfImage -> remember(action) {
+            action.image.toPainter()
         }
-        is ImageResult.Error,
-        is ImageResult.Source,
-        -> errorPainter?.invoke() ?: EmptyPainter
     }.also { painter ->
-        if (painter is AnimationPainter) {
+        if (painter is AnimationPainter && painter.isPlay()) {
             LaunchedEffect(painter) {
-                while (painter.isPlay()) {
+                while (painter.nextPlay()) {
                     withFrameMillis { frameTimeMillis ->
                         painter.update(frameTimeMillis)
                     }

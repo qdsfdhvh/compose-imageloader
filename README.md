@@ -17,17 +17,17 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-+                api("io.github.qdsfdhvh:image-loader:1.6.8")
++                api("io.github.qdsfdhvh:image-loader:1.7.0")
                 // optional - Moko Resources Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.6.8")
++                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.7.0")
                 // optional - Blur Interceptor (only support bitmap)
-+                api("io.github.qdsfdhvh:image-loader-extension-blur:1.6.8")
++                api("io.github.qdsfdhvh:image-loader-extension-blur:1.7.0")
             }
         }
         val jvmMain by getting {
             dependencies {
                 // optional - ImageIO Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.6.8")
++                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.7.0")
             }
         }
     }
@@ -58,18 +58,40 @@ fun Content() {
     CompositionLocalProvider(
         LocalImageLoader provides remember { generateImageLoader() },
     ) {
-        val painter = rememberImagePainter("https://..")
+        // Option 1 on 1.7.0+
+        AutoSizeImage(
+            "https://...",
+            contentDescription = "image",
+        )
+        // Option 2 on 1.7.0+
+        AutoSizeBox("https://...") { action ->
+            when (action) {
+                is ImageAction.Success -> {
+                    Image(
+                        rememberImageSuccessPainter(action),
+                        contentDescription = "image",
+                    )
+                }
+                is ImageAction.Loading -> {}
+                is ImageAction.Failure -> {}
+            }
+        }
+        // Option 3
         Image(
-            painter = painter,
+            painter = rememberImagePainter("https://.."),
             contentDescription = "image",
         )
     }
 }
 ```
 
+Use priority: `AutoSizeImage` -> `AutoSizeBox` -> `rememberImagePainter`.
+
+`AutoSizeBox` & `AutoSizeImage` are based on **Modifier.Node**, `AutoSizeImage` ≈ `AutoSizeBox` + `Painter`.
+
 #### in Android
 
-```kotlin title="MainActivity.kt"
+```kotlin
 fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         options {
@@ -96,7 +118,7 @@ fun generateImageLoader(): ImageLoader {
 
 #### in Jvm
 
-```kotlin title="Main.kt"
+```kotlin
 fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         components {

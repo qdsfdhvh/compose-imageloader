@@ -24,7 +24,7 @@ class KtorUrlFetcher private constructor(
             url(httpUrl)
         }
         if (response.status.isSuccess()) {
-            return FetchResult.Source(
+            return FetchResult.OfSource(
                 source = response.bodyAsChannel().source(),
                 extra = extraData {
                     mimeType(response.contentType()?.toString())

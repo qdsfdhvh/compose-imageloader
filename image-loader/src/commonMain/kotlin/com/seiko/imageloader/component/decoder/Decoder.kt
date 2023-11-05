@@ -1,28 +1,29 @@
 package com.seiko.imageloader.component.decoder
 
+import androidx.compose.ui.graphics.painter.Painter
+import com.seiko.imageloader.Bitmap
+import com.seiko.imageloader.Image
 import com.seiko.imageloader.Poko
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
 
-typealias DecodeSource = ImageResult.Source
+typealias DecodeSource = ImageResult.OfSource
 
 interface Decoder {
     suspend fun decode(): DecodeResult?
-    interface Factory {
-        suspend fun create(source: DecodeSource, options: Options): Decoder?
+    fun interface Factory {
+        fun create(source: DecodeSource, options: Options): Decoder?
     }
 }
 
+fun Decoder(block: () -> DecodeResult?) = object : Decoder {
+    override suspend fun decode(): DecodeResult? = block()
+}
+
 sealed interface DecodeResult {
-    @Poko class Bitmap(
-        val bitmap: com.seiko.imageloader.Bitmap,
-    ) : DecodeResult
+    @Poko class OfBitmap(val bitmap: Bitmap) : DecodeResult
 
-    @Poko class Image(
-        val image: com.seiko.imageloader.Image,
-    ) : DecodeResult
+    @Poko class OfImage(val image: Image) : DecodeResult
 
-    @Poko class Painter(
-        val painter: androidx.compose.ui.graphics.painter.Painter,
-    ) : DecodeResult
+    @Poko class OfPainter(val painter: Painter) : DecodeResult
 }

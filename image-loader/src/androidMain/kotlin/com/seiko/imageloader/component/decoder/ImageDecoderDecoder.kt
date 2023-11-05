@@ -21,7 +21,7 @@ import com.seiko.imageloader.util.isAnimatedHeif
 import com.seiko.imageloader.util.isAnimatedWebP
 import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
-import com.seiko.imageloader.util.toBitmapConfig
+import com.seiko.imageloader.util.toAndroidConfig
 import kotlinx.coroutines.runInterruptible
 import okio.BufferedSource
 import okio.FileSystem
@@ -62,7 +62,7 @@ class ImageDecoderDecoder private constructor(
             imageDecoder?.close()
             wrapDecodeSource.close()
         }
-        DecodeResult.Image(
+        DecodeResult.OfImage(
             image = wrapDrawable(drawable).toImage(),
         )
     }
@@ -101,7 +101,7 @@ class ImageDecoderDecoder private constructor(
     }
 
     private fun ImageDecoder.configureImageDecoderProperties() {
-        val config = options.imageConfig.toBitmapConfig()
+        val config = options.bitmapConfig.toAndroidConfig()
         allocator = if (config.isHardware) {
             ImageDecoder.ALLOCATOR_HARDWARE
         } else {
@@ -175,7 +175,7 @@ class ImageDecoderDecoder private constructor(
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
 
-        override suspend fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!options.playAnimate) return null
             if (!isApplicable(source.source)) return null
             return ImageDecoderDecoder(

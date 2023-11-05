@@ -5,12 +5,34 @@
 Just use it like this for display image:
 
 ```kotlin
-val painter = rememberImagePainter("https://..")
+// Option 1 on 1.7.0+
+AutoSizeImage(
+    "https://...",
+    contentDescription = "image",
+)
+// Option 2 on 1.7.0+
+AutoSizeBox("https://...") { action ->
+    when (action) {
+        is ImageAction.Success -> {
+            Image(
+                rememberImageSuccessPainter(action),
+                contentDescription = "image",
+            )
+        }
+        is ImageAction.Loading -> {}
+        is ImageAction.Failure -> {}
+    }
+}
+// Option 3
 Image(
-    painter = painter,
+    painter = rememberImagePainter("https://.."),
     contentDescription = "image",
 )
 ```
+
+Use priority: `AutoSizeImage` -> `AutoSizeBox` -> `rememberImagePainter`.
+
+`AutoSizeBox` & `AutoSizeImage` are based on **Modifier.Node**, `AutoSizeImage` ≈ `AutoSizeBox` + `Painter`.
 
 PS: default `Imageloader` will reload when it's displayed, is not friendly for `https` link, so it is recommended to custom `ImageLoader` and configure the cache.
 
@@ -24,11 +46,7 @@ fun Content() {
     CompositionLocalProvider(
         LocalImageLoader provides remember { generateImageLoader() },
     ) {
-        val painter = rememberImagePainter("https://..")
-        Image(
-            painter = painter,
-            contentDescription = "image",
-        )
+        // App
     }
 }
 ```
@@ -45,6 +63,8 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
+            // cache 100 success image result, without bitmap
+            defaultImageResultMemoryCache()
             memoryCacheConfig {
                 // Set the max size to 25% of the app's available memory.
                 maxSizePercent(context, 0.25)
@@ -67,6 +87,8 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
+            // cache 100 success image result, without bitmap
+            defaultImageResultMemoryCache()
             memoryCacheConfig {
                 maxSizeBytes(32 * 1024 * 1024) // 32MB
             }
@@ -95,7 +117,9 @@ fun generateImageLoader(): ImageLoader {
         components {
             setupDefaultComponents()
         }
-       interceptor {
+        interceptor {
+            // cache 100 success image result, without bitmap
+            defaultImageResultMemoryCache()
             memoryCacheConfig {
                 maxSizeBytes(32 * 1024 * 1024) // 32MB
             }
