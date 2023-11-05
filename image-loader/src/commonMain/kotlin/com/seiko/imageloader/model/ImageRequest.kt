@@ -43,13 +43,13 @@ class ImageRequest internal constructor(
 
     override fun toString(): String {
         return "ImageRequest(" +
-            "data=${data}," +
-            "extra=${extra}," +
-            "sizeResolver=${sizeResolver}," +
-            "skipEvent=${skipEvent}," +
-            "optionsBuilders=${optionsBuilders}," +
-            "components=${components}," +
-            "interceptors=${interceptors})"
+            "data=$data," +
+            "extra=$extra," +
+            "sizeResolver=$sizeResolver," +
+            "skipEvent=$skipEvent," +
+            "optionsBuilders=$optionsBuilders," +
+            "components=$components," +
+            "interceptors=$interceptors)"
     }
 }
 
