@@ -1,6 +1,7 @@
 package com.seiko.imageloader
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.intercept.InterceptorChainImpl
 import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageEvent
@@ -43,7 +44,9 @@ private class RealImageLoader(
         }
         val initialSize = request.sizeResolver.size()
         val options = Options(config.defaultOptions) {
-            size = initialSize
+            if (initialSize.isSpecified) {
+                size = initialSize
+            }
         }
         val chain = InterceptorChainImpl(
             initialRequest = request,
