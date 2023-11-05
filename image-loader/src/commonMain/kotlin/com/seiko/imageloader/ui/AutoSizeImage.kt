@@ -47,6 +47,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
+// AutoSizeImage ≈ AutoSizeBox + Painter
 @Composable
 fun AutoSizeImage(
     request: ImageRequest,
@@ -61,7 +62,6 @@ fun AutoSizeImage(
     errorPainter: (@Composable () -> Painter)? = null,
     isOnlyPostFirstEvent: Boolean = true,
 ) {
-    // same with @Composable Image(painter)
     val semantics = if (contentDescription != null) {
         Modifier.semantics {
             this.contentDescription = contentDescription
