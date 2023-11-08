@@ -225,11 +225,3 @@ fun generateImageLoader(): ImageLoader {
 ## Thx
 
 [Coil](https://github.com/coil-kt/coil)
-
----
-
-###### Look for a remote job
-
-I'm sorry to put the job hunting here, if you have a remote position about Android, feel free to contact me at [seiko_des@outlook.com](mailto:seiko_des@outlook.com).
-
-PS: My English is not good.
