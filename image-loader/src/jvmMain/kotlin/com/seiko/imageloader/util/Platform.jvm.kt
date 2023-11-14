@@ -1,5 +1,7 @@
 package com.seiko.imageloader.util
 
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import okio.BufferedSource
@@ -12,6 +14,8 @@ actual typealias WeakReference<T> = java.lang.ref.WeakReference<T>
 internal actual suspend fun ByteReadChannel.source(): BufferedSource {
     return toInputStream().source().buffer()
 }
+
+internal actual val httpEngine: HttpClientEngine get() = OkHttp.create()
 
 internal actual val defaultFileSystem: FileSystem? get() = FileSystem.SYSTEM
 
