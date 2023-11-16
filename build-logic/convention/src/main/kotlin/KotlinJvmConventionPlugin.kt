@@ -8,6 +8,5 @@ class KotlinJvmConventionPlugin : Plugin<Project> {
             apply("org.jetbrains.kotlin.jvm")
         }
         configKotlin()
-        configJava()
     }
 }
