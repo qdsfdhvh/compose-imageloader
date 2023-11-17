@@ -47,6 +47,7 @@ include(
     ":app:macos",
     ":app:web",
     ":app:intellij-plugin",
+    ":test-paparazzi",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
