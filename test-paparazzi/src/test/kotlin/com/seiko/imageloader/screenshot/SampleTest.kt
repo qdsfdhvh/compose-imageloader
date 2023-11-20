@@ -18,6 +18,7 @@ import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.SizeResolver
 import com.seiko.imageloader.rememberImagePainter
 import com.seiko.imageloader.ui.AutoSizeImage
+import kotlinx.coroutines.Dispatchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,7 +35,7 @@ class SampleTest {
 
     @Before
     fun onBefore() {
-        imageLoader = ImageLoader {
+        imageLoader = ImageLoader(Dispatchers.Main.immediate) {
             interceptor {
                 useDefaultInterceptors = false
                 addInterceptor {
