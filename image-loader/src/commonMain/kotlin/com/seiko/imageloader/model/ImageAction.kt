@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.Image
-import com.seiko.imageloader.Poko
+import dev.drewhamilton.poko.Poko
 import okio.BufferedSource
 
 @Immutable
