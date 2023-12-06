@@ -3,10 +3,10 @@ package com.seiko.imageloader.component.fetcher
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.Image
-import com.seiko.imageloader.Poko
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
 import com.seiko.imageloader.option.Options
+import dev.drewhamilton.poko.Poko
 import okio.BufferedSource
 
 interface Fetcher {
@@ -21,14 +21,18 @@ fun Fetcher(block: suspend () -> FetchResult?) = object : Fetcher {
 }
 
 sealed interface FetchResult {
-    @Poko class OfSource(
+    @Poko
+    class OfSource(
         val source: BufferedSource,
         val extra: ExtraData = EmptyExtraData,
     ) : FetchResult
 
-    @Poko class OfBitmap(val bitmap: Bitmap) : FetchResult
+    @Poko
+    class OfBitmap(val bitmap: Bitmap) : FetchResult
 
-    @Poko class OfImage(val image: Image) : FetchResult
+    @Poko
+    class OfImage(val image: Image) : FetchResult
 
-    @Poko class OfPainter(val painter: Painter) : FetchResult
+    @Poko
+    class OfPainter(val painter: Painter) : FetchResult
 }

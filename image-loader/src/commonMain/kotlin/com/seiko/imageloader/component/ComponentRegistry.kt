@@ -1,6 +1,5 @@
 package com.seiko.imageloader.component
 
-import com.seiko.imageloader.Poko
 import com.seiko.imageloader.component.decoder.DecodeSource
 import com.seiko.imageloader.component.decoder.Decoder
 import com.seiko.imageloader.component.fetcher.Fetcher
@@ -8,8 +7,10 @@ import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.component.mapper.Mapper
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.forEachIndices
+import dev.drewhamilton.poko.Poko
 
-@Poko class ComponentRegistry internal constructor(
+@Poko
+class ComponentRegistry internal constructor(
     val mappers: List<Mapper<out Any>>,
     val keyers: List<Keyer>,
     val fetcherFactories: List<Fetcher.Factory>,

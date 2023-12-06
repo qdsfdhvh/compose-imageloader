@@ -3,9 +3,9 @@ package com.seiko.imageloader.component.decoder
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.Image
-import com.seiko.imageloader.Poko
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
+import dev.drewhamilton.poko.Poko
 
 typealias DecodeSource = ImageResult.OfSource
 
@@ -21,9 +21,12 @@ fun Decoder(block: () -> DecodeResult?) = object : Decoder {
 }
 
 sealed interface DecodeResult {
-    @Poko class OfBitmap(val bitmap: Bitmap) : DecodeResult
+    @Poko
+    class OfBitmap(val bitmap: Bitmap) : DecodeResult
 
-    @Poko class OfImage(val image: Image) : DecodeResult
+    @Poko
+    class OfImage(val image: Image) : DecodeResult
 
-    @Poko class OfPainter(val painter: Painter) : DecodeResult
+    @Poko
+    class OfPainter(val painter: Painter) : DecodeResult
 }

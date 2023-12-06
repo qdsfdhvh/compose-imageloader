@@ -128,7 +128,3 @@ baselineProfile {
 dependencies {
     baselineProfile(projects.app.android.benchmark)
 }
-
-poko {
-    pokoAnnotation.set("com.seiko.imageloader.Poko")
-}

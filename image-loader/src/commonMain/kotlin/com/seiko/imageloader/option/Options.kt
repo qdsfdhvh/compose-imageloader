@@ -2,7 +2,6 @@ package com.seiko.imageloader.option
 
 import androidx.compose.ui.geometry.Size
 import com.seiko.imageloader.BitmapConfig
-import com.seiko.imageloader.Poko
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
@@ -10,8 +9,10 @@ import com.seiko.imageloader.model.ExtraDataBuilder
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
+import dev.drewhamilton.poko.Poko
 
-@Poko class Options internal constructor(
+@Poko
+class Options internal constructor(
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,
