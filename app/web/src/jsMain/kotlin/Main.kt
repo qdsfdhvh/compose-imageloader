@@ -15,7 +15,6 @@ import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 fun main() {
-    // TODO compose resources can't get resources from common library now
     configureWebResources {
         // Not necessary - It's the same as the default. We add it here just to present this feature.
         resourcePathMapping { path -> "./$path" }

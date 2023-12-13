@@ -10,6 +10,8 @@ kotlin {
     }
     sourceSets {
         jsMain {
+            // TODO remove if plugin support dependency resources dir
+            resources.srcDir("../common/src/commonMain/resources")
             dependencies {
                 implementation(projects.app.common)
                 implementation(compose.runtime)
