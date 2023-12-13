@@ -14,8 +14,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
 
@@ -46,6 +47,7 @@ include(
     ":app:ios-combine",
     ":app:macos",
     ":app:web",
+    ":app:wasmJs",
     ":app:intellij-plugin",
 )
 
