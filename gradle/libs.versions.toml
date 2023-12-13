@@ -85,7 +85,8 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
-ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js-js", version.ref = "ktor" }
+ktor-client-wasmJs = { module = "io.ktor:ktor-client-js-wasm-js", version.ref = "ktor" }
 
 uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 moko-resources = { module = "dev.icerock.moko:resources", version.ref = "moko-resources" }

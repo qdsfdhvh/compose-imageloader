@@ -81,17 +81,15 @@ kotlin {
                 implementation(libs.ktor.client.darwin)
             }
         }
-        val jsAndWasmMain by creating {
-            dependsOn(darwinMain.get())
+        jsMain {
             dependencies {
                 implementation(libs.ktor.client.js)
             }
         }
-        jsMain {
-            dependsOn(jsAndWasmMain)
-        }
         val wasmJsMain by getting {
-            dependsOn(jsAndWasmMain)
+            dependencies {
+                implementation(libs.ktor.client.wasmJs)
+            }
         }
         val noJsAndWasmMain by creating {
             dependsOn(commonMain.get())
@@ -105,7 +103,8 @@ kotlin {
             dependsOn(commonMain.get())
             desktopMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
-            jsAndWasmMain.dependsOn(this)
+            jsMain.get().dependsOn(this)
+            wasmJsMain.dependsOn(this)
         }
     }
     sourceSets.all {
