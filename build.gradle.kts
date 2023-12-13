@@ -90,8 +90,8 @@ object ProjectVersion {
     private const val monir = "7"
 
     // backwards compatible bug fixes
-    private const val path = "1"
-    const val version = "$major.$monir.$path"
+    private const val path = "2"
+    const val version = "$major.$monir.$path-SNAPSHOT"
 }
 
 gradle.taskGraph.whenReady {
