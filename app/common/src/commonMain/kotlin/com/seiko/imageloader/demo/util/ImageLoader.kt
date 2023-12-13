@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import co.touchlab.kermit.Severity
 import com.seiko.imageloader.ImageLoaderConfigBuilder
-import com.seiko.imageloader.component.fetcher.MokoResourceFetcher
+import com.seiko.imageloader.component.fetcher.ComposeResourceFetcher
 import com.seiko.imageloader.intercept.BlurInterceptor
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.intercept.NinePatchInterceptor
@@ -50,7 +50,8 @@ fun ImageLoaderConfigBuilder.commonConfig() {
         override fun isLoggable(priority: LogPriority) = priority >= LogPriority.DEBUG
     }
     components {
-        add(MokoResourceFetcher.Factory())
+        // add(MokoResourceFetcher.Factory())
+        add(ComposeResourceFetcher.Factory())
     }
     interceptor {
         addInterceptor(NinePatchInterceptor())

@@ -35,7 +35,7 @@ fun LocalResourceScene(
             item {
                 Row {
                     ImageItem(
-                        MR.files.chat_from_bg_normal_9,
+                        MR.images.chat_from_bg_normal_9,
                         modifier = Modifier.weight(1f).height(100.dp),
                         contentScale = ContentScale.Fit,
                         block = remember {
@@ -54,27 +54,27 @@ fun LocalResourceScene(
                     )
                     Spacer(Modifier.width(8.dp))
                     ImageItem(
-                        MR.files.chat_from_bg_normal_9,
+                        MR.images.chat_from_bg_normal_9,
                         modifier = Modifier.weight(1f).height(100.dp),
                         contentScale = ContentScale.Fit,
                     )
                 }
             }
             item {
-                ImageItem(MR.files.cat)
+                ImageItem(MR.images.cat)
             }
             item {
-                ImageItem(MR.files.collection_logo)
+                ImageItem(MR.images.collection_logo)
             }
             item {
                 ImageItem(MR.images.car_black)
             }
-            item {
-                ImageItem(MR.colors.valueColor)
-            }
-            item {
-                ImageItem(MR.colors.valueColor2)
-            }
+            // item {
+            //     ImageItem(composeRes.colors.valueColor)
+            // }
+            // item {
+            //     ImageItem(composeRes.colors.valueColor2)
+            // }
         }
     }
 }

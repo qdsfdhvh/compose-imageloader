@@ -14,7 +14,6 @@ spotless = "6.23.3"
 ktlint = "0.50.0"
 publish = "0.25.3"
 dokka = "1.9.10"
-moko-resources = "0.23.0"
 ktor = "2.3.7"
 okio = "3.6.0"
 uri-kmp = "0.0.15"
@@ -43,7 +42,6 @@ compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-m
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-moko-resources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko-resources" }
 baselineProfile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 poko = { id = "dev.drewhamilton.poko", version.ref = "poko" }
@@ -90,7 +88,6 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 
 uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
-moko-resources = { module = "dev.icerock.moko:resources", version.ref = "moko-resources" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }

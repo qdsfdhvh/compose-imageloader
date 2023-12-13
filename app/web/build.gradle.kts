@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     id("app.compose.multiplatform")
-    alias(libs.plugins.moko.resources)
 }
 
 kotlin {
@@ -10,17 +9,14 @@ kotlin {
         binaries.executable()
     }
     sourceSets {
-        commonMain {
+        jsMain {
             dependencies {
                 implementation(projects.app.common)
                 implementation(compose.runtime)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
                 implementation(libs.okio.fakefilesystem)
-                implementation(libs.moko.resources)
             }
-        }
-        jsMain {
-            // https://github.com/icerockdev/moko-resources/issues/531
-            dependsOn(commonMain.get())
         }
     }
 }

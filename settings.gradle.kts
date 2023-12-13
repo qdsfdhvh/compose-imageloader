@@ -36,6 +36,7 @@ rootProject.name = "compose-imageLoader"
 include(
     ":image-loader",
     ":extension:blur",
+    ":extension:compose-resources",
     ":extension:imageio",
     ":extension:moko-resources",
     ":extension:nine-patch",
@@ -43,7 +44,6 @@ include(
     ":app:android",
     ":app:android:benchmark",
     ":app:desktop",
-    ":app:ios-combine",
     ":app:macos",
     ":app:web",
     ":app:intellij-plugin",
