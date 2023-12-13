@@ -26,7 +26,6 @@ import com.seiko.imageloader.toImage
 import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.toAndroidConfig
-import dev.drewhamilton.poko.Poko
 import okio.buffer
 import okio.source
 import org.xmlpull.v1.XmlPullParser
@@ -118,12 +117,23 @@ class ResourceUriFetcher private constructor(
         }
     }
 
-    @Poko
     class Metadata(
         val packageName: String,
         @DrawableRes val resId: Int,
         val density: Int,
-    )
+    ) {
+        override fun hashCode(): Int {
+            var result = packageName.hashCode()
+            result = result * 31 + density.hashCode()
+            return result
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is Metadata) return false
+            return packageName == other.packageName && density == other.density
+        }
+    }
 
     companion object {
         private const val MIME_TYPE_XML = "text/xml"

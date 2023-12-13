@@ -9,9 +9,7 @@ import com.seiko.imageloader.model.ExtraDataBuilder
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
-import dev.drewhamilton.poko.Poko
 
-@Poko
 class Options internal constructor(
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
@@ -26,6 +24,39 @@ class Options internal constructor(
     val maxImageSize: Int,
     val extra: ExtraData,
 ) {
+    override fun hashCode(): Int {
+        var result = allowInexactSize.hashCode()
+        result = result * 31 + premultipliedAlpha.hashCode()
+        result = result * 31 + retryIfDiskDecodeError.hashCode()
+        result = result * 31 + bitmapConfig.hashCode()
+        result = result * 31 + size.hashCode()
+        result = result * 31 + scale.hashCode()
+        result = result * 31 + memoryCachePolicy.hashCode()
+        result = result * 31 + diskCachePolicy.hashCode()
+        result = result * 31 + playAnimate.hashCode()
+        result = result * 31 + repeatCount.hashCode()
+        result = result * 31 + maxImageSize.hashCode()
+        result = result * 31 + extra.hashCode()
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Options) return false
+        return allowInexactSize == other.allowInexactSize &&
+            premultipliedAlpha == other.premultipliedAlpha &&
+            retryIfDiskDecodeError == other.retryIfDiskDecodeError &&
+            bitmapConfig == other.bitmapConfig &&
+            size == other.size &&
+            scale == other.scale &&
+            memoryCachePolicy == other.memoryCachePolicy &&
+            diskCachePolicy == other.diskCachePolicy &&
+            playAnimate == other.playAnimate &&
+            repeatCount == other.repeatCount &&
+            maxImageSize == other.maxImageSize &&
+            extra == other.extra
+    }
+
     companion object {
         internal const val REPEAT_INFINITE = -1
     }

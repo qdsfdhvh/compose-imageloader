@@ -10,7 +10,6 @@ import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.isAssetUri
-import dev.drewhamilton.poko.Poko
 import okio.buffer
 import okio.source
 
@@ -43,8 +42,17 @@ class AssetUriFetcher private constructor(
         }
     }
 
-    @Poko
     class MetaData(
         val fileName: String,
-    )
+    ) {
+        override fun hashCode(): Int {
+            return fileName.hashCode()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is MetaData) return false
+            return fileName == other.fileName
+        }
+    }
 }
