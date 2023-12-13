@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.config.LanguageFeature
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     id("app.android.library")
@@ -11,6 +12,8 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
     sourceSets {
         all {
             languageSettings {
@@ -78,12 +81,19 @@ kotlin {
                 implementation(libs.ktor.client.darwin)
             }
         }
-        jsMain {
+        val jsAndWasmMain by creating {
+            dependsOn(darwinMain.get())
             dependencies {
                 implementation(libs.ktor.client.js)
             }
         }
-        val noJsMain by creating {
+        jsMain {
+            dependsOn(jsAndWasmMain)
+        }
+        val wasmJsMain by getting {
+            dependsOn(jsAndWasmMain)
+        }
+        val noJsAndWasmMain by creating {
             dependsOn(commonMain.get())
             jvmMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
@@ -95,7 +105,7 @@ kotlin {
             dependsOn(commonMain.get())
             desktopMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
-            jsMain.get().dependsOn(this)
+            jsAndWasmMain.dependsOn(this)
         }
     }
     sourceSets.all {
