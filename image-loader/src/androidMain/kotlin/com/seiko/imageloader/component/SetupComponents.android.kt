@@ -33,11 +33,10 @@ fun ComponentRegistryBuilder.setupAndroidComponents(
     add(DrawableFetcher.Factory())
     // Decoders
     add(SvgDecoder.Factory(density))
-    add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder.Factory(context) else GifDecoder.Factory())
-    add(
-        BitmapFactoryDecoder.Factory(
-            context = context,
-            maxParallelism = maxParallelism,
-        ),
-    )
+    if (Build.VERSION.SDK_INT >= 28) {
+        add(ImageDecoderDecoder.Factory(context, maxParallelism))
+    } else {
+        add(GifDecoder.Factory())
+        add(BitmapFactoryDecoder.Factory(context, maxParallelism))
+    }
 }
