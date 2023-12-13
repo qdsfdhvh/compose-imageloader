@@ -87,6 +87,7 @@ kotlin {
             }
         }
         val wasmJsMain by getting {
+            dependsOn(darwinMain.get())
             dependencies {
                 implementation(libs.ktor.client.wasmJs)
             }
