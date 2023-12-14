@@ -24,7 +24,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.imageLoader)
+                implementation(projects.imageLoaderSingleton)
                 implementation(compose.runtime)
             }
         }
