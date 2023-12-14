@@ -1,6 +1,6 @@
 [versions]
 agp = "8.2.0"
-compose-multiplatform = "1.6.0-dev1334"
+compose-multiplatform = "1.6.0-alpha01"
 kotlin = "1.9.21"
 kotlinx-coroutines = "1.8.0-RC"
 kotlinx-serialization = "1.6.2"
