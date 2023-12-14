@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.geometry.Size
@@ -20,11 +21,28 @@ import com.seiko.imageloader.util.AnimationPainter
 @Composable
 fun rememberImageAction(
     request: ImageRequest,
-    imageLoader: ImageLoader = LocalImageLoader.current,
+    imageLoader: ImageLoader,
 ): State<ImageAction> {
     return remember(request, imageLoader) {
         imageLoader.async(request)
     }.collectAsState(ImageEvent.Start)
+}
+
+@Composable
+fun rememberImagePainter(
+    request: ImageRequest,
+    imageLoader: ImageLoader,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+    placeholderPainter: (@Composable () -> Painter)? = null,
+    errorPainter: (@Composable () -> Painter)? = null,
+): Painter {
+    val action by rememberImageAction(request, imageLoader)
+    return rememberImageActionPainter(
+        action = action,
+        filterQuality = filterQuality,
+        placeholderPainter = placeholderPainter,
+        errorPainter = errorPainter,
+    )
 }
 
 @Composable

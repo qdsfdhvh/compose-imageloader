@@ -15,7 +15,7 @@ kotlin {
                 api(compose.ui)
                 api(compose.material)
 
-                api(projects.imageLoader)
+                api(projects.imageLoaderSingleton)
                 implementation(projects.extension.blur)
                 implementation(projects.extension.mokoResources)
                 implementation(projects.extension.ninePatch)

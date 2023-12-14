@@ -2,7 +2,6 @@ package com.seiko.imageloader.component.decoder
 
 import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
 import com.seiko.imageloader.util.calculateDstSize
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -57,7 +56,7 @@ class SkiaImageDecoder private constructor(
     }
 
     class Factory(
-        maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
+        maxParallelism: Int = Options.DEFAULT_MAX_PARALLELISM,
     ) : Decoder.Factory {
 
         private val parallelismLock = Semaphore(maxParallelism)

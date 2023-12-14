@@ -4,11 +4,11 @@ import androidx.compose.ui.unit.Density
 import com.seiko.imageloader.component.decoder.GifDecoder
 import com.seiko.imageloader.component.decoder.SkiaImageDecoder
 import com.seiko.imageloader.component.decoder.SvgDecoder
-import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
+import com.seiko.imageloader.option.Options
 
 fun ComponentRegistryBuilder.setupSkiaComponents(
     density: Density = Density(2f),
-    maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
+    maxParallelism: Int = Options.DEFAULT_MAX_PARALLELISM,
 ) {
     // Decoders
     add(SvgDecoder.Factory(density))
