@@ -72,9 +72,6 @@ kotlin {
         }
         val wasmJsMain by getting {
             dependsOn(darwinMain.get())
-            dependencies {
-                implementation(libs.ktor.client.wasmJs)
-            }
         }
         val noJsAndWasmMain by creating {
             dependsOn(commonMain.get())

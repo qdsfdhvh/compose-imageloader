@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
@@ -7,6 +9,8 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
     sourceSets {
         commonMain {
             dependencies {
@@ -20,11 +24,15 @@ kotlin {
                 implementation(libs.bundles.test.common)
             }
         }
+        val wasmJsMain by getting {
+            dependsOn(darwinMain.get())
+        }
         val noAndroidMain by creating {
             dependsOn(commonMain.get())
             desktopMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
             jsMain.get().dependsOn(this)
+            wasmJsMain.dependsOn(this)
         }
     }
 }

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
@@ -6,6 +8,8 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
     sourceSets {
         commonMain {
             dependencies {
@@ -31,6 +35,12 @@ kotlin {
         jsMain {
             dependencies {
                 implementation(libs.ktor.client.js)
+            }
+        }
+        val wasmJsMain by getting {
+            dependsOn(darwinMain.get())
+            dependencies {
+                implementation(libs.ktor.client.wasmJs)
             }
         }
     }
