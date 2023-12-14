@@ -1,12 +1,19 @@
 package com.seiko.imageloader.component.mapper
 
+import com.seiko.imageloader.option.Options
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-class StringUriMapperTest : BaseMapperTest<StringUriMapper>() {
+class StringUriMapperTest {
 
-    override fun createMapper() = StringUriMapper()
+    private lateinit var mapper: StringUriMapper
+
+    @BeforeTest
+    fun onBefore() {
+        mapper = StringUriMapper()
+    }
 
     @Test
     fun test() {
@@ -18,4 +25,6 @@ class StringUriMapperTest : BaseMapperTest<StringUriMapper>() {
         assertNotNull(map("tel:10086"))
         assertNotNull(map("geo:52.76,-79.0342"))
     }
+
+    private fun map(data: Any, options: Options = Options()) = mapper.map(data, options)
 }

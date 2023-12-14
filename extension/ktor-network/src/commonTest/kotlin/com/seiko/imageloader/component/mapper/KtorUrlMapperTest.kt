@@ -1,12 +1,19 @@
 package com.seiko.imageloader.component.mapper
 
+import com.seiko.imageloader.option.Options
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-class KtorUrlMapperTest : BaseMapperTest<KtorUrlMapper>() {
+class KtorUrlMapperTest {
 
-    override fun createMapper() = KtorUrlMapper()
+    private lateinit var mapper: KtorUrlMapper
+
+    @BeforeTest
+    fun onBefore() {
+        mapper = KtorUrlMapper()
+    }
 
     @Test
     fun test() {
@@ -18,4 +25,6 @@ class KtorUrlMapperTest : BaseMapperTest<KtorUrlMapper>() {
         assertNull(map("tel:10086"))
         assertNull(map("geo:52.76,-79.0342"))
     }
+
+    private fun map(data: Any, options: Options = Options()) = mapper.map(data, options)
 }

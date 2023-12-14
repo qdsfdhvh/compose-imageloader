@@ -13,6 +13,11 @@ kotlin {
                 api(libs.ktor.client.core)
             }
         }
+        commonTest {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
         jvmMain {
             dependencies {
                 implementation(libs.ktor.client.okhttp)

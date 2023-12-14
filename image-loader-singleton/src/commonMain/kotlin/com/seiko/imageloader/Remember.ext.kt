@@ -10,7 +10,7 @@ import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageRequest
 
 @Composable
-inline fun rememberImageAction(
+fun rememberImageAction(
     request: ImageRequest,
 ): State<ImageAction> {
     return rememberImageAction(request, LocalImageLoader.current)

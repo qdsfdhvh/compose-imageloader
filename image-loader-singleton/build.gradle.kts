@@ -14,6 +14,12 @@ kotlin {
                 api(projects.extension.ktorNetwork)
             }
         }
+        commonTest {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.bundles.test.common)
+            }
+        }
         val noAndroidMain by creating {
             dependsOn(commonMain.get())
             desktopMain.get().dependsOn(this)
