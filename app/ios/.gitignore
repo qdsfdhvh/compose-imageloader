@@ -1,5 +1,3 @@
-Podfile.lock
-Pods/*
 *.xcworkspace/*
 *.xcodeproj/*
 !*/project.pbxproj

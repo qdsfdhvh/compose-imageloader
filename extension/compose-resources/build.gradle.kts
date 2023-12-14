@@ -1,6 +1,7 @@
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
+    id("app.compose.multiplatform")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
 }
@@ -10,12 +11,13 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.imageLoader)
-                implementation("dev.icerock.moko:resources:0.23.0")
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
             }
         }
     }
 }
 
 android {
-    namespace = "io.github.qdsfdhvh.imageloader.moko.resources"
+    namespace = "io.github.qdsfdhvh.imageloader.compose.resources"
 }
