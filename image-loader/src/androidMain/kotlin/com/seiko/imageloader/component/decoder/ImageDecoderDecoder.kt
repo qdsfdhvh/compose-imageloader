@@ -16,7 +16,6 @@ import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
-import com.seiko.imageloader.util.DEFAULT_MAX_PARALLELISM
 import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.ScaleDrawable
 import com.seiko.imageloader.util.calculateDstSize
@@ -197,7 +196,7 @@ class ImageDecoderDecoder private constructor(
 
     class Factory(
         private val context: Context? = null,
-        maxParallelism: Int = DEFAULT_MAX_PARALLELISM,
+        maxParallelism: Int = Options.DEFAULT_MAX_PARALLELISM,
         private val enforceMinimumFrameDelay: Boolean = true,
     ) : Decoder.Factory {
 

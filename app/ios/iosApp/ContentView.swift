@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftUI
-import combine
+import common
 
 struct ComposeView : UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> some UIViewController {

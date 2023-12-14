@@ -26,7 +26,6 @@ kotlin {
                 api(compose.ui)
                 api(libs.kotlinx.coroutines.core)
                 api(libs.okio)
-                api(libs.ktor.client.core)
                 api(libs.uri.kmp)
             }
         }
@@ -36,11 +35,6 @@ kotlin {
                 implementation(libs.bundles.test.common)
                 implementation(compose.foundation)
                 implementation(compose.ui)
-            }
-        }
-        jvmMain {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
             }
         }
         androidMain {
@@ -76,16 +70,6 @@ kotlin {
                 }
             }
         }
-        appleMain {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-        }
-        jsMain {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
-        }
         val wasmJsMain by getting {
             dependsOn(darwinMain.get())
             dependencies {
@@ -100,24 +84,12 @@ kotlin {
                 implementation(libs.androidx.collection)
             }
         }
-        val noAndroidMain by creating {
-            dependsOn(commonMain.get())
-            desktopMain.get().dependsOn(this)
-            appleMain.get().dependsOn(this)
-            jsMain.get().dependsOn(this)
-            wasmJsMain.dependsOn(this)
-        }
-    }
-    sourceSets.all {
-        if (name.endsWith("Main")) {
-            kotlin.srcDir("src/$name/singleton")
-        }
     }
 }
 
 @Suppress("UnstableApiUsage")
 android {
-    namespace = "io.github.qdsfdhvh.imageloader"
+    namespace = "io.github.qdsfdhvh.imageloader.core"
     testOptions {
         unitTests {
             isIncludeAndroidResources = true

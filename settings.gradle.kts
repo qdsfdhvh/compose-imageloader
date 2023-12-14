@@ -36,15 +36,17 @@ rootProject.name = "compose-imageLoader"
 
 include(
     ":image-loader",
+    ":image-loader-singleton",
     ":extension:blur",
+    ":extension:compose-resources",
     ":extension:imageio",
+    ":extension:ktor-network",
     ":extension:moko-resources",
     ":extension:nine-patch",
     ":app:common",
     ":app:android",
     ":app:android:benchmark",
     ":app:desktop",
-    ":app:ios-combine",
     ":app:macos",
     ":app:web",
     ":app:wasmJs",

@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.intercept.Interceptor
+import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.rememberImagePainter
 import kotlinx.coroutines.delay
@@ -37,13 +38,13 @@ abstract class ComposeScreenShotCommonTest {
         }
         Row {
             Image(
-                rememberImagePainter(url, imageLoader),
+                rememberImagePainter(remember { ImageRequest(url) }, imageLoader),
                 contentDescription = "green",
                 modifier = Modifier.size(100.dp),
             )
             Spacer(Modifier.width(8.dp))
             Image(
-                rememberImagePainter("", imageLoader),
+                rememberImagePainter(remember { ImageRequest("") }, imageLoader),
                 contentDescription = "blue",
                 modifier = Modifier.size(100.dp),
             )
@@ -65,7 +66,7 @@ abstract class ComposeScreenShotCommonTest {
         }
         Image(
             rememberImagePainter(
-                "",
+                remember { ImageRequest("") },
                 imageLoader,
                 placeholderPainter = { ColorPainter(Color.Gray) },
             ),
@@ -88,7 +89,7 @@ abstract class ComposeScreenShotCommonTest {
         }
         Image(
             rememberImagePainter(
-                "",
+                remember { ImageRequest("") },
                 imageLoader,
                 errorPainter = { ColorPainter(Color.Red) },
             ),

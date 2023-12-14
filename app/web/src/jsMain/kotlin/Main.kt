@@ -9,10 +9,16 @@ import com.seiko.imageloader.demo.App
 import com.seiko.imageloader.demo.util.commonConfig
 import okio.FileSystem
 import okio.fakefilesystem.FakeFileSystem
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.configureWebResources
 import org.jetbrains.skiko.wasm.onWasmReady
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 fun main() {
+    configureWebResources {
+        // Not necessary - It's the same as the default. We add it here just to present this feature.
+        resourcePathMapping { path -> "./$path" }
+    }
     onWasmReady {
         CanvasBasedWindow("ComposeImageLoader") {
             CompositionLocalProvider(
