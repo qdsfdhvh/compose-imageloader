@@ -18,7 +18,7 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
-                api(projects.imageLoader)
+                api(projects.imageLoaderSingleton)
                 implementation(projects.extension.blur)
                 implementation(projects.extension.composeResources)
                 // implementation(projects.extension.mokoResources)

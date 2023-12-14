@@ -142,8 +142,10 @@ inline fun ImageRequest(
     block.invoke(this)
 }
 
+@Suppress("NOTHING_TO_INLINE")
 inline fun ImageRequest(request: ImageRequest) = request
 
+@Suppress("NOTHING_TO_INLINE")
 inline fun ImageRequest(data: Any) = ImageRequest {
     data(data)
 }

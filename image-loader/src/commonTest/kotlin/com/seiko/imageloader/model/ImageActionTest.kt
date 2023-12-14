@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.painter.Painter
+import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.rememberImageAction
 import com.seiko.imageloader.rememberImageActionPainter
 import com.seiko.imageloader.rememberImageSuccessPainter
@@ -13,7 +14,7 @@ class ImageActionTest {
     @Composable
     fun test() {
         val request = remember { ImageRequest("") }
-        val action by rememberImageAction(request)
+        val action by rememberImageAction(request, remember { ImageLoader { } })
         when_normal_test(action)
         when_image_action_test(action)
         when_image_action_no_result_test(action)
