@@ -4,7 +4,6 @@ plugins {
     id("app.compose.multiplatform")
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.baselineProfile)
 }
 
 kotlin {
@@ -26,15 +25,4 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader"
-}
-
-baselineProfile {
-    baselineProfileOutputDir = "../../src/androidMain/generated/baselineProfiles"
-    filter {
-        include("com.seiko.imageloader.**")
-    }
-}
-
-dependencies {
-    baselineProfile(projects.app.android.benchmark)
 }
