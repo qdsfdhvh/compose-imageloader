@@ -5,6 +5,7 @@ import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.Image
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
+import dev.drewhamilton.poko.Poko
 
 typealias DecodeSource = ImageResult.OfSource
 
@@ -20,39 +21,12 @@ fun Decoder(block: () -> DecodeResult?) = object : Decoder {
 }
 
 sealed interface DecodeResult {
-    class OfBitmap(val bitmap: Bitmap) : DecodeResult {
-        override fun hashCode(): Int {
-            return bitmap.hashCode()
-        }
+    @Poko
+    class OfBitmap(val bitmap: Bitmap) : DecodeResult
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is OfBitmap) return false
-            return bitmap == other.bitmap
-        }
-    }
+    @Poko
+    class OfImage(val image: Image) : DecodeResult
 
-    class OfImage(val image: Image) : DecodeResult {
-        override fun hashCode(): Int {
-            return image.hashCode()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is OfImage) return false
-            return image == other.image
-        }
-    }
-
-    class OfPainter(val painter: Painter) : DecodeResult {
-        override fun hashCode(): Int {
-            return painter.hashCode()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is OfPainter) return false
-            return painter == other.painter
-        }
-    }
+    @Poko
+    class OfPainter(val painter: Painter) : DecodeResult
 }

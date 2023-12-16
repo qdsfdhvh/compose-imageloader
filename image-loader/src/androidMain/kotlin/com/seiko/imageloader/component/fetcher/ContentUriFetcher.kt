@@ -16,6 +16,7 @@ import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
+import dev.drewhamilton.poko.Poko
 import okio.buffer
 import okio.source
 import android.net.Uri as AndroidUri
@@ -94,15 +95,6 @@ class ContentUriFetcher private constructor(
         private fun isApplicable(data: Uri) = data.scheme == SCHEME_CONTENT
     }
 
-    class Metadata(val uri: AndroidUri) {
-        override fun hashCode(): Int {
-            return uri.hashCode()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is Metadata) return false
-            return uri == other.uri
-        }
-    }
+    @Poko
+    class Metadata(val uri: AndroidUri)
 }

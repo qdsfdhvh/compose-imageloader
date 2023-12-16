@@ -7,7 +7,9 @@ import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.component.mapper.Mapper
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.forEachIndices
+import dev.drewhamilton.poko.Poko
 
+@Poko
 class ComponentRegistry internal constructor(
     val mappers: List<Mapper<out Any>>,
     val keyers: List<Keyer>,
@@ -58,22 +60,5 @@ class ComponentRegistry internal constructor(
             factory.create(source, options)?.let { return it to index }
         }
         throw RuntimeException("Unable to create a decoder that supports: $source")
-    }
-
-    override fun hashCode(): Int {
-        var result = mappers.hashCode()
-        result = result * 31 + keyers.hashCode()
-        result = result * 31 + fetcherFactories.hashCode()
-        result = result * 31 + decoderFactories.hashCode()
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is ComponentRegistry) return false
-        return mappers == other.mappers &&
-            keyers == other.keyers &&
-            fetcherFactories == other.fetcherFactories &&
-            decoderFactories == other.decoderFactories
     }
 }
