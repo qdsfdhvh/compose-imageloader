@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.ImageLoader
+import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.rememberImagePainter
 
@@ -40,7 +41,7 @@ abstract class ChangeImageUrlCommonTest {
         }
         var index by remember { mutableStateOf(0) }
         Image(
-            rememberImagePainter(index, imageLoader),
+            rememberImagePainter(remember(index) { ImageRequest(index) }, imageLoader),
             contentDescription = "change url",
             modifier = Modifier.size(80.dp)
                 .testTag(BUTTON_TAG)

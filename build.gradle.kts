@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.roborazzi) apply false
+    alias(libs.plugins.poko) apply false
     alias(libs.plugins.spotless)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
@@ -90,7 +91,7 @@ object ProjectVersion {
     private const val monir = "7"
 
     // backwards compatible bug fixes
-    private const val path = "1"
+    private const val path = "2"
     const val version = "$major.$monir.$path"
 }
 

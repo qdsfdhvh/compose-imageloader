@@ -1,5 +1,0 @@
-target 'iosApp' do
-  use_frameworks!
-  platform :ios, '15.2'
-  pod 'combine', :path => '../ios-combine'
-end

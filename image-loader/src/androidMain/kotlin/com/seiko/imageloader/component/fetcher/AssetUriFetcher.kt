@@ -3,7 +3,6 @@ package com.seiko.imageloader.component.fetcher
 import android.content.Context
 import android.webkit.MimeTypeMap
 import com.eygraber.uri.Uri
-import com.seiko.imageloader.Poko
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
@@ -11,6 +10,7 @@ import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.isAssetUri
+import dev.drewhamilton.poko.Poko
 import okio.buffer
 import okio.source
 
@@ -43,7 +43,8 @@ class AssetUriFetcher private constructor(
         }
     }
 
-    @Poko class MetaData(
+    @Poko
+    class MetaData(
         val fileName: String,
     )
 }

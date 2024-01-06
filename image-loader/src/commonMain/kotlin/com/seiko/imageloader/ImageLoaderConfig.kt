@@ -23,6 +23,7 @@ class ImageLoaderConfigBuilder internal constructor() {
     private val componentsBuilder = ComponentRegistryBuilder()
     private val optionsBuilder = OptionsBuilder()
 
+    @Suppress("NOTHING_TO_INLINE")
     inline fun takeFrom(
         imageLoader: ImageLoader,
         clearOptionsExtraData: Boolean = false,

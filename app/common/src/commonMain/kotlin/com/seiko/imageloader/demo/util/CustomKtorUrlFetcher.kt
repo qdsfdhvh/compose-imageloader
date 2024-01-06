@@ -21,7 +21,7 @@ val customKtorUrlFetcher = KtorUrlFetcher.Factory {
             level = LogLevel.HEADERS
             logger = object : Logger {
                 override fun log(message: String) {
-                    DebugLogger.d(tag = "HttpClient") { message }
+                    DebugLogger.d("HttpClient") { message }
                 }
             }
         }

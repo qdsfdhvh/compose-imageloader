@@ -2,16 +2,16 @@ package com.seiko.imageloader.option
 
 import androidx.compose.ui.geometry.Size
 import com.seiko.imageloader.BitmapConfig
-import com.seiko.imageloader.Poko
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
 import com.seiko.imageloader.model.ExtraDataBuilder
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.extraData
-import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
+import dev.drewhamilton.poko.Poko
 
-@Poko class Options internal constructor(
+@Poko
+class Options internal constructor(
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,
@@ -27,6 +27,8 @@ import com.seiko.imageloader.util.DEFAULT_MAX_IMAGE_SIZE
 ) {
     companion object {
         internal const val REPEAT_INFINITE = -1
+        const val DEFAULT_MAX_IMAGE_SIZE = 4096
+        const val DEFAULT_MAX_PARALLELISM = 4
     }
 }
 
@@ -42,7 +44,7 @@ class OptionsBuilder internal constructor() {
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED
     var playAnimate: Boolean = true
     private var _repeatCount: Int = Options.REPEAT_INFINITE
-    var maxImageSize = DEFAULT_MAX_IMAGE_SIZE
+    var maxImageSize = Options.DEFAULT_MAX_IMAGE_SIZE
     private var extraData: ExtraData? = null
 
     var repeatCount: Int

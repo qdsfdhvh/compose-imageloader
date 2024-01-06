@@ -24,7 +24,6 @@ kotlin {
                 api(compose.ui)
                 api(libs.kotlinx.coroutines.core)
                 api(libs.okio)
-                api(libs.ktor.client.core)
                 api(libs.uri.kmp)
             }
         }
@@ -34,11 +33,6 @@ kotlin {
                 implementation(libs.bundles.test.common)
                 implementation(compose.foundation)
                 implementation(compose.ui)
-            }
-        }
-        jvmMain {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
             }
         }
         androidMain {
@@ -74,16 +68,6 @@ kotlin {
                 }
             }
         }
-        appleMain {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-        }
-        jsMain {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
-        }
         val noJsMain by creating {
             dependsOn(commonMain.get())
             jvmMain.get().dependsOn(this)
@@ -92,23 +76,12 @@ kotlin {
                 implementation(libs.androidx.collection)
             }
         }
-        val noAndroidMain by creating {
-            dependsOn(commonMain.get())
-            desktopMain.get().dependsOn(this)
-            appleMain.get().dependsOn(this)
-            jsMain.get().dependsOn(this)
-        }
-    }
-    sourceSets.all {
-        if (name.endsWith("Main")) {
-            kotlin.srcDir("src/$name/singleton")
-        }
     }
 }
 
 @Suppress("UnstableApiUsage")
 android {
-    namespace = "io.github.qdsfdhvh.imageloader"
+    namespace = "io.github.qdsfdhvh.imageloader.core"
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -127,8 +100,4 @@ baselineProfile {
 
 dependencies {
     baselineProfile(projects.app.android.benchmark)
-}
-
-poko {
-    pokoAnnotation.set("com.seiko.imageloader.Poko")
 }
