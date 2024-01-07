@@ -12,6 +12,7 @@ kotlin {
             dependencies {
                 api(projects.imageLoader)
                 api(projects.extension.ktorNetwork)
+                api(projects.extension.svg)
             }
         }
         commonTest {

@@ -42,6 +42,7 @@ include(
     ":extension:ktor-network",
     ":extension:moko-resources",
     ":extension:nine-patch",
+    ":extension:svg",
     ":app:common",
     ":app:android",
     ":app:android:benchmark",

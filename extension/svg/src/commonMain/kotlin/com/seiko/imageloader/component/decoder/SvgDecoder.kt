@@ -1,27 +1,23 @@
 package com.seiko.imageloader.component.decoder
 
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.unit.Density
-import com.caverock.androidsvg.SVG
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.util.SVGPainter
 import com.seiko.imageloader.util.isSvg
+import okio.BufferedSource
 
-/**
- * A [Decoder] that uses [AndroidSVG](https://bigbadaboom.github.io/androidsvg/) to decode SVG
- * files.
- */
 class SvgDecoder private constructor(
-    private val source: DecodeSource,
+    private val source: BufferedSource,
     private val density: Density,
     private val options: Options,
 ) : Decoder {
 
     override suspend fun decode(): DecodeResult {
-        val svg = SVG.getFromInputStream(source.source.inputStream())
         return DecodeResult.OfPainter(
-            painter = SVGPainter(svg, density, options.size),
+            painter = createSVGPainter(source, density, options),
         )
     }
 
@@ -32,8 +28,8 @@ class SvgDecoder private constructor(
         override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source)) return null
             return SvgDecoder(
-                source = source,
-                density = density ?: Density(options.androidContext),
+                source = source.source,
+                density = density ?: defaultDensity(options),
                 options = options,
             )
         }
@@ -47,3 +43,13 @@ class SvgDecoder private constructor(
         private const val MIME_TYPE_SVG = "image/svg+xml"
     }
 }
+
+interface SvgDom {
+    val width: Float
+    val height: Float
+    fun draw(canvas: Canvas, size: Size)
+}
+
+internal expect fun createSVGPainter(source: BufferedSource, density: Density, options: Options): SVGPainter
+
+internal expect fun defaultDensity(options: Options): Density

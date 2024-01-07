@@ -23,10 +23,7 @@ fun ComponentRegistryBuilder.setupDefaultComponents(
     setupKtorComponents(httpClient)
     setupBase64Components()
     setupCommonComponents()
+    setupSvgComponents(density)
     setupJvmComponents()
-    setupAndroidComponents(
-        context = context,
-        density = density,
-        maxParallelism = maxParallelism,
-    )
+    setupAndroidComponents(context, maxParallelism)
 }
