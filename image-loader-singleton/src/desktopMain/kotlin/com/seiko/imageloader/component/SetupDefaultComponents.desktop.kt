@@ -7,13 +7,13 @@ import io.ktor.client.HttpClient
 
 actual fun ComponentRegistryBuilder.setupDefaultComponents(httpClient: () -> HttpClient) {
     setupDefaultComponents(
-        density = Density(2f),
+        density = null,
         httpClient = httpClient,
     )
 }
 
 fun ComponentRegistryBuilder.setupDefaultComponents(
-    density: Density = Density(2f),
+    density: Density? = null,
     httpClient: () -> HttpClient = KtorUrlFetcher.defaultHttpEngineFactory,
     maxParallelism: Int = Options.DEFAULT_MAX_PARALLELISM,
 ) {
@@ -21,5 +21,6 @@ fun ComponentRegistryBuilder.setupDefaultComponents(
     setupBase64Components()
     setupCommonComponents()
     setupJvmComponents()
-    setupSkiaComponents(density, maxParallelism)
+    setupSvgComponents(density)
+    setupSkiaComponents(maxParallelism)
 }
