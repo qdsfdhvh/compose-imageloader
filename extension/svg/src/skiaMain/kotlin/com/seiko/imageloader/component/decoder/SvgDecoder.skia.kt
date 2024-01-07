@@ -14,8 +14,10 @@ import org.jetbrains.skia.svg.SVGLength
 import org.jetbrains.skia.svg.SVGLengthUnit
 import org.jetbrains.skia.svg.SVGPreserveAspectRatio
 import org.jetbrains.skia.svg.SVGPreserveAspectRatioAlign
+import kotlin.jvm.JvmInline
 
-private class SkiaSvgDom(
+@JvmInline
+private value class SkiaSvgDom(
     val dom: SVGDOM,
 ) : SvgDom {
     override val width: Float
