@@ -93,5 +93,5 @@ private enum class Route {
     Pokemon,
     LocalResource,
     Other,
-    FilePicker;
+    FilePicker,
 }
