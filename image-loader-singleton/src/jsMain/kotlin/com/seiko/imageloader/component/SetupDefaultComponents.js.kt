@@ -22,7 +22,7 @@ fun ComponentRegistryBuilder.setupDefaultComponents(
 ) {
     setupKtorComponents(httpClient)
     setupBase64Components()
-    setupCommonComponents(fileSystem)
     setupSvgComponents(density)
     setupSkiaComponents(maxParallelism)
+    setupCommonComponents(fileSystem)
 }

@@ -1,7 +1,7 @@
 package com.seiko.imageloader.component
 
-import com.seiko.imageloader.component.mapper.NSURLToPathMapper
+import com.seiko.imageloader.component.mapper.NSURLToUriMapper
 
 fun ComponentRegistryBuilder.setupAppleComponents() {
-    add(NSURLToPathMapper())
+    add(NSURLToUriMapper())
 }

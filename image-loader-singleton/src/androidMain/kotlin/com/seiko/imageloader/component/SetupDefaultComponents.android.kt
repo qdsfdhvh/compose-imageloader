@@ -25,8 +25,8 @@ fun ComponentRegistryBuilder.setupDefaultComponents(
 ) {
     setupKtorComponents(httpClient)
     setupBase64Components()
-    setupCommonComponents(fileSystem)
     setupSvgComponents(density)
     setupJvmComponents()
     setupAndroidComponents(context, maxParallelism)
+    setupCommonComponents(fileSystem)
 }
