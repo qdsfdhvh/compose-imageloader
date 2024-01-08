@@ -8,11 +8,11 @@ import kotlin.test.assertNull
 
 class StringUriMapperTest {
 
-    private lateinit var mapper: StringUriMapper
+    private lateinit var mapper: StringToUriMapper
 
     @BeforeTest
     fun onBefore() {
-        mapper = StringUriMapper()
+        mapper = StringToUriMapper()
     }
 
     @Test

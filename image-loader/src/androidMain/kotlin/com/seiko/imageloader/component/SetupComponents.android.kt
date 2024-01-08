@@ -10,6 +10,7 @@ import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.DrawableFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
 import com.seiko.imageloader.component.keyer.UriKeyer
+import com.seiko.imageloader.component.mapper.AndroidUriMapper
 import com.seiko.imageloader.component.mapper.ResourceIntMapper
 import com.seiko.imageloader.component.mapper.ResourceUriMapper
 import com.seiko.imageloader.option.Options
@@ -19,6 +20,7 @@ fun ComponentRegistryBuilder.setupAndroidComponents(
     maxParallelism: Int = Options.DEFAULT_MAX_PARALLELISM,
 ) {
     // Mappers
+    add(AndroidUriMapper())
     add(ResourceUriMapper(context))
     add(ResourceIntMapper(context))
     // Keyers
