@@ -4,4 +4,4 @@ import okio.FileSystem
 
 actual typealias WeakReference<T> = kotlin.native.ref.WeakReference<T>
 
-internal actual val defaultFileSystem: FileSystem? get() = FileSystem.SYSTEM
+actual val defaultFileSystem: FileSystem? get() = FileSystem.SYSTEM

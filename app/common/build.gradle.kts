@@ -49,6 +49,19 @@ kotlin {
                 implementation(libs.ktor.client.js)
             }
         }
+        val filePickerMain by creating {
+            dependsOn(commonMain.get())
+            jvmMain.get().dependsOn(this)
+            iosMain.get().dependsOn(this)
+            jsMain.get().dependsOn(this)
+            dependencies {
+                implementation(libs.file.picker)
+            }
+        }
+        val noFilePickerMain by creating {
+            dependsOn(commonMain.get())
+            macosMain.get().dependsOn(this)
+        }
     }
     targets.withType<KotlinNativeTarget>().configureEach {
         binaries.framework {

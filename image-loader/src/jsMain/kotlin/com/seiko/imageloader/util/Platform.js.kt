@@ -28,4 +28,4 @@ actual class WeakReference<T : Any> actual constructor(referred: T) {
 
 internal actual val ioDispatcher: CoroutineDispatcher get() = Dispatchers.Default
 
-internal actual val defaultFileSystem: FileSystem? get() = null
+actual val defaultFileSystem: FileSystem? get() = null
