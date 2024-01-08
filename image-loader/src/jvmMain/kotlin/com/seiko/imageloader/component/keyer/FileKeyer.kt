@@ -8,6 +8,7 @@ class FileKeyer(
 ) : Keyer {
     override fun key(data: Any, options: Options, type: Keyer.Type): String? {
         if (data !is File) return null
+        if (type === Keyer.Type.Disk) return null
         return if (addLastModifiedToFileCacheKey) {
             "${data.path}:${data.lastModified()}"
         } else {

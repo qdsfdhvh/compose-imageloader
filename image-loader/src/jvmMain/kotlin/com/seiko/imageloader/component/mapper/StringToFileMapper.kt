@@ -5,7 +5,7 @@ import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.firstPathSegment
 import java.io.File
 
-class FileUriMapper : Mapper<File> {
+class StringToFileMapper : Mapper<File> {
     override fun map(data: Any, options: Options): File? {
         if (data !is Uri) return null
         if (!isApplicable(data)) return null
