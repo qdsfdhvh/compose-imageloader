@@ -29,6 +29,7 @@ roborazzi = "1.8.0-rc-1"
 robolectric = "4.11.1"
 poko = "0.15.2"
 turbine = "1.0.0"
+file-picker = "3.1.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -91,6 +92,7 @@ uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+file-picker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "file-picker" }
 
 [bundles]
 logic-plugins = [
