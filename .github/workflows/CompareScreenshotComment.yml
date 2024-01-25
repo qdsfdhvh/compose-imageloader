@@ -123,7 +123,7 @@ jobs:
           body-includes: Snapshot diff report
 
       - name: Add or update comment on PR
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: steps.generate-diff-reports.outputs.reports != ''
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
