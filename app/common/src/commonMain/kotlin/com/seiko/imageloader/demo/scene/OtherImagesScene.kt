@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import com.seiko.imageloader.demo.data.imageJsonData
 import com.seiko.imageloader.rememberImagePainter
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.readResourceBytes
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(InternalResourceApi::class)
 @Composable
 fun OtherImagesScene(
     onBack: () -> Unit,
@@ -107,7 +107,7 @@ fun OtherImagesScene(
             }
             item {
                 val imageBytes by produceState<ByteArray?>(null) {
-                    value = readResourceBytes("composeRes/images/cat.jpg")
+                    value = readResourceBytes("drawable/cat.jpg")
                 }
                 imageBytes?.let {
                     ImageItem(it)

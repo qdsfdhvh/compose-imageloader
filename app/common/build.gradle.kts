@@ -9,6 +9,11 @@ plugins {
 
 kotlin {
     sourceSets {
+        all {
+            languageSettings {
+                optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
+            }
+        }
         commonMain {
             dependencies {
                 api(compose.runtime)
