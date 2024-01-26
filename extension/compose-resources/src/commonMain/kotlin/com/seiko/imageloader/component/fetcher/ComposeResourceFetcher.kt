@@ -6,6 +6,7 @@ import com.seiko.imageloader.option.Options
 import okio.Buffer
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.getPathByEnvironment
 import org.jetbrains.compose.resources.getSystemEnvironment
 import org.jetbrains.compose.resources.readResourceBytes
@@ -24,6 +25,7 @@ class ComposeResourceFetcher {
     private class DrawableResourceFetcher(
         private val resource: DrawableResource,
     ) : Fetcher {
+        @OptIn(InternalResourceApi::class)
         override suspend fun fetch(): FetchResult {
             val path = resource.getPathByEnvironment(getSystemEnvironment())
             return FetchResult.OfSource(

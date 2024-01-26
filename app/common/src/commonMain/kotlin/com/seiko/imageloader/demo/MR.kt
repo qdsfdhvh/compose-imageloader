@@ -1,6 +1,6 @@
 package com.seiko.imageloader.demo
 
-import io.github.qdsfdhvh.generated.resources.Res
+import io.github.qdsfdhvh.common.generated.resources.Res
 
 internal object MR {
     val images get() = Res.drawable
