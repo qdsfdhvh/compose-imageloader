@@ -107,7 +107,7 @@ fun OtherImagesScene(
             }
             item {
                 val imageBytes by produceState<ByteArray?>(null) {
-                    value = readResourceBytes("composeRes/images/cat.jpg")
+                    value = readResourceBytes("drawable/cat.jpg")
                 }
                 imageBytes?.let {
                     ImageItem(it)

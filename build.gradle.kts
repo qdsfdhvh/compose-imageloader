@@ -76,6 +76,16 @@ allprojects {
             }
         }
     }
+
+    // fix order of android release lint tasks
+    listOf(
+        "generateReleaseLintVitalModel",
+        "lintVitalAnalyzeRelease",
+    ).forEach { name ->
+        tasks.matching { it.name == name }.configureEach {
+            dependsOn(tasks.matching { it.name == "copyFontsToAndroidAssets" })
+        }
+    }
 }
 
 tasks.dokkaHtmlMultiModule {

@@ -48,6 +48,7 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
 }
 
 @OptIn(ExperimentalForeignApi::class)
+@Suppress("INVISIBLE_MEMBER")
 internal actual suspend fun ImageResource.toFetchResult(options: Options): FetchResult? {
     val nsImage: NSImage = this.toNSImage()
         ?: throw IllegalArgumentException("can't read NSImage of $this")
