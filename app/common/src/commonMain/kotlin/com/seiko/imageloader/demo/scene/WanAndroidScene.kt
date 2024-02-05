@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
@@ -93,23 +92,21 @@ fun WanAndroidScene(
                 }
             }
 
-            println(projects.firstOrNull()?.envelopePic ?: "null")
-
             LazyVerticalGrid(
                 GridCells.Fixed(3),
                 Modifier.weight(1f).fillMaxWidth(),
             ) {
                 items(
-                    projects,
-                    key = { it.id },
-                ) { project ->
+                    projects.size,
+                    key = { projects[it].id },
+                ) {
                     Column {
                         AutoSizeImage(
-                            project.envelopePic,
-                            contentDescription = project.title,
+                            projects[it].envelopePic,
+                            contentDescription = projects[it].title,
                             modifier = Modifier.size(200.dp),
                         )
-                        Text(project.title)
+                        Text(projects[it].title)
                     }
                 }
             }
