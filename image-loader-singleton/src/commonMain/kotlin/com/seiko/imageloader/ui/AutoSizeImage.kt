@@ -177,7 +177,7 @@ private class AutoSizeImageNode(
 
     private var cachedSize: Size = Size.Unspecified
 
-    private var drawPainter: Painter? = null
+    private var drawPainter: Painter? = placeholderPainter
     private var drawPainterPositionAndSize: CachedPositionAndSize? = null
 
     private var hasFixedSize: Boolean = false
@@ -202,11 +202,13 @@ private class AutoSizeImageNode(
     override fun onDetach() {
         super.onDetach()
         // if this node is reset from pool, not need to reset size
-        if (!isReset) {
+        if (isReset) {
+            updatePainter(placeholderPainter)
+        } else {
             hasFixedSize = false
             cachedSize = Size.Unspecified
+            updatePainter(null)
         }
-        updatePainter(null)
     }
 
     fun update(
@@ -273,11 +275,10 @@ private class AutoSizeImageNode(
 
         drawPainterPositionAndSize = null
 
-        if (hasFixedSize) {
-            invalidateDraw()
-        } else {
+        if (!hasFixedSize) {
             invalidateMeasurement()
         }
+        invalidateDraw()
     }
 
     private fun checkPainterPlay() {
