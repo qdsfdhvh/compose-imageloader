@@ -11,4 +11,4 @@ expect class WeakReference<T : Any>(referred: T) {
 
 internal expect val ioDispatcher: CoroutineDispatcher
 
-internal expect val defaultFileSystem: FileSystem?
+expect val defaultFileSystem: FileSystem?

@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.16.1"
+    id("com.gradle.enterprise") version "3.16.2"
 }
 
 gradleEnterprise {
@@ -43,6 +43,7 @@ include(
     ":extension:ktor-network",
     ":extension:moko-resources",
     ":extension:nine-patch",
+    ":extension:svg",
     ":app:common",
     ":app:android",
     ":app:android:benchmark",

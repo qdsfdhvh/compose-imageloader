@@ -20,12 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.seiko.imageloader.demo.scene.FilePickerScene
 import com.seiko.imageloader.demo.scene.GifImagesScene
 import com.seiko.imageloader.demo.scene.LocalResourceScene
 import com.seiko.imageloader.demo.scene.NetworkImagesScene
 import com.seiko.imageloader.demo.scene.OtherImagesScene
 import com.seiko.imageloader.demo.scene.PokemonScene
 import com.seiko.imageloader.demo.scene.SvgImagesScene
+import com.seiko.imageloader.demo.scene.WanAndroidScene
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
@@ -46,6 +48,8 @@ fun App(modifier: Modifier = Modifier) {
                 Route.Pokemon -> PokemonScene(::onBack)
                 Route.LocalResource -> LocalResourceScene(::onBack)
                 Route.Other -> OtherImagesScene(::onBack)
+                Route.FilePicker -> FilePickerScene(::onBack)
+                Route.WanAndroid -> WanAndroidScene(::onBack)
             }
         }
     }
@@ -91,4 +95,6 @@ private enum class Route {
     Pokemon,
     LocalResource,
     Other,
+    FilePicker,
+    WanAndroid,
 }
