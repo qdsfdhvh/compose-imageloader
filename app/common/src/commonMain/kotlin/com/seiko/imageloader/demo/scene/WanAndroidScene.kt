@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.seiko.imageloader.demo.MR
 import com.seiko.imageloader.demo.util.JSON
 import com.seiko.imageloader.demo.util.httpEngine
 import com.seiko.imageloader.ui.AutoSizeImage
@@ -31,7 +32,10 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun WanAndroidScene(
     onBack: () -> Unit,
@@ -105,6 +109,8 @@ fun WanAndroidScene(
                             projects[it].envelopePic,
                             contentDescription = projects[it].title,
                             modifier = Modifier.size(200.dp),
+                            placeholderPainter = { painterResource(MR.images.cat) },
+                            errorPainter = { painterResource(MR.images.cat) },
                         )
                         Text(projects[it].title)
                     }
