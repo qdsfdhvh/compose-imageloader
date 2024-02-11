@@ -72,7 +72,7 @@ kotlin {
             jvmMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
             dependencies {
-                implementation(libs.androidx.collection)
+                implementation(libs.jetbrains.collection)
             }
         }
     }
