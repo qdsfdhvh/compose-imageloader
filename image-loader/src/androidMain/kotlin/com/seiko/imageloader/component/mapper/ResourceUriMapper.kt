@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.mapper
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import com.eygraber.uri.Uri
@@ -15,6 +16,7 @@ class ResourceUriMapper(
     private val context: Context? = null,
 ) : Mapper<Uri> {
 
+    @SuppressLint("DiscouragedApi")
     override fun map(data: Any, options: Options): Uri? {
         if (data !is Uri) return null
         if (!isApplicable(data)) return null
