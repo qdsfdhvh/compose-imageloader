@@ -12,7 +12,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -38,7 +38,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun BackButton(onBack: () -> Unit) {
     IconButton(onBack) {
-        Icon(Icons.Default.ArrowBack, "back")
+        Icon(Icons.AutoMirrored.Filled.ArrowBack, "back")
     }
 }
 
