@@ -11,8 +11,10 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.imageLoader)
+                // implementation compose resources will auto enable generate res task, so here use compileOnly
+                // https://github.com/JetBrains/compose-multiplatform/blob/master/gradle-plugins/compose/src/main/kotlin/org/jetbrains/compose/resources/ResourcesGenerator.kt#L143
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
+                compileOnly(compose.components.resources)
             }
         }
     }
