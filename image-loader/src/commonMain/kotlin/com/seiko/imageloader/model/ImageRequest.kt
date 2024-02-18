@@ -7,7 +7,9 @@ import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.option.OptionsBuilder
 import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.option.SizeResolver
+import dev.drewhamilton.poko.Poko
 
+@Poko
 @Immutable
 class ImageRequest internal constructor(
     val data: Any,
@@ -17,41 +19,7 @@ class ImageRequest internal constructor(
     internal val optionsBuilders: List<OptionsBuilder.() -> Unit>,
     internal val components: ComponentRegistry?,
     internal val interceptors: List<Interceptor>?,
-) {
-
-    override fun equals(other: Any?): Boolean {
-        return other is ImageRequest &&
-            data == other.data &&
-            extra == other.extra &&
-            sizeResolver == other.sizeResolver &&
-            skipEvent == other.skipEvent &&
-            optionsBuilders == other.optionsBuilders &&
-            components == other.components &&
-            interceptors == other.interceptors
-    }
-
-    override fun hashCode(): Int {
-        var result = data.hashCode()
-        result = 31 * result + extra.hashCode()
-        result = 31 * result + sizeResolver.hashCode()
-        result = 31 * result + skipEvent.hashCode()
-        result = 31 * result + optionsBuilders.hashCode()
-        result = 31 * result + components.hashCode()
-        result = 31 * result + interceptors.hashCode()
-        return result
-    }
-
-    override fun toString(): String {
-        return "ImageRequest(" +
-            "data=$data," +
-            "extra=$extra," +
-            "sizeResolver=$sizeResolver," +
-            "skipEvent=$skipEvent," +
-            "optionsBuilders=$optionsBuilders," +
-            "components=$components," +
-            "interceptors=$interceptors)"
-    }
-}
+)
 
 class ImageRequestBuilder internal constructor() {
 

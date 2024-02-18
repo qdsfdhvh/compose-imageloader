@@ -5,13 +5,13 @@ class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
     private val valueSizeProvider: (V) -> Int,
 ) {
 
-    private var maxSizeBytes = 0
+    private var maxSize = 0
     private var strongReferencesEnabled = true
     private var weakReferencesEnabled = true
 
-    fun maxSizeBytes(size: Int) {
+    fun maxSize(size: Int) {
         require(size >= 0) { "size must be >= 0." }
-        maxSizeBytes = size
+        maxSize = size
     }
 
     fun strongReferencesEnabled(enable: Boolean) {
@@ -30,8 +30,8 @@ class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
                 EmptyWeakMemoryCache()
             }
         val strongMemoryCache: StrongMemoryCache<K, V> =
-            if (strongReferencesEnabled && maxSizeBytes > 0) {
-                RealStrongMemoryCache(maxSizeBytes, weakMemoryCache, valueSizeProvider)
+            if (strongReferencesEnabled && maxSize > 0) {
+                RealStrongMemoryCache(maxSize, weakMemoryCache, valueSizeProvider)
             } else {
                 EmptyStrongMemoryCache(weakMemoryCache, valueSizeProvider)
             }
@@ -47,5 +47,3 @@ fun <K : Any, V : Any> MemoryCache(
     valueHashProvider = valueHashProvider,
     valueSizeProvider = valueSizeProvider,
 ).apply(block).build()
-
-typealias MemoryKey = String

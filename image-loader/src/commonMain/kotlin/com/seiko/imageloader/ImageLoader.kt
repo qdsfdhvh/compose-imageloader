@@ -2,7 +2,7 @@ package com.seiko.imageloader
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.isSpecified
-import com.seiko.imageloader.intercept.InterceptorChainImpl
+import com.seiko.imageloader.intercept.createInterceptorChain
 import com.seiko.imageloader.model.ImageAction
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
@@ -48,7 +48,7 @@ private class RealImageLoader(
                 size = initialSize
             }
         }
-        val chain = InterceptorChainImpl(
+        val chain = createInterceptorChain(
             initialRequest = request,
             initialOptions = options,
             config = config,
