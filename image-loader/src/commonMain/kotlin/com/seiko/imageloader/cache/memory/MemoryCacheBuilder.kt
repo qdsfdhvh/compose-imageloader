@@ -47,5 +47,3 @@ fun <K : Any, V : Any> MemoryCache(
     valueHashProvider = valueHashProvider,
     valueSizeProvider = valueSizeProvider,
 ).apply(block).build()
-
-typealias MemoryKey = String
