@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.asComposeImageBitmap
 
 actual typealias Bitmap = org.jetbrains.skia.Bitmap
 
-internal actual val Bitmap.size: Int
-    get() = height * rowBytes
+actual val Bitmap.size: Int
+    get() = computeByteSize()
 
 actual fun Bitmap.asImageBitmap(): ImageBitmap {
     return asComposeImageBitmap()

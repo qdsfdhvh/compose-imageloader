@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.painter.Painter
 
 expect class Bitmap
 
-internal expect val Bitmap.size: Int
+expect val Bitmap.size: Int
 
 @Suppress("INVISIBLE_MEMBER")
 @OptIn(InternalComposeApi::class)
