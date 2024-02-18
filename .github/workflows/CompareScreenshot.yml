@@ -46,7 +46,7 @@ jobs:
         id: compare-screenshot-test
         run: ./gradlew compareRoborazzi --stacktrace --info
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: screenshot-diff
@@ -54,7 +54,7 @@ jobs:
             **/build/outputs/roborazzi
           retention-days: 30
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: screenshot-diff-reports
@@ -62,7 +62,7 @@ jobs:
             **/build/reports
           retention-days: 30
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: screenshot-diff-test-results
@@ -75,7 +75,7 @@ jobs:
         run: |
           mkdir -p ./pr
           echo ${{ github.event.number }} > ./pr/NR
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: pr
           path: pr/
