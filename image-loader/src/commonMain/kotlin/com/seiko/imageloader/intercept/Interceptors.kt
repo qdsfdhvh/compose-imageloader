@@ -1,31 +1,29 @@
 package com.seiko.imageloader.intercept
 
+import androidx.compose.runtime.identityHashCode
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryKey
-import com.seiko.imageloader.identityHashCode
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.size
 import com.seiko.imageloader.util.defaultFileSystem
-import com.seiko.imageloader.util.forEachIndices
 import okio.FileSystem
 
 class Interceptors internal constructor(
     internal val useDefaultInterceptors: Boolean,
     internal val interceptorList: List<Interceptor>,
-    internal val memoryCaches: List<MemoryCacheWrapper<*>>,
+    internal val defaultMemoryCacheInterceptorList: Set<MemoryCacheInterceptor<*>>,
     internal val diskCache: (() -> DiskCache)?,
 ) {
     val list: List<Interceptor> by lazy {
         if (useDefaultInterceptors) {
-            interceptorList + buildList {
+            buildList {
+                addAll(interceptorList)
                 add(MappedInterceptor())
-                memoryCaches.forEachIndices { wrapper ->
-                    add(wrapper.toInterceptor())
-                }
+                addAll(defaultMemoryCacheInterceptorList)
                 add(DecodeInterceptor())
                 diskCache?.let {
                     add(DiskCacheInterceptor(it))
@@ -41,7 +39,7 @@ class Interceptors internal constructor(
 class InterceptorsBuilder internal constructor() {
 
     private val interceptorList = mutableListOf<Interceptor>()
-    private val memoryCaches = mutableListOf<MemoryCacheWrapper<*>>()
+    private val defaultMemoryCacheInterceptorList = mutableSetOf<MemoryCacheInterceptor<*>>()
     private var diskCache: (() -> DiskCache)? = null
 
     var useDefaultInterceptors = true
@@ -56,10 +54,10 @@ class InterceptorsBuilder internal constructor() {
             interceptorList.clear()
         }
         if (clearMemoryCaches) {
-            memoryCaches.clear()
+            defaultMemoryCacheInterceptorList.clear()
         }
         interceptorList.addAll(interceptors.interceptorList)
-        memoryCaches.addAll(interceptors.memoryCaches)
+        defaultMemoryCacheInterceptorList.addAll(interceptors.defaultMemoryCacheInterceptorList)
         diskCache = interceptors.diskCache
     }
 
@@ -71,47 +69,60 @@ class InterceptorsBuilder internal constructor() {
         interceptorList.addAll(interceptors)
     }
 
-    fun memoryCacheConfig(
-        valueHashProvider: (Bitmap) -> Int = { it.identityHashCode },
-        valueSizeProvider: (Bitmap) -> Int = { it.size },
-        block: MemoryCacheBuilder<MemoryKey, Bitmap>.() -> Unit,
-    ) {
-        memoryCache(
-            block = {
-                MemoryCache(
-                    valueHashProvider = valueHashProvider,
-                    valueSizeProvider = valueSizeProvider,
-                    block = block,
-                )
-            },
-        )
+    /**
+     * only use for useDefaultInterceptors = true
+     */
+    fun addDefaultMemoryCacheInterceptor(interceptor: MemoryCacheInterceptor<*>) {
+        defaultMemoryCacheInterceptorList.add(interceptor)
     }
 
-    fun memoryCache(
-        mapToMemoryValue: (ImageResult) -> Bitmap? = { (it as? ImageResult.OfBitmap)?.bitmap },
-        mapToImageResult: (Bitmap) -> ImageResult? = { ImageResult.OfBitmap(it) },
-        block: () -> MemoryCache<MemoryKey, Bitmap>,
-    ) {
-        memoryCaches.add(
-            MemoryCacheWrapper(
-                memoryCache = block,
-                mapToMemoryValue = mapToMemoryValue,
-                mapToImageResult = mapToImageResult,
-            ),
-        )
-    }
-
+    @Deprecated(
+        message = "Use addMemoryCacheInterceptor instead",
+        replaceWith = ReplaceWith("addMemoryCacheInterceptor(memoryInterceptor(mapToMemoryValue = mapToMemoryValue, mapToImageResult = mapToImageResult, memoryCache = block))"),
+    )
     fun <T : Any> anyMemoryCache(
         mapToMemoryValue: (ImageResult) -> T?,
         mapToImageResult: (T) -> ImageResult?,
         block: () -> MemoryCache<MemoryKey, T>,
     ) {
-        memoryCaches.add(
-            MemoryCacheWrapper(
-                memoryCache = block,
+        addDefaultMemoryCacheInterceptor(
+            memoryInterceptor(
                 mapToMemoryValue = mapToMemoryValue,
                 mapToImageResult = mapToImageResult,
+                memoryCache = block,
             ),
+        )
+    }
+
+    @Deprecated(
+        message = "Use bitmapMemoryCacheConfig instead",
+        replaceWith = ReplaceWith("bitmapMemoryCacheConfig(valueHashProvider = valueHashProvider, valueSizeProvider = valueSizeProvider, block = block)"),
+    )
+    fun memoryCacheConfig(
+        valueHashProvider: (Bitmap) -> Int = { identityHashCode(it) },
+        valueSizeProvider: (Bitmap) -> Int = { it.size },
+        block: MemoryCacheBuilder<MemoryKey, Bitmap>.() -> Unit,
+    ) {
+        bitmapMemoryCacheConfig(
+            valueHashProvider = valueHashProvider,
+            valueSizeProvider = valueSizeProvider,
+            block = block,
+        )
+    }
+
+    @Deprecated(
+        message = "Use bitmapMemoryCache instead",
+        replaceWith = ReplaceWith("bitmapMemoryCache(memoryCache = memoryCache, mapToMemoryValue = mapToMemoryValue, mapToImageResult = mapToImageResult)"),
+    )
+    fun memoryCache(
+        mapToMemoryValue: (ImageResult) -> Bitmap? = { (it as? ImageResult.OfBitmap)?.bitmap },
+        mapToImageResult: (Bitmap) -> ImageResult? = { ImageResult.OfBitmap(it) },
+        memoryCache: () -> MemoryCache<MemoryKey, Bitmap>,
+    ) {
+        bitmapMemoryCache(
+            memoryCache = memoryCache,
+            mapToMemoryValue = mapToMemoryValue,
+            mapToImageResult = mapToImageResult,
         )
     }
 
@@ -132,20 +143,8 @@ class InterceptorsBuilder internal constructor() {
         return Interceptors(
             useDefaultInterceptors = useDefaultInterceptors,
             interceptorList = interceptorList,
-            memoryCaches = memoryCaches,
+            defaultMemoryCacheInterceptorList = defaultMemoryCacheInterceptorList,
             diskCache = diskCache,
         )
     }
-}
-
-internal class MemoryCacheWrapper<T>(
-    val memoryCache: () -> MemoryCache<MemoryKey, T>,
-    val mapToMemoryValue: (ImageResult) -> T?,
-    val mapToImageResult: (T) -> ImageResult?,
-) {
-    fun toInterceptor() = MemoryCacheInterceptor(
-        memoryCache = memoryCache,
-        mapToMemoryValue = mapToMemoryValue,
-        mapToImageResult = mapToImageResult,
-    )
 }

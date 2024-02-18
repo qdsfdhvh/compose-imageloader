@@ -16,6 +16,7 @@ kotlin {
         all {
             languageSettings {
                 optIn("kotlin.experimental.ExperimentalNativeApi")
+                optIn("androidx.compose.runtime.InternalComposeApi")
             }
         }
         commonMain {
