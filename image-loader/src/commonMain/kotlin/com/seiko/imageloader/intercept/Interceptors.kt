@@ -63,10 +63,6 @@ class InterceptorsBuilder internal constructor() {
         diskCache = interceptors.diskCache
     }
 
-    fun addInterceptor(block: suspend (chain: Interceptor.Chain) -> ImageResult) {
-        interceptorList.add(Interceptor(block))
-    }
-
     fun addInterceptor(interceptor: Interceptor) {
         interceptorList.add(interceptor)
     }
