@@ -11,7 +11,7 @@ fun <K : Any, V : Any> MemoryCacheBuilder<K, V>.maxSizePercent(
 ) {
     require(percent in 0.0..1.0) { "size must be in the range [0.0, 1.0]." }
     val maxSizeBytes = context.calculateMemoryCacheSize(percent)
-    maxSizeBytes(maxSizeBytes)
+    maxSize(maxSizeBytes)
 }
 
 private fun Context.defaultMemoryCacheSizePercent(): Double {

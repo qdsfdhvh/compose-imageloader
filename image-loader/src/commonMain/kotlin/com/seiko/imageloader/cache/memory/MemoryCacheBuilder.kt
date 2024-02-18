@@ -9,7 +9,7 @@ class MemoryCacheBuilder<K : Any, V : Any> internal constructor(
     private var strongReferencesEnabled = true
     private var weakReferencesEnabled = true
 
-    fun maxSizeBytes(size: Int) {
+    fun maxSize(size: Int) {
         require(size >= 0) { "size must be >= 0." }
         maxSizeBytes = size
     }
