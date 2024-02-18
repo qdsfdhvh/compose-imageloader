@@ -1,6 +1,5 @@
 package com.seiko.imageloader.intercept
 
-import androidx.compose.runtime.identityHashCode
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.cache.disk.DiskCacheBuilder
@@ -10,6 +9,7 @@ import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.size
 import com.seiko.imageloader.util.defaultFileSystem
+import com.seiko.imageloader.util.identityHashCode
 import okio.FileSystem
 
 class Interceptors internal constructor(

@@ -1,6 +1,5 @@
 package com.seiko.imageloader.intercept
 
-import androidx.compose.runtime.identityHashCode
 import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.Image
@@ -9,6 +8,7 @@ import com.seiko.imageloader.cache.memory.MemoryCacheBuilder
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.size
+import com.seiko.imageloader.util.identityHashCode
 
 fun <T> memoryInterceptor(
     memoryCache: () -> MemoryCache<MemoryKey, T>,
