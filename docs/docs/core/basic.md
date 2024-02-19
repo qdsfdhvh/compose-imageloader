@@ -63,11 +63,17 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
-            // cache 100 success image result, without bitmap
-            defaultImageResultMemoryCache()
-            memoryCacheConfig {
-                // Set the max size to 25% of the app's available memory.
+            // cache 25% memory bitmap
+            bitmapMemoryCacheConfig {
                 maxSizePercent(context, 0.25)
+            }
+            // cache 50 image
+            imageMemoryCacheConfig {
+                maxSize(50)
+            }
+            // cache 50 painter
+            painterMemoryCacheConfig {
+                maxSize(50)
             }
             diskCacheConfig {
                 directory(context.cacheDir.resolve("image_cache").toOkioPath())
@@ -87,10 +93,17 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
-            // cache 100 success image result, without bitmap
-            defaultImageResultMemoryCache()
-            memoryCacheConfig {
-                maxSizeBytes(32 * 1024 * 1024) // 32MB
+            // cache 32MB bitmap
+            bitmapMemoryCacheConfig {
+                maxSize(32 * 1024 * 1024) // 32MB
+            }
+            // cache 50 image
+            imageMemoryCacheConfig {
+                maxSize(50)
+            }
+            // cache 50 painter
+            painterMemoryCacheConfig {
+                maxSize(50)
             }
             diskCacheConfig {
                 directory(getCacheDir().toOkioPath().resolve("image_cache"))
@@ -118,10 +131,17 @@ fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
-            // cache 100 success image result, without bitmap
-            defaultImageResultMemoryCache()
-            memoryCacheConfig {
-                maxSizeBytes(32 * 1024 * 1024) // 32MB
+            // cache 32MB bitmap
+            bitmapMemoryCacheConfig {
+                maxSize(32 * 1024 * 1024) // 32MB
+            }
+            // cache 50 image
+            imageMemoryCacheConfig {
+                maxSize(50)
+            }
+            // cache 50 painter
+            painterMemoryCacheConfig {
+                maxSize(50)
             }
             diskCacheConfig {
                 directory(getCacheDir().toPath().resolve("image_cache"))
@@ -148,8 +168,17 @@ fun generateImageLoader(): ImageLoader {
     return ImageLoader {
         // ...
         interceptor {
-             memoryCacheConfig {
-                maxSizeBytes(32 * 1024 * 1024) // 32MB
+            // cache 32MB bitmap
+            bitmapMemoryCacheConfig {
+                maxSize(32 * 1024 * 1024) // 32MB
+            }
+            // cache 50 image
+            imageMemoryCacheConfig {
+                maxSize(50)
+            }
+            // cache 50 painter
+            painterMemoryCacheConfig {
+                maxSize(50)
             }
             // At the moment I don't know how to configure the disk cache in js either
             diskCacheConfig(FakeFileSystem().apply { emulateUnix() }) {
