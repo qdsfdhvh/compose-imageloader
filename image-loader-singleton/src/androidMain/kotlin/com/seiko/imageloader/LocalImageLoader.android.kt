@@ -9,6 +9,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
+import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
+import com.seiko.imageloader.intercept.imageMemoryCacheConfig
+import com.seiko.imageloader.intercept.painterMemoryCacheConfig
 import com.seiko.imageloader.option.androidContext
 import okio.Path.Companion.toOkioPath
 
@@ -38,9 +41,17 @@ fun ImageLoader.Companion.createDefaultAndroid(context: Context): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
-            defaultImageResultMemoryCache()
-            memoryCacheConfig {
+            // cache 25% memory bitmap
+            bitmapMemoryCacheConfig {
                 maxSizePercent(context, 0.25)
+            }
+            // cache 50 image
+            imageMemoryCacheConfig {
+                maxSize(50)
+            }
+            // cache 50 painter
+            painterMemoryCacheConfig {
+                maxSize(50)
             }
             diskCacheConfig {
                 directory(context.cacheDir.resolve("image_cache").toOkioPath())

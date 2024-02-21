@@ -12,6 +12,7 @@ import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.demo.util.commonConfig
+import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
 import javax.swing.JComponent
 
 class ComposeDemoAction : DumbAwareAction() {
@@ -49,7 +50,7 @@ class ComposeDemoAction : DumbAwareAction() {
                     setupDefaultComponents()
                 }
                 interceptor {
-                    memoryCacheConfig {
+                    bitmapMemoryCacheConfig {
                         // Set the max size to 25% of the app's available memory.
                         maxSizePercent(0.25)
                     }

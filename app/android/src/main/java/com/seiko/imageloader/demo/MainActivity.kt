@@ -27,24 +27,32 @@ class MainActivity : ComponentActivity() {
             takeFrom(ImageLoader.createDefaultAndroid(applicationContext))
             commonConfig()
         }
-        // return ImageLoader {
-        //     commonConfig()
-        //     options {
-        //         androidContext(applicationContext)
-        //     }
-        //     components {
-        //         setupDefaultComponents()
-        //     }
-        //     interceptor {
-        //         memoryCacheConfig {
-        //             // Set the max size to 25% of the app's available memory.
-        //             maxSizePercent(applicationContext, 0.25)
+        //     return ImageLoader {
+        //         commonConfig()
+        //         options {
+        //             androidContext(applicationContext)
         //         }
-        //         diskCacheConfig {
-        //             directory(cacheDir.resolve("image_cache").toOkioPath())
-        //             maxSizeBytes(512L * 1024 * 1024) // 512MB
+        //         components {
+        //             setupDefaultComponents()
+        //         }
+        //         interceptor {
+        //             // cache 25% memory bitmap
+        //             bitmapMemoryCacheConfig {
+        //                 maxSizePercent(context, 0.25)
+        //             }
+        //             // cache 50 image
+        //             imageMemoryCacheConfig {
+        //                 maxSize(50)
+        //             }
+        //             // cache 50 painter
+        //             painterMemoryCacheConfig {
+        //                 maxSize(50)
+        //             }
+        //             diskCacheConfig {
+        //                 directory(cacheDir.resolve("image_cache").toOkioPath())
+        //                 maxSizeBytes(512L * 1024 * 1024) // 512MB
+        //             }
         //         }
         //     }
-        // }
     }
 }

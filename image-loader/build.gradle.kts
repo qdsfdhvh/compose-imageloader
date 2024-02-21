@@ -89,14 +89,12 @@ android {
 }
 
 baselineProfile {
-    baselineProfileOutputDir = "../../src/androidMain/generated/baselineProfiles"
+    mergeIntoMain = true
+    saveInSrc = true
+    from(projects.app.android.benchmark.dependencyProject)
     filter {
         include("com.seiko.imageloader.**")
         exclude("com.seiko.imageloader.demo.**")
         exclude("com.seiko.imageloader.util.Logger")
     }
-}
-
-dependencies {
-    baselineProfile(projects.app.android.benchmark)
 }

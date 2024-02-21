@@ -29,8 +29,17 @@ private fun generateImageLoader(): ImageLoader {
     //         setupDefaultComponents()
     //     }
     //     interceptor {
-    //         memoryCacheConfig {
-    //             maxSizeBytes(32 * 1024 * 1024) // 32MB
+    //         // cache 32MB bitmap
+    //         bitmapMemoryCacheConfig {
+    //             maxSize(32 * 1024 * 1024) // 32MB
+    //         }
+    //         // cache 50 image
+    //         imageMemoryCacheConfig {
+    //             maxSize(50)
+    //         }
+    //         // cache 50 painter
+    //         painterMemoryCacheConfig {
+    //             maxSize(50)
     //         }
     //         diskCacheConfig {
     //             directory(getCacheDir().toPath().resolve("image_cache"))
