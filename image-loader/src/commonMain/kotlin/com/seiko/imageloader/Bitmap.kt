@@ -1,6 +1,5 @@
 package com.seiko.imageloader
 
-import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
@@ -9,12 +8,7 @@ import androidx.compose.ui.graphics.painter.Painter
 
 expect class Bitmap
 
-internal expect val Bitmap.size: Int
-
-@Suppress("INVISIBLE_MEMBER")
-@OptIn(InternalComposeApi::class)
-internal val Bitmap.identityHashCode: Int
-    get() = androidx.compose.runtime.identityHashCode(this)
+expect val Bitmap.size: Int
 
 enum class BitmapConfig {
     ALPHA_8,

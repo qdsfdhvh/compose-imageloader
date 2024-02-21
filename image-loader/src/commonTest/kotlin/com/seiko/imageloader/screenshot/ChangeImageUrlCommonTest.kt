@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.ImageLoader
+import com.seiko.imageloader.intercept.addInterceptor
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.rememberImagePainter

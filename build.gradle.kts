@@ -76,6 +76,16 @@ allprojects {
             }
         }
     }
+
+    // fix order of android release lint tasks
+    listOf(
+        "generateReleaseLintVitalModel",
+        "lintVitalAnalyzeRelease",
+    ).forEach { name ->
+        tasks.matching { it.name == name }.configureEach {
+            dependsOn(tasks.matching { it.name == "copyFontsToAndroidAssets" })
+        }
+    }
 }
 
 tasks.dokkaHtmlMultiModule {
@@ -91,7 +101,7 @@ object ProjectVersion {
     private const val monir = "7"
 
     // backwards compatible bug fixes
-    private const val path = "4"
+    private const val path = "6"
     const val version = "$major.$monir.$path-SNAPSHOT"
 }
 

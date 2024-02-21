@@ -7,6 +7,7 @@ import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.demo.App
 import com.seiko.imageloader.demo.util.commonConfig
+import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
 import okio.FileSystem
 import okio.fakefilesystem.FakeFileSystem
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -37,8 +38,8 @@ private fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
-            memoryCacheConfig {
-                maxSizeBytes(32 * 1024 * 1024) // 32MB
+            bitmapMemoryCacheConfig {
+                maxSize(32 * 1024 * 1024) // 32MB
             }
             diskCacheConfig(FakeFileSystem().apply { emulateUnix() }) {
                 directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY)

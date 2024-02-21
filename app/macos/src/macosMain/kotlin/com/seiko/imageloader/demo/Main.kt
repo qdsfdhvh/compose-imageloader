@@ -7,6 +7,7 @@ import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.demo.util.commonConfig
+import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
 import okio.Path.Companion.toPath
 import platform.AppKit.NSApp
 import platform.AppKit.NSApplication
@@ -33,8 +34,8 @@ private fun generateImageLoader(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
-            memoryCacheConfig {
-                maxSizeBytes(32 * 1024 * 1024) // 32MB
+            bitmapMemoryCacheConfig {
+                maxSize(32 * 1024 * 1024) // 32MB
             }
             diskCacheConfig {
                 directory(getCacheDir().toPath().resolve("image_cache"))

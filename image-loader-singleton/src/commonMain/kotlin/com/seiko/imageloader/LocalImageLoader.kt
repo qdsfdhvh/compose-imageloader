@@ -6,6 +6,10 @@ import androidx.compose.runtime.ReadOnlyComposable
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.component.setupDefaultComponents
 import com.seiko.imageloader.intercept.InterceptorsBuilder
+import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
+import com.seiko.imageloader.intercept.imageMemoryCacheConfig
+import com.seiko.imageloader.intercept.memoryInterceptor
+import com.seiko.imageloader.intercept.painterMemoryCacheConfig
 import com.seiko.imageloader.model.ImageResult
 
 val LocalImageLoader = createImageLoaderProvidableCompositionLocal()
@@ -28,15 +32,24 @@ fun ImageLoader.Companion.createDefault(): ImageLoader {
             setupDefaultComponents()
         }
         interceptor {
-            defaultImageResultMemoryCache()
-            memoryCacheConfig {
-                maxSizeBytes(32 * 1024 * 1024) // 32MB
+            // cache 32MB bitmap
+            bitmapMemoryCacheConfig {
+                maxSize(32 * 1024 * 1024) // 32MB
+            }
+            // cache 50 image
+            imageMemoryCacheConfig {
+                maxSize(50)
+            }
+            // cache 50 painter
+            painterMemoryCacheConfig {
+                maxSize(50)
             }
         }
     }
 }
 
 // cache 100 image result, without bitmap
+@Deprecated("Use imageMemoryCache() & painterMemoryCacheConfig() instead", ReplaceWith(""))
 fun InterceptorsBuilder.defaultImageResultMemoryCache(
     includeBitmap: Boolean = false,
     saveSize: Int = 100,
@@ -55,16 +68,19 @@ fun InterceptorsBuilder.defaultImageResultMemoryCache(
     },
     mapToImageResult: (ImageResult) -> ImageResult? = { it },
 ) {
-    anyMemoryCache(
-        mapToMemoryValue = mapToMemoryValue,
-        mapToImageResult = mapToImageResult,
-    ) {
-        MemoryCache(
-            valueHashProvider = valueHashProvider,
-            valueSizeProvider = valueSizeProvider,
-            block = {
-                maxSizeBytes(saveSize)
+    addDefaultMemoryCacheInterceptor(
+        memoryInterceptor(
+            memoryCache = {
+                MemoryCache(
+                    valueHashProvider = valueHashProvider,
+                    valueSizeProvider = valueSizeProvider,
+                    block = {
+                        maxSize(saveSize)
+                    },
+                )
             },
-        )
-    }
+            mapToMemoryValue = mapToMemoryValue,
+            mapToImageResult = mapToImageResult,
+        ),
+    )
 }
