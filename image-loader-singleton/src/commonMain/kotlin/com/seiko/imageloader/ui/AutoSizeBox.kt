@@ -17,6 +17,7 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
+import androidx.compose.ui.node.invalidateMeasurement
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Constraints
 import com.seiko.imageloader.ImageLoader
@@ -141,10 +142,12 @@ private class AutoSizeBoxNode(
         onImageActionChange: (ImageAction) -> Unit,
         isOnlyPostFirstEvent: Boolean,
     ) {
+        val isRequestDataChange = this.request.data != request.data
+
         val finalRequest = modifyRequest(
             request = request,
             cachedSize = cachedSize,
-            skipEvent = isOnlyPostFirstEvent,
+            skipEvent = !isRequestDataChange && isOnlyPostFirstEvent,
         )
         val isRequestChange = this.request != finalRequest
 
@@ -152,8 +155,13 @@ private class AutoSizeBoxNode(
         this.imageLoader = imageLoader
         this.onImageActionChange = onImageActionChange
 
-        if (isAttached && isRequestChange) {
-            launchImage()
+        if (isAttached) {
+            if (isRequestChange) {
+                launchImage()
+            }
+            if (isRequestDataChange) {
+                invalidateMeasurement()
+            }
         }
     }
 

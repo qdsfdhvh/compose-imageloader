@@ -101,7 +101,7 @@ object ProjectVersion {
     private const val monir = "7"
 
     // backwards compatible bug fixes
-    private const val path = "6"
+    private const val path = "7"
     const val version = "$major.$monir.$path"
 }
 
