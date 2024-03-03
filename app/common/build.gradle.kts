@@ -68,6 +68,7 @@ kotlin {
         val noFilePickerMain by creating {
             dependsOn(commonMain.get())
             macosMain.get().dependsOn(this)
+            wasmJsMain.get().dependsOn(this)
         }
     }
     targets.withType<KotlinNativeTarget>().configureEach {

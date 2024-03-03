@@ -15,6 +15,7 @@ ktlint = "0.50.0"
 publish = "0.27.0"
 dokka = "1.9.10"
 ktor = "2.3.8"
+ktor-wasm = "3.0.0-wasm2"
 okio = "3.8.0"
 uri-kmp = "0.0.16"
 kermit = "2.0.3"
@@ -88,12 +89,12 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
-ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js-js", version.ref = "ktor" }
+ktor-client-wasmJs = { module = "io.ktor:ktor-client-js-wasm-js", version.ref = "ktor" }
 
 uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 file-picker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "file-picker" }
 
 [bundles]
@@ -105,7 +106,6 @@ logic-plugins = [
 test-common = [
     "kotlinx-coroutines-test",
     "okio-fakefilesystem",
-    "turbine",
 ]
 test-android = [
     "junit",

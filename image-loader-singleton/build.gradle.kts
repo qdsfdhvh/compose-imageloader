@@ -26,6 +26,7 @@ kotlin {
             desktopMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
             jsMain.get().dependsOn(this)
+            wasmJsMain.get().dependsOn(this)
         }
     }
 }
