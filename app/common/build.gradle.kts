@@ -24,7 +24,6 @@ kotlin {
                 implementation(compose.components.resources)
 
                 api(projects.imageLoaderSingleton)
-                implementation(projects.extension.blur)
                 implementation(projects.extension.composeResources)
                 // implementation(projects.extension.mokoResources)
                 implementation(projects.extension.ninePatch)
