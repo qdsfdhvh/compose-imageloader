@@ -31,3 +31,5 @@ kotlin {
 android {
     namespace = "io.github.qdsfdhvh.imageloader.moko.resources"
 }
+
+configKotlin()
