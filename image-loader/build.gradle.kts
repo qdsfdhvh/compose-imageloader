@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.config.LanguageFeature
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     id("app.android.library")
@@ -13,8 +12,6 @@ plugins {
 }
 
 kotlin {
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
     sourceSets {
         all {
             languageSettings {
@@ -104,5 +101,3 @@ baselineProfile {
         exclude("com.seiko.imageloader.util.Logger")
     }
 }
-
-applyKtorWasmWorkaround(libs.versions.ktor.wasm.get())
