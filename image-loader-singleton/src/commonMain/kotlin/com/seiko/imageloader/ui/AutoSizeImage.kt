@@ -175,7 +175,7 @@ private class AutoSizeImageNode(
     private var currentImageJob: Job? = null
     private var currentPlayerJob: Job? = null
 
-    private var cachedSize: Size = Size.Unspecified
+    private var cachedSize: Size? = null
 
     private var drawPainter: Painter? = placeholderPainter
     private var drawPainterPositionAndSize: CachedPositionAndSize? = null
@@ -206,7 +206,7 @@ private class AutoSizeImageNode(
             updatePainter(placeholderPainter)
         } else {
             hasFixedSize = false
-            cachedSize = Size.Unspecified
+            cachedSize = null
             updatePainter(null)
         }
     }
@@ -305,7 +305,7 @@ private class AutoSizeImageNode(
 
         val sizeResolver = request.sizeResolver
         if (sizeResolver is AsyncSizeResolver) {
-            sizeResolver.setSize(cachedSize)
+            sizeResolver.setSize(cachedSize ?: Size.Unspecified)
         }
 
         val placeable = measurable.measure(
