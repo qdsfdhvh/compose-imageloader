@@ -21,15 +21,12 @@ kotlin {
                 implementation(libs.bundles.test.common)
             }
         }
-        val wasmJsMain by getting {
-            dependsOn(darwinMain.get())
-        }
         val noAndroidMain by creating {
             dependsOn(commonMain.get())
             desktopMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
             jsMain.get().dependsOn(this)
-            wasmJsMain.dependsOn(this)
+            wasmJsMain.get().dependsOn(this)
         }
     }
 }

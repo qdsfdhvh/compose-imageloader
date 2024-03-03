@@ -67,9 +67,6 @@ kotlin {
                 }
             }
         }
-        val wasmJsMain by getting {
-            dependsOn(darwinMain.get())
-        }
         val noJsAndWasmMain by creating {
             dependsOn(commonMain.get())
             jvmMain.get().dependsOn(this)

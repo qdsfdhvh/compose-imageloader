@@ -34,6 +34,7 @@ fun Project.configJava() {
     }
 }
 
+// TODO: Remove when ktor 3.0.0 rc
 // https://youtrack.jetbrains.com/issue/KTOR-5587
 fun Project.applyKtorWasmWorkaround(version: String) {
     configurations.all {
