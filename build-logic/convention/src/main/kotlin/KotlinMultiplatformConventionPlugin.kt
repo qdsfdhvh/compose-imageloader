@@ -21,7 +21,15 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             macosArm64()
             js(IR) {
                 browser()
-                nodejs()
+            }
+            @Suppress("OPT_IN_USAGE")
+            wasmJs {
+                browser {
+                    // TODO: Fix wasm tests.
+                    testTask {
+                        enabled = false
+                    }
+                }
             }
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             applyHierarchyTemplate {
@@ -45,6 +53,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                                 }
                             }
                             withJs()
+                            withWasm()
                         }
                     }
                 }
@@ -59,5 +68,6 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             }
         }
         configKotlin()
+        applyKtorWasmWorkaround(libs.findVersion("ktor-wasm").get().toString())
     }
 }

@@ -14,8 +14,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
 
@@ -36,7 +37,6 @@ rootProject.name = "compose-imageLoader"
 include(
     ":image-loader",
     ":image-loader-singleton",
-    ":extension:blur",
     ":extension:compose-resources",
     ":extension:imageio",
     ":extension:ktor-network",
@@ -49,6 +49,7 @@ include(
     ":app:desktop",
     ":app:macos",
     ":app:web",
+    ":app:wasmJs",
     ":app:intellij-plugin",
 )
 

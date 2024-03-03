@@ -24,7 +24,6 @@ kotlin {
                 implementation(compose.components.resources)
 
                 api(projects.imageLoaderSingleton)
-                implementation(projects.extension.blur)
                 implementation(projects.extension.composeResources)
                 // implementation(projects.extension.mokoResources)
                 implementation(projects.extension.ninePatch)
@@ -68,6 +67,7 @@ kotlin {
         val noFilePickerMain by creating {
             dependsOn(commonMain.get())
             macosMain.get().dependsOn(this)
+            wasmJsMain.get().dependsOn(this)
         }
     }
     targets.withType<KotlinNativeTarget>().configureEach {

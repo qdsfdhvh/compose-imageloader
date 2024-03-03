@@ -11,13 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.node.invalidateMeasurement
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Constraints
 import com.seiko.imageloader.ImageLoader
@@ -109,7 +107,7 @@ private class AutoSizeBoxNode(
 
     private var currentImageJob: Job? = null
 
-    private var cachedSize: Size = Size.Unspecified
+    private var cachedSize: Size? = null
 
     private var isReset = false
 
@@ -132,7 +130,7 @@ private class AutoSizeBoxNode(
     override fun onDetach() {
         super.onDetach()
         if (!isReset) {
-            cachedSize = Size.Unspecified
+            cachedSize = null
         }
     }
 
@@ -159,9 +157,6 @@ private class AutoSizeBoxNode(
             if (isRequestChange) {
                 launchImage()
             }
-            if (isRequestDataChange) {
-                invalidateMeasurement()
-            }
         }
     }
 
@@ -182,7 +177,7 @@ private class AutoSizeBoxNode(
 
         val sizeResolver = request.sizeResolver
         if (sizeResolver is AsyncSizeResolver) {
-            sizeResolver.setSize(cachedSize)
+            sizeResolver.setSize(cachedSize ?: Size.Unspecified)
         }
 
         val placeable = measurable.measure(constraints)
@@ -194,12 +189,12 @@ private class AutoSizeBoxNode(
 
 internal fun modifyRequest(
     request: ImageRequest,
-    cachedSize: Size,
+    cachedSize: Size?,
     skipEvent: Boolean = false,
 ): ImageRequest {
     return if (request.sizeResolver == SizeResolver.Unspecified) {
         ImageRequest(request) {
-            if (cachedSize.isSpecified && !cachedSize.isEmpty()) {
+            if (cachedSize != null) {
                 size(SizeResolver(cachedSize))
             } else {
                 size(AsyncSizeResolver())

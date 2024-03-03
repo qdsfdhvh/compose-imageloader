@@ -1,6 +1,7 @@
 package com.seiko.imageloader
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.intercept.createInterceptorChain
 import com.seiko.imageloader.model.ImageAction
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.CoroutineContext
 
 @Immutable
@@ -42,7 +44,9 @@ private class RealImageLoader(
         if (!request.skipEvent) {
             emit(ImageEvent.Start)
         }
-        val initialSize = request.sizeResolver.size()
+        val initialSize = withTimeoutOrNull(200) {
+            request.sizeResolver.size()
+        } ?: Size.Unspecified
         val options = Options(config.defaultOptions) {
             if (initialSize.isSpecified) {
                 size = initialSize

@@ -67,7 +67,7 @@ kotlin {
                 }
             }
         }
-        val noJsMain by creating {
+        val noJsAndWasmMain by creating {
             dependsOn(commonMain.get())
             jvmMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
