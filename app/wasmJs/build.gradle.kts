@@ -6,6 +6,7 @@ plugins {
 }
 
 kotlin {
+    @Suppress("OPT_IN_USAGE")
     wasmJs {
         moduleName = "compose-imageloader-demo"
         browser {
@@ -35,3 +36,5 @@ compose.experimental {
     web.application {
     }
 }
+
+applyKtorWasmWorkaround(libs.versions.ktor.wasm.get())

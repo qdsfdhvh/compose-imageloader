@@ -33,3 +33,21 @@ fun Project.configJava() {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
+// https://youtrack.jetbrains.com/issue/KTOR-5587
+fun Project.applyKtorWasmWorkaround(version: String) {
+    // repositories {
+    //     maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
+    // }
+    configurations.all {
+        if (name.startsWith("wasmJs")) {
+            resolutionStrategy.eachDependency {
+                if (requested.group.startsWith("io.ktor") &&
+                    requested.name.startsWith("ktor-client-")
+                ) {
+                    useVersion(version)
+                }
+            }
+        }
+    }
+}

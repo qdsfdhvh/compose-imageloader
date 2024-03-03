@@ -104,3 +104,5 @@ baselineProfile {
         exclude("com.seiko.imageloader.util.Logger")
     }
 }
+
+applyKtorWasmWorkaround(libs.versions.ktor.wasm.get())

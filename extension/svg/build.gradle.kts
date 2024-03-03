@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
@@ -6,6 +8,8 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
     sourceSets {
         commonMain {
             dependencies {
@@ -17,9 +21,14 @@ kotlin {
                 implementation(libs.androidsvg)
             }
         }
+        val wasmJsMain by getting {
+            dependsOn(skiaMain.get())
+        }
     }
 }
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader.svg"
 }
+
+applyKtorWasmWorkaround(libs.versions.ktor.wasm.get())

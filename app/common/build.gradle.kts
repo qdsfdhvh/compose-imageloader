@@ -81,3 +81,5 @@ kotlin {
 android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
 }
+
+applyKtorWasmWorkaround(libs.versions.ktor.wasm.get())
