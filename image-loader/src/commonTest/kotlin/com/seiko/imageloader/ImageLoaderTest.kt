@@ -3,7 +3,6 @@ package com.seiko.imageloader
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
-import app.cash.turbine.test
 import com.seiko.imageloader.component.fetcher.FetchResult
 import com.seiko.imageloader.component.fetcher.Fetcher
 import com.seiko.imageloader.model.ImageEvent
@@ -11,6 +10,7 @@ import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -52,12 +52,11 @@ class ImageLoaderTest {
     @Test
     fun request_test() = runTest {
         val request = ImageRequest("1")
-        imageLoader.async(request).test {
-            assertEquals(ImageEvent.Start, awaitItem())
-            assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.OfPainter(resultPainter1), awaitItem())
-            awaitComplete()
-        }
+        val list = imageLoader.async(request).toList()
+
+        assertEquals(ImageEvent.Start, list[0])
+        assertEquals(ImageEvent.StartWithFetch, list[1])
+        assertEquals(ImageResult.OfPainter(resultPainter1), list[2])
     }
 
     @Test
@@ -67,18 +66,17 @@ class ImageLoaderTest {
             emit(ImageRequest("2"))
             emit(ImageRequest("3") { skipEvent = true })
         }
-        requestFlow.transform { emitAll(imageLoader.async(it)) }.test {
-            // 1
-            assertEquals(ImageEvent.Start, awaitItem())
-            assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.OfPainter(resultPainter1), awaitItem())
-            // 2
-            assertEquals(ImageEvent.Start, awaitItem())
-            assertEquals(ImageEvent.StartWithFetch, awaitItem())
-            assertEquals(ImageResult.OfPainter(resultPainter2), awaitItem())
-            // 3
-            assertEquals(ImageResult.OfPainter(resultPainter3), awaitItem())
-            awaitComplete()
-        }
+        val list = requestFlow.transform { emitAll(imageLoader.async(it)) }.toList()
+
+        // 1
+        assertEquals(ImageEvent.Start, list[0])
+        assertEquals(ImageEvent.StartWithFetch, list[1])
+        assertEquals(ImageResult.OfPainter(resultPainter1), list[2])
+        // 2
+        assertEquals(ImageEvent.Start, list[3])
+        assertEquals(ImageEvent.StartWithFetch, list[4])
+        assertEquals(ImageResult.OfPainter(resultPainter2), list[5])
+        // 3
+        assertEquals(ImageResult.OfPainter(resultPainter3), list[6])
     }
 }

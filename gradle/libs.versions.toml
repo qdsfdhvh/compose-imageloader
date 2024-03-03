@@ -95,7 +95,6 @@ ktor-client-wasmJs = { module = "io.ktor:ktor-client-js-wasm-js", version.ref = 
 uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 file-picker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "file-picker" }
 
 [bundles]
@@ -107,7 +106,6 @@ logic-plugins = [
 test-common = [
     "kotlinx-coroutines-test",
     "okio-fakefilesystem",
-    "turbine",
 ]
 test-android = [
     "junit",
