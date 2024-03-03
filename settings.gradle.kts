@@ -37,7 +37,6 @@ rootProject.name = "compose-imageLoader"
 include(
     ":image-loader",
     ":image-loader-singleton",
-    ":extension:blur",
     ":extension:compose-resources",
     ":extension:imageio",
     ":extension:ktor-network",
