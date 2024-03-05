@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import co.touchlab.kermit.Severity
 import com.seiko.imageloader.ImageLoaderConfigBuilder
 import com.seiko.imageloader.component.fetcher.ComposeResourceFetcher
-import com.seiko.imageloader.intercept.BlurInterceptor
 import com.seiko.imageloader.intercept.Interceptor
 import com.seiko.imageloader.intercept.NinePatchInterceptor
 import com.seiko.imageloader.model.ImageResult
@@ -55,7 +54,6 @@ fun ImageLoaderConfigBuilder.commonConfig() {
     }
     interceptor {
         addInterceptor(NinePatchInterceptor())
-        addInterceptor(BlurInterceptor())
     }
 }
 
