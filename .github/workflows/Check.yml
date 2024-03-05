@@ -121,7 +121,6 @@ jobs:
         run: |
           ./gradlew kotlinUpgradeYarnLock \
             :image-loader:assemble \
-            :extension:blur:assemble \
             :extension:imageio:assemble \
             :extension:moko-resources:assemble \
             --stacktrace -PnoAppApple \
@@ -160,7 +159,6 @@ jobs:
         run: |
           ./gradlew kotlinUpgradeYarnLock \
             :image-loader:build \
-            :extension:blur:build \
             :extension:imageio:build \
             :extension:moko-resources:build \
             --stacktrace -PnoAppApple \

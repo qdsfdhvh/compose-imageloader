@@ -5,15 +5,21 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
 
-actual class WeakReference<T : Any> actual constructor(referred: T) {
+// https://youtrack.jetbrains.com/issue/KT-66230/KJS-Wasm-Support-Weak-References-to-Kotlin-objects
+// Original JS reference
+external class WeakRef(target: JsAny) {
+    fun deref(): JsAny
+}
 
-    private var strongRefFallback: T? = referred
+actual class WeakReference<T : Any>(private var ref: WeakRef?) {
+
+    actual constructor(referred: T) : this(WeakRef(referred.toJsReference()))
 
     /** The weakly referenced object. If the garbage collector collected the object, this returns null. */
-    actual fun get(): T? = strongRefFallback
+    actual fun get(): T? = ref?.deref()?.unsafeCast<JsReference<T>>()?.get()
 
     actual fun clear() {
-        strongRefFallback = null
+        ref = null
     }
 }
 

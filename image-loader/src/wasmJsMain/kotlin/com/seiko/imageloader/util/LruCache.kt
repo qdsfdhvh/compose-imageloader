@@ -36,7 +36,7 @@ actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
     }
 
     actual operator fun get(key: K): V? {
-        var mapValue: V? = null
+        var mapValue: V?
         synchronized(syncObject) {
             mapValue = map[key]
             if (mapValue != null) {
@@ -73,7 +73,7 @@ actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
     }
 
     actual fun put(key: K, value: V): V? {
-        var previous: V? = null
+        var previous: V?
         synchronized(syncObject) {
             _putCount++
             _size += safeSizeOf(key, value)
@@ -115,7 +115,7 @@ actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
     }
 
     actual fun remove(key: K): V? {
-        var previous: V? = null
+        var previous: V?
         synchronized(syncObject) {
             previous = map.remove(key)
             previous?.let {
