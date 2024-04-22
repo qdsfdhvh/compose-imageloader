@@ -24,11 +24,13 @@ plugins {
     id("com.gradle.enterprise") version "3.17.2"
 }
 
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
-        publishAlwaysIf(System.getenv("GITHUB_ACTIONS") != null)
+        termsOfUseUrl = "https://gradle.com/terms-of-service"
+        termsOfUseAgree = "yes"
+        publishing {
+            onlyIf { System.getenv("GITHUB_ACTIONS") != null }
+        }
     }
 }
 
