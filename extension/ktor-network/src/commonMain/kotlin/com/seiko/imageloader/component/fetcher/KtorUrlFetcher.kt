@@ -1,13 +1,17 @@
 package com.seiko.imageloader.component.fetcher
 
+import com.seiko.imageloader.model.KtorRequestData
 import com.seiko.imageloader.model.extraData
+import com.seiko.imageloader.model.ktorRequestData
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.option.Options
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.request.headers
 import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.client.statement.bodyAsChannel
+import io.ktor.http.HttpMethod
 import io.ktor.http.Url
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
@@ -17,6 +21,7 @@ import okio.BufferedSource
 class KtorUrlFetcher private constructor(
     private val httpUrl: Url,
     httpClient: () -> HttpClient,
+    private val ktorRequestData: KtorRequestData?,
 ) : Fetcher {
 
     private val httpClient by lazy(httpClient)
@@ -24,6 +29,14 @@ class KtorUrlFetcher private constructor(
     override suspend fun fetch(): FetchResult {
         val response = httpClient.request {
             url(httpUrl)
+            method = ktorRequestData?.method ?: HttpMethod.Get
+            ktorRequestData?.headers?.let {
+                headers {
+                    it.forEach { (key, value) ->
+                        append(key, value)
+                    }
+                }
+            }
         }
         if (response.status.isSuccess()) {
             return FetchResult.OfSource(
@@ -40,8 +53,12 @@ class KtorUrlFetcher private constructor(
         private val httpClient: () -> HttpClient,
     ) : Fetcher.Factory {
         override fun create(data: Any, options: Options): Fetcher? {
-            if (data is Url) return KtorUrlFetcher(data, httpClient)
-            return null
+            if (data !is Url) return null
+            return KtorUrlFetcher(
+                httpUrl = data,
+                httpClient = httpClient,
+                ktorRequestData = options.ktorRequestData,
+            )
         }
     }
 
