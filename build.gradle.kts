@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.plugin.compose.compiler) apply false
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.poko) apply false
@@ -57,22 +58,6 @@ allprojects {
                     connection.set("scm:git:git://github.com/qdsfdhvh/compose-imageLoader.git")
                     developerConnection.set("scm:git:git://github.com/qdsfdhvh/compose-imageLoader.git")
                 }
-            }
-        }
-    }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            if (findProperty("myapp.enableComposeCompilerReports") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                )
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                )
             }
         }
     }
