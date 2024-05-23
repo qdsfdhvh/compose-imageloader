@@ -58,3 +58,6 @@ publish.properties
 
 # Moko
 moko-resources-generated.js
+
+# Kotlin
+/.kotlin
