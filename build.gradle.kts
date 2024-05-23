@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.plugin.compose.compiler) apply false
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.poko) apply false
@@ -60,22 +61,6 @@ allprojects {
             }
         }
     }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            if (findProperty("myapp.enableComposeCompilerReports") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                )
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                )
-            }
-        }
-    }
 
     // fix order of android release lint tasks
     listOf(
@@ -98,10 +83,10 @@ object ProjectVersion {
     private const val major = "1"
 
     // functionality in a backwards compatible manner
-    private const val monir = "7"
+    private const val monir = "8"
 
     // backwards compatible bug fixes
-    private const val path = "8"
+    private const val path = "0"
     const val version = "$major.$monir.$path"
 }
 

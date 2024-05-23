@@ -7,36 +7,35 @@ plugins {
 }
 
 android {
-    namespace = "com.seiko.imageloader.demo.benchmark"
+    namespace = "com.seiko.imageloader.demo.baselineprofile"
+    compileSdk = 34
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
     defaultConfig {
-        minSdk = 23
+        minSdk = 28
+        targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        // This benchmark buildType is used for benchmarking, and should function like your
-        // release build (for example, with minification on). It"s signed with a debug key
-        // for easy local/CI testing.
-        create("benchmark") {
-            isDebuggable = true
-            signingConfig = getByName("debug").signingConfig
-            matchingFallbacks += listOf("release")
-        }
-    }
     testOptions.managedDevices.devices {
-        create<ManagedVirtualDevice>("pixel6proApi31").apply {
-            device = "Pixel 6 Pro"
-            apiLevel = 31
+        @Suppress("UnstableApiUsage")
+        create<ManagedVirtualDevice>("pixel6Api32").apply {
+            device = "Pixel 6"
+            apiLevel = 32
             systemImageSource = "aosp"
         }
     }
     targetProjectPath = ":app:android"
-    experimentalProperties["android.experimental.self-instrumenting"] = true
 }
 
 baselineProfile {
     // This specifies the managed devices to use that you run the tests on. The default
     // is none.
-    managedDevices += "pixel6proApi31"
+    managedDevices += "pixel6Api32"
 
     // This enables using connected devices to generate profiles. The default is true.
     // When using connected devices, they must be rooted or API 33 and higher.
@@ -48,7 +47,18 @@ baselineProfile {
 
 dependencies {
     implementation(libs.androidx.test.junit)
+    implementation(libs.androidx.test.espresso)
     implementation(libs.androidx.test.uiautomator)
     implementation(libs.androidx.benchmark.macro.junit4)
     implementation(libs.androidx.profileinstaller)
+}
+
+androidComponents {
+    onVariants { v ->
+        val artifactsLoader = v.artifacts.getBuiltArtifactsLoader()
+        v.instrumentationRunnerArguments.put(
+            "targetAppId",
+            v.testedApks.map { artifactsLoader.load(it)?.applicationId!! },
+        )
+    }
 }

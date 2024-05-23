@@ -1,34 +1,34 @@
 [versions]
-agp = "8.3.0"
-compose-multiplatform = "1.6.0"
-kotlin = "1.9.22"
-kotlinx-coroutines = "1.8.0"
+agp = "8.4.1"
+compose-multiplatform = "1.6.10"
+kotlin = "2.0.0"
+kotlinx-coroutines = "1.8.1"
 kotlinx-serialization = "1.6.3"
-androidx-core-ktx = "1.12.0"
+androidx-core-ktx = "1.13.1"
 androidx-collection = "1.4.0"
 androidx-appcompat = "1.6.1"
 androidx-exifinterface = "1.3.7"
-androidx-activity-compose = "1.8.2"
-androidx-lifecycle-runtime-ktx = "2.7.0"
+androidx-activity-compose = "1.9.0"
+androidx-lifecycle-runtime-ktx = "2.8.0"
 spotless = "6.25.0"
 ktlint = "0.50.0"
-publish = "0.27.0"
-dokka = "1.9.10"
-ktor = "2.3.8"
+publish = "0.28.0"
+dokka = "1.9.20"
+ktor = "2.3.11"
 ktor-wasm = "3.0.0-wasm2"
-okio = "3.8.0"
-uri-kmp = "0.0.16"
+okio = "3.9.0"
+uri-kmp = "0.0.18"
 kermit = "2.0.3"
 androidsvg = "1.4"
-benchmark = "1.2.3"
+benchmark = "1.2.4"
 junit = "4.13.2"
 androidx-test-junit = "1.1.5"
 androidx-test-espresso = "3.5.1"
 androidx-test-uiautomator = "2.3.0"
 profileinstaller = "1.3.1"
-roborazzi = "1.10.1"
-robolectric = "4.11.1"
-poko = "0.15.2"
+roborazzi = "1.16.1"
+robolectric = "4.12.2"
+poko = "0.16.0-beta01"
 turbine = "1.0.0"
 file-picker = "3.1.0"
 
@@ -40,6 +40,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-plugin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
@@ -52,6 +53,7 @@ poko = { id = "dev.drewhamilton.poko", version.ref = "poko" }
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradlePlugin-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
+gradlePlugin-composeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
@@ -102,6 +104,7 @@ logic-plugins = [
     "gradlePlugin-android",
     "gradlePlugin-kotlin",
     "gradlePlugin-compose",
+    "gradlePlugin-composeCompiler",
 ]
 test-common = [
     "kotlinx-coroutines-test",
