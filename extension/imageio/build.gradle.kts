@@ -11,7 +11,7 @@ kotlin {
             dependencies {
                 implementation(projects.imageLoader)
                 // svg
-                implementation("com.twelvemonkeys.imageio:imageio-batik:3.10.1")
+                implementation("com.twelvemonkeys.imageio:imageio-batik:3.11.0")
                 implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
             }
         }
