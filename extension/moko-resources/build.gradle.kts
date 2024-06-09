@@ -22,7 +22,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.imageLoader)
-                implementation("dev.icerock.moko:resources:0.23.0")
+                implementation("dev.icerock.moko:resources:0.24.0")
             }
         }
     }
