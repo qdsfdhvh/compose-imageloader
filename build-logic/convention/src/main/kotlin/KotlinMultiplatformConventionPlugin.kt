@@ -19,17 +19,12 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             iosSimulatorArm64()
             macosX64()
             macosArm64()
-            js(IR) {
+            js {
                 browser()
             }
             @Suppress("OPT_IN_USAGE")
             wasmJs {
-                browser {
-                    // TODO: Fix wasm tests.
-                    testTask {
-                        enabled = false
-                    }
-                }
+                browser()
             }
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             applyHierarchyTemplate {
