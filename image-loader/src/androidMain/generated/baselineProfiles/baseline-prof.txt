@@ -14,7 +14,7 @@ HSPLcom/seiko/imageloader/ImageLoader$Companion;-><clinit>()V
 HSPLcom/seiko/imageloader/ImageLoader$Companion;-><init>()V
 Lcom/seiko/imageloader/ImageLoaderConfig;
 HSPLcom/seiko/imageloader/ImageLoaderConfig;-><clinit>()V
-HSPLcom/seiko/imageloader/ImageLoaderConfig;-><init>(Lcom/seiko/imageloader/util/Logger;Lcom/seiko/imageloader/option/Options;Lcom/seiko/imageloader/component/ComponentRegistry;Lcom/seiko/imageloader/intercept/Interceptors;)V
+HPLcom/seiko/imageloader/ImageLoaderConfig;-><init>(Lcom/seiko/imageloader/util/Logger;Lcom/seiko/imageloader/option/Options;Lcom/seiko/imageloader/component/ComponentRegistry;Lcom/seiko/imageloader/intercept/Interceptors;)V
 HSPLcom/seiko/imageloader/ImageLoaderConfig;->getComponentRegistry()Lcom/seiko/imageloader/component/ComponentRegistry;
 HSPLcom/seiko/imageloader/ImageLoaderConfig;->getDefaultOptions()Lcom/seiko/imageloader/option/Options;
 HSPLcom/seiko/imageloader/ImageLoaderConfig;->getInterceptors()Lcom/seiko/imageloader/intercept/Interceptors;
@@ -104,7 +104,7 @@ HSPLcom/seiko/imageloader/component/ComponentRegistry;->getKeyers()Ljava/util/Li
 HSPLcom/seiko/imageloader/component/ComponentRegistry;->getMappers()Ljava/util/List;
 Lcom/seiko/imageloader/component/ComponentRegistryBuilder;
 HSPLcom/seiko/imageloader/component/ComponentRegistryBuilder;-><clinit>()V
-HPLcom/seiko/imageloader/component/ComponentRegistryBuilder;-><init>(Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)V
+HSPLcom/seiko/imageloader/component/ComponentRegistryBuilder;-><init>(Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)V
 HSPLcom/seiko/imageloader/component/ComponentRegistryBuilder;-><init>(Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 HSPLcom/seiko/imageloader/component/ComponentRegistryBuilder;->add(Lcom/seiko/imageloader/component/decoder/Decoder$Factory;)V
 HSPLcom/seiko/imageloader/component/ComponentRegistryBuilder;->add(Lcom/seiko/imageloader/component/fetcher/Fetcher$Factory;)V
