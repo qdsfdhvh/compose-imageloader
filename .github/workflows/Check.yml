@@ -60,6 +60,28 @@ jobs:
       - name: Lint
         run: ./gradlew lint --stacktrace
 
+  api-check:
+    needs: spotless
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v3
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Lint
+        run: ./gradlew apiCheck --stacktrace
+
   test:
     needs: spotless
     runs-on: ubuntu-latest
