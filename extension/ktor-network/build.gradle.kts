@@ -33,7 +33,7 @@ kotlin {
                 implementation(libs.ktor.client.js)
             }
         }
-        val wasmJsMain by getting {
+        wasmJsMain {
             dependencies {
                 implementation(libs.ktor.client.wasmJs)
             }

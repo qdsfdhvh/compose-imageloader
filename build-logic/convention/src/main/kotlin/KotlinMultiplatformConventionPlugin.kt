@@ -19,7 +19,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             iosSimulatorArm64()
             macosX64()
             macosArm64()
-            js(IR) {
+            js {
                 browser()
             }
             @Suppress("OPT_IN_USAGE")
@@ -52,8 +52,10 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                                     withMacosArm64()
                                 }
                             }
-                            withJs()
-                            withWasmJs()
+                            group("commonJs") {
+                                withJs()
+                                withWasmJs()
+                            }
                         }
                     }
                 }

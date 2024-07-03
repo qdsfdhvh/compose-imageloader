@@ -20,7 +20,6 @@ kotlin {
                 api(compose.foundation)
                 api(compose.ui)
                 api(compose.material)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
                 api(projects.imageLoaderSingleton)
