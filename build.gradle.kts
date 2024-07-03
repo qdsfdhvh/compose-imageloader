@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 spotless {
@@ -24,6 +25,15 @@ spotless {
         targetExclude("**/build/")
         ktlint(libs.versions.ktlint.get())
     }
+}
+
+apiValidation {
+    ignoredProjects.addAll(listOf(
+        /*app*/"android",
+        /*app*/"common",
+        /*app*/"desktop",
+        /*app*/"intellij-plugin",
+    ))
 }
 
 allprojects {
