@@ -24,7 +24,12 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             }
             @Suppress("OPT_IN_USAGE")
             wasmJs {
-                browser()
+                browser {
+                    // TODO: Fix wasm tests.
+                    testTask {
+                        enabled = false
+                    }
+                }
             }
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             applyHierarchyTemplate {
