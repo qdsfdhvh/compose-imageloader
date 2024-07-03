@@ -53,6 +53,7 @@ include(
     ":app:web",
     ":app:wasmJs",
     ":app:intellij-plugin",
+    ":test-paparazzi",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
