@@ -13,12 +13,16 @@ import androidx.compose.ui.unit.dp
 import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.seiko.imageloader.ImageLoader
+import com.seiko.imageloader.intercept.addInterceptor
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.SizeResolver
+import com.seiko.imageloader.rememberImageActionPainter
 import com.seiko.imageloader.rememberImagePainter
+import com.seiko.imageloader.ui.AutoSizeBox
 import com.seiko.imageloader.ui.AutoSizeImage
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,9 +37,10 @@ class SampleTest {
 
     private lateinit var imageLoader: ImageLoader
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun onBefore() {
-        imageLoader = ImageLoader(Dispatchers.Main.immediate) {
+        imageLoader = ImageLoader(UnconfinedTestDispatcher()) {
             interceptor {
                 useDefaultInterceptors = false
                 addInterceptor {
@@ -44,7 +49,7 @@ class SampleTest {
                             when (it.request.data) {
                                 "0" -> Color.Gray
                                 "1" -> Color.Blue
-                                else -> Color.Green
+                                else -> Color.Red
                             },
                         ),
                     )
@@ -71,6 +76,20 @@ class SampleTest {
                     modifier = Modifier.size(100.dp),
                     imageLoader = imageLoader,
                 )
+                Spacer(Modifier.height(4.dp))
+                AutoSizeBox(
+                    ImageRequest("22") {
+                        size(SizeResolver(Size(100f, 100f)))
+                    },
+                    imageLoader = imageLoader,
+                    modifier = Modifier.size(100.dp),
+                ) { action ->
+                    Image(
+                        rememberImageActionPainter(action),
+                        contentDescription = null,
+                        modifier = Modifier.matchParentSize(),
+                    )
+                }
             }
         }
     }
