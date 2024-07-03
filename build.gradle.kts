@@ -28,12 +28,14 @@ spotless {
 }
 
 apiValidation {
-    ignoredProjects.addAll(listOf(
-        /*app*/"android",
-        /*app*/"common",
-        /*app*/"desktop",
-        /*app*/"intellij-plugin",
-    ))
+    ignoredProjects.addAll(
+        listOf(
+            "android",
+            "common",
+            "desktop",
+            "intellij-plugin",
+        ),
+    )
 }
 
 allprojects {
