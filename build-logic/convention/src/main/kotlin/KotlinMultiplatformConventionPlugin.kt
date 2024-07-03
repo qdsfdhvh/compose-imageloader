@@ -52,8 +52,10 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                                     withMacosArm64()
                                 }
                             }
-                            withJs()
-                            withWasmJs()
+                            group("commonJs") {
+                                withJs()
+                                withWasmJs()
+                            }
                         }
                     }
                 }
