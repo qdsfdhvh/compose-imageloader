@@ -1,0 +1,57 @@
+public final class com/seiko/imageloader/ImageLoaderProvidableCompositionLocal {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/runtime/ProvidableCompositionLocal;)V
+	public final fun getCurrent (Landroidx/compose/runtime/Composer;I)Lcom/seiko/imageloader/ImageLoader;
+	public final fun getDelegate ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public final fun provides (Lcom/seiko/imageloader/ImageLoader;)Landroidx/compose/runtime/ProvidedValue;
+}
+
+public final class com/seiko/imageloader/LocalImageLoaderKt {
+	public static final fun createDefault (Lcom/seiko/imageloader/ImageLoader$Companion;)Lcom/seiko/imageloader/ImageLoader;
+	public static final fun defaultImageResultMemoryCache (Lcom/seiko/imageloader/intercept/InterceptorsBuilder;ZILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun defaultImageResultMemoryCache$default (Lcom/seiko/imageloader/intercept/InterceptorsBuilder;ZILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun getLocalImageLoader ()Lcom/seiko/imageloader/ImageLoaderProvidableCompositionLocal;
+}
+
+public final class com/seiko/imageloader/LocalImageLoader_desktopKt {
+	public static final fun createImageLoaderProvidableCompositionLocal ()Lcom/seiko/imageloader/ImageLoaderProvidableCompositionLocal;
+}
+
+public final class com/seiko/imageloader/Remember_extKt {
+	public static final fun rememberImageAction (ILcom/seiko/imageloader/ImageLoader;Landroidx/compose/runtime/Composer;II)Landroidx/compose/runtime/State;
+	public static final fun rememberImageAction (Lcom/seiko/imageloader/model/ImageRequest;Landroidx/compose/runtime/Composer;I)Landroidx/compose/runtime/State;
+	public static final fun rememberImageAction (Ljava/lang/String;Lcom/seiko/imageloader/ImageLoader;Landroidx/compose/runtime/Composer;II)Landroidx/compose/runtime/State;
+	public static final fun rememberImagePainter-RGgXEk8 (ILcom/seiko/imageloader/ImageLoader;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Landroidx/compose/ui/graphics/painter/Painter;
+	public static final fun rememberImagePainter-RGgXEk8 (Ljava/lang/String;Lcom/seiko/imageloader/ImageLoader;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Landroidx/compose/ui/graphics/painter/Painter;
+	public static final fun rememberImagePainter-UCTX6hg (Lcom/seiko/imageloader/model/ImageRequest;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Landroidx/compose/ui/graphics/painter/Painter;
+}
+
+public final class com/seiko/imageloader/component/SetupDefaultComponents_desktopKt {
+	public static final fun setupDefaultComponents (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Landroidx/compose/ui/unit/Density;Lkotlin/jvm/functions/Function0;ILokio/FileSystem;)V
+	public static final fun setupDefaultComponents (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Lkotlin/jvm/functions/Function0;)V
+	public static synthetic fun setupDefaultComponents$default (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Landroidx/compose/ui/unit/Density;Lkotlin/jvm/functions/Function0;ILokio/FileSystem;ILjava/lang/Object;)V
+	public static synthetic fun setupDefaultComponents$default (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)V
+}
+
+public final class com/seiko/imageloader/option/AsyncSizeResolver : com/seiko/imageloader/option/SizeResolver {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun setSize-uvyYCjk (J)V
+	public fun size-7Ah8Wj8 (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/seiko/imageloader/ui/AutoSizeBoxKt {
+	public static final fun AutoSizeBox (Lcom/seiko/imageloader/model/ImageRequest;Landroidx/compose/ui/Modifier;Lcom/seiko/imageloader/ImageLoader;Landroidx/compose/ui/Alignment;ZZLkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/seiko/imageloader/ui/AutoSizeImageKt {
+	public static final fun AutoSizeImage (Lcom/seiko/imageloader/model/ImageRequest;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;FLandroidx/compose/ui/graphics/ColorFilter;Lcom/seiko/imageloader/ImageLoader;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLandroidx/compose/runtime/Composer;III)V
+}
+
+public final class com/seiko/imageloader/ui/AutoSizeWidget_extKt {
+	public static final fun AutoSizeBox (ILandroidx/compose/ui/Modifier;Lcom/seiko/imageloader/ImageLoader;Landroidx/compose/ui/Alignment;ZZLkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AutoSizeBox (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcom/seiko/imageloader/ImageLoader;Landroidx/compose/ui/Alignment;ZZLkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AutoSizeImage (ILjava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;FLandroidx/compose/ui/graphics/ColorFilter;Lcom/seiko/imageloader/ImageLoader;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLandroidx/compose/runtime/Composer;III)V
+	public static final fun AutoSizeImage (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;FLandroidx/compose/ui/graphics/ColorFilter;Lcom/seiko/imageloader/ImageLoader;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLandroidx/compose/runtime/Composer;III)V
+}
+

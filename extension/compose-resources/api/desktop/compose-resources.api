@@ -1,0 +1,11 @@
+public final class com/seiko/imageloader/component/fetcher/ComposeResourceFetcher {
+	public static final field $stable I
+	public fun <init> ()V
+}
+
+public final class com/seiko/imageloader/component/fetcher/ComposeResourceFetcher$Factory : com/seiko/imageloader/component/fetcher/Fetcher$Factory {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun create (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/fetcher/Fetcher;
+}
+
