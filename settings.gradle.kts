@@ -22,7 +22,7 @@ dependencyResolutionManagement {
 
 plugins {
     id("com.gradle.enterprise") version "3.17.5"
-    id("com.dropbox.focus") version "0.4.0"
+    id("com.dropbox.focus") version "0.6.0"
 }
 
 develocity {
