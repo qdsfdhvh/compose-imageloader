@@ -1,0 +1,59 @@
+public final class com/seiko/imageloader/component/SetupKtorComponentsKt {
+	public static final fun setupKtorComponents (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Lkotlin/jvm/functions/Function0;)V
+	public static synthetic fun setupKtorComponents$default (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)V
+}
+
+public final class com/seiko/imageloader/component/fetcher/KtorUrlFetcher : com/seiko/imageloader/component/fetcher/Fetcher {
+	public static final field Companion Lcom/seiko/imageloader/component/fetcher/KtorUrlFetcher$Companion;
+	public synthetic fun <init> (Lio/ktor/http/Url;Lkotlin/jvm/functions/Function0;Lcom/seiko/imageloader/model/KtorRequestData;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun fetch (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/seiko/imageloader/component/fetcher/KtorUrlFetcher$Companion {
+	public final fun getDefaultHttpEngineFactory ()Lkotlin/jvm/functions/Function0;
+}
+
+public final class com/seiko/imageloader/component/fetcher/KtorUrlFetcher$Factory : com/seiko/imageloader/component/fetcher/Fetcher$Factory {
+	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public fun create (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/fetcher/Fetcher;
+}
+
+public final class com/seiko/imageloader/component/keyer/KtorUrlKeyer : com/seiko/imageloader/component/keyer/Keyer {
+	public fun <init> ()V
+	public fun key (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;Lcom/seiko/imageloader/component/keyer/Keyer$Type;)Ljava/lang/String;
+}
+
+public final class com/seiko/imageloader/component/mapper/KtorUrlMapper : com/seiko/imageloader/component/mapper/Mapper {
+	public fun <init> ()V
+	public fun map (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Lio/ktor/http/Url;
+	public synthetic fun map (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Ljava/lang/Object;
+}
+
+public final class com/seiko/imageloader/model/KtorRequestData {
+	public fun <init> (Lio/ktor/http/HttpMethod;Ljava/util/Map;)V
+	public final fun component1 ()Lio/ktor/http/HttpMethod;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun copy (Lio/ktor/http/HttpMethod;Ljava/util/Map;)Lcom/seiko/imageloader/model/KtorRequestData;
+	public static synthetic fun copy$default (Lcom/seiko/imageloader/model/KtorRequestData;Lio/ktor/http/HttpMethod;Ljava/util/Map;ILjava/lang/Object;)Lcom/seiko/imageloader/model/KtorRequestData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeaders ()Ljava/util/Map;
+	public final fun getMethod ()Lio/ktor/http/HttpMethod;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/seiko/imageloader/model/KtorRequestDataBuilder {
+	public final fun build ()Lcom/seiko/imageloader/model/KtorRequestData;
+	public final fun getMethod ()Lio/ktor/http/HttpMethod;
+	public final fun headers (Lkotlin/jvm/functions/Function1;)V
+	public final fun setMethod (Lio/ktor/http/HttpMethod;)V
+}
+
+public final class com/seiko/imageloader/model/KtorRequestDataKt {
+	public static final fun KtorRequestData (Lkotlin/jvm/functions/Function1;)Lcom/seiko/imageloader/model/KtorRequestData;
+}
+
+public final class com/seiko/imageloader/model/Option_ktorKt {
+	public static final fun ktorRequest (Lcom/seiko/imageloader/option/OptionsBuilder;Lkotlin/jvm/functions/Function1;)V
+}
+

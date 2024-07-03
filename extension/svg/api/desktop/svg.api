@@ -1,0 +1,27 @@
+public final class com/seiko/imageloader/component/SetupSvgComponentsKt {
+	public static final fun setupSvgComponents (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Landroidx/compose/ui/unit/Density;)V
+	public static synthetic fun setupSvgComponents$default (Lcom/seiko/imageloader/component/ComponentRegistryBuilder;Landroidx/compose/ui/unit/Density;ILjava/lang/Object;)V
+}
+
+public final class com/seiko/imageloader/component/decoder/SvgDecoder : com/seiko/imageloader/component/decoder/Decoder {
+	public static final field Companion Lcom/seiko/imageloader/component/decoder/SvgDecoder$Companion;
+	public synthetic fun <init> (Lokio/BufferedSource;Landroidx/compose/ui/unit/Density;Lcom/seiko/imageloader/option/Options;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/seiko/imageloader/component/decoder/SvgDecoder$Companion {
+}
+
+public final class com/seiko/imageloader/component/decoder/SvgDecoder$Factory : com/seiko/imageloader/component/decoder/Decoder$Factory {
+	public fun <init> ()V
+	public fun <init> (Landroidx/compose/ui/unit/Density;)V
+	public synthetic fun <init> (Landroidx/compose/ui/unit/Density;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun create (Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/decoder/Decoder;
+}
+
+public abstract interface class com/seiko/imageloader/component/decoder/SvgDom {
+	public abstract fun draw-d16Qtg0 (Landroidx/compose/ui/graphics/Canvas;J)V
+	public abstract fun getHeight ()F
+	public abstract fun getWidth ()F
+}
+
