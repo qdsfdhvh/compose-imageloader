@@ -11,7 +11,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
         }
         extensions.configure<KotlinMultiplatformExtension> {
             androidTarget {
-                publishLibraryVariants("debug", "release")
+                publishLibraryVariants("release")
             }
             jvm("desktop")
             iosX64()
