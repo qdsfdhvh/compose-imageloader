@@ -34,6 +34,7 @@ apiValidation {
             "common",
             "desktop",
             "intellij-plugin",
+            "test-paparazzi",
         ),
     )
 }
