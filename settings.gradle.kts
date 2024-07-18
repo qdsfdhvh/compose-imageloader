@@ -16,12 +16,13 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://jitpack.io")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
     }
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.17.4"
+    id("com.gradle.enterprise") version "3.17.5"
+    id("com.dropbox.focus") version "0.6.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 develocity {
@@ -34,25 +35,11 @@ develocity {
     }
 }
 
-rootProject.name = "compose-imageLoader"
+configure<com.dropbox.focus.FocusExtension> {
+    allSettingsFileName.set("includes.gradle.kts")
+    focusFileName.set(".focus")
+}
 
-include(
-    ":image-loader",
-    ":image-loader-singleton",
-    ":extension:compose-resources",
-    ":extension:imageio",
-    ":extension:ktor-network",
-    ":extension:moko-resources",
-    ":extension:nine-patch",
-    ":extension:svg",
-    ":app:common",
-    ":app:android",
-    ":app:android:benchmark",
-    ":app:desktop",
-    ":app:macos",
-    ":app:web",
-    ":app:wasmJs",
-    ":app:intellij-plugin",
-)
+rootProject.name = "compose-imageLoader"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

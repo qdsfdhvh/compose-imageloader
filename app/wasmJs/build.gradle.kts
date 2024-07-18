@@ -33,8 +33,4 @@ kotlin {
 }
 
 compose.experimental {
-    web.application {
-    }
 }
-
-applyKtorWasmWorkaround(libs.versions.ktor.wasm.get())

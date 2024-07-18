@@ -33,19 +33,3 @@ fun Project.configJava() {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
-// TODO: Remove when ktor 3.0.0 rc
-// https://youtrack.jetbrains.com/issue/KTOR-5587
-fun Project.applyKtorWasmWorkaround(version: String) {
-    configurations.all {
-        if (name.startsWith("wasmJs")) {
-            resolutionStrategy.eachDependency {
-                if (requested.group.startsWith("io.ktor") &&
-                    requested.name.startsWith("ktor-")
-                ) {
-                    useVersion(version)
-                }
-            }
-        }
-    }
-}

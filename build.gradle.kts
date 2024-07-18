@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 spotless {
@@ -24,6 +25,18 @@ spotless {
         targetExclude("**/build/")
         ktlint(libs.versions.ktlint.get())
     }
+}
+
+apiValidation {
+    ignoredProjects.addAll(
+        listOf(
+            "android",
+            "common",
+            "desktop",
+            "intellij-plugin",
+            "test-paparazzi",
+        ),
+    )
 }
 
 allprojects {
@@ -86,7 +99,7 @@ object ProjectVersion {
     private const val monir = "8"
 
     // backwards compatible bug fixes
-    private const val path = "1"
+    private const val path = "2"
     const val version = "$major.$monir.$path"
 }
 
