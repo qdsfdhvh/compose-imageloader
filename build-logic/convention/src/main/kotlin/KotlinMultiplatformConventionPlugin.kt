@@ -72,6 +72,5 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             }
         }
         configKotlin()
-        applyKtorWasmWorkaround(libs.findVersion("ktor-wasm").get().toString())
     }
 }
