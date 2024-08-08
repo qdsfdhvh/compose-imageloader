@@ -53,6 +53,9 @@ fun LocalResourceScene(
                                     skipPadding = 1
                                     maxFactor = 1f
                                 }
+                                options {
+                                    isBitmap = true
+                                }
                             }
                         },
                     )
