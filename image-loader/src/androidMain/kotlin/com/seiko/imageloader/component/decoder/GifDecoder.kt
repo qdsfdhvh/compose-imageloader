@@ -74,6 +74,7 @@ class GifDecoder private constructor(
     ) : Decoder.Factory {
         override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!options.playAnimate) return null
+            if (options.isBitmap) return null
             if (!isGif(source.source)) return null
             return GifDecoder(source, options, enforceMinimumFrameDelay)
         }

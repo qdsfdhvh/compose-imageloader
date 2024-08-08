@@ -38,6 +38,7 @@ public final class com/seiko/imageloader/Image {
 public abstract interface class com/seiko/imageloader/ImageLoader {
 	public static final field Companion Lcom/seiko/imageloader/ImageLoader$Companion;
 	public abstract fun async (Lcom/seiko/imageloader/model/ImageRequest;)Lkotlinx/coroutines/flow/Flow;
+	public abstract fun enqueue (Lcom/seiko/imageloader/model/ImageRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getConfig ()Lcom/seiko/imageloader/ImageLoaderConfig;
 }
 
@@ -839,6 +840,7 @@ public final class com/seiko/imageloader/option/Options {
 	public final fun getScale ()Lcom/seiko/imageloader/option/Scale;
 	public final fun getSize-NH-jbRc ()J
 	public fun hashCode ()I
+	public final fun isBitmap ()Z
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -859,7 +861,9 @@ public final class com/seiko/imageloader/option/OptionsBuilder {
 	public final fun getRetryIfDiskDecodeError ()Z
 	public final fun getScale ()Lcom/seiko/imageloader/option/Scale;
 	public final fun getSize-NH-jbRc ()J
+	public final fun isBitmap ()Z
 	public final fun setAllowInexactSize (Z)V
+	public final fun setBitmap (Z)V
 	public final fun setBitmapConfig (Lcom/seiko/imageloader/BitmapConfig;)V
 	public final fun setDiskCachePolicy (Lcom/seiko/imageloader/cache/CachePolicy;)V
 	public final fun setMaxImageSize (I)V

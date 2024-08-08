@@ -21,6 +21,7 @@ class Options internal constructor(
     val memoryCachePolicy: CachePolicy,
     val diskCachePolicy: CachePolicy,
     val playAnimate: Boolean,
+    val isBitmap: Boolean,
     val repeatCount: Int,
     val maxImageSize: Int,
     val extra: ExtraData,
@@ -43,6 +44,7 @@ class OptionsBuilder internal constructor() {
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED
     var playAnimate: Boolean = true
+    var isBitmap: Boolean = false
     private var _repeatCount: Int = Options.REPEAT_INFINITE
     var maxImageSize = Options.DEFAULT_MAX_IMAGE_SIZE
     private var extraData: ExtraData? = null
@@ -66,6 +68,7 @@ class OptionsBuilder internal constructor() {
         memoryCachePolicy = options.memoryCachePolicy
         diskCachePolicy = options.diskCachePolicy
         playAnimate = options.playAnimate
+        isBitmap = options.isBitmap
         _repeatCount = options.repeatCount
         maxImageSize = options.maxImageSize
         extra {
@@ -94,6 +97,7 @@ class OptionsBuilder internal constructor() {
         memoryCachePolicy = memoryCachePolicy,
         diskCachePolicy = diskCachePolicy,
         playAnimate = playAnimate,
+        isBitmap = isBitmap,
         repeatCount = repeatCount,
         maxImageSize = maxImageSize,
         extra = extraData ?: EmptyExtraData,
