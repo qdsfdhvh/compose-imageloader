@@ -14,7 +14,7 @@ fun createInterceptorChain(
     initialRequest: ImageRequest,
     initialOptions: Options,
     config: ImageLoaderConfig,
-    flowCollector: FlowCollector<ImageAction>,
+    flowCollector: FlowCollector<ImageAction>?,
 ): Interceptor.Chain {
     return InterceptorChainImpl(
         helper = InterceptorChainHelper(
@@ -64,7 +64,7 @@ private class InterceptorChainHelper(
     initialImageRequest: ImageRequest,
     private val initialOptions: Options,
     private val config: ImageLoaderConfig,
-    private val flowCollector: FlowCollector<ImageAction>,
+    private val flowCollector: FlowCollector<ImageAction>?,
 ) {
     val logger get() = config.logger
 
@@ -85,6 +85,6 @@ private class InterceptorChainHelper(
     }
 
     suspend fun emit(action: ImageAction) {
-        flowCollector.emit(action)
+        flowCollector?.emit(action)
     }
 }

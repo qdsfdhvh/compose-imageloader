@@ -57,7 +57,7 @@ class ImageDecoderDecoder private constructor(
             val wrapDecodeSource = WrapDecodeSource(source, cacheDirFactory = { context.safeCacheDir })
             try {
                 val imageDecoderSource = wrapDecodeSource.toImageDecoderSource()
-                if (options.playAnimate) {
+                if (options.playAnimate && !options.isBitmap) {
                     val drawable = imageDecoderSource.decodeDrawable { info, _ ->
                         imageDecoder = this
                         configureImageDecoderProperties(info)
