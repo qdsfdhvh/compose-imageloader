@@ -16,4 +16,5 @@ include(
     ":app:wasmJs",
     ":app:intellij-plugin",
     ":test-paparazzi",
+    ":test-roborazzi",
 )

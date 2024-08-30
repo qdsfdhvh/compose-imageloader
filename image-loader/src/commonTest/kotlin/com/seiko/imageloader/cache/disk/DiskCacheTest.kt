@@ -29,14 +29,14 @@ internal class DiskCacheTest {
     }
 
     @Test
-    fun can_read_and_write_empty() {
+    fun canReadAndWriteEmpty() {
         diskCache.openSnapshot("test").use { assertNull(it) }
         diskCache.openEditor("test")?.use { /* Empty edit to create the file on disk. */ }
         diskCache.openSnapshot("test").use { assertNotNull(it) }
     }
 
     @Test
-    fun can_read_and_write_data() {
+    fun canReadAndWriteData() {
         assertEquals(0, diskCache.size)
         diskCache.openSnapshot("test").use { assertNull(it) }
 
@@ -64,7 +64,7 @@ internal class DiskCacheTest {
     }
 
     @Test
-    fun can_remove_singular_entries() {
+    fun canRemoveSingularEntries() {
         diskCache.openEditor("test1")!!.use { /* Empty edit to create the file on disk. */ }
         diskCache.openEditor("test2")!!.use { /* Empty edit to create the file on disk. */ }
         assertTrue(diskCache.remove("test1"))
@@ -73,7 +73,7 @@ internal class DiskCacheTest {
     }
 
     @Test
-    fun can_clear_all_entries() {
+    fun canClearAllEntries() {
         diskCache.openEditor("test1")!!.use { /* Empty edit to create the file on disk. */ }
         diskCache.openEditor("test2")!!.use { /* Empty edit to create the file on disk. */ }
         diskCache.clear()
