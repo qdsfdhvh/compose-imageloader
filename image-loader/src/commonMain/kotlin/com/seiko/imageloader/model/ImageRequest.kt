@@ -103,7 +103,7 @@ inline fun ImageRequest(
 }
 
 inline fun ImageRequest(
-    data: Any,
+    data: Any?,
     crossinline block: ImageRequestBuilder.() -> Unit,
 ) = ImageRequest {
     data(data)

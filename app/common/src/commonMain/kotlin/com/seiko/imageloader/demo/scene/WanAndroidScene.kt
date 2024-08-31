@@ -23,7 +23,7 @@ import com.seiko.imageloader.demo.MR
 import com.seiko.imageloader.demo.util.JSON
 import com.seiko.imageloader.demo.util.httpEngine
 import com.seiko.imageloader.ui.AutoSizeImage
-import io.github.qdsfdhvh.common.generated.resources.cat
+import io.github.qdsfdhvh.imageloader.demo.common.cat
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -33,10 +33,8 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun WanAndroidScene(
     onBack: () -> Unit,

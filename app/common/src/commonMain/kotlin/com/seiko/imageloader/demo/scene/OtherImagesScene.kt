@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import com.seiko.imageloader.demo.data.imageJsonData
 import com.seiko.imageloader.rememberImagePainter
-import io.github.qdsfdhvh.common.generated.resources.Res
+import io.github.qdsfdhvh.imageloader.demo.common.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)

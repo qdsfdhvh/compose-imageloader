@@ -25,7 +25,7 @@ interface ImageLoader {
 
     fun async(request: ImageRequest): Flow<ImageAction>
 
-    suspend fun enqueue(request: ImageRequest): ImageResult
+    suspend fun execute(request: ImageRequest): ImageResult
 
     companion object
 }
@@ -60,7 +60,7 @@ private class RealImageLoader(
         }
     }.flowOn(requestCoroutineContext)
 
-    override suspend fun enqueue(request: ImageRequest): ImageResult {
+    override suspend fun execute(request: ImageRequest): ImageResult {
         return withContext(requestCoroutineContext) {
             val chain = createInterceptorChain(
                 initialRequest = request,
