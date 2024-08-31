@@ -38,7 +38,7 @@ public final class com/seiko/imageloader/Image {
 public abstract interface class com/seiko/imageloader/ImageLoader {
 	public static final field Companion Lcom/seiko/imageloader/ImageLoader$Companion;
 	public abstract fun async (Lcom/seiko/imageloader/model/ImageRequest;)Lkotlinx/coroutines/flow/Flow;
-	public abstract fun enqueue (Lcom/seiko/imageloader/model/ImageRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun execute (Lcom/seiko/imageloader/model/ImageRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getConfig ()Lcom/seiko/imageloader/ImageLoaderConfig;
 }
 
@@ -751,6 +751,13 @@ public final class com/seiko/imageloader/model/ImageRequestBuilder {
 	public final fun size (Lcom/seiko/imageloader/option/SizeResolver;)V
 	public final fun takeFrom (Lcom/seiko/imageloader/model/ImageRequest;Z)V
 	public static synthetic fun takeFrom$default (Lcom/seiko/imageloader/model/ImageRequestBuilder;Lcom/seiko/imageloader/model/ImageRequest;ZILjava/lang/Object;)V
+}
+
+public final class com/seiko/imageloader/model/ImageRequestExtKt {
+	public static final fun size (Lcom/seiko/imageloader/model/ImageRequestBuilder;F)V
+	public static final fun size (Lcom/seiko/imageloader/model/ImageRequestBuilder;FF)V
+	public static final fun size (Lcom/seiko/imageloader/model/ImageRequestBuilder;Lkotlin/jvm/functions/Function1;)V
+	public static final fun size-d16Qtg0 (Lcom/seiko/imageloader/model/ImageRequestBuilder;J)V
 }
 
 public final class com/seiko/imageloader/model/ImageRequestKt {
