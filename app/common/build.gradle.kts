@@ -1,3 +1,4 @@
+import org.jetbrains.compose.resources.ResourcesExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
@@ -79,4 +80,12 @@ kotlin {
 
 android {
     namespace = "io.github.qdsfdhvh.imageloader.demo.common"
+}
+
+compose {
+    resources {
+        publicResClass = true
+        packageOfResClass = "io.github.qdsfdhvh.imageloader.demo.common"
+        generateResClass = ResourcesExtension.ResourceClassGeneration.Always
+    }
 }

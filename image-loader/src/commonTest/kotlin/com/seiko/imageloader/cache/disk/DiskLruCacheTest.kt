@@ -1,6 +1,5 @@
 package com.seiko.imageloader.cache.disk
 
-import com.seiko.imageloader.util.FaultyFileSystem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
 import okio.FileNotFoundException

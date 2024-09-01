@@ -1,15 +1,15 @@
 [versions]
-agp = "8.5.1"
+agp = "8.6.0"
 compose-multiplatform = "1.6.11"
 kotlin = "2.0.0"
 kotlinx-coroutines = "1.8.1"
-kotlinx-serialization = "1.7.1"
+kotlinx-serialization = "1.7.2"
 androidx-core-ktx = "1.13.1"
-androidx-collection = "1.4.1"
+androidx-collection = "1.4.3"
 androidx-appcompat = "1.7.0"
 androidx-exifinterface = "1.3.7"
-androidx-activity-compose = "1.9.0"
-androidx-lifecycle-runtime-ktx = "2.8.3"
+androidx-activity-compose = "1.9.1"
+androidx-lifecycle-runtime-ktx = "2.8.4"
 spotless = "6.25.0"
 ktlint = "0.50.0"
 publish = "0.29.0"
@@ -19,14 +19,13 @@ okio = "3.9.0"
 uri-kmp = "0.0.18"
 kermit = "2.0.4"
 androidsvg = "1.4"
-benchmark = "1.2.4"
+benchmark = "1.3.0"
 junit = "4.13.2"
 androidx-test-junit = "1.2.1"
 androidx-test-espresso = "3.6.1"
 androidx-test-uiautomator = "2.3.0"
 profileinstaller = "1.3.1"
-roborazzi = "1.22.2"
-robolectric = "4.13"
+roborazzi = "1.26.0"
 poko = "0.16.0"
 turbine = "1.0.0"
 file-picker = "3.1.0"
@@ -47,7 +46,7 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 baselineProfile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 poko = { id = "dev.drewhamilton.poko", version.ref = "poko" }
-binaryCompatibilityValidator =  { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.16.0" }
+binaryCompatibilityValidator =  { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.16.3" }
 
 [libraries]
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -75,11 +74,14 @@ androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", 
 androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
 
-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.13" }
 roborazzi-core = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazzi-junit = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule", version.ref = "roborazzi" }
-roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-compose-android = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-compose-desktop = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop", version.ref = "roborazzi" }
+roborazzi-compose-ios = { module = "io.github.takahirom.roborazzi:roborazzi-compose-ios", version.ref = "roborazzi" }
+roborazzi-compose-preview-scanner-support = { module = "io.github.takahirom.roborazzi:roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
+composable-preview-scanner = { module = "com.github.sergio-sastre.ComposablePreviewScanner:android", version = "0.3.0" }
 
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
@@ -109,15 +111,4 @@ logic-plugins = [
 test-common = [
     "kotlinx-coroutines-test",
     "okio-fakefilesystem",
-]
-test-android = [
-    "junit",
-    "androidx-test-junit",
-    "robolectric",
-    "roborazzi-core",
-    "roborazzi-junit",
-    "roborazzi-compose"
-]
-test-desktop = [
-    "roborazzi-compose-desktop",
 ]

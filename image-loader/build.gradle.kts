@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.config.LanguageFeature
-
 plugins {
     id("app.android.library")
     id("app.kotlin.multiplatform")
@@ -7,7 +5,6 @@ plugins {
     alias(libs.plugins.publish)
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)
-    alias(libs.plugins.roborazzi)
     alias(libs.plugins.poko)
 }
 
@@ -31,8 +28,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.bundles.test.common)
-                implementation(compose.foundation)
-                implementation(compose.ui)
             }
         }
         androidMain {
@@ -43,28 +38,9 @@ kotlin {
                 implementation(libs.androidx.exifinterface)
             }
         }
-        androidUnitTest {
-            dependencies {
-                implementation(compose.desktop.uiTestJUnit4)
-                implementation(libs.bundles.test.android)
-            }
-        }
         desktopMain {
             dependencies {
                 implementation(libs.kotlinx.coroutines.swing)
-            }
-        }
-        desktopTest {
-            languageSettings {
-                enableLanguageFeature(LanguageFeature.ContextReceivers.name)
-            }
-            dependencies {
-                implementation(compose.desktop.currentOs)
-                implementation(compose.desktop.uiTestJUnit4)
-                implementation(libs.roborazzi.compose.desktop.get().toString()) {
-                    exclude("org.jetbrains.compose.ui", "ui-test-junit4-desktop")
-                    exclude("org.jetbrains.compose.ui", "ui-graphics-desktop")
-                }
             }
         }
         val noJsAndWasmMain by creating {

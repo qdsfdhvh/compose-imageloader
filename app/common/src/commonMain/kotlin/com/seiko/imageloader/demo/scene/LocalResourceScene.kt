@@ -18,10 +18,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.demo.MR
 import com.seiko.imageloader.model.ninePatch
-import io.github.qdsfdhvh.common.generated.resources.car_black
-import io.github.qdsfdhvh.common.generated.resources.cat
-import io.github.qdsfdhvh.common.generated.resources.chat_from_bg_normal_9
-import io.github.qdsfdhvh.common.generated.resources.collection_logo
+import io.github.qdsfdhvh.imageloader.demo.common.car_black
+import io.github.qdsfdhvh.imageloader.demo.common.cat
+import io.github.qdsfdhvh.imageloader.demo.common.chat_from_bg_normal_9
+import io.github.qdsfdhvh.imageloader.demo.common.collection_logo
 
 @Composable
 fun LocalResourceScene(
@@ -52,6 +52,9 @@ fun LocalResourceScene(
                                     right = 42 + 2
                                     skipPadding = 1
                                     maxFactor = 1f
+                                }
+                                options {
+                                    isBitmap = true
                                 }
                             }
                         },
