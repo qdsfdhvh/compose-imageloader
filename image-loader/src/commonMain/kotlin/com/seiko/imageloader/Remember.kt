@@ -22,10 +22,11 @@ import com.seiko.imageloader.util.AnimationPainter
 fun rememberImageAction(
     request: ImageRequest,
     imageLoader: ImageLoader,
+    initialAction: ImageAction = ImageEvent.Start,
 ): State<ImageAction> {
     return remember(request, imageLoader) {
         imageLoader.async(request)
-    }.collectAsState(ImageEvent.Start)
+    }.collectAsState(initialAction)
 }
 
 @Composable

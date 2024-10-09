@@ -1,5 +1,6 @@
 package com.seiko.imageloader.component.keyer
 
+import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.Scale
@@ -34,6 +35,9 @@ class KtorUrlKeyer : Keyer {
             }
             if (options.maxImageSize != Options.DEFAULT_MAX_IMAGE_SIZE) {
                 append("-maxSize${options.maxImageSize}")
+            }
+            if (options.size.isSpecified) {
+                append("-size=${options.size}")
             }
         }
     }
