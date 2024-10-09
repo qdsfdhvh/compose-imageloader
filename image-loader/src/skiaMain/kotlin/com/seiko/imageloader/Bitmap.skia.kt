@@ -11,3 +11,13 @@ actual val Bitmap.size: Int
 actual fun Bitmap.asImageBitmap(): ImageBitmap {
     return asComposeImageBitmap()
 }
+
+actual val Bitmap.isMutable: Boolean
+    get() = !this.isImmutable
+
+actual val Bitmap.isRecycled: Boolean
+    get() = this.isClosed
+
+actual fun Bitmap.recycle() {
+    close()
+}
