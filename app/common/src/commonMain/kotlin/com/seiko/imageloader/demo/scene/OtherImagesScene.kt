@@ -24,10 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import com.seiko.imageloader.demo.data.imageJsonData
+import com.seiko.imageloader.model.ImageRequest
+import com.seiko.imageloader.option.SizeResolver
 import com.seiko.imageloader.rememberImagePainter
+import com.seiko.imageloader.ui.AutoSizeImage
 import io.github.qdsfdhvh.imageloader.demo.common.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -54,6 +58,40 @@ fun OtherImagesScene(
             verticalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.padding(innerPadding).fillMaxSize(),
         ) {
+            item {
+                Text("Test same svg with different size")
+            }
+            item {
+                Row {
+                    val density = LocalDensity.current
+                    Image(
+                        rememberImagePainter(
+                            remember {
+                                ImageRequest("https://cdn.alza.cz/Foto/category/40/18901355.svg") {
+                                    size(SizeResolver(density, 50.dp))
+                                }
+                            },
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier.size(50.dp),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Image(
+                        rememberImagePainter("https://cdn.alza.cz/Foto/category/40/18901355.svg"),
+                        contentDescription = null,
+                        modifier = Modifier.size(146.dp),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    AutoSizeImage(
+                        "https://cdn.alza.cz/Foto/category/40/18901355.svg",
+                        contentDescription = null,
+                        modifier = Modifier.size(77.dp),
+                    )
+                }
+            }
+            item {
+                Text("Test image change")
+            }
             item {
                 Column {
                     Row {
@@ -129,11 +167,18 @@ fun OtherImagesScene(
 
 @Composable
 private fun TestSvgImage(url: String) {
+    val density = LocalDensity.current
     Image(
-        painter = rememberImagePainter(url),
+        painter = rememberImagePainter(
+            remember {
+                ImageRequest(url) {
+                    size(SizeResolver(density, 55.dp))
+                }
+            },
+        ),
         contentDescription = null,
         modifier = Modifier
-            .size(50.dp)
+            .size(55.dp)
             .background(color = Color.Red),
         contentScale = ContentScale.FillWidth,
     )

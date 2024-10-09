@@ -27,3 +27,9 @@ expect fun Bitmap.asImageBitmap(): ImageBitmap
 fun Bitmap.toPainter(filterQuality: FilterQuality = DefaultFilterQuality): Painter {
     return BitmapPainter(asImageBitmap(), filterQuality = filterQuality)
 }
+
+expect val Bitmap.isMutable: Boolean
+
+expect val Bitmap.isRecycled: Boolean
+
+expect fun Bitmap.recycle()

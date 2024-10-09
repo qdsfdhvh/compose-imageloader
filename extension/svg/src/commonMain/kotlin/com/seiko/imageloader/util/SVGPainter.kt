@@ -3,19 +3,30 @@ package com.seiko.imageloader.util
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmapConfig
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
+import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.component.decoder.SvgDom
 import kotlin.math.ceil
 
+@Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
 internal class SVGPainter(
     private val dom: SvgDom,
     private val density: Density,
     private val requestSize: Size = Size.Unspecified,
+    bitmapConfig: BitmapConfig = BitmapConfig.ARGB_8888,
 ) : Painter() {
+
+    private val imageBitmapConfig = when (bitmapConfig) {
+        BitmapConfig.ARGB_8888 -> ImageBitmapConfig.Argb8888
+        BitmapConfig.RGBA_F16 -> ImageBitmapConfig.F16
+        BitmapConfig.ALPHA_8 -> ImageBitmapConfig.Alpha8
+        BitmapConfig.HARDWARE -> ImageBitmapConfig.Gpu
+    }
 
     private val defaultSizePx: Size = run {
         if (requestSize.isSpecified) {
@@ -44,7 +55,7 @@ internal class SVGPainter(
     private var colorFilter: ColorFilter? = null
 
     // with caching into bitmap FPS is 3x-4x higher (tested with idea-logo.svg with 30x30 icons)
-    private val drawCache = DrawCache()
+    private val drawCache = androidx.compose.ui.graphics.vector.DrawCache()
 
     override fun applyAlpha(alpha: Float): Boolean {
         this.alpha = alpha
@@ -58,10 +69,13 @@ internal class SVGPainter(
 
     override fun DrawScope.onDraw() {
         if (previousDrawSize != size) {
+            previousDrawSize = size
+
             drawCache.drawCachedImage(
-                IntSize(ceil(size.width).toInt(), ceil(size.height).toInt()),
+                config = imageBitmapConfig,
+                size = IntSize(ceil(size.width).toInt(), ceil(size.height).toInt()),
                 density = this,
-                layoutDirection,
+                layoutDirection = layoutDirection,
             ) {
                 drawSvg(size)
             }
@@ -74,5 +88,24 @@ internal class SVGPainter(
         drawIntoCanvas { canvas ->
             dom.draw(canvas, size)
         }
+    }
+
+    override fun hashCode(): Int {
+        var result = dom.hashCode()
+        result = 31 * result + density.hashCode()
+        result = 31 * result + requestSize.hashCode()
+        result = 31 * result + imageBitmapConfig.hashCode()
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SVGPainter) return false
+
+        if (dom != other.dom) return false
+        if (density != other.density) return false
+        if (requestSize != other.requestSize) return false
+        if (imageBitmapConfig != other.imageBitmapConfig) return false
+        return true
     }
 }
