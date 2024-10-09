@@ -21,6 +21,9 @@ public final class com/seiko/imageloader/BitmapKt {
 public final class com/seiko/imageloader/Bitmap_skiaKt {
 	public static final fun asImageBitmap (Lorg/jetbrains/skia/Bitmap;)Landroidx/compose/ui/graphics/ImageBitmap;
 	public static final fun getSize (Lorg/jetbrains/skia/Bitmap;)I
+	public static final fun isMutable (Lorg/jetbrains/skia/Bitmap;)Z
+	public static final fun isRecycled (Lorg/jetbrains/skia/Bitmap;)Z
+	public static final fun recycle (Lorg/jetbrains/skia/Bitmap;)V
 }
 
 public final class com/seiko/imageloader/EmptyPainter : androidx/compose/ui/graphics/painter/Painter {
@@ -74,7 +77,7 @@ public final class com/seiko/imageloader/Image_skiaKt {
 }
 
 public final class com/seiko/imageloader/RememberKt {
-	public static final fun rememberImageAction (Lcom/seiko/imageloader/model/ImageRequest;Lcom/seiko/imageloader/ImageLoader;Landroidx/compose/runtime/Composer;I)Landroidx/compose/runtime/State;
+	public static final fun rememberImageAction (Lcom/seiko/imageloader/model/ImageRequest;Lcom/seiko/imageloader/ImageLoader;Lcom/seiko/imageloader/model/ImageAction;Landroidx/compose/runtime/Composer;II)Landroidx/compose/runtime/State;
 	public static final fun rememberImageActionPainter-UCTX6hg (Lcom/seiko/imageloader/model/ImageAction;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Landroidx/compose/ui/graphics/painter/Painter;
 	public static final fun rememberImagePainter-RGgXEk8 (Lcom/seiko/imageloader/model/ImageRequest;Lcom/seiko/imageloader/ImageLoader;ILkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Landroidx/compose/ui/graphics/painter/Painter;
 	public static final fun rememberImageResultPainter-y3sDtpA (Lcom/seiko/imageloader/model/ImageResult;ILkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Landroidx/compose/ui/graphics/painter/Painter;
@@ -771,7 +774,14 @@ public final class com/seiko/imageloader/option/SizeResolver$Companion {
 }
 
 public final class com/seiko/imageloader/option/SizeResolverKt {
+	public static final fun SizeResolver (F)Lcom/seiko/imageloader/option/SizeResolver;
+	public static final fun SizeResolver (FF)Lcom/seiko/imageloader/option/SizeResolver;
+	public static final fun SizeResolver (I)Lcom/seiko/imageloader/option/SizeResolver;
+	public static final fun SizeResolver (II)Lcom/seiko/imageloader/option/SizeResolver;
 	public static final fun SizeResolver (Lkotlin/jvm/functions/Function1;)Lcom/seiko/imageloader/option/SizeResolver;
+	public static final fun SizeResolver-3ABfNKs (Landroidx/compose/ui/unit/Density;F)Lcom/seiko/imageloader/option/SizeResolver;
+	public static final fun SizeResolver-6HolHcs (Landroidx/compose/ui/unit/Density;J)Lcom/seiko/imageloader/option/SizeResolver;
+	public static final fun SizeResolver-VpY3zN4 (Landroidx/compose/ui/unit/Density;FF)Lcom/seiko/imageloader/option/SizeResolver;
 	public static final fun SizeResolver-uvyYCjk (J)Lcom/seiko/imageloader/option/SizeResolver;
 }
 
