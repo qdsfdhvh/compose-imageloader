@@ -70,7 +70,7 @@ fun OtherImagesScene(
                                 ImageRequest("https://cdn.alza.cz/Foto/category/40/18901355.svg") {
                                     size(SizeResolver(density, 50.dp))
                                 }
-                            }
+                            },
                         ),
                         contentDescription = null,
                         modifier = Modifier.size(50.dp),
@@ -167,11 +167,18 @@ fun OtherImagesScene(
 
 @Composable
 private fun TestSvgImage(url: String) {
+    val density = LocalDensity.current
     Image(
-        painter = rememberImagePainter(url),
+        painter = rememberImagePainter(
+            remember {
+                ImageRequest(url) {
+                    size(SizeResolver(density, 55.dp))
+                }
+            },
+        ),
         contentDescription = null,
         modifier = Modifier
-            .size(50.dp)
+            .size(55.dp)
             .background(color = Color.Red),
         contentScale = ContentScale.FillWidth,
     )
