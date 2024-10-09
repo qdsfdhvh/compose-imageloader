@@ -8,7 +8,7 @@ actual typealias Bitmap = android.graphics.Bitmap
 actual val Bitmap.size: Int
     get() {
         if (isRecycled) {
-            error("Cannot obtain size for recycled Bitmap: $this [${width}x${height}] $config")
+            error("Cannot obtain size for recycled Bitmap: $this [${width}x$height] $config")
         }
         return allocationByteCount
     }
