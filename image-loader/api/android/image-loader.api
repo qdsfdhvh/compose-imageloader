@@ -214,7 +214,7 @@ public final class com/seiko/imageloader/component/SetupComponents_jvmKt {
 
 public final class com/seiko/imageloader/component/decoder/BitmapFactoryDecoder : com/seiko/imageloader/component/decoder/Decoder {
 	public static final field $stable I
-	public synthetic fun <init> (Landroid/content/Context;Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;Lkotlinx/coroutines/sync/Semaphore;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Landroid/content/Context;Lokio/BufferedSource;Lcom/seiko/imageloader/option/Options;Lkotlinx/coroutines/sync/Semaphore;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -293,6 +293,18 @@ public final class com/seiko/imageloader/component/decoder/ImageDecoderDecoder$F
 	public fun <init> ()V
 	public fun <init> (Landroid/content/Context;IZ)V
 	public synthetic fun <init> (Landroid/content/Context;IZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun create (Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/decoder/Decoder;
+}
+
+public final class com/seiko/imageloader/component/decoder/VideoFrameDecoder : com/seiko/imageloader/component/decoder/Decoder {
+	public static final field $stable I
+	public fun <init> (Lokio/BufferedSource;Lcom/seiko/imageloader/option/Options;)V
+	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/seiko/imageloader/component/decoder/VideoFrameDecoder$Factory : com/seiko/imageloader/component/decoder/Decoder$Factory {
+	public static final field $stable I
+	public fun <init> ()V
 	public fun create (Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/decoder/Decoder;
 }
 
@@ -769,6 +781,14 @@ public final class com/seiko/imageloader/model/ImageRequestKt {
 	public static final fun ImageRequest (Ljava/lang/Object;)Lcom/seiko/imageloader/model/ImageRequest;
 	public static final fun ImageRequest (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lcom/seiko/imageloader/model/ImageRequest;
 	public static final fun ImageRequest (Lkotlin/jvm/functions/Function1;)Lcom/seiko/imageloader/model/ImageRequest;
+}
+
+public final class com/seiko/imageloader/model/ImageRequest_videoKt {
+	public static final fun videoFrameIndex (Lcom/seiko/imageloader/model/ImageRequestBuilder;I)V
+	public static final fun videoFrameMicros (Lcom/seiko/imageloader/model/ImageRequestBuilder;J)V
+	public static final fun videoFrameMillis (Lcom/seiko/imageloader/model/ImageRequestBuilder;J)V
+	public static final fun videoFrameOption (Lcom/seiko/imageloader/model/ImageRequestBuilder;I)Lcom/seiko/imageloader/model/ImageRequestBuilder;
+	public static final fun videoFramePercent (Lcom/seiko/imageloader/model/ImageRequestBuilder;F)V
 }
 
 public abstract interface class com/seiko/imageloader/model/ImageResult : com/seiko/imageloader/model/ImageAction {
