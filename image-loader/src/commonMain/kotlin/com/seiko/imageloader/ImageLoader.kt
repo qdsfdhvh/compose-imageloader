@@ -62,13 +62,24 @@ private class RealImageLoader(
 
     override suspend fun execute(request: ImageRequest): ImageResult {
         return withContext(requestCoroutineContext) {
-            val chain = createInterceptorChain(
-                initialRequest = request,
-                initialOptions = getOptions(request),
-                config = config,
-                flowCollector = null,
+            runCatching {
+                val chain = createInterceptorChain(
+                    initialRequest = request,
+                    initialOptions = getOptions(request),
+                    config = config,
+                    flowCollector = null,
+                )
+                chain.proceed(request)
+            }.fold(
+                onSuccess = { it },
+                onFailure = {
+                    if (it !is CancellationException) {
+                        ImageResult.OfError(it)
+                    } else {
+                        throw it
+                    }
+                },
             )
-            chain.proceed(request)
         }
     }
 
