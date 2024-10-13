@@ -5,6 +5,7 @@ import android.os.Build
 import com.seiko.imageloader.component.decoder.BitmapFactoryDecoder
 import com.seiko.imageloader.component.decoder.GifDecoder
 import com.seiko.imageloader.component.decoder.ImageDecoderDecoder
+import com.seiko.imageloader.component.decoder.VideoFrameDecoder
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.DrawableFetcher
@@ -31,6 +32,9 @@ fun ComponentRegistryBuilder.setupAndroidComponents(
     add(ResourceUriFetcher.Factory(context))
     add(DrawableFetcher.Factory())
     // Decoders
+    if (Build.VERSION.SDK_INT >= 23) {
+        add(VideoFrameDecoder.Factory())
+    }
     if (Build.VERSION.SDK_INT >= 28) {
         add(ImageDecoderDecoder.Factory(context, maxParallelism))
     } else {

@@ -20,6 +20,7 @@ import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import okio.Buffer
+import okio.BufferedSource
 import okio.ForwardingSource
 import okio.Source
 import okio.buffer
@@ -28,7 +29,7 @@ import kotlin.math.roundToInt
 /** The base [Decoder] that uses [BitmapFactory] to decode a given [ImageSource]. */
 class BitmapFactoryDecoder private constructor(
     private val context: Context,
-    private val source: DecodeSource,
+    private val source: BufferedSource,
     private val options: Options,
     private val parallelismLock: Semaphore,
 ) : Decoder {
@@ -38,7 +39,7 @@ class BitmapFactoryDecoder private constructor(
     }
 
     private fun BitmapFactory.Options.decode(): DecodeResult {
-        val safeSource = ExceptionCatchingSource(source.source)
+        val safeSource = ExceptionCatchingSource(source)
         val safeBufferedSource = safeSource.buffer()
 
         // Read the image's dimensions.
@@ -174,7 +175,7 @@ class BitmapFactoryDecoder private constructor(
         override fun create(source: DecodeSource, options: Options): Decoder {
             return BitmapFactoryDecoder(
                 context = context ?: options.androidContext,
-                source = source,
+                source = source.source,
                 options = options,
                 parallelismLock = parallelismLock,
             )
