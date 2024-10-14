@@ -5,7 +5,7 @@ public final class com/seiko/imageloader/component/SetupSvgComponentsKt {
 
 public final class com/seiko/imageloader/component/decoder/SvgDecoder : com/seiko/imageloader/component/decoder/Decoder {
 	public static final field Companion Lcom/seiko/imageloader/component/decoder/SvgDecoder$Companion;
-	public synthetic fun <init> (Lokio/BufferedSource;Landroidx/compose/ui/unit/Density;Lcom/seiko/imageloader/option/Options;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/seiko/imageloader/model/ImageSource;Landroidx/compose/ui/unit/Density;Lcom/seiko/imageloader/option/Options;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

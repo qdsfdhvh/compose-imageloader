@@ -214,7 +214,7 @@ public final class com/seiko/imageloader/component/SetupComponents_jvmKt {
 
 public final class com/seiko/imageloader/component/decoder/BitmapFactoryDecoder : com/seiko/imageloader/component/decoder/Decoder {
 	public static final field $stable I
-	public synthetic fun <init> (Landroid/content/Context;Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;Lkotlinx/coroutines/sync/Semaphore;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Landroid/content/Context;Lcom/seiko/imageloader/model/ImageSource;Lcom/seiko/imageloader/option/Options;Lkotlinx/coroutines/sync/Semaphore;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -270,7 +270,7 @@ public final class com/seiko/imageloader/component/decoder/DecoderKt {
 
 public final class com/seiko/imageloader/component/decoder/GifDecoder : com/seiko/imageloader/component/decoder/Decoder {
 	public static final field $stable I
-	public synthetic fun <init> (Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/seiko/imageloader/model/ImageSource;Lcom/seiko/imageloader/option/Options;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -284,7 +284,7 @@ public final class com/seiko/imageloader/component/decoder/GifDecoder$Factory : 
 
 public final class com/seiko/imageloader/component/decoder/ImageDecoderDecoder : com/seiko/imageloader/component/decoder/Decoder {
 	public static final field $stable I
-	public synthetic fun <init> (Landroid/content/Context;Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;Lkotlinx/coroutines/sync/Semaphore;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Landroid/content/Context;Lcom/seiko/imageloader/model/ImageSource;Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;Lkotlinx/coroutines/sync/Semaphore;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -293,6 +293,18 @@ public final class com/seiko/imageloader/component/decoder/ImageDecoderDecoder$F
 	public fun <init> ()V
 	public fun <init> (Landroid/content/Context;IZ)V
 	public synthetic fun <init> (Landroid/content/Context;IZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun create (Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/decoder/Decoder;
+}
+
+public final class com/seiko/imageloader/component/decoder/VideoFrameDecoder : com/seiko/imageloader/component/decoder/Decoder {
+	public static final field $stable I
+	public fun <init> (Lcom/seiko/imageloader/model/ImageSource;Lcom/seiko/imageloader/option/Options;)V
+	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/seiko/imageloader/component/decoder/VideoFrameDecoder$Factory : com/seiko/imageloader/component/decoder/Decoder$Factory {
+	public static final field $stable I
+	public fun <init> ()V
 	public fun create (Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/decoder/Decoder;
 }
 
@@ -367,6 +379,12 @@ public final class com/seiko/imageloader/component/fetcher/ByteBufferFetcher$Fac
 	public fun create (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Lcom/seiko/imageloader/component/fetcher/Fetcher;
 }
 
+public final class com/seiko/imageloader/component/fetcher/ByteBufferFetcher$Metadata {
+	public static final field $stable I
+	public fun <init> (Ljava/nio/ByteBuffer;)V
+	public final fun getByteBuffer ()Ljava/nio/ByteBuffer;
+}
+
 public final class com/seiko/imageloader/component/fetcher/ContentUriFetcher : com/seiko/imageloader/component/fetcher/Fetcher {
 	public static final field $stable I
 	public synthetic fun <init> (Landroid/content/Context;Lcom/eygraber/uri/Uri;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -434,11 +452,12 @@ public final class com/seiko/imageloader/component/fetcher/FetchResult$OfPainter
 
 public final class com/seiko/imageloader/component/fetcher/FetchResult$OfSource : com/seiko/imageloader/component/fetcher/FetchResult {
 	public static final field $stable I
-	public fun <init> (Lokio/BufferedSource;Ljava/util/Map;)V
-	public synthetic fun <init> (Lokio/BufferedSource;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/seiko/imageloader/model/ImageSource;Lcom/seiko/imageloader/model/ImageSourceFrom;Ljava/util/Map;)V
+	public synthetic fun <init> (Lcom/seiko/imageloader/model/ImageSource;Lcom/seiko/imageloader/model/ImageSourceFrom;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getExtra ()Ljava/util/Map;
-	public final fun getSource ()Lokio/BufferedSource;
+	public final fun getImageSource ()Lcom/seiko/imageloader/model/ImageSource;
+	public final fun getImageSourceFrom ()Lcom/seiko/imageloader/model/ImageSourceFrom;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -667,14 +686,6 @@ public final class com/seiko/imageloader/intercept/MemoryCacheInterceptorExtKt {
 	public static synthetic fun painterMemoryInterceptor$default (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/seiko/imageloader/intercept/MemoryCacheInterceptor;
 }
 
-public final class com/seiko/imageloader/model/DataSource : java/lang/Enum {
-	public static final field Disk Lcom/seiko/imageloader/model/DataSource;
-	public static final field Engine Lcom/seiko/imageloader/model/DataSource;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lcom/seiko/imageloader/model/DataSource;
-	public static fun values ()[Lcom/seiko/imageloader/model/DataSource;
-}
-
 public final class com/seiko/imageloader/model/ExtraDataKt {
 	public static final fun extraData (Lkotlin/jvm/functions/Function1;)Ljava/util/Map;
 	public static final fun getEmptyExtraData ()Ljava/util/Map;
@@ -771,6 +782,14 @@ public final class com/seiko/imageloader/model/ImageRequestKt {
 	public static final fun ImageRequest (Lkotlin/jvm/functions/Function1;)Lcom/seiko/imageloader/model/ImageRequest;
 }
 
+public final class com/seiko/imageloader/model/ImageRequest_videoKt {
+	public static final fun videoFrameIndex (Lcom/seiko/imageloader/model/ImageRequestBuilder;I)V
+	public static final fun videoFrameMicros (Lcom/seiko/imageloader/model/ImageRequestBuilder;J)V
+	public static final fun videoFrameMillis (Lcom/seiko/imageloader/model/ImageRequestBuilder;J)V
+	public static final fun videoFrameOption (Lcom/seiko/imageloader/model/ImageRequestBuilder;I)Lcom/seiko/imageloader/model/ImageRequestBuilder;
+	public static final fun videoFramePercent (Lcom/seiko/imageloader/model/ImageRequestBuilder;F)V
+}
+
 public abstract interface class com/seiko/imageloader/model/ImageResult : com/seiko/imageloader/model/ImageAction {
 }
 
@@ -812,15 +831,44 @@ public final class com/seiko/imageloader/model/ImageResult$OfPainter : com/seiko
 
 public final class com/seiko/imageloader/model/ImageResult$OfSource : com/seiko/imageloader/model/ImageAction$Failure, com/seiko/imageloader/model/ImageResult {
 	public static final field $stable I
-	public fun <init> (Lokio/BufferedSource;Lcom/seiko/imageloader/model/DataSource;Ljava/util/Map;)V
-	public synthetic fun <init> (Lokio/BufferedSource;Lcom/seiko/imageloader/model/DataSource;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/seiko/imageloader/model/ImageSource;Lcom/seiko/imageloader/model/ImageSourceFrom;Ljava/util/Map;)V
+	public synthetic fun <init> (Lcom/seiko/imageloader/model/ImageSource;Lcom/seiko/imageloader/model/ImageSourceFrom;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDataSource ()Lcom/seiko/imageloader/model/DataSource;
 	public fun getError ()Ljava/lang/Throwable;
 	public final fun getExtra ()Ljava/util/Map;
-	public final fun getSource ()Lokio/BufferedSource;
+	public final fun getImageSource ()Lcom/seiko/imageloader/model/ImageSource;
+	public final fun getImageSourceFrom ()Lcom/seiko/imageloader/model/ImageSourceFrom;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/seiko/imageloader/model/ImageSource : java/lang/AutoCloseable {
+	public abstract fun getBufferedSource ()Lokio/BufferedSource;
+}
+
+public final class com/seiko/imageloader/model/ImageSourceFrom : java/lang/Enum {
+	public static final field Disk Lcom/seiko/imageloader/model/ImageSourceFrom;
+	public static final field Memory Lcom/seiko/imageloader/model/ImageSourceFrom;
+	public static final field Network Lcom/seiko/imageloader/model/ImageSourceFrom;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/seiko/imageloader/model/ImageSourceFrom;
+	public static fun values ()[Lcom/seiko/imageloader/model/ImageSourceFrom;
+}
+
+public final class com/seiko/imageloader/model/ImageSourceKt {
+	public static final fun ImageSource (Lokio/BufferedSource;)Lcom/seiko/imageloader/model/ImageSource;
+	public static final fun ImageSource ([B)Lcom/seiko/imageloader/model/ImageSource;
+	public static final fun toImageSource (Lokio/BufferedSource;)Lcom/seiko/imageloader/model/ImageSource;
+	public static final fun toImageSource ([B)Lcom/seiko/imageloader/model/ImageSource;
+}
+
+public final class com/seiko/imageloader/model/ImageSource_jvmKt {
+	public static final fun InputStreamImageSource (Ljava/io/InputStream;)Lcom/seiko/imageloader/model/InputStreamImageSource;
+	public static final fun toImageSource (Ljava/io/InputStream;)Lcom/seiko/imageloader/model/InputStreamImageSource;
+}
+
+public abstract interface class com/seiko/imageloader/model/InputStreamImageSource : com/seiko/imageloader/model/ImageSource {
+	public abstract fun getInputStream ()Ljava/io/InputStream;
 }
 
 public final class com/seiko/imageloader/model/NullRequestData {

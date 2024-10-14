@@ -1,5 +1,5 @@
 public final class com/seiko/imageloader/component/decoder/ImageIODecoder : com/seiko/imageloader/component/decoder/Decoder {
-	public fun <init> (Lokio/BufferedSource;)V
+	public fun <init> (Lcom/seiko/imageloader/model/ImageSource;)V
 	public fun decode (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

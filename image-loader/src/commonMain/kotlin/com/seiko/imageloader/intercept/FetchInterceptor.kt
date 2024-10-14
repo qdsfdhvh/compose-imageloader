@@ -2,7 +2,6 @@ package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.fetcher.FetchResult
-import com.seiko.imageloader.model.DataSource
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
@@ -42,8 +41,8 @@ class FetchInterceptor : Interceptor {
 
 private fun FetchResult.toImageResult() = when (this) {
     is FetchResult.OfSource -> ImageResult.OfSource(
-        source = source,
-        dataSource = DataSource.Engine,
+        imageSource = imageSource,
+        imageSourceFrom = imageSourceFrom,
         extra = extra,
     )
     is FetchResult.OfBitmap -> ImageResult.OfBitmap(

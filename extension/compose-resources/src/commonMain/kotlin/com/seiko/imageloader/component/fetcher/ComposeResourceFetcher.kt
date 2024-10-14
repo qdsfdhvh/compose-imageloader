@@ -2,8 +2,9 @@
 
 package com.seiko.imageloader.component.fetcher
 
+import com.seiko.imageloader.model.ImageSourceFrom
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
-import okio.Buffer
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.InternalResourceApi
@@ -28,9 +29,8 @@ class ComposeResourceFetcher {
         override suspend fun fetch(): FetchResult {
             val path = resource.getResourceItemByEnvironment(getSystemEnvironment()).path
             return FetchResult.OfSource(
-                source = Buffer().apply {
-                    write(readResourceBytes(path))
-                },
+                imageSource = readResourceBytes(path).toImageSource(),
+                imageSourceFrom = ImageSourceFrom.Disk,
             )
         }
     }

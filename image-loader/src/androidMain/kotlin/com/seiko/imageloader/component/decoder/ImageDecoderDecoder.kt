@@ -4,35 +4,29 @@ import android.content.Context
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build.VERSION.SDK_INT
+import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.geometry.isSpecified
 import androidx.core.graphics.decodeBitmap
 import androidx.core.graphics.decodeDrawable
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
+import com.seiko.imageloader.component.fetcher.ByteBufferFetcher
 import com.seiko.imageloader.component.fetcher.ContentUriFetcher
 import com.seiko.imageloader.component.fetcher.ResourceUriFetcher
+import com.seiko.imageloader.model.ImageSource
+import com.seiko.imageloader.model.InputStreamImageSource
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
-import com.seiko.imageloader.util.FrameDelayRewritingSource
 import com.seiko.imageloader.util.ScaleDrawable
 import com.seiko.imageloader.util.calculateDstSize
-import com.seiko.imageloader.util.closeQuietly
-import com.seiko.imageloader.util.isGif
 import com.seiko.imageloader.util.isHardware
+import com.seiko.imageloader.util.tempFile
 import com.seiko.imageloader.util.toAndroidConfig
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import okio.BufferedSource
-import okio.FileSystem
-import okio.Path
-import okio.Path.Companion.toOkioPath
-import okio.buffer
-import java.io.File
-import java.nio.ByteBuffer
 
 /**
  * A [Decoder] that uses [ImageDecoder] to decode GIFs, animated WebPs, and animated HEIFs.
@@ -45,7 +39,8 @@ import java.nio.ByteBuffer
 @RequiresApi(28)
 class ImageDecoderDecoder private constructor(
     private val context: Context,
-    private val source: DecodeSource,
+    private val imageSource: ImageSource,
+    private val metadata: Any?,
     private val options: Options,
     private val parallelismLock: Semaphore,
     private val enforceMinimumFrameDelay: Boolean = true,
@@ -54,9 +49,8 @@ class ImageDecoderDecoder private constructor(
     override suspend fun decode(): DecodeResult = parallelismLock.withPermit {
         runInterruptible {
             var imageDecoder: ImageDecoder? = null
-            val wrapDecodeSource = WrapDecodeSource(source, cacheDirFactory = { context.safeCacheDir })
             try {
-                val imageDecoderSource = wrapDecodeSource.toImageDecoderSource()
+                val imageDecoderSource = imageSource.toImageDecoderSource()
                 if (options.playAnimate && !options.isBitmap) {
                     val drawable = imageDecoderSource.decodeDrawable { info, _ ->
                         imageDecoder = this
@@ -72,23 +66,13 @@ class ImageDecoderDecoder private constructor(
                 }
             } finally {
                 imageDecoder?.close()
-                wrapDecodeSource.close()
+                imageSource.close()
             }
         }
     }
 
-    private fun wrapBufferedSource(channel: BufferedSource): BufferedSource {
-        return if (enforceMinimumFrameDelay && isGif(channel)) {
-            // Wrap the source to rewrite its frame delay as it's read.
-            val rewritingSource = FrameDelayRewritingSource(channel)
-            rewritingSource.buffer()
-        } else {
-            channel
-        }
-    }
-
-    private fun WrapDecodeSource.toImageDecoderSource(): ImageDecoder.Source {
-        when (val metadata = extra.metadata) {
+    private fun ImageSource.toImageDecoderSource(): ImageDecoder.Source {
+        when (metadata) {
             is AssetUriFetcher.MetaData -> {
                 return ImageDecoder.createSource(context.assets, metadata.fileName)
             }
@@ -100,13 +84,19 @@ class ImageDecoderDecoder private constructor(
                     return ImageDecoder.createSource(context.resources, metadata.resId)
                 }
             }
+            is ByteBufferFetcher.Metadata -> {
+                return ImageDecoder.createSource(metadata.byteBuffer)
+            }
         }
-        val source = wrapBufferedSource(source)
-        return when {
-            SDK_INT >= 31 -> ImageDecoder.createSource(source.readByteArray())
-            SDK_INT == 30 -> ImageDecoder.createSource(ByteBuffer.wrap(source.readByteArray()))
-            // https://issuetracker.google.com/issues/139371066
-            else -> ImageDecoder.createSource(tempPath.toFile())
+        return if (this is InputStreamImageSource) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ImageDecoder.createSource(bufferedSource.tempFile())
+                // ImageDecoder.createSource(ByteBuffer.wrap(inputStream.readAllBytes()))
+            } else {
+                ImageDecoder.createSource(bufferedSource.tempFile())
+            }
+        } else {
+            ImageDecoder.createSource(bufferedSource.tempFile())
         }
     }
 
@@ -165,35 +155,6 @@ class ImageDecoderDecoder private constructor(
         return ScaleDrawable(baseDrawable, options.scale)
     }
 
-    private class WrapDecodeSource(
-        private val decodeSource: DecodeSource,
-        private val cacheDirFactory: () -> File,
-    ) {
-        val extra get() = decodeSource.extra
-        val source get() = decodeSource.source
-
-        private val fileSystem get() = FileSystem.SYSTEM
-        private var _tempPath: Path? = null
-
-        private fun createTempPath(): Path {
-            val parentDir = cacheDirFactory.invoke()
-            check(parentDir.isDirectory) { "cacheDirectory must be a directory." }
-            val temp = File.createTempFile("tmp", null, parentDir).toOkioPath()
-            fileSystem.write(temp) {
-                writeAll(source)
-            }
-            return temp
-        }
-
-        val tempPath: Path
-            get() = _tempPath ?: createTempPath().also { _tempPath = it }
-
-        fun close() {
-            _tempPath?.let(fileSystem::delete)
-            source.closeQuietly()
-        }
-    }
-
     class Factory(
         private val context: Context? = null,
         maxParallelism: Int = Options.DEFAULT_MAX_PARALLELISM,
@@ -202,10 +163,11 @@ class ImageDecoderDecoder private constructor(
 
         private val parallelismLock = Semaphore(maxParallelism)
 
-        override fun create(source: DecodeSource, options: Options): Decoder? {
+        override fun create(source: DecodeSource, options: Options): Decoder {
             return ImageDecoderDecoder(
                 context = context ?: options.androidContext,
-                source = source,
+                imageSource = source.imageSource,
+                metadata = source.extra.metadata,
                 options = options,
                 parallelismLock = parallelismLock,
                 enforceMinimumFrameDelay = enforceMinimumFrameDelay,
@@ -214,9 +176,9 @@ class ImageDecoderDecoder private constructor(
     }
 }
 
-/** https://github.com/coil-kt/coil/issues/675 */
-private val Context.safeCacheDir: File
-    get() {
-        val cacheDir = checkNotNull(cacheDir) { "cacheDir == null" }
-        return cacheDir.apply { mkdirs() }
-    }
+// private fun InputStream.toByteBuffer(): ByteBuffer {
+//     return ByteBuffer.wrap(readAllBytes())
+//     // val byteBuffer = ByteBuffer.allocate(available())
+//     // Channels.newChannel(this).read(byteBuffer)
+//     // return byteBuffer
+// }

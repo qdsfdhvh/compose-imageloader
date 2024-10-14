@@ -11,14 +11,14 @@ import android.provider.MediaStore
 import androidx.annotation.VisibleForTesting
 import com.eygraber.uri.Uri
 import com.eygraber.uri.toAndroidUri
+import com.seiko.imageloader.model.ImageSourceFrom
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import dev.drewhamilton.poko.Poko
-import okio.buffer
-import okio.source
 import android.net.Uri as AndroidUri
 
 class ContentUriFetcher private constructor(
@@ -47,7 +47,8 @@ class ContentUriFetcher private constructor(
         }
 
         return FetchResult.OfSource(
-            source = inputStream.source().buffer(),
+            imageSource = inputStream.toImageSource(),
+            imageSourceFrom = ImageSourceFrom.Disk,
             extra = extraData {
                 mimeType(contentResolver.getType(androidUri))
                 metadata(Metadata(androidUri))

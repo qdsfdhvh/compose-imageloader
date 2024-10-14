@@ -2,14 +2,16 @@ package com.seiko.imageloader.intercept
 
 import com.seiko.imageloader.cache.disk.DiskCache
 import com.seiko.imageloader.component.keyer.Keyer
-import com.seiko.imageloader.model.DataSource
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.model.ImageSourceFrom
+import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.closeQuietly
 import com.seiko.imageloader.util.d
 import com.seiko.imageloader.util.w
-import okio.BufferedSource
+import okio.Source
 import okio.buffer
 
 class DiskCacheInterceptor(
@@ -44,8 +46,8 @@ class DiskCacheInterceptor(
                 data = request.data,
             ) { "read disk cache" }
             return ImageResult.OfSource(
-                source = snapshot.source(),
-                dataSource = DataSource.Disk,
+                imageSource = snapshot.source().buffer().toImageSource(),
+                imageSourceFrom = ImageSourceFrom.Disk,
             )
         }
         if (!request.skipEvent) {
@@ -59,7 +61,7 @@ class DiskCacheInterceptor(
                         options,
                         cacheKey,
                         snapshot,
-                        result.source,
+                        result,
                     )
                 }.onFailure {
                     logger.w(
@@ -74,8 +76,8 @@ class DiskCacheInterceptor(
                         data = request.data,
                     ) { "write disk cache" }
                     return ImageResult.OfSource(
-                        source = snapshot.source(),
-                        dataSource = result.dataSource,
+                        imageSource = snapshot.source().buffer().toImageSource(),
+                        imageSourceFrom = result.imageSourceFrom,
                         extra = result.extra,
                     )
                 }
@@ -100,9 +102,13 @@ class DiskCacheInterceptor(
         options: Options,
         cacheKey: String,
         snapshot: DiskCache.Snapshot?,
-        source: BufferedSource,
+        source: ImageResult.OfSource,
     ): DiskCache.Snapshot? {
         if (!options.diskCachePolicy.writeEnabled) {
+            snapshot?.closeQuietly()
+            return null
+        }
+        if (source.extra.mimeType?.startsWith("video/") == true) {
             snapshot?.closeQuietly()
             return null
         }
@@ -111,19 +117,19 @@ class DiskCacheInterceptor(
             ?: return null
         try {
             fileSystem.write(editor.data) {
-                writeAll(source)
+                writeAll(source.imageSource.bufferedSource)
             }
             return editor.commitAndOpenSnapshot()
         } catch (e: Exception) {
             editor.abortQuietly()
             throw e
         } finally {
-            source.closeQuietly()
+            source.imageSource.close()
         }
     }
 
-    private fun DiskCache.Snapshot.source(): BufferedSource {
-        return fileSystem.source(data).buffer()
+    private fun DiskCache.Snapshot.source(): Source {
+        return fileSystem.source(data)
     }
 }
 

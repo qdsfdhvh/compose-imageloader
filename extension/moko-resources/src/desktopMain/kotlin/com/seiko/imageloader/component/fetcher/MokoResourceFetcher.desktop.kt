@@ -2,13 +2,13 @@ package com.seiko.imageloader.component.fetcher
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import com.seiko.imageloader.model.ImageSourceFrom
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
 import dev.icerock.moko.resources.AssetResource
 import dev.icerock.moko.resources.ColorResource
 import dev.icerock.moko.resources.FileResource
 import dev.icerock.moko.resources.ImageResource
-import okio.buffer
-import okio.source
 import java.io.FileNotFoundException
 
 internal actual suspend fun AssetResource.toFetchResult(options: Options): FetchResult? {
@@ -32,7 +32,8 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
     val stream = resourcesClassLoader.getResourceAsStream(filePath)
         ?: throw FileNotFoundException("Couldn't open resource as stream at: $filePath")
     return FetchResult.OfSource(
-        source = stream.source().buffer(),
+        imageSource = stream.toImageSource(),
+        imageSourceFrom = ImageSourceFrom.Disk,
     )
 }
 
@@ -40,6 +41,7 @@ internal actual suspend fun ImageResource.toFetchResult(options: Options): Fetch
     val stream = resourcesClassLoader.getResourceAsStream(filePath)
         ?: throw FileNotFoundException("Couldn't open resource as stream at: $filePath")
     return FetchResult.OfSource(
-        source = stream.source().buffer(),
+        imageSource = stream.toImageSource(),
+        imageSourceFrom = ImageSourceFrom.Disk,
     )
 }
