@@ -1,11 +1,11 @@
 package com.seiko.imageloader.component.decoder
 
 import androidx.compose.ui.geometry.isSpecified
+import com.seiko.imageloader.model.ImageSource
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.calculateDstSize
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import okio.BufferedSource
 import okio.use
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Canvas
@@ -14,13 +14,13 @@ import org.jetbrains.skia.Rect
 import org.jetbrains.skia.impl.use
 
 class SkiaImageDecoder private constructor(
-    private val source: BufferedSource,
+    private val source: ImageSource,
     private val options: Options,
     private val parallelismLock: Semaphore,
 ) : Decoder {
 
     override suspend fun decode() = parallelismLock.withPermit {
-        val image = source.use {
+        val image = source.bufferedSource.use {
             Image.makeFromEncoded(it.readByteArray())
         }
         DecodeResult.OfBitmap(
@@ -63,7 +63,7 @@ class SkiaImageDecoder private constructor(
 
         override fun create(source: DecodeSource, options: Options): Decoder {
             return SkiaImageDecoder(
-                source = source.source,
+                source = source.imageSource,
                 options = options,
                 parallelismLock = parallelismLock,
             )

@@ -1,5 +1,7 @@
 package com.seiko.imageloader.component.fetcher
 
+import com.seiko.imageloader.model.ImageSourceFrom
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
 import okio.FileSystem
 import okio.Path
@@ -11,7 +13,8 @@ class OkioPathFetcher private constructor(
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return FetchResult.OfSource(
-            source = fileSystem.source(path).buffer(),
+            imageSource = fileSystem.source(path).buffer().toImageSource(),
+            imageSourceFrom = ImageSourceFrom.Disk,
         )
     }
 

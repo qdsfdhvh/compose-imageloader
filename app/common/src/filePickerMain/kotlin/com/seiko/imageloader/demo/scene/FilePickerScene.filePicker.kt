@@ -32,7 +32,7 @@ actual fun FilePickerScene(onBack: () -> Unit) {
         title = { Text("FilePicker") },
     ) { innerPadding ->
 
-        val fileType = remember { listOf("jpg", "png") }
+        val fileType = remember { listOf("jpg", "png", "mp4") }
         var selectPlatformFile by remember { mutableStateOf<Any?>(null) }
 
         var pathSingleChosen by remember { mutableStateOf("") }

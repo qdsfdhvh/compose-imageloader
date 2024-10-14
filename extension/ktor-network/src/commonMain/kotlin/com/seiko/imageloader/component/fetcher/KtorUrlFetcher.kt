@@ -1,14 +1,19 @@
+@file:Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
+
 package com.seiko.imageloader.component.fetcher
 
+import com.seiko.imageloader.model.ImageSource
+import com.seiko.imageloader.model.ImageSourceFrom
 import com.seiko.imageloader.model.KtorRequestData
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.ktorRequestData
 import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.request.headers
-import io.ktor.client.request.request
+import io.ktor.client.request.prepareRequest
 import io.ktor.client.request.url
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.HttpMethod
@@ -16,7 +21,9 @@ import io.ktor.http.Url
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.utils.io.ByteReadChannel
-import okio.BufferedSource
+import io.ktor.utils.io.readRemaining
+import kotlinx.io.readByteArray
+import okio.Buffer
 
 class KtorUrlFetcher private constructor(
     private val httpUrl: Url,
@@ -27,7 +34,7 @@ class KtorUrlFetcher private constructor(
     private val httpClient by lazy(httpClient)
 
     override suspend fun fetch(): FetchResult {
-        val response = httpClient.request {
+        return httpClient.prepareRequest {
             url(httpUrl)
             method = ktorRequestData?.method ?: HttpMethod.Get
             ktorRequestData?.headers?.let {
@@ -37,16 +44,19 @@ class KtorUrlFetcher private constructor(
                     }
                 }
             }
-        }
-        if (response.status.isSuccess()) {
-            return FetchResult.OfSource(
-                source = response.bodyAsChannel().source(),
+        }.execute { response ->
+            if (!response.status.isSuccess()) {
+                throw KtorUrlRequestException("code:${response.status.value}, ${response.status.description}")
+            }
+
+            FetchResult.OfSource(
+                imageSource = channelToImageSource(response.bodyAsChannel()),
+                imageSourceFrom = ImageSourceFrom.Network,
                 extra = extraData {
                     mimeType(response.contentType()?.toString())
                 },
             )
         }
-        throw KtorUrlRequestException("code:${response.status.value}, ${response.status.description}")
     }
 
     class Factory(
@@ -68,8 +78,18 @@ class KtorUrlFetcher private constructor(
     }
 }
 
-private class KtorUrlRequestException(msg: String) : RuntimeException(msg)
+private suspend fun channelToImageSource(channel: ByteReadChannel): ImageSource {
+    val buffer = Buffer()
+    while (!channel.isClosedForRead) {
+        val packet = channel.readRemaining(2048)
+        while (!packet.exhausted()) {
+            val bytes = packet.readByteArray()
+            buffer.write(bytes)
+        }
+    }
+    return buffer.toImageSource()
+}
 
-internal expect suspend fun ByteReadChannel.source(): BufferedSource
+private class KtorUrlRequestException(msg: String) : RuntimeException(msg)
 
 internal expect val httpEngine: HttpClientEngine
