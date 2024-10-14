@@ -4,9 +4,9 @@ import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.component.ComponentRegistry
 import com.seiko.imageloader.component.decoder.DecodeResult
 import com.seiko.imageloader.component.decoder.DecodeSource
-import com.seiko.imageloader.model.DataSource
 import com.seiko.imageloader.model.ImageRequest
 import com.seiko.imageloader.model.ImageResult
+import com.seiko.imageloader.model.ImageSourceFrom
 import com.seiko.imageloader.option.Options
 
 class DecodeInterceptor : Interceptor {
@@ -24,7 +24,7 @@ class DecodeInterceptor : Interceptor {
                 }.fold(
                     onSuccess = { it.toImageResult() },
                     onFailure = {
-                        if (options.retryIfDiskDecodeError && result.dataSource == DataSource.Disk) {
+                        if (options.retryIfDiskDecodeError && result.imageSourceFrom == ImageSourceFrom.Disk) {
                             val noDiskCacheRequest = ImageRequest(request) {
                                 options {
                                     retryIfDiskDecodeError = false

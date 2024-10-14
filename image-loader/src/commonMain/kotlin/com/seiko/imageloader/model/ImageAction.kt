@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.Image
 import dev.drewhamilton.poko.Poko
-import okio.BufferedSource
 
 @Immutable
 sealed interface ImageAction {
@@ -46,8 +45,8 @@ sealed interface ImageResult : ImageAction {
     @Immutable
     @Poko
     class OfSource(
-        val source: BufferedSource,
-        val dataSource: DataSource,
+        val imageSource: ImageSource,
+        val imageSourceFrom: ImageSourceFrom,
         val extra: ExtraData = EmptyExtraData,
     ) : ImageResult, ImageAction.Failure {
         override val error: Throwable

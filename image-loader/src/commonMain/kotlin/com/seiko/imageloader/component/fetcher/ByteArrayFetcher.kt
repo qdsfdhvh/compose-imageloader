@@ -1,16 +1,16 @@
 package com.seiko.imageloader.component.fetcher
 
+import com.seiko.imageloader.model.ImageSourceFrom
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
-import okio.Buffer
 
 class ByteArrayFetcher(
     private val data: ByteArray,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult {
         return FetchResult.OfSource(
-            source = Buffer().apply {
-                write(data)
-            },
+            imageSource = data.toImageSource(),
+            imageSourceFrom = ImageSourceFrom.Memory,
         )
     }
 

@@ -17,9 +17,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.eygraber.uri.Uri
+import com.seiko.imageloader.model.ImageSourceFrom
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
@@ -27,8 +29,6 @@ import com.seiko.imageloader.util.DrawableUtils
 import com.seiko.imageloader.util.getMimeTypeFromUrl
 import com.seiko.imageloader.util.toAndroidConfig
 import dev.drewhamilton.poko.Poko
-import okio.buffer
-import okio.source
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
@@ -84,7 +84,8 @@ class ResourceUriFetcher private constructor(
             val typedValue = TypedValue()
             val inputStream = resources.openRawResource(resId, typedValue)
             FetchResult.OfSource(
-                source = inputStream.source().buffer(),
+                imageSource = inputStream.toImageSource(),
+                imageSourceFrom = ImageSourceFrom.Disk,
                 extra = extraData {
                     mimeType(mimeType)
                     metadata(Metadata(packageName, resId, typedValue.density))

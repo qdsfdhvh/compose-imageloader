@@ -5,9 +5,10 @@ import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.Image
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
+import com.seiko.imageloader.model.ImageSource
+import com.seiko.imageloader.model.ImageSourceFrom
 import com.seiko.imageloader.option.Options
 import dev.drewhamilton.poko.Poko
-import okio.BufferedSource
 
 interface Fetcher {
     suspend fun fetch(): FetchResult?
@@ -23,7 +24,8 @@ fun Fetcher(block: suspend () -> FetchResult?) = object : Fetcher {
 sealed interface FetchResult {
     @Poko
     class OfSource(
-        val source: BufferedSource,
+        val imageSource: ImageSource,
+        val imageSourceFrom: ImageSourceFrom,
         val extra: ExtraData = EmptyExtraData,
     ) : FetchResult
 

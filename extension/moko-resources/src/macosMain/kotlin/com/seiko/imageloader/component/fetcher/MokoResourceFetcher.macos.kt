@@ -2,6 +2,8 @@ package com.seiko.imageloader.component.fetcher
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import com.seiko.imageloader.model.ImageSourceFrom
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.util.toSkiaImage
 import dev.icerock.moko.resources.AssetResource
@@ -42,7 +44,8 @@ internal actual suspend fun FileResource.toFetchResult(options: Options): FetchR
         inDirectory = "files",
     )!!.toPath()
     return FetchResult.OfSource(
-        source = FileSystem.SYSTEM.source(path).buffer(),
+        imageSource = FileSystem.SYSTEM.source(path).buffer().toImageSource(),
+        imageSourceFrom = ImageSourceFrom.Disk,
     )
 }
 

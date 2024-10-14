@@ -1,9 +1,10 @@
 package com.seiko.imageloader.component.fetcher
 
+import com.seiko.imageloader.model.ImageSourceFrom
 import com.seiko.imageloader.model.extraData
 import com.seiko.imageloader.model.mimeType
+import com.seiko.imageloader.model.toImageSource
 import com.seiko.imageloader.option.Options
-import okio.Buffer
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -16,9 +17,8 @@ class Base64Fetcher private constructor(
             val contentType = it.firstOrNull()?.removePrefix("data:")?.removeSuffix(";base64")
             val content = it.last()
             FetchResult.OfSource(
-                source = Buffer().apply {
-                    write(Base64.decode(content))
-                },
+                imageSource = Base64.decode(content).toImageSource(),
+                imageSourceFrom = ImageSourceFrom.Memory,
                 extra = extraData {
                     mimeType(contentType)
                 },

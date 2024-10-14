@@ -27,6 +27,7 @@ import com.seiko.imageloader.demo.scene.NetworkImagesScene
 import com.seiko.imageloader.demo.scene.OtherImagesScene
 import com.seiko.imageloader.demo.scene.PokemonScene
 import com.seiko.imageloader.demo.scene.SvgImagesScene
+import com.seiko.imageloader.demo.scene.VideoScene
 import com.seiko.imageloader.demo.scene.WanAndroidScene
 
 @Composable
@@ -45,6 +46,7 @@ fun App(modifier: Modifier = Modifier) {
                 Route.Network -> NetworkImagesScene(::onBack)
                 Route.Gif -> GifImagesScene(::onBack)
                 Route.Svg -> SvgImagesScene(::onBack)
+                Route.Video -> VideoScene(::onBack)
                 Route.Pokemon -> PokemonScene(::onBack)
                 Route.LocalResource -> LocalResourceScene(::onBack)
                 Route.Other -> OtherImagesScene(::onBack)
@@ -92,6 +94,7 @@ private enum class Route {
     Network,
     Gif,
     Svg,
+    Video,
     Pokemon,
     LocalResource,
     Other,

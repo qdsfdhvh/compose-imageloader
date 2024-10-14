@@ -1,10 +1,13 @@
 package com.seiko.imageloader.component.decoder
 
+import android.media.MediaDataSource
 import android.media.MediaMetadataRetriever
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.Bitmap
+import com.seiko.imageloader.model.ImageSource
+import com.seiko.imageloader.model.InputStreamImageSource
 import com.seiko.imageloader.model.mimeType
 import com.seiko.imageloader.model.videoFrameIndex
 import com.seiko.imageloader.model.videoFrameMicros
@@ -15,22 +18,19 @@ import com.seiko.imageloader.util.calculateDstSize
 import com.seiko.imageloader.util.getFrameAtIndexCompat
 import com.seiko.imageloader.util.getFrameAtTimeCompat
 import com.seiko.imageloader.util.getScaledFrameAtTimeCompat
+import com.seiko.imageloader.util.tempFile
 import com.seiko.imageloader.util.toAndroidConfig
 import com.seiko.imageloader.util.use
-import okio.BufferedSource
-import okio.FileSystem
-import okio.Path.Companion.toOkioPath
-import java.io.File
+import java.io.InputStream
 import kotlin.math.roundToLong
-import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.M)
 class VideoFrameDecoder(
-    private val source: BufferedSource,
+    private val source: ImageSource,
     private val options: Options,
 ) : Decoder {
     override suspend fun decode(): DecodeResult = MediaMetadataRetriever().use { retriever ->
-        retriever.setDataSource(source.tempFile().path)
+        retriever.setDataSource(source)
 
         // Resolve the dimensions to decode the video frame at accounting
         // for the source's aspect ratio and the target's size.
@@ -111,7 +111,7 @@ class VideoFrameDecoder(
     class Factory : Decoder.Factory {
         override fun create(source: DecodeSource, options: Options): Decoder? {
             if (!isApplicable(source.extra.mimeType)) return null
-            return VideoFrameDecoder(source.source, options)
+            return VideoFrameDecoder(source.imageSource, options)
         }
 
         private fun isApplicable(mimeType: String?): Boolean {
@@ -120,15 +120,32 @@ class VideoFrameDecoder(
     }
 }
 
-// We can't get the resource size of the video via okio.source, so for now we can only create temp file instead of MediaDataSource.
 @RequiresApi(Build.VERSION_CODES.M)
-private fun BufferedSource.tempFile(): File {
-    val tempFile = File.createTempFile("temp_${Random.nextLong()}", null)
-    tempFile.deleteOnExit()
-
-    FileSystem.SYSTEM.write(tempFile.toOkioPath()) {
-        writeAll(this@tempFile)
+private fun MediaMetadataRetriever.setDataSource(source: ImageSource) {
+    when (source) {
+        is InputStreamImageSource -> {
+            // TODO: without temp file
+            setDataSource(source.bufferedSource.tempFile().path)
+        }
+        else -> {
+            setDataSource(source.bufferedSource.tempFile().path)
+        }
     }
+}
 
-    return tempFile
+@RequiresApi(Build.VERSION_CODES.M)
+private fun InputStream.toMediaDataSource(): MediaDataSource {
+    return object : MediaDataSource() {
+        override fun readAt(position: Long, buffer: ByteArray, offset: Int, size: Int): Int {
+            return read(buffer, offset, size)
+        }
+
+        override fun getSize(): Long {
+            return available().toLong()
+        }
+
+        override fun close() {
+            this@toMediaDataSource.close()
+        }
+    }
 }

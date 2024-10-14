@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.ui.geometry.isSpecified
+import com.seiko.imageloader.model.ImageSource
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.util.ExifData
@@ -20,7 +21,6 @@ import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import okio.Buffer
-import okio.BufferedSource
 import okio.ForwardingSource
 import okio.Source
 import okio.buffer
@@ -29,7 +29,7 @@ import kotlin.math.roundToInt
 /** The base [Decoder] that uses [BitmapFactory] to decode a given [ImageSource]. */
 class BitmapFactoryDecoder private constructor(
     private val context: Context,
-    private val source: BufferedSource,
+    private val source: ImageSource,
     private val options: Options,
     private val parallelismLock: Semaphore,
 ) : Decoder {
@@ -39,7 +39,7 @@ class BitmapFactoryDecoder private constructor(
     }
 
     private fun BitmapFactory.Options.decode(): DecodeResult {
-        val safeSource = ExceptionCatchingSource(source)
+        val safeSource = ExceptionCatchingSource(source.bufferedSource)
         val safeBufferedSource = safeSource.buffer()
 
         // Read the image's dimensions.
@@ -175,7 +175,7 @@ class BitmapFactoryDecoder private constructor(
         override fun create(source: DecodeSource, options: Options): Decoder {
             return BitmapFactoryDecoder(
                 context = context ?: options.androidContext,
-                source = source.source,
+                source = source.imageSource,
                 options = options,
                 parallelismLock = parallelismLock,
             )
