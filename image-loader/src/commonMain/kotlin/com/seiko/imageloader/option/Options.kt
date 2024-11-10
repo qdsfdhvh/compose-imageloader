@@ -1,7 +1,7 @@
 package com.seiko.imageloader.option
 
 import androidx.compose.ui.geometry.Size
-import com.seiko.imageloader.BitmapConfig
+import androidx.compose.ui.graphics.ImageBitmapConfig
 import com.seiko.imageloader.cache.CachePolicy
 import com.seiko.imageloader.model.EmptyExtraData
 import com.seiko.imageloader.model.ExtraData
@@ -15,7 +15,7 @@ class Options internal constructor(
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,
-    val bitmapConfig: BitmapConfig,
+    val bitmapConfig: ImageBitmapConfig,
     val size: Size,
     val scale: Scale,
     val memoryCachePolicy: CachePolicy,
@@ -38,7 +38,7 @@ class OptionsBuilder internal constructor() {
     var allowInexactSize: Boolean = false
     var premultipliedAlpha: Boolean = true
     var retryIfDiskDecodeError: Boolean = true
-    var bitmapConfig: BitmapConfig = BitmapConfig.Default
+    var bitmapConfig: ImageBitmapConfig = ImageBitmapConfig.Argb8888
     var size: Size = Size.Unspecified
     var scale: Scale = Scale.FILL
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
