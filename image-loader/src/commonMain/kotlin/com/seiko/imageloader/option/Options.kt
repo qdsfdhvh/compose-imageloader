@@ -15,7 +15,7 @@ class Options internal constructor(
     val allowInexactSize: Boolean,
     val premultipliedAlpha: Boolean,
     val retryIfDiskDecodeError: Boolean,
-    val bitmapConfig: ImageBitmapConfig,
+    val imageBitmapConfig: ImageBitmapConfig,
     val size: Size,
     val scale: Scale,
     val memoryCachePolicy: CachePolicy,
@@ -38,7 +38,7 @@ class OptionsBuilder internal constructor() {
     var allowInexactSize: Boolean = false
     var premultipliedAlpha: Boolean = true
     var retryIfDiskDecodeError: Boolean = true
-    var bitmapConfig: ImageBitmapConfig = ImageBitmapConfig.Argb8888
+    var imageBitmapConfig: ImageBitmapConfig = ImageBitmapConfig.Argb8888
     var size: Size = Size.Unspecified
     var scale: Scale = Scale.FILL
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
@@ -62,7 +62,7 @@ class OptionsBuilder internal constructor() {
         allowInexactSize = options.allowInexactSize
         premultipliedAlpha = options.premultipliedAlpha
         retryIfDiskDecodeError = options.retryIfDiskDecodeError
-        bitmapConfig = options.bitmapConfig
+        imageBitmapConfig = options.imageBitmapConfig
         size = options.size
         scale = options.scale
         memoryCachePolicy = options.memoryCachePolicy
@@ -91,7 +91,7 @@ class OptionsBuilder internal constructor() {
         allowInexactSize = allowInexactSize,
         premultipliedAlpha = premultipliedAlpha,
         retryIfDiskDecodeError = retryIfDiskDecodeError,
-        bitmapConfig = bitmapConfig,
+        imageBitmapConfig = imageBitmapConfig,
         size = size,
         scale = scale,
         memoryCachePolicy = memoryCachePolicy,

@@ -44,7 +44,7 @@ internal actual fun createSVGPainter(source: BufferedSource, density: Density, o
         dom = AndroidSvgDom(dom),
         density = density,
         requestSize = options.size,
-        bitmapConfig = options.bitmapConfig,
+        imageBitmapConfig = options.imageBitmapConfig,
     )
 }
 

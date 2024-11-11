@@ -34,7 +34,7 @@ class ImageRequestTest {
                 allowInexactSize = true
                 premultipliedAlpha = false
                 retryIfDiskDecodeError = false
-                bitmapConfig = ImageBitmapConfig.Alpha8
+                imageBitmapConfig = ImageBitmapConfig.Alpha8
                 scale = Scale.FIT
                 memoryCachePolicy = CachePolicy.DISABLED
                 diskCachePolicy = CachePolicy.READ_ONLY
@@ -51,7 +51,7 @@ class ImageRequestTest {
         assertTrue(options.allowInexactSize)
         assertFalse(options.premultipliedAlpha)
         assertFalse(options.retryIfDiskDecodeError)
-        assertEquals(options.bitmapConfig, BitmapConfig.ALPHA_8)
+        assertEquals(options.imageBitmapConfig, BitmapConfig.ALPHA_8)
         assertEquals(options.scale, Scale.FIT)
         assertEquals(options.memoryCachePolicy, CachePolicy.DISABLED)
         assertEquals(options.diskCachePolicy, CachePolicy.READ_ONLY)

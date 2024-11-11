@@ -24,8 +24,8 @@ class KtorUrlKeyer : Keyer {
             if (!options.premultipliedAlpha) {
                 append("-premultipliedAlpha")
             }
-            if (options.bitmapConfig != ImageBitmapConfig.Argb8888) {
-                append("-imageConfig=${options.bitmapConfig}")
+            if (options.imageBitmapConfig != ImageBitmapConfig.Argb8888) {
+                append("-imageConfig=${options.imageBitmapConfig}")
             }
             if (options.scale != Scale.FILL) {
                 append("-scale=fit")
