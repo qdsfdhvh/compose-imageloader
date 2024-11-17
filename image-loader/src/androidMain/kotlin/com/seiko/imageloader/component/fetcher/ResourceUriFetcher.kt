@@ -66,7 +66,7 @@ class ResourceUriFetcher private constructor(
                 FetchResult.OfBitmap(
                     bitmap = DrawableUtils.convertToBitmap(
                         drawable = drawable,
-                        config = options.bitmapConfig.toAndroidConfig(),
+                        config = options.imageBitmapConfig.toAndroidConfig(),
                         scale = options.scale,
                         allowInexactSize = options.allowInexactSize,
                     ),

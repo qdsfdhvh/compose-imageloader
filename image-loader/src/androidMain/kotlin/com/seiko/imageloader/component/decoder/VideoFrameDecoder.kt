@@ -72,7 +72,7 @@ class VideoFrameDecoder(
         return if (Build.VERSION.SDK_INT >= 28 && options.videoFrameIndex >= 0) {
             getFrameAtIndexCompat(
                 frameIndex = options.videoFrameIndex,
-                config = options.bitmapConfig.toAndroidConfig(),
+                config = options.imageBitmapConfig.toAndroidConfig(),
             )
         } else if (Build.VERSION.SDK_INT >= 27 && dstWidth > 0 && dstHeight > 0) {
             getScaledFrameAtTimeCompat(
@@ -80,13 +80,13 @@ class VideoFrameDecoder(
                 option = options.videoFrameOption,
                 dstWidth = dstWidth,
                 dstHeight = dstHeight,
-                config = options.bitmapConfig.toAndroidConfig(),
+                config = options.imageBitmapConfig.toAndroidConfig(),
             )
         } else {
             getFrameAtTimeCompat(
                 timeUs = computeFrameMicros(),
                 option = options.videoFrameOption,
-                config = options.bitmapConfig.toAndroidConfig(),
+                config = options.imageBitmapConfig.toAndroidConfig(),
             )
         }
     }

@@ -1,7 +1,7 @@
 package com.seiko.imageloader.component.keyer
 
 import androidx.compose.ui.geometry.isSpecified
-import com.seiko.imageloader.BitmapConfig
+import androidx.compose.ui.graphics.ImageBitmapConfig
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.Scale
 import io.ktor.http.Url
@@ -24,8 +24,8 @@ class KtorUrlKeyer : Keyer {
             if (!options.premultipliedAlpha) {
                 append("-premultipliedAlpha")
             }
-            if (options.bitmapConfig != BitmapConfig.Default) {
-                append("-imageConfig=${options.bitmapConfig}")
+            if (options.imageBitmapConfig != ImageBitmapConfig.Argb8888) {
+                append("-imageConfig=${options.imageBitmapConfig}")
             }
             if (options.scale != Scale.FILL) {
                 append("-scale=fit")

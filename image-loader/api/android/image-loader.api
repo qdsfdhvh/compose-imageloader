@@ -1,18 +1,3 @@
-public final class com/seiko/imageloader/BitmapConfig : java/lang/Enum {
-	public static final field ALPHA_8 Lcom/seiko/imageloader/BitmapConfig;
-	public static final field ARGB_8888 Lcom/seiko/imageloader/BitmapConfig;
-	public static final field Companion Lcom/seiko/imageloader/BitmapConfig$Companion;
-	public static final field HARDWARE Lcom/seiko/imageloader/BitmapConfig;
-	public static final field RGBA_F16 Lcom/seiko/imageloader/BitmapConfig;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lcom/seiko/imageloader/BitmapConfig;
-	public static fun values ()[Lcom/seiko/imageloader/BitmapConfig;
-}
-
-public final class com/seiko/imageloader/BitmapConfig$Companion {
-	public final fun getDefault ()Lcom/seiko/imageloader/BitmapConfig;
-}
-
 public final class com/seiko/imageloader/BitmapKt {
 	public static final fun toPainter-50PEsBU (Landroid/graphics/Bitmap;I)Landroidx/compose/ui/graphics/painter/Painter;
 	public static synthetic fun toPainter-50PEsBU$default (Landroid/graphics/Bitmap;IILjava/lang/Object;)Landroidx/compose/ui/graphics/painter/Painter;
@@ -886,9 +871,9 @@ public final class com/seiko/imageloader/option/Options {
 	public static final field DEFAULT_MAX_PARALLELISM I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAllowInexactSize ()Z
-	public final fun getBitmapConfig ()Lcom/seiko/imageloader/BitmapConfig;
 	public final fun getDiskCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
 	public final fun getExtra ()Ljava/util/Map;
+	public final fun getImageBitmapConfig-_sVssgQ ()I
 	public final fun getMaxImageSize ()I
 	public final fun getMemoryCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
 	public final fun getPlayAnimate ()Z
@@ -909,8 +894,8 @@ public final class com/seiko/imageloader/option/OptionsBuilder {
 	public static final field $stable I
 	public final fun extra (Lkotlin/jvm/functions/Function1;)V
 	public final fun getAllowInexactSize ()Z
-	public final fun getBitmapConfig ()Lcom/seiko/imageloader/BitmapConfig;
 	public final fun getDiskCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
+	public final fun getImageBitmapConfig-_sVssgQ ()I
 	public final fun getMaxImageSize ()I
 	public final fun getMemoryCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
 	public final fun getPlayAnimate ()Z
@@ -922,8 +907,8 @@ public final class com/seiko/imageloader/option/OptionsBuilder {
 	public final fun isBitmap ()Z
 	public final fun setAllowInexactSize (Z)V
 	public final fun setBitmap (Z)V
-	public final fun setBitmapConfig (Lcom/seiko/imageloader/BitmapConfig;)V
 	public final fun setDiskCachePolicy (Lcom/seiko/imageloader/cache/CachePolicy;)V
+	public final fun setImageBitmapConfig-1JJdX4A (I)V
 	public final fun setMaxImageSize (I)V
 	public final fun setMemoryCachePolicy (Lcom/seiko/imageloader/cache/CachePolicy;)V
 	public final fun setPlayAnimate (Z)V
