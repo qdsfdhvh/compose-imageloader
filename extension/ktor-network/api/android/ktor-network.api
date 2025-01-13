@@ -20,7 +20,7 @@ public final class com/seiko/imageloader/component/fetcher/KtorUrlFetcher$Factor
 
 public final class com/seiko/imageloader/component/keyer/KtorUrlKeyer : com/seiko/imageloader/component/keyer/Keyer {
 	public fun <init> ()V
-	public fun key (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;Lcom/seiko/imageloader/component/keyer/Keyer$Type;)Ljava/lang/String;
+	public fun key (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Ljava/lang/String;
 }
 
 public final class com/seiko/imageloader/component/mapper/KtorUrlMapper : com/seiko/imageloader/component/mapper/Mapper {
