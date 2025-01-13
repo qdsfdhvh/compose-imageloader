@@ -231,10 +231,12 @@ public abstract interface class com/seiko/imageloader/component/decoder/DecodeRe
 
 public final class com/seiko/imageloader/component/decoder/DecodeResult$OfBitmap : com/seiko/imageloader/component/decoder/DecodeResult {
 	public static final field $stable I
-	public fun <init> (Landroid/graphics/Bitmap;)V
+	public fun <init> (Landroid/graphics/Bitmap;Z)V
+	public synthetic fun <init> (Landroid/graphics/Bitmap;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getBitmap ()Landroid/graphics/Bitmap;
 	public fun hashCode ()I
+	public final fun isSampled ()Z
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -998,6 +1000,15 @@ public abstract interface class com/seiko/imageloader/util/AnimationPainter {
 	public abstract fun isPlay ()Z
 	public abstract fun nextPlay ()Z
 	public abstract fun update (J)V
+}
+
+public final class com/seiko/imageloader/util/DecodeUtils {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/seiko/imageloader/util/DecodeUtils;
+	public static final fun calculateInSampleSize (IIIILcom/seiko/imageloader/option/Scale;)I
+	public static final fun computeDstSize-sMkvCDs (IIJLcom/seiko/imageloader/option/Scale;I)J
+	public static final fun computeSizeMultiplier (DDDDLcom/seiko/imageloader/option/Scale;)D
+	public static final fun computeSizeMultiplier (IIIILcom/seiko/imageloader/option/Scale;)D
 }
 
 public abstract class com/seiko/imageloader/util/ForwardingSink : okio/Sink {
