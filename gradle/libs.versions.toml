@@ -74,7 +74,7 @@ androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", 
 androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
 
-robolectric = { module = "org.robolectric:robolectric", version = "4.13" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.14.1" }
 roborazzi-core = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazzi-junit = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule", version.ref = "roborazzi" }
 roborazzi-compose-android = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
