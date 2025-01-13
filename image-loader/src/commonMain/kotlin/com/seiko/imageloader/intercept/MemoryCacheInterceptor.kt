@@ -1,11 +1,13 @@
 package com.seiko.imageloader.intercept
 
+import androidx.compose.ui.geometry.isSpecified
+import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
-import com.seiko.imageloader.component.keyer.Keyer
 import com.seiko.imageloader.model.ImageEvent
 import com.seiko.imageloader.model.ImageResult
 import com.seiko.imageloader.option.Options
+import com.seiko.imageloader.option.Scale
 import com.seiko.imageloader.util.d
 import com.seiko.imageloader.util.w
 
@@ -22,8 +24,13 @@ class MemoryCacheInterceptor<T>(
         val options = chain.options
         val logger = chain.logger
 
-        val cacheKey = chain.components.key(request.data, options, Keyer.Type.Memory)
+        val key = chain.components.key(request.data, options)
             ?: return chain.proceed(request)
+
+        val cacheKey = MemoryKey(
+            key = key,
+            extra = options.toMemoryExtra(),
+        )
 
         val cachedImageResult = runCatching {
             readCachedValue(options, cacheKey)
@@ -85,6 +92,41 @@ class MemoryCacheInterceptor<T>(
             } ?: false
         } else {
             false
+        }
+    }
+
+    private fun Options.toMemoryExtra(): Map<String, String> {
+        return buildMap {
+            if (allowInexactSize) {
+                put("op#allowInexactSize", "true")
+            }
+            if (!premultipliedAlpha) {
+                put("op#premultipliedAlpha", "false")
+            }
+            if (bitmapConfig != BitmapConfig.Default) {
+                put("op#imageConfig", bitmapConfig.name)
+            }
+            if (this@toMemoryExtra.size.isSpecified) {
+                put("op#size", this@toMemoryExtra.size.toString())
+            }
+            if (scale != Scale.FILL) {
+                put("op#scale", scale.name)
+            }
+            if (!playAnimate) {
+                put("op#noPlay", "true")
+            }
+            if (isBitmap) {
+                put("op#isBitmap", "true")
+            }
+            if (repeatCount != Options.REPEAT_INFINITE) {
+                put("op#repeatCount", repeatCount.toString())
+            }
+            if (maxImageSize != Options.DEFAULT_MAX_IMAGE_SIZE) {
+                put("op#maxSize", maxImageSize.toString())
+            }
+            if (memoryCacheKeyExtras.isNotEmpty()) {
+                putAll(memoryCacheKeyExtras)
+            }
         }
     }
 }
