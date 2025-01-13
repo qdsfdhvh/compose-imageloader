@@ -81,7 +81,7 @@ roborazzi-compose-android = { module = "io.github.takahirom.roborazzi:roborazzi-
 roborazzi-compose-desktop = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop", version.ref = "roborazzi" }
 roborazzi-compose-ios = { module = "io.github.takahirom.roborazzi:roborazzi-compose-ios", version.ref = "roborazzi" }
 roborazzi-compose-preview-scanner-support = { module = "io.github.takahirom.roborazzi:roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
-composable-preview-scanner = { module = "com.github.sergio-sastre.ComposablePreviewScanner:android", version = "0.3.0" }
+composable-preview-scanner = { module = "com.github.sergio-sastre.ComposablePreviewScanner:android", version = "0.5.0" }
 
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
