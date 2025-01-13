@@ -69,6 +69,9 @@ fun OtherImagesScene(
                             remember {
                                 ImageRequest("https://cdn.alza.cz/Foto/category/40/18901355.svg") {
                                     size(SizeResolver(density, 50.dp))
+                                    options {
+                                        memoryCacheKeyExtras("c#size", "50")
+                                    }
                                 }
                             },
                         ),
@@ -77,13 +80,28 @@ fun OtherImagesScene(
                     )
                     Spacer(Modifier.width(6.dp))
                     Image(
-                        rememberImagePainter("https://cdn.alza.cz/Foto/category/40/18901355.svg"),
+                        rememberImagePainter(
+                            remember {
+                                ImageRequest("https://cdn.alza.cz/Foto/category/40/18901355.svg") {
+                                    size(SizeResolver(density, 100.dp))
+                                    options {
+                                        memoryCacheKeyExtras("c#size", "100")
+                                    }
+                                }
+                            }
+                        ),
                         contentDescription = null,
                         modifier = Modifier.size(146.dp),
                     )
                     Spacer(Modifier.width(6.dp))
                     AutoSizeImage(
-                        "https://cdn.alza.cz/Foto/category/40/18901355.svg",
+                        remember {
+                            ImageRequest("https://cdn.alza.cz/Foto/category/40/18901355.svg") {
+                                options {
+                                    memoryCacheKeyExtras("c#size", "auto")
+                                }
+                            }
+                        },
                         contentDescription = null,
                         modifier = Modifier.size(77.dp),
                     )
