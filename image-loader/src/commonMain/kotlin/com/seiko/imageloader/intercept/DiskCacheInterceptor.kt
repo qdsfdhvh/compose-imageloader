@@ -27,7 +27,7 @@ class DiskCacheInterceptor(
         val options = chain.options
         val logger = chain.logger
 
-        val cacheKey = chain.components.key(request.data, options, Keyer.Type.Disk)
+        val cacheKey = chain.components.key(request.data, options)
             ?: return chain.proceed(request)
 
         var snapshot = runCatching {

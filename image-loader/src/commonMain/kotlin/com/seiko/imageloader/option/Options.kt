@@ -18,6 +18,7 @@ class Options internal constructor(
     val bitmapConfig: BitmapConfig,
     val size: Size,
     val scale: Scale,
+    val memoryCacheKeyExtras: Map<String, String>,
     val memoryCachePolicy: CachePolicy,
     val diskCachePolicy: CachePolicy,
     val playAnimate: Boolean,
@@ -41,6 +42,7 @@ class OptionsBuilder internal constructor() {
     var bitmapConfig: BitmapConfig = BitmapConfig.Default
     var size: Size = Size.Unspecified
     var scale: Scale = Scale.FILL
+    private val memoryCacheKeyExtras: MutableMap<String, String> = mutableMapOf()
     var memoryCachePolicy: CachePolicy = CachePolicy.ENABLED
     var diskCachePolicy: CachePolicy = CachePolicy.ENABLED
     var playAnimate: Boolean = true
@@ -65,6 +67,7 @@ class OptionsBuilder internal constructor() {
         bitmapConfig = options.bitmapConfig
         size = options.size
         scale = options.scale
+        memoryCacheKeyExtras.putAll(options.memoryCacheKeyExtras)
         memoryCachePolicy = options.memoryCachePolicy
         diskCachePolicy = options.diskCachePolicy
         playAnimate = options.playAnimate
@@ -77,6 +80,10 @@ class OptionsBuilder internal constructor() {
             }
             putAll(options.extra)
         }
+    }
+
+    fun memoryCacheKeyExtras(key: String, value: String) {
+        memoryCacheKeyExtras[key] = value
     }
 
     fun extra(builder: ExtraDataBuilder.() -> Unit) {
@@ -94,6 +101,7 @@ class OptionsBuilder internal constructor() {
         bitmapConfig = bitmapConfig,
         size = size,
         scale = scale,
+        memoryCacheKeyExtras = memoryCacheKeyExtras.toMap(),
         memoryCachePolicy = memoryCachePolicy,
         diskCachePolicy = diskCachePolicy,
         playAnimate = playAnimate,
