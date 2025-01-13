@@ -88,7 +88,7 @@ fun OtherImagesScene(
                                         memoryCacheKeyExtras("c#size", "100")
                                     }
                                 }
-                            }
+                            },
                         ),
                         contentDescription = null,
                         modifier = Modifier.size(146.dp),
