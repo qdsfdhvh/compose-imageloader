@@ -46,7 +46,7 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 baselineProfile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 poko = { id = "dev.drewhamilton.poko", version.ref = "poko" }
-binaryCompatibilityValidator =  { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.16.3" }
+binaryCompatibilityValidator =  { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.17.0" }
 
 [libraries]
 gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
