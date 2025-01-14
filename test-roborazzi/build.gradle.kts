@@ -1,5 +1,4 @@
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
-import org.jetbrains.kotlin.config.LanguageFeature
 
 plugins {
     id("app.android.library")
@@ -47,7 +46,8 @@ kotlin {
         }
         val desktopTest by getting {
             languageSettings {
-                enableLanguageFeature(LanguageFeature.ContextReceivers.name)
+                // TODO: maybe replace to 'ContextParameters'
+                enableLanguageFeature("ContextReceivers")
             }
             dependencies {
                 implementation(compose.desktop.currentOs)
