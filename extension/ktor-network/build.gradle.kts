@@ -18,7 +18,7 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        jvmMain {
+        commonJvmMain {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
             }

@@ -45,7 +45,7 @@ kotlin {
         }
         val noJsAndWasmMain by creating {
             dependsOn(commonMain.get())
-            jvmMain.get().dependsOn(this)
+            commonJvmMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
             dependencies {
                 implementation(libs.androidx.collection)

@@ -34,7 +34,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             applyHierarchyTemplate {
                 common {
-                    group("jvm") {
+                    group("commonJvm") {
                         withAndroidTarget()
                         withJvm()
                     }
