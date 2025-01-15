@@ -61,15 +61,15 @@ kotlin {
         //     }
         // }
     }
-    jvmToolchain(17)
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
 }
 
 android {
     namespace = "com.seiko.imageloader.test.roborazzi"
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
     testOptions {
         unitTests {
             isIncludeAndroidResources = true

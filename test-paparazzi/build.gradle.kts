@@ -5,16 +5,16 @@ plugins {
     id("app.cash.paparazzi") version "1.3.5"
 }
 
-android {
-    namespace = "com.seiko.imageloader.test.paparazzi"
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+kotlin {
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
     }
 }
 
-kotlin {
-    jvmToolchain(17)
+android {
+    namespace = "com.seiko.imageloader.test.paparazzi"
 }
 
 dependencies {
