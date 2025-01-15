@@ -61,3 +61,6 @@ moko-resources-generated.js
 
 # Kotlin
 .kotlin/
+
+# Intellij
+.intellijPlatform/
