@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)
     alias(libs.plugins.poko)
+    alias(libs.plugins.kotlinx.atomicfu)
 }
 
 kotlin {
@@ -50,6 +51,12 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.collection)
             }
+        }
+        val noCommonJvmMain by creating {
+            dependsOn(commonMain.get())
+            appleMain.get().dependsOn(this)
+            jsMain.get().dependsOn(this)
+            wasmJsMain.get().dependsOn(this)
         }
     }
 }

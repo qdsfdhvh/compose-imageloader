@@ -1,6 +1,6 @@
 package com.seiko.imageloader.util
 
-expect open class LruCache<K : Any, V : Any>(maxSize: Int) {
+internal expect open class LruCache<K : Any, V : Any>(maxSize: Int) {
     protected open fun sizeOf(key: K, value: V): Int
     protected open fun entryRemoved(evicted: Boolean, key: K, oldValue: V, newValue: V?)
     protected open fun create(key: K): V?

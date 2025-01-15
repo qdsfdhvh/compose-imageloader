@@ -1,11 +1,9 @@
 package com.seiko.imageloader.util
 
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.internal.SynchronizedObject
-import kotlinx.coroutines.internal.synchronized
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 
-@OptIn(InternalCoroutinesApi::class)
-actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
+internal actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
 
     private var _maxSize = 0
     private var _size = 0
@@ -36,7 +34,7 @@ actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
     }
 
     actual operator fun get(key: K): V? {
-        var mapValue: V?
+        var mapValue: V? = null
         synchronized(syncObject) {
             mapValue = map[key]
             if (mapValue != null) {
@@ -73,7 +71,7 @@ actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
     }
 
     actual fun put(key: K, value: V): V? {
-        var previous: V?
+        var previous: V? = null
         synchronized(syncObject) {
             _putCount++
             _size += safeSizeOf(key, value)
@@ -115,7 +113,7 @@ actual open class LruCache<K : Any, V : Any> actual constructor(maxSize: Int) {
     }
 
     actual fun remove(key: K): V? {
-        var previous: V?
+        var previous: V? = null
         synchronized(syncObject) {
             previous = map.remove(key)
             previous?.let {
