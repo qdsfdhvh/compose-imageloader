@@ -6,7 +6,7 @@ import android.util.Log
 import com.seiko.imageloader.BitmapConfig
 
 internal val Bitmap.safeConfig: Bitmap.Config
-    get() = config
+    get() = config ?: Bitmap.Config.ARGB_8888
 
 internal val Bitmap.Config.isHardware: Boolean
     get() = Build.VERSION.SDK_INT >= 26 && this == Bitmap.Config.HARDWARE
