@@ -23,7 +23,11 @@ kotlin {
                 api(compose.material)
                 implementation(compose.components.resources)
 
+                api(projects.imageLoader)
                 api(projects.imageLoaderSingleton)
+
+                implementation(projects.extension.ktorNetwork)
+                implementation(projects.extension.svg)
                 implementation(projects.extension.composeResources)
                 // implementation(projects.extension.mokoResources)
                 implementation(projects.extension.ninePatch)
