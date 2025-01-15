@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Check Spotless
         run: ./gradlew spotlessCheck --stacktrace
@@ -54,7 +54,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Check API
         run: ./gradlew apiCheck --stacktrace
@@ -76,7 +76,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Lint
         run: ./gradlew lint --stacktrace
@@ -98,7 +98,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Test
         run: ./gradlew test --stacktrace
@@ -126,7 +126,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Assemble
         run: |
@@ -154,7 +154,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Build
         run: |
