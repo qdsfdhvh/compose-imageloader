@@ -35,7 +35,7 @@ jobs:
           gradle-version: wrapper
 
       # Download screenshots from main branch
-      - uses: dawidd6/action-download-artifact@v6
+      - uses: dawidd6/action-download-artifact@v7
         continue-on-error: true
         with:
           name: screenshot
