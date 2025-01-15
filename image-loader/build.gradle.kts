@@ -70,10 +70,11 @@ android {
     }
 }
 
+dependencies {
+    baselineProfile(projects.app.android.benchmark)
+}
+
 baselineProfile {
-    mergeIntoMain = true
-    saveInSrc = true
-    from(projects.app.android.benchmark.dependencyProject)
     filter {
         include("com.seiko.imageloader.**")
         exclude("com.seiko.imageloader.demo.**")
