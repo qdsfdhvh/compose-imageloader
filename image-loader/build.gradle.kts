@@ -23,6 +23,8 @@ kotlin {
                 api(libs.kotlinx.coroutines.core)
                 api(libs.okio)
                 api(libs.uri.kmp)
+
+                implementation(libs.compose.collection)
             }
         }
         commonTest {
@@ -48,9 +50,6 @@ kotlin {
             dependsOn(commonMain.get())
             commonJvmMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
-            dependencies {
-                implementation(libs.androidx.collection)
-            }
         }
         val noCommonJvmMain by creating {
             dependsOn(commonMain.get())
