@@ -38,30 +38,7 @@ jobs:
       - name: Check spotless
         run: ./gradlew spotlessCheck --stacktrace
 
-  lint:
-    needs: spotless
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: Lint
-        run: ./gradlew lint --stacktrace
-
   api-check:
-    needs: spotless
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -82,8 +59,30 @@ jobs:
       - name: Lint
         run: ./gradlew apiCheck --stacktrace
 
+  lint:
+    needs: [spotless, api-check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v3
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Lint
+        run: ./gradlew lint --stacktrace
+
   test:
-    needs: spotless
+    needs: [spotless, api-check]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -111,7 +110,7 @@ jobs:
           path: '**/build/reports'
 
   assemble:
-    needs: spotless
+    needs: [spotless, api-check]
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -128,16 +127,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-
-      #      - name: Setup Gradle
-      #        uses: gradle/gradle-build-action@v2
-      #        with:
-      #          gradle-home-cache-cleanup: true
-      #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
-      # Cleans managed device if previously settle and space currently is not available
-      #      - name: Clean Managed Devices
-      #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
         run: |
@@ -149,7 +138,7 @@ jobs:
             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
   build:
-    needs: spotless
+    needs: [spotless, api-check]
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -166,16 +155,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-
-      #      - name: Setup Gradle
-      #        uses: gradle/gradle-build-action@v2
-      #        with:
-      #          gradle-home-cache-cleanup: true
-      #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
-      # Cleans managed device if previously settle and space currently is not available
-      #      - name: Clean Managed Devices
-      #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
         run: |
