@@ -23,22 +23,29 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0 # v3.13.0
         with:
-          distribution: 'zulu'
-          java-version: 21
+          distribution: temurin
+          java-version: 17
 
+      # Better than caching and/or extensions of actions/setup-java
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa # v2.12.0
+        with:
+          gradle-version: wrapper
 
       - name: record screenshot
         id: record-test
-        run: ./gradlew recordRoborazzi --stacktrace
+        run: |
+          cd include-build;
+          ./gradlew roborazzi-core:test
+          cd ..
+          ./gradlew recordRoborazziDebug recordRoborazziDesktop recordRoborazziJvm recordRoborazziIosX64 recordRoborazziIosArm64 --stacktrace
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         if: ${{ always() }}
         with:
           name: screenshot
@@ -46,15 +53,16 @@ jobs:
             **/build/outputs/roborazzi
           retention-days: 30
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         if: ${{ always() }}
         with:
           name: screenshot-reports
           path: |
             **/build/reports
+            **/build/outputs/roborazzi
           retention-days: 30
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         if: ${{ always() }}
         with:
           name: screenshot-test-results

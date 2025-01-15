@@ -18,33 +18,52 @@ jobs:
     permissions:
       contents: read # for clone
       actions: write # for upload-artifact
+      checks: read # for wait-on-check-action
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Checkout base branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
-          distribution: 'zulu'
-          java-version: 21
+          ref: ${{ github.base_ref }}
+      - name: Set up JDK 17
+        uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0 # v3.13.0
+        with:
+          distribution: temurin
+          java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa # v2.12.0
+        with:
+          gradle-version: wrapper
+      - name: Get base branch HEAD commit
+        id: get_base_branch_head
+        run: echo "sha=$(git rev-parse origin/${{ github.base_ref }})" >> "$GITHUB_OUTPUT"
 
-      # Download screenshots from main branch
-      - uses: dawidd6/action-download-artifact@v6
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - name: Wait for base unit-test to succeed before downloading base branch screenshot artifact
+        uses: lewagon/wait-on-check-action@ccfb013c15c8afb7bf2b7c028fb74dc5a068cccc # v1.3.4
+        with:
+          ref: ${{ steps.get_base_branch_head.outputs.sha }}
+          check-name: 'store-screenshot-test'
+          repo-token: ${{ github.token }}
+          wait-interval: 10
+
+      - uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2
         continue-on-error: true
         with:
           name: screenshot
           workflow: StoreScreenshot.yml
-          branch: master
+          commit: ${{ steps.get_base_branch_head.outputs.sha }}
+          if_no_artifact_found: fail
 
       - name: compare screenshot test
         id: compare-screenshot-test
-        run: ./gradlew compareRoborazzi --stacktrace --info
+        run: |
+          ./gradlew compareRoborazziDebug compareRoborazziDesktop compareRoborazziJvm compareRoborazziIosArm64 compareRoborazziIosX64  --stacktrace --info
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         if: ${{ always() }}
         with:
           name: screenshot-diff
@@ -52,15 +71,16 @@ jobs:
             **/build/outputs/roborazzi
           retention-days: 30
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         if: ${{ always() }}
         with:
           name: screenshot-diff-reports
           path: |
             **/build/reports
+            **/build/outputs/roborazzi
           retention-days: 30
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         if: ${{ always() }}
         with:
           name: screenshot-diff-test-results
@@ -73,7 +93,7 @@ jobs:
         run: |
           mkdir -p ./pr
           echo ${{ github.event.number }} > ./pr/NR
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         with:
           name: pr
           path: pr/
