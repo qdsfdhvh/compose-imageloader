@@ -1,7 +1,7 @@
 package com.seiko.imageloader.intercept
 
 import androidx.compose.ui.geometry.isSpecified
-import com.seiko.imageloader.BitmapConfig
+import androidx.compose.ui.graphics.ImageBitmapConfig
 import com.seiko.imageloader.cache.memory.MemoryCache
 import com.seiko.imageloader.cache.memory.MemoryKey
 import com.seiko.imageloader.model.ImageEvent
@@ -103,8 +103,8 @@ class MemoryCacheInterceptor<T>(
             if (!premultipliedAlpha) {
                 put("op#premultipliedAlpha", "false")
             }
-            if (bitmapConfig != BitmapConfig.Default) {
-                put("op#imageConfig", bitmapConfig.name)
+            if (imageBitmapConfig != ImageBitmapConfig.Argb8888) {
+                put("op#imageConfig", imageBitmapConfig.value.toString())
             }
             if (this@toMemoryExtra.size.isSpecified) {
                 put("op#size", this@toMemoryExtra.size.toString())
