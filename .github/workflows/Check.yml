@@ -60,7 +60,7 @@ jobs:
         run: ./gradlew apiCheck --stacktrace
 
   lint:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -82,7 +82,7 @@ jobs:
         run: ./gradlew lint --stacktrace
 
   test:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -110,7 +110,7 @@ jobs:
           path: '**/build/reports'
 
   assemble:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -130,15 +130,19 @@ jobs:
 
       - name: Assemble
         run: |
-          ./gradlew kotlinUpgradeYarnLock \
-            :image-loader:assemble \
-            :extension:imageio:assemble \
-            :extension:moko-resources:assemble \
-            --stacktrace -PnoAppApple \
-            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          ./gradlew \
+          :image-loader:assemble \
+          :image-loader-singleton:assemble \
+          :extension:compose-resources:assemble \
+          :extension:imageio:assemble \
+          :extension:ktor-network:assemble \
+          :extension:moko-resources:assemble \
+          :extension:nine-patch:assemble \
+          :extension:svg:assemble \
+          --stacktrace
 
   build:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -159,8 +163,12 @@ jobs:
       - name: Build
         run: |
           ./gradlew kotlinUpgradeYarnLock \
-            :image-loader:build \
-            :extension:imageio:build \
-            :extension:moko-resources:build \
-            --stacktrace -PnoAppApple \
-            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          :image-loader:build \
+          :image-loader-singleton:build \
+          :extension:compose-resources:build \
+          :extension:imageio:build \
+          :extension:ktor-network:build \
+          :extension:moko-resources:build \
+          :extension:nine-patch:build \
+          :extension:svg:build \
+          --stacktrace
