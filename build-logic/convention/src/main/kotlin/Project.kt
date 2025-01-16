@@ -22,7 +22,7 @@ fun Project.configKotlin() {
 fun Project.configJava() {
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
+            languageVersion.set(JavaLanguageVersion.of(11))
         }
     }
 }
