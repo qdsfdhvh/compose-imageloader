@@ -60,7 +60,7 @@ jobs:
         run: ./gradlew apiCheck --stacktrace
 
   lint:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -82,7 +82,7 @@ jobs:
         run: ./gradlew lint --stacktrace
 
   test:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -110,7 +110,7 @@ jobs:
           path: '**/build/reports'
 
   assemble:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -142,7 +142,7 @@ jobs:
           --stacktrace
 
   build:
-    needs: [spotless, api-check]
+    needs: [ spotless, api-check ]
     runs-on: macos-latest
     steps:
       - name: Checkout
