@@ -1,10 +1,8 @@
 package com.seiko.imageloader.cache.memory
 
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.internal.SynchronizedObject
-import kotlinx.coroutines.internal.synchronized
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 
-@OptIn(InternalCoroutinesApi::class)
 internal class RealMemoryCache<K : Any, V : Any>(
     private val strongMemoryCache: StrongMemoryCache<K, V>,
     private val weakMemoryCache: WeakMemoryCache<K, V>,

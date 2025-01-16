@@ -20,7 +20,13 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             macosX64()
             macosArm64()
             js {
-                browser()
+                browser {
+                    testTask {
+                        useMocha {
+                            timeout = "10s"
+                        }
+                    }
+                }
             }
             @Suppress("OPT_IN_USAGE")
             wasmJs {
@@ -34,7 +40,7 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             applyHierarchyTemplate {
                 common {
-                    group("jvm") {
+                    group("commonJvm") {
                         withAndroidTarget()
                         withJvm()
                     }

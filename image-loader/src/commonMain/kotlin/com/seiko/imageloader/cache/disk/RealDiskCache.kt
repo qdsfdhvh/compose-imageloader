@@ -2,6 +2,7 @@ package com.seiko.imageloader.cache.disk
 
 import com.seiko.imageloader.cache.disk.DiskCache.Editor
 import com.seiko.imageloader.cache.disk.DiskCache.Snapshot
+import com.seiko.imageloader.util.closeQuietly
 import kotlinx.coroutines.CoroutineDispatcher
 import okio.ByteString.Companion.encodeUtf8
 import okio.FileSystem
@@ -39,6 +40,10 @@ internal class RealDiskCache(
 
     override fun clear() {
         cache.evictAll()
+    }
+
+    override fun shutdown() {
+        cache.closeQuietly()
     }
 
     private fun String.hash() = encodeUtf8().sha256().hex()

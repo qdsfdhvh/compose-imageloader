@@ -1,7 +1,5 @@
 package com.seiko.imageloader.cache.disk
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.test.StandardTestDispatcher
 import okio.FileNotFoundException
 import okio.IOException
 import okio.Path
@@ -22,8 +20,9 @@ import kotlin.test.assertTrue
 import kotlin.test.fail
 
 internal class DiskLruCacheTest {
+
     private lateinit var fileSystem: FaultyFileSystem
-    private lateinit var dispatcher: CoroutineDispatcher
+    private lateinit var dispatcher: SimpleTestDispatcher
     private lateinit var caches: MutableSet<DiskLruCache>
     private lateinit var cache: DiskLruCache
 
@@ -33,18 +32,20 @@ internal class DiskLruCacheTest {
 
     @BeforeTest
     fun before() {
-        fileSystem = FaultyFileSystem(FakeFileSystem().apply { emulateUnix() })
+        val delegateFileSystem = FakeFileSystem()
+        delegateFileSystem.emulateUnix()
+        fileSystem = FaultyFileSystem(delegateFileSystem)
         if (fileSystem.exists(cacheDir)) {
             fileSystem.deleteRecursively(cacheDir)
         }
-        dispatcher = StandardTestDispatcher()
+        dispatcher = SimpleTestDispatcher()
         caches = mutableSetOf()
         createNewCache()
     }
 
     @AfterTest
     fun after() {
-        caches.forEach { it.close() }
+        for (cache in caches) cache.close()
         (fileSystem.delegate as FakeFileSystem).checkNoOpenFiles()
     }
 
@@ -219,7 +220,7 @@ internal class DiskLruCacheTest {
 
     /** We have to wait until the edit is committed before we can delete its files. */
     @Test
-    fun unterminated_edit_is_reverted_on_cache_close() {
+    fun unterminatedEditIsRevertedOnCacheClose() {
         val editor = cache.edit("k1")!!
         editor.setString(0, "AB")
         editor.setString(1, "C")
@@ -633,239 +634,239 @@ internal class DiskLruCacheTest {
         snapshot.close()
     }
 
-    // @Test
-    // fun rebuildJournalOnRepeatedReads() {
-    //     set("a", "a", "a")
-    //     set("b", "b", "b")
-    //     while (dispatcher.isIdle()) {
-    //         assertValue("a", "a", "a")
-    //         assertValue("b", "b", "b")
-    //     }
-    // }
-    //
-    // @Test
-    // fun rebuildJournalOnRepeatedEdits() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //     dispatcher.runNextTask()
-    //
-    //     // Sanity check that a rebuilt journal behaves normally.
-    //     assertValue("a", "a", "a")
-    //     assertValue("b", "b", "b")
-    // }
-    //
-    // /** https://github.com/JakeWharton/DiskLruCache/issues/28 */
-    // @Test
-    // fun rebuildJournalOnRepeatedReadsWithOpenAndClose() {
-    //     set("a", "a", "a")
-    //     set("b", "b", "b")
-    //     while (dispatcher.isIdle()) {
-    //         assertValue("a", "a", "a")
-    //         assertValue("b", "b", "b")
-    //         cache.close()
-    //         createNewCache()
-    //     }
-    // }
-    //
-    // /** https://github.com/JakeWharton/DiskLruCache/issues/28 */
-    // @Test
-    // fun rebuildJournalOnRepeatedEditsWithOpenAndClose() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //         cache.close()
-    //         createNewCache()
-    //     }
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailurePreventsEditors() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Don't allow edits under any circumstances.
-    //     assertNull(cache.edit("a"))
-    //     assertNull(cache.edit("c"))
-    //     cache["a"]!!.use {
-    //         assertNull(cache.edit(it.entry.key))
-    //     }
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailureIsRetried() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //
-    //     // The rebuild is retried on cache hits and on cache edits.
-    //     val snapshot = cache["b"]!!
-    //     snapshot.close()
-    //     assertNull(cache.edit("d"))
-    //     assertFalse(dispatcher.isIdle())
-    //
-    //     // On cache misses, no retry job is queued.
-    //     assertNull(cache["c"])
-    //     assertFalse(dispatcher.isIdle())
-    //
-    //     // Let the rebuild complete successfully.
-    //     fileSystem.setFaultyRename(journalFileBackup, false)
-    //     dispatcher.runNextTask()
-    //     assertJournalEquals("CLEAN a 1 1", "CLEAN b 1 1")
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailureWithInFlightEditors() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //     val commitEditor = cache.edit("c")!!
-    //     val abortEditor = cache.edit("d")!!
-    //     cache.edit("e") // Grab an editor, but don't do anything with it.
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //
-    //     // In-flight editors can commit and have their values retained.
-    //     commitEditor.setString(0, "c")
-    //     commitEditor.setString(1, "c")
-    //     commitEditor.commit()
-    //     assertValue("c", "c", "c")
-    //     abortEditor.abort()
-    //
-    //     // Let the rebuild complete successfully.
-    //     fileSystem.setFaultyRename(journalFileBackup, false)
-    //     dispatcher.runNextTask()
-    //     assertJournalEquals("CLEAN a 1 1", "CLEAN b 1 1", "DIRTY e", "CLEAN c 1 1")
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailureWithEditorsInFlightThenClose() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //     val commitEditor = cache.edit("c")!!
-    //     val abortEditor = cache.edit("d")!!
-    //     cache.edit("e") // Grab an editor, but don't do anything with it.
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //     commitEditor.setString(0, "c")
-    //     commitEditor.setString(1, "c")
-    //     commitEditor.commit()
-    //     assertValue("c", "c", "c")
-    //     abortEditor.abort()
-    //     cache.close()
-    //     createNewCache()
-    //
-    //     // Although 'c' successfully committed above, the journal wasn't available to issue a CLEAN op.
-    //     // Because the last state of 'c' was DIRTY before the journal failed, it should be removed
-    //     // entirely on a subsequent open.
-    //     assertEquals(4, cache.size())
-    //     assertAbsent("c")
-    //     assertAbsent("d")
-    //     assertAbsent("e")
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailureAllowsRemovals() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //     assertTrue(cache.remove("a"))
-    //     assertAbsent("a")
-    //
-    //     // Let the rebuild complete successfully.
-    //     fileSystem.setFaultyRename(journalFileBackup, false)
-    //     dispatcher.runNextTask()
-    //     assertJournalEquals("CLEAN b 1 1")
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailureWithRemovalThenClose() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //     assertTrue(cache.remove("a"))
-    //     assertAbsent("a")
-    //     cache.close()
-    //     createNewCache()
-    //
-    //     // The journal will have no record that 'a' was removed. It will have an entry for 'a', but when
-    //     // it tries to read the cache files, it will find they were deleted. Once it encounters an entry
-    //     // with missing cache files, it should remove it from the cache entirely.
-    //     assertEquals(4, cache.size())
-    //     assertNull(cache["a"])
-    //     assertEquals(2, cache.size())
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailureAllowsEvictAll() {
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "a", "a")
-    //         set("b", "b", "b")
-    //     }
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //     cache.evictAll()
-    //     assertEquals(0, cache.size())
-    //     assertAbsent("a")
-    //     assertAbsent("b")
-    //     cache.close()
-    //     createNewCache()
-    //
-    //     // The journal has no record that 'a' and 'b' were removed. It will have an entry for both, but
-    //     // when it tries to read the cache files for either entry, it will discover the cache files are
-    //     // missing and remove the entries from the cache.
-    //     assertEquals(4, cache.size())
-    //     assertNull(cache["a"])
-    //     assertNull(cache["b"])
-    //     assertEquals(0, cache.size())
-    // }
-    //
-    // @Test
-    // fun rebuildJournalFailureWithCacheTrim() {
-    //     createNewCache(4)
-    //     while (dispatcher.isIdle()) {
-    //         set("a", "aa", "aa")
-    //         set("b", "bb", "bb")
-    //     }
-    //
-    //     // Cause the rebuild action to fail.
-    //     fileSystem.setFaultyRename(journalFileBackup, true)
-    //     dispatcher.runNextTask()
-    //
-    //     assertAbsent("a")
-    //     assertValue("b", "bb", "bb")
-    // }
+    @Test
+    fun rebuildJournalOnRepeatedReads() {
+        set("a", "a", "a")
+        set("b", "b", "b")
+        while (dispatcher.isIdle()) {
+            assertValue("a", "a", "a")
+            assertValue("b", "b", "b")
+        }
+    }
+
+    @Test
+    fun rebuildJournalOnRepeatedEdits() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+        dispatcher.runNextTask()
+
+        // Sanity check that a rebuilt journal behaves normally.
+        assertValue("a", "a", "a")
+        assertValue("b", "b", "b")
+    }
+
+    /** https://github.com/JakeWharton/DiskLruCache/issues/28 */
+    @Test
+    fun rebuildJournalOnRepeatedReadsWithOpenAndClose() {
+        set("a", "a", "a")
+        set("b", "b", "b")
+        while (dispatcher.isIdle()) {
+            assertValue("a", "a", "a")
+            assertValue("b", "b", "b")
+            cache.close()
+            createNewCache()
+        }
+    }
+
+    /** https://github.com/JakeWharton/DiskLruCache/issues/28 */
+    @Test
+    fun rebuildJournalOnRepeatedEditsWithOpenAndClose() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+            cache.close()
+            createNewCache()
+        }
+    }
+
+    @Test
+    fun rebuildJournalFailurePreventsEditors() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+
+        // Don't allow edits under any circumstances.
+        assertNull(cache.edit("a"))
+        assertNull(cache.edit("c"))
+        cache["a"]!!.use {
+            assertNull(cache.edit(it.entry.key))
+        }
+    }
+
+    @Test
+    fun rebuildJournalFailureIsRetried() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+
+        // The rebuild is retried on cache hits and on cache edits.
+        val snapshot = cache["b"]!!
+        snapshot.close()
+        assertNull(cache.edit("d"))
+        assertFalse(dispatcher.isIdle())
+
+        // On cache misses, no retry job is queued.
+        assertNull(cache["c"])
+        assertFalse(dispatcher.isIdle())
+
+        // Let the rebuild complete successfully.
+        fileSystem.setFaultyRename(journalFileBackup, false)
+        dispatcher.runNextTask()
+        assertJournalEquals("CLEAN a 1 1", "CLEAN b 1 1")
+    }
+
+    @Test
+    fun rebuildJournalFailureWithInFlightEditors() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+        val commitEditor = cache.edit("c")!!
+        val abortEditor = cache.edit("d")!!
+        cache.edit("e") // Grab an editor, but don't do anything with it.
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+
+        // In-flight editors can commit and have their values retained.
+        commitEditor.setString(0, "c")
+        commitEditor.setString(1, "c")
+        commitEditor.commit()
+        assertValue("c", "c", "c")
+        abortEditor.abort()
+
+        // Let the rebuild complete successfully.
+        fileSystem.setFaultyRename(journalFileBackup, false)
+        dispatcher.runNextTask()
+        assertJournalEquals("CLEAN a 1 1", "CLEAN b 1 1", "DIRTY e", "CLEAN c 1 1")
+    }
+
+    @Test
+    fun rebuildJournalFailureWithEditorsInFlightThenClose() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+        val commitEditor = cache.edit("c")!!
+        val abortEditor = cache.edit("d")!!
+        cache.edit("e") // Grab an editor, but don't do anything with it.
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+        commitEditor.setString(0, "c")
+        commitEditor.setString(1, "c")
+        commitEditor.commit()
+        assertValue("c", "c", "c")
+        abortEditor.abort()
+        cache.close()
+        createNewCache()
+
+        // Although 'c' successfully committed above, the journal wasn't available to issue a CLEAN op.
+        // Because the last state of 'c' was DIRTY before the journal failed, it should be removed
+        // entirely on a subsequent open.
+        assertEquals(4, cache.size())
+        assertAbsent("c")
+        assertAbsent("d")
+        assertAbsent("e")
+    }
+
+    @Test
+    fun rebuildJournalFailureAllowsRemovals() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+        assertTrue(cache.remove("a"))
+        assertAbsent("a")
+
+        // Let the rebuild complete successfully.
+        fileSystem.setFaultyRename(journalFileBackup, false)
+        dispatcher.runNextTask()
+        assertJournalEquals("CLEAN b 1 1")
+    }
+
+    @Test
+    fun rebuildJournalFailureWithRemovalThenClose() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+        assertTrue(cache.remove("a"))
+        assertAbsent("a")
+        cache.close()
+        createNewCache()
+
+        // The journal will have no record that 'a' was removed. It will have an entry for 'a', but when
+        // it tries to read the cache files, it will find they were deleted. Once it encounters an entry
+        // with missing cache files, it should remove it from the cache entirely.
+        assertEquals(4, cache.size())
+        assertNull(cache["a"])
+        assertEquals(2, cache.size())
+    }
+
+    @Test
+    fun rebuildJournalFailureAllowsEvictAll() {
+        while (dispatcher.isIdle()) {
+            set("a", "a", "a")
+            set("b", "b", "b")
+        }
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+        cache.evictAll()
+        assertEquals(0, cache.size())
+        assertAbsent("a")
+        assertAbsent("b")
+        cache.close()
+        createNewCache()
+
+        // The journal has no record that 'a' and 'b' were removed. It will have an entry for both, but
+        // when it tries to read the cache files for either entry, it will discover the cache files are
+        // missing and remove the entries from the cache.
+        assertEquals(4, cache.size())
+        assertNull(cache["a"])
+        assertNull(cache["b"])
+        assertEquals(0, cache.size())
+    }
+
+    @Test
+    fun rebuildJournalFailureWithCacheTrim() {
+        createNewCache(4)
+        while (dispatcher.isIdle()) {
+            set("a", "aa", "aa")
+            set("b", "bb", "bb")
+        }
+
+        // Cause the rebuild action to fail.
+        fileSystem.setFaultyRename(journalFileBackup, true)
+        dispatcher.runNextTask()
+
+        assertAbsent("a")
+        assertValue("b", "bb", "bb")
+    }
 
     @Test
     fun restoreBackupFile() {
@@ -1224,193 +1225,193 @@ internal class DiskLruCacheTest {
         assertValue("b", "b", "b")
     }
 
-    // @Test
-    // fun cleanupTrimFailurePreventsNewEditors() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm that edits are prevented after a cache trim failure.
-    //     assertNull(cache.edit("a"))
-    //     assertNull(cache.edit("b"))
-    //     assertNull(cache.edit("c"))
-    //
-    //     // Allow the test to clean up.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    // }
-    //
-    // @Test
-    // fun cleanupTrimFailureRetriedOnEditors() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // An edit should now add a job to clean up if the most recent trim failed.
-    //     assertNull(cache.edit("b"))
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm a successful cache trim now allows edits.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    //     assertNull(cache.edit("c"))
-    //     dispatcher.runNextTask()
-    //     set("c", "cc", "cc")
-    //     assertValue("c", "cc", "cc")
-    // }
-    //
-    // @Test
-    // fun cleanupTrimFailureWithInFlightEditor() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aaa")
-    //     set("b", "bb", "bb")
-    //     val inFlightEditor = cache.edit("c")!!
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // The in-flight editor can still write after a trim failure.
-    //     inFlightEditor.setString(0, "cc")
-    //     inFlightEditor.setString(1, "cc")
-    //     inFlightEditor.commit()
-    //
-    //     // Confirm the committed values are present after a successful cache trim.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    //     dispatcher.runNextTask()
-    //     assertValue("c", "cc", "cc")
-    // }
-    //
-    // @Test
-    // fun cleanupTrimFailureAllowsSnapshotReads() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm we still allow snapshot reads after a trim failure.
-    //     assertValue("a", "aa", "aa")
-    //     assertValue("b", "bb", "bbb")
-    //
-    //     // Allow the test to clean up.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    // }
-    //
-    // @Test
-    // fun cleanupTrimFailurePreventsSnapshotWrites() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm snapshot writes are prevented after a trim failure.
-    //     cache["a"]!!.use {
-    //         assertNull(cache.edit(it.entry.key))
-    //     }
-    //     cache["b"]!!.use {
-    //         assertNull(cache.edit(it.entry.key))
-    //     }
-    //
-    //     // Allow the test to clean up.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    // }
-    //
-    // @Test
-    // fun evictAllAfterCleanupTrimFailure() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm we prevent edits after a trim failure.
-    //     assertNull(cache.edit("c"))
-    //
-    //     // A successful eviction should allow new writes.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    //     cache.evictAll()
-    //     set("c", "cc", "cc")
-    //     assertValue("c", "cc", "cc")
-    // }
-    //
-    // @Test
-    // fun manualRemovalAfterCleanupTrimFailure() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm we prevent edits after a trim failure.
-    //     assertNull(cache.edit("c"))
-    //
-    //     // A successful removal which trims the cache should allow new writes.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    //     cache.remove("a")
-    //     set("c", "cc", "cc")
-    //     assertValue("c", "cc", "cc")
-    // }
-    //
-    // @Test
-    // fun flushingAfterCleanupTrimFailure() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim job to fail.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm we prevent edits after a trim failure.
-    //     assertNull(cache.edit("c"))
-    //
-    //     // A successful flush trims the cache and should allow new writes.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.0", false)
-    //     cache.flush()
-    //     set("c", "cc", "cc")
-    //     assertValue("c", "cc", "cc")
-    // }
-    //
-    // @Test
-    // fun cleanupTrimFailureWithPartialSnapshot() {
-    //     createNewCache(8)
-    //     set("a", "aa", "aa")
-    //     set("b", "bb", "bbb")
-    //
-    //     // Cause the cache trim to fail on the second value leaving a partial snapshot.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.1", true)
-    //     dispatcher.runNextTask()
-    //
-    //     // Confirm the partial snapshot is not returned.
-    //     assertNull(cache["a"])
-    //
-    //     // Confirm we prevent edits after a trim failure.
-    //     assertNull(cache.edit("a"))
-    //
-    //     // Confirm the partial snapshot is not returned after a successful trim.
-    //     fileSystem.setFaultyDelete(cacheDir / "a.1", false)
-    //     dispatcher.runNextTask()
-    //     assertNull(cache["a"])
-    // }
+    @Test
+    fun cleanupTrimFailurePreventsNewEditors() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // Confirm that edits are prevented after a cache trim failure.
+        assertNull(cache.edit("a"))
+        assertNull(cache.edit("b"))
+        assertNull(cache.edit("c"))
+
+        // Allow the test to clean up.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+    }
 
     @Test
-    fun edit_discarded_after_editor_detached() {
+    fun cleanupTrimFailureRetriedOnEditors() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // An edit should now add a job to clean up if the most recent trim failed.
+        assertNull(cache.edit("b"))
+        dispatcher.runNextTask()
+
+        // Confirm a successful cache trim now allows edits.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+        assertNull(cache.edit("c"))
+        dispatcher.runNextTask()
+        set("c", "cc", "cc")
+        assertValue("c", "cc", "cc")
+    }
+
+    @Test
+    fun cleanupTrimFailureWithInFlightEditor() {
+        createNewCache(8)
+        set("a", "aa", "aaa")
+        set("b", "bb", "bb")
+        val inFlightEditor = cache.edit("c")!!
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // The in-flight editor can still write after a trim failure.
+        inFlightEditor.setString(0, "cc")
+        inFlightEditor.setString(1, "cc")
+        inFlightEditor.commit()
+
+        // Confirm the committed values are present after a successful cache trim.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+        dispatcher.runNextTask()
+        assertValue("c", "cc", "cc")
+    }
+
+    @Test
+    fun cleanupTrimFailureAllowsSnapshotReads() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // Confirm we still allow snapshot reads after a trim failure.
+        assertValue("a", "aa", "aa")
+        assertValue("b", "bb", "bbb")
+
+        // Allow the test to clean up.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+    }
+
+    @Test
+    fun cleanupTrimFailurePreventsSnapshotWrites() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // Confirm snapshot writes are prevented after a trim failure.
+        cache["a"]!!.use {
+            assertNull(cache.edit(it.entry.key))
+        }
+        cache["b"]!!.use {
+            assertNull(cache.edit(it.entry.key))
+        }
+
+        // Allow the test to clean up.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+    }
+
+    @Test
+    fun evictAllAfterCleanupTrimFailure() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // Confirm we prevent edits after a trim failure.
+        assertNull(cache.edit("c"))
+
+        // A successful eviction should allow new writes.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+        cache.evictAll()
+        set("c", "cc", "cc")
+        assertValue("c", "cc", "cc")
+    }
+
+    @Test
+    fun manualRemovalAfterCleanupTrimFailure() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // Confirm we prevent edits after a trim failure.
+        assertNull(cache.edit("c"))
+
+        // A successful removal which trims the cache should allow new writes.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+        cache.remove("a")
+        set("c", "cc", "cc")
+        assertValue("c", "cc", "cc")
+    }
+
+    @Test
+    fun flushingAfterCleanupTrimFailure() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim job to fail.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", true)
+        dispatcher.runNextTask()
+
+        // Confirm we prevent edits after a trim failure.
+        assertNull(cache.edit("c"))
+
+        // A successful flush trims the cache and should allow new writes.
+        fileSystem.setFaultyDelete(cacheDir / "a.0", false)
+        cache.flush()
+        set("c", "cc", "cc")
+        assertValue("c", "cc", "cc")
+    }
+
+    @Test
+    fun cleanupTrimFailureWithPartialSnapshot() {
+        createNewCache(8)
+        set("a", "aa", "aa")
+        set("b", "bb", "bbb")
+
+        // Cause the cache trim to fail on the second value leaving a partial snapshot.
+        fileSystem.setFaultyDelete(cacheDir / "a.1", true)
+        dispatcher.runNextTask()
+
+        // Confirm the partial snapshot is not returned.
+        assertNull(cache["a"])
+
+        // Confirm we prevent edits after a trim failure.
+        assertNull(cache.edit("a"))
+
+        // Confirm the partial snapshot is not returned after a successful trim.
+        fileSystem.setFaultyDelete(cacheDir / "a.1", false)
+        dispatcher.runNextTask()
+        assertNull(cache["a"])
+    }
+
+    @Test
+    fun editDiscardedAfterEditorDetached() {
         set("k1", "a", "a")
 
         // Create an editor, then detach it.
@@ -1447,7 +1448,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun cannot_read_while_writing() {
+    fun cannotReadWhileWriting() {
         set("k1", "a", "a")
         val editor = cache.edit("k1")!!
         assertNull(cache["k1"])
@@ -1455,7 +1456,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun cannot_write_while_reading() {
+    fun cannotWriteWhileReading() {
         set("k1", "a", "a")
         val snapshot = cache["k1"]!!
         assertNull(cache.edit("k1"))
@@ -1463,7 +1464,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun can_read_while_reading() {
+    fun canReadWhileReading() {
         set("k1", "a", "a")
         cache["k1"]!!.use { snapshot1 ->
             snapshot1.assertValue(0, "a")
@@ -1476,7 +1477,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun remove_while_reading_creates_zombie_that_is_removed_when_read_finishes() {
+    fun removeWhileReadingCreatesZombieThatIsRemovedWhenReadFinishes() {
         val afterRemoveFileContents = "a"
 
         set("k1", "a", "a")
@@ -1501,7 +1502,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun remove_while_writing_creates_zombie_that_is_removed_when_write_finishes() {
+    fun removeWhileWritingCreatesZombieThatIsRemovedWhenWriteFinishes() {
         val afterRemoveFileContents = "a"
 
         set("k1", "a", "a")
@@ -1520,7 +1521,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun cannot_read_zombie_entry() {
+    fun cannotReadZombieEntry() {
         set("k1", "a", "a")
         cache["k1"]!!.use {
             cache.remove("k1")
@@ -1529,7 +1530,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun cannot_write_zombie_entry() {
+    fun cannotWriteZombieEntry() {
         set("k1", "a", "a")
         cache["k1"]!!.use {
             cache.remove("k1")
@@ -1538,7 +1539,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun close_with_zombie_read() {
+    fun closeWithZombieRead() {
         val afterRemoveFileContents = "a"
 
         set("k1", "a", "a")
@@ -1560,7 +1561,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun close_with_zombie_write() {
+    fun closeWithZombieWrite() {
         val afterRemoveCleanFileContents = "a"
         val afterRemoveDirtyFileContents = ""
 
@@ -1582,7 +1583,7 @@ internal class DiskLruCacheTest {
     }
 
     @Test
-    fun close_with_completed_zombie_write() {
+    fun closeWithCompletedZombieWrite() {
         val afterRemoveCleanFileContents = "a"
         val afterRemoveDirtyFileContents = "b"
 
@@ -1718,7 +1719,7 @@ internal class DiskLruCacheTest {
         val snapshot = cache[key]
         if (snapshot != null) {
             snapshot.close()
-            fail("$key not null")
+            fail("")
         }
         assertFalse(fileSystem.exists(getCleanFile(key, 0)))
         assertFalse(fileSystem.exists(getCleanFile(key, 1)))
