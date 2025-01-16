@@ -129,7 +129,17 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace -PnoAppApple
+        run: ｜
+          ./gradlew \
+          :image-loader:assemble \
+          :image-loader-singleton:assemble \
+          :extension:compose-resources:assemble \
+          :extension:imageio:assemble \
+          :extension:ktor-network:assemble \
+          :extension:moko-resources:assemble \
+          :extension:nine-patch:assemble \
+          :extension:svg:assemble \
+          --stacktrace
 
   build:
     needs: [spotless, api-check]
@@ -151,4 +161,14 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Build
-        run: ./gradlew build --stacktrace -PnoAppApple
+        run: |
+          ./gradlew kotlinUpgradeYarnLock \
+          :image-loader:build \
+          :image-loader-singleton:build \
+          :extension:compose-resources:build \
+          :extension:imageio:build \
+          :extension:ktor-network:build \
+          :extension:moko-resources:build \
+          :extension:nine-patch:build \
+          :extension:svg:build \
+          --stacktrace
