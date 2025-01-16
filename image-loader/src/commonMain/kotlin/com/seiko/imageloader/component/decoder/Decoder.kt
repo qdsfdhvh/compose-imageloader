@@ -22,7 +22,10 @@ fun Decoder(block: () -> DecodeResult?) = object : Decoder {
 
 sealed interface DecodeResult {
     @Poko
-    class OfBitmap(val bitmap: Bitmap) : DecodeResult
+    class OfBitmap(
+        val bitmap: Bitmap,
+        val isSampled: Boolean = false,
+    ) : DecodeResult
 
     @Poko
     class OfImage(val image: Image) : DecodeResult

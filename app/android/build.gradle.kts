@@ -41,5 +41,4 @@ dependencies {
     implementation(projects.app.common)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    baselineProfile(projects.app.android.benchmark)
 }

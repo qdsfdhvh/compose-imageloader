@@ -60,4 +60,7 @@ publish.properties
 moko-resources-generated.js
 
 # Kotlin
-/.kotlin
+.kotlin/
+
+# Intellij
+.intellijPlatform/

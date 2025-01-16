@@ -217,7 +217,7 @@ internal class MovieDrawable(
         val movieHeight = movie.height()
         if (movieWidth <= 0 || movieHeight <= 0) return
 
-        softwareScale = computeSizeMultiplier(movieWidth, movieHeight, boundsWidth, boundsHeight, scale)
+        softwareScale = DecodeUtils.computeSizeMultiplier(movieWidth, movieHeight, boundsWidth, boundsHeight, scale)
             .run { if (isSoftwareScalingEnabled) this else coerceAtMost(1.0) }
             .toFloat()
         val bitmapWidth = (softwareScale * movieWidth).toInt()
@@ -233,7 +233,7 @@ internal class MovieDrawable(
             hardwareDx = 0f
             hardwareDy = 0f
         } else {
-            hardwareScale = computeSizeMultiplier(bitmapWidth, bitmapHeight, boundsWidth, boundsHeight, scale)
+            hardwareScale = DecodeUtils.computeSizeMultiplier(bitmapWidth, bitmapHeight, boundsWidth, boundsHeight, scale)
                 .toFloat()
             hardwareDx = bounds.left + (boundsWidth - hardwareScale * bitmapWidth) / 2
             hardwareDy = bounds.top + (boundsHeight - hardwareScale * bitmapHeight) / 2

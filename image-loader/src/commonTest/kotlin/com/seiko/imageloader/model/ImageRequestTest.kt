@@ -63,7 +63,7 @@ class ImageRequestTest {
     @Test
     fun image_request_other_params_test() {
         val mapperFactory = Mapper { _, _ -> }
-        val keyerFactory = Keyer { _, _, _ -> null }
+        val keyerFactory = Keyer { _, _ -> null }
         val fetcherFactory = Fetcher.Factory { _, _ ->
             Fetcher { null }
         }

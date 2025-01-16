@@ -1,9 +1,8 @@
 package com.seiko.imageloader.component.decoder
 
-import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.model.ImageSource
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.util.calculateDstSize
+import com.seiko.imageloader.util.DecodeUtils
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import okio.use
@@ -35,13 +34,13 @@ class SkiaImageDecoder private constructor(
         val srcWidth = width
         val srcHeight = height
 
-        val maxImageSize = if (options.size.isSpecified && !options.size.isEmpty()) {
-            minOf(options.size.width, options.size.height).toInt()
-                .coerceAtMost(options.maxImageSize)
-        } else {
-            options.maxImageSize
-        }
-        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, maxImageSize)
+        val (dstWidth, dstHeight) = DecodeUtils.computeDstSize(
+            srcWidth = srcWidth,
+            srcHeight = srcHeight,
+            targetSize = options.size,
+            scale = options.scale,
+            maxSize = options.maxImageSize,
+        )
 
         bitmap.allocN32Pixels(dstWidth, dstHeight)
         Canvas(bitmap).use { canvas ->

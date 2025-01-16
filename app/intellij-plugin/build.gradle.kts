@@ -1,26 +1,43 @@
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+
 plugins {
-    id("org.jetbrains.intellij") version "1.17.4"
-    java
+    id("java")
     id("app.kotlin.jvm")
     id("app.compose.multiplatform")
-    idea
-}
-
-dependencies {
-    implementation(projects.app.common)
-    implementation(compose.desktop.currentOs)
-    testImplementation(libs.junit)
+    id("org.jetbrains.intellij.platform") version "2.2.1"
 }
 
 repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
-intellij {
-    version.set("2023.1")
+dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity("2024.3.1.1")
+        bundledPlugins(
+            "org.jetbrains.kotlin",
+            "com.intellij.java",
+        )
+        zipSigner()
+        testFramework(TestFrameworkType.Platform)
+    }
+
+    implementation(projects.app.common)
+    implementation(compose.desktop.currentOs)
+
+    testImplementation(libs.junit)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 // fix ktor @see https://stackoverflow.com/questions/75694002/problem-with-ktor-client-in-intellij-idea-plugin-development

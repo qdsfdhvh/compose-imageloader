@@ -23,7 +23,11 @@ kotlin {
                 api(compose.material)
                 implementation(compose.components.resources)
 
+                api(projects.imageLoader)
                 api(projects.imageLoaderSingleton)
+
+                implementation(projects.extension.ktorNetwork)
+                implementation(projects.extension.svg)
                 implementation(projects.extension.composeResources)
                 // implementation(projects.extension.mokoResources)
                 implementation(projects.extension.ninePatch)
@@ -57,7 +61,7 @@ kotlin {
         }
         val filePickerMain by creating {
             dependsOn(commonMain.get())
-            jvmMain.get().dependsOn(this)
+            commonJvmMain.get().dependsOn(this)
             iosMain.get().dependsOn(this)
             jsMain.get().dependsOn(this)
             dependencies {
