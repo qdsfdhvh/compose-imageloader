@@ -20,9 +20,8 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.18.1"
-    id("com.dropbox.focus") version "0.6.0"
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("com.gradle.develocity") version "3.19"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
 develocity {
@@ -35,10 +34,26 @@ develocity {
     }
 }
 
-configure<com.dropbox.focus.FocusExtension> {
-    allSettingsFileName.set("includes.gradle.kts")
-    focusFileName.set(".focus")
-}
+include(
+    ":image-loader",
+    ":image-loader-singleton",
+    ":extension:compose-resources",
+    ":extension:imageio",
+    ":extension:ktor-network",
+    ":extension:moko-resources",
+    ":extension:nine-patch",
+    ":extension:svg",
+    ":app:common",
+    ":app:android",
+    ":app:android:benchmark",
+    ":app:desktop",
+    ":app:macos",
+    ":app:web",
+    ":app:wasmJs",
+    ":app:intellij-plugin",
+    ":test-paparazzi",
+    ":test-roborazzi",
+)
 
 rootProject.name = "compose-imageLoader"
 

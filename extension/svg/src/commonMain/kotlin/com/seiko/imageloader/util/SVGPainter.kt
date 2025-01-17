@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
-import com.seiko.imageloader.BitmapConfig
 import com.seiko.imageloader.component.decoder.SvgDom
 import kotlin.math.ceil
 
@@ -18,15 +17,8 @@ internal class SVGPainter(
     private val dom: SvgDom,
     private val density: Density,
     private val requestSize: Size = Size.Unspecified,
-    bitmapConfig: BitmapConfig = BitmapConfig.ARGB_8888,
+    private val imageBitmapConfig: ImageBitmapConfig = ImageBitmapConfig.Argb8888,
 ) : Painter() {
-
-    private val imageBitmapConfig = when (bitmapConfig) {
-        BitmapConfig.ARGB_8888 -> ImageBitmapConfig.Argb8888
-        BitmapConfig.RGBA_F16 -> ImageBitmapConfig.F16
-        BitmapConfig.ALPHA_8 -> ImageBitmapConfig.Alpha8
-        BitmapConfig.HARDWARE -> ImageBitmapConfig.Gpu
-    }
 
     private val defaultSizePx: Size = run {
         if (requestSize.isSpecified) {

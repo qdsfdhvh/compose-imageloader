@@ -5,8 +5,8 @@ import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.geometry.isSpecified
 import androidx.core.graphics.decodeBitmap
 import androidx.core.graphics.decodeDrawable
 import com.seiko.imageloader.component.fetcher.AssetUriFetcher
@@ -19,14 +19,15 @@ import com.seiko.imageloader.model.metadata
 import com.seiko.imageloader.option.Options
 import com.seiko.imageloader.option.androidContext
 import com.seiko.imageloader.toImage
+import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.ScaleDrawable
-import com.seiko.imageloader.util.calculateDstSize
 import com.seiko.imageloader.util.isHardware
 import com.seiko.imageloader.util.tempFile
 import com.seiko.imageloader.util.toAndroidConfig
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import kotlin.math.roundToInt
 
 /**
  * A [Decoder] that uses [ImageDecoder] to decode GIFs, animated WebPs, and animated HEIFs.
@@ -43,12 +44,15 @@ class ImageDecoderDecoder private constructor(
     private val metadata: Any?,
     private val options: Options,
     private val parallelismLock: Semaphore,
-    private val enforceMinimumFrameDelay: Boolean = true,
+    private val enforceMinimumFrameDelay: Boolean,
 ) : Decoder {
+
+    private var isSampled = false
 
     override suspend fun decode(): DecodeResult = parallelismLock.withPermit {
         runInterruptible {
             var imageDecoder: ImageDecoder? = null
+            isSampled = false
             try {
                 val imageDecoderSource = imageSource.toImageDecoderSource()
                 if (options.playAnimate && !options.isBitmap) {
@@ -62,7 +66,7 @@ class ImageDecoderDecoder private constructor(
                         imageDecoder = this
                         configureImageDecoderProperties(info)
                     }
-                    DecodeResult.OfBitmap(bitmap)
+                    DecodeResult.OfBitmap(bitmap, isSampled = isSampled)
                 }
             } finally {
                 imageDecoder?.close()
@@ -103,23 +107,43 @@ class ImageDecoderDecoder private constructor(
     private fun ImageDecoder.configureImageDecoderProperties(
         info: ImageDecoder.ImageInfo,
     ) {
-        val config = options.bitmapConfig.toAndroidConfig()
+        val config = options.imageBitmapConfig.toAndroidConfig()
         allocator = if (config.isHardware) {
             ImageDecoder.ALLOCATOR_HARDWARE
         } else {
             ImageDecoder.ALLOCATOR_SOFTWARE
         }
 
+        // Configure the output image's size.
         val srcWidth = info.size.width
         val srcHeight = info.size.height
-        val maxImageSize = if (options.size.isSpecified && !options.size.isEmpty()) {
-            minOf(options.size.width, options.size.height).toInt()
-                .coerceAtMost(options.maxImageSize)
-        } else {
-            options.maxImageSize
+        val (dstWidth, dstHeight) = DecodeUtils.computeDstSize(
+            srcWidth = srcWidth,
+            srcHeight = srcHeight,
+            targetSize = options.size,
+            scale = options.scale,
+            maxSize = options.maxImageSize,
+        )
+        if (srcWidth > 0 && srcHeight > 0 &&
+            (srcWidth != dstWidth || srcHeight != dstHeight)
+        ) {
+            val multiplier = DecodeUtils.computeSizeMultiplier(
+                srcWidth = srcWidth,
+                srcHeight = srcHeight,
+                dstWidth = dstWidth,
+                dstHeight = dstHeight,
+                scale = options.scale,
+            )
+
+            // Set the target size if the image is larger than the requested dimensions
+            // or the request requires exact dimensions.
+            isSampled = multiplier < 1
+            if (isSampled) {
+                val targetWidth = (multiplier * srcWidth).roundToInt()
+                val targetHeight = (multiplier * srcHeight).roundToInt()
+                setTargetSize(targetWidth, targetHeight)
+            }
         }
-        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, maxImageSize)
-        setTargetSize(dstWidth, dstHeight)
 
         // memorySizePolicy = if (options.allowRgb565) {
         //     ImageDecoder.MEMORY_POLICY_LOW_RAM
@@ -158,7 +182,8 @@ class ImageDecoderDecoder private constructor(
     class Factory(
         private val context: Context? = null,
         maxParallelism: Int = Options.DEFAULT_MAX_PARALLELISM,
-        private val enforceMinimumFrameDelay: Boolean = true,
+        // https://android.googlesource.com/platform/frameworks/base/+/2be87bb707e2c6d75f668c4aff6697b85fbf5b15
+        private val enforceMinimumFrameDelay: Boolean = SDK_INT < 34,
     ) : Decoder.Factory {
 
         private val parallelismLock = Semaphore(maxParallelism)

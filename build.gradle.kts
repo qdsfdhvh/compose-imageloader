@@ -97,23 +97,9 @@ object ProjectVersion {
     private const val major = "1"
 
     // functionality in a backwards compatible manner
-    private const val monir = "9"
+    private const val monir = "10"
 
     // backwards compatible bug fixes
     private const val path = "0"
     const val version = "$major.$monir.$path"
-}
-
-gradle.taskGraph.whenReady {
-    if (project.hasProperty("noAppApple")) {
-        allTasks.asSequence()
-            .filter {
-                it.path.startsWith(":app:ios-combine") ||
-                    it.path.startsWith(":app:macos") ||
-                    it.path.startsWith(":app:web")
-            }
-            .forEach {
-                it.enabled = false
-            }
-    }
 }

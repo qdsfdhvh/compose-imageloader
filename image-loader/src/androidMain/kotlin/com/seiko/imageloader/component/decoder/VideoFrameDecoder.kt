@@ -4,7 +4,6 @@ import android.media.MediaDataSource
 import android.media.MediaMetadataRetriever
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.geometry.isSpecified
 import com.seiko.imageloader.Bitmap
 import com.seiko.imageloader.model.ImageSource
 import com.seiko.imageloader.model.InputStreamImageSource
@@ -14,7 +13,7 @@ import com.seiko.imageloader.model.videoFrameMicros
 import com.seiko.imageloader.model.videoFrameOption
 import com.seiko.imageloader.model.videoFramePercent
 import com.seiko.imageloader.option.Options
-import com.seiko.imageloader.util.calculateDstSize
+import com.seiko.imageloader.util.DecodeUtils
 import com.seiko.imageloader.util.getFrameAtIndexCompat
 import com.seiko.imageloader.util.getFrameAtTimeCompat
 import com.seiko.imageloader.util.getScaledFrameAtTimeCompat
@@ -22,6 +21,7 @@ import com.seiko.imageloader.util.tempFile
 import com.seiko.imageloader.util.toAndroidConfig
 import com.seiko.imageloader.util.use
 import java.io.InputStream
+import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -50,13 +50,32 @@ class VideoFrameDecoder(
                 ?.toIntOrNull() ?: 0
         }
 
-        val maxImageSize = if (options.size.isSpecified && !options.size.isEmpty()) {
-            minOf(options.size.width, options.size.height).toInt()
-                .coerceAtMost(options.maxImageSize)
+        val (dstWidth, dstHeight) = if (srcWidth > 0 && srcHeight > 0) {
+            val (dstWidth, dstHeight) = DecodeUtils.computeDstSize(
+                srcWidth = srcWidth,
+                srcHeight = srcHeight,
+                targetSize = options.size,
+                scale = options.scale,
+                maxSize = options.maxImageSize,
+            )
+            val rawScale = DecodeUtils.computeSizeMultiplier(
+                srcWidth = srcWidth,
+                srcHeight = srcHeight,
+                dstWidth = dstWidth,
+                dstHeight = dstHeight,
+                scale = options.scale,
+            )
+            val scale = rawScale.coerceAtMost(1.0)
+
+            val width = (scale * srcWidth).roundToInt()
+            val height = (scale * srcHeight).roundToInt()
+            width to height
         } else {
-            options.maxImageSize
+            // We were unable to decode the video's dimensions.
+            // Fall back to decoding the video frame at the original size.
+            // We'll scale the resulting bitmap after decoding if necessary.
+            srcWidth to srcHeight
         }
-        val (dstWidth, dstHeight) = calculateDstSize(srcWidth, srcHeight, maxImageSize)
 
         val frameBitmap = retriever.getFrameBitmap(dstWidth, dstHeight)
             ?: error("Failed to decode video frame with index=${options.videoFrameIndex} or timeUs=${retriever.computeFrameMicros()}.")
@@ -72,7 +91,7 @@ class VideoFrameDecoder(
         return if (Build.VERSION.SDK_INT >= 28 && options.videoFrameIndex >= 0) {
             getFrameAtIndexCompat(
                 frameIndex = options.videoFrameIndex,
-                config = options.bitmapConfig.toAndroidConfig(),
+                config = options.imageBitmapConfig.toAndroidConfig(),
             )
         } else if (Build.VERSION.SDK_INT >= 27 && dstWidth > 0 && dstHeight > 0) {
             getScaledFrameAtTimeCompat(
@@ -80,13 +99,13 @@ class VideoFrameDecoder(
                 option = options.videoFrameOption,
                 dstWidth = dstWidth,
                 dstHeight = dstHeight,
-                config = options.bitmapConfig.toAndroidConfig(),
+                config = options.imageBitmapConfig.toAndroidConfig(),
             )
         } else {
             getFrameAtTimeCompat(
                 timeUs = computeFrameMicros(),
                 option = options.videoFrameOption,
-                config = options.bitmapConfig.toAndroidConfig(),
+                config = options.imageBitmapConfig.toAndroidConfig(),
             )
         }
     }

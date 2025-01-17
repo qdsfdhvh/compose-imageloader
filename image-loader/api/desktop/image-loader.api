@@ -1,18 +1,3 @@
-public final class com/seiko/imageloader/BitmapConfig : java/lang/Enum {
-	public static final field ALPHA_8 Lcom/seiko/imageloader/BitmapConfig;
-	public static final field ARGB_8888 Lcom/seiko/imageloader/BitmapConfig;
-	public static final field Companion Lcom/seiko/imageloader/BitmapConfig$Companion;
-	public static final field HARDWARE Lcom/seiko/imageloader/BitmapConfig;
-	public static final field RGBA_F16 Lcom/seiko/imageloader/BitmapConfig;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lcom/seiko/imageloader/BitmapConfig;
-	public static fun values ()[Lcom/seiko/imageloader/BitmapConfig;
-}
-
-public final class com/seiko/imageloader/BitmapConfig$Companion {
-	public final fun getDefault ()Lcom/seiko/imageloader/BitmapConfig;
-}
-
 public final class com/seiko/imageloader/BitmapKt {
 	public static final fun toPainter-50PEsBU (Lorg/jetbrains/skia/Bitmap;I)Landroidx/compose/ui/graphics/painter/Painter;
 	public static synthetic fun toPainter-50PEsBU$default (Lorg/jetbrains/skia/Bitmap;IILjava/lang/Object;)Landroidx/compose/ui/graphics/painter/Painter;
@@ -105,6 +90,7 @@ public abstract interface class com/seiko/imageloader/cache/disk/DiskCache {
 	public abstract fun openEditor (Ljava/lang/String;)Lcom/seiko/imageloader/cache/disk/DiskCache$Editor;
 	public abstract fun openSnapshot (Ljava/lang/String;)Lcom/seiko/imageloader/cache/disk/DiskCache$Snapshot;
 	public abstract fun remove (Ljava/lang/String;)Z
+	public abstract fun shutdown ()V
 }
 
 public abstract interface class com/seiko/imageloader/cache/disk/DiskCache$Editor {
@@ -115,7 +101,7 @@ public abstract interface class com/seiko/imageloader/cache/disk/DiskCache$Edito
 	public abstract fun getMetadata ()Lokio/Path;
 }
 
-public abstract interface class com/seiko/imageloader/cache/disk/DiskCache$Snapshot : java/io/Closeable {
+public abstract interface class com/seiko/imageloader/cache/disk/DiskCache$Snapshot : java/lang/AutoCloseable {
 	public abstract fun close ()V
 	public abstract fun closeAndOpenEditor ()Lcom/seiko/imageloader/cache/disk/DiskCache$Editor;
 	public abstract fun getData ()Lokio/Path;
@@ -162,6 +148,16 @@ public final class com/seiko/imageloader/cache/memory/MemoryCacheBuilder_desktop
 	public static synthetic fun maxSizePercent$default (Lcom/seiko/imageloader/cache/memory/MemoryCacheBuilder;DILjava/lang/Object;)V
 }
 
+public final class com/seiko/imageloader/cache/memory/MemoryKey {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExtra ()Ljava/util/Map;
+	public final fun getKey ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/seiko/imageloader/component/ComponentRegistry {
 	public static final field $stable I
 	public final fun decode (Lcom/seiko/imageloader/model/ImageResult$OfSource;Lcom/seiko/imageloader/option/Options;I)Lkotlin/Pair;
@@ -174,7 +170,7 @@ public final class com/seiko/imageloader/component/ComponentRegistry {
 	public final fun getKeyers ()Ljava/util/List;
 	public final fun getMappers ()Ljava/util/List;
 	public fun hashCode ()I
-	public final fun key (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;Lcom/seiko/imageloader/component/keyer/Keyer$Type;)Ljava/lang/String;
+	public final fun key (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Ljava/lang/String;
 	public final fun map (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 }
@@ -210,10 +206,12 @@ public abstract interface class com/seiko/imageloader/component/decoder/DecodeRe
 
 public final class com/seiko/imageloader/component/decoder/DecodeResult$OfBitmap : com/seiko/imageloader/component/decoder/DecodeResult {
 	public static final field $stable I
-	public fun <init> (Lorg/jetbrains/skia/Bitmap;)V
+	public fun <init> (Lorg/jetbrains/skia/Bitmap;Z)V
+	public synthetic fun <init> (Lorg/jetbrains/skia/Bitmap;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getBitmap ()Lorg/jetbrains/skia/Bitmap;
 	public fun hashCode ()I
+	public final fun isSampled ()Z
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -394,15 +392,7 @@ public final class com/seiko/imageloader/component/fetcher/OkioPathFetcher$Facto
 }
 
 public abstract interface class com/seiko/imageloader/component/keyer/Keyer {
-	public abstract fun key (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;Lcom/seiko/imageloader/component/keyer/Keyer$Type;)Ljava/lang/String;
-}
-
-public final class com/seiko/imageloader/component/keyer/Keyer$Type : java/lang/Enum {
-	public static final field Disk Lcom/seiko/imageloader/component/keyer/Keyer$Type;
-	public static final field Memory Lcom/seiko/imageloader/component/keyer/Keyer$Type;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lcom/seiko/imageloader/component/keyer/Keyer$Type;
-	public static fun values ()[Lcom/seiko/imageloader/component/keyer/Keyer$Type;
+	public abstract fun key (Ljava/lang/Object;Lcom/seiko/imageloader/option/Options;)Ljava/lang/String;
 }
 
 public final class com/seiko/imageloader/component/mapper/FileToPathMapper : com/seiko/imageloader/component/mapper/Mapper {
@@ -723,10 +713,11 @@ public final class com/seiko/imageloader/option/Options {
 	public static final field DEFAULT_MAX_PARALLELISM I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAllowInexactSize ()Z
-	public final fun getBitmapConfig ()Lcom/seiko/imageloader/BitmapConfig;
 	public final fun getDiskCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
 	public final fun getExtra ()Ljava/util/Map;
+	public final fun getImageBitmapConfig-_sVssgQ ()I
 	public final fun getMaxImageSize ()I
+	public final fun getMemoryCacheKeyExtras ()Ljava/util/Map;
 	public final fun getMemoryCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
 	public final fun getPlayAnimate ()Z
 	public final fun getPremultipliedAlpha ()Z
@@ -746,8 +737,8 @@ public final class com/seiko/imageloader/option/OptionsBuilder {
 	public static final field $stable I
 	public final fun extra (Lkotlin/jvm/functions/Function1;)V
 	public final fun getAllowInexactSize ()Z
-	public final fun getBitmapConfig ()Lcom/seiko/imageloader/BitmapConfig;
 	public final fun getDiskCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
+	public final fun getImageBitmapConfig-_sVssgQ ()I
 	public final fun getMaxImageSize ()I
 	public final fun getMemoryCachePolicy ()Lcom/seiko/imageloader/cache/CachePolicy;
 	public final fun getPlayAnimate ()Z
@@ -757,10 +748,11 @@ public final class com/seiko/imageloader/option/OptionsBuilder {
 	public final fun getScale ()Lcom/seiko/imageloader/option/Scale;
 	public final fun getSize-NH-jbRc ()J
 	public final fun isBitmap ()Z
+	public final fun memoryCacheKeyExtras (Ljava/lang/String;Ljava/lang/String;)V
 	public final fun setAllowInexactSize (Z)V
 	public final fun setBitmap (Z)V
-	public final fun setBitmapConfig (Lcom/seiko/imageloader/BitmapConfig;)V
 	public final fun setDiskCachePolicy (Lcom/seiko/imageloader/cache/CachePolicy;)V
+	public final fun setImageBitmapConfig-1JJdX4A (I)V
 	public final fun setMaxImageSize (I)V
 	public final fun setMemoryCachePolicy (Lcom/seiko/imageloader/cache/CachePolicy;)V
 	public final fun setPlayAnimate (Z)V
@@ -817,6 +809,15 @@ public abstract interface class com/seiko/imageloader/util/AnimationPainter {
 	public abstract fun isPlay ()Z
 	public abstract fun nextPlay ()Z
 	public abstract fun update (J)V
+}
+
+public final class com/seiko/imageloader/util/DecodeUtils {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/seiko/imageloader/util/DecodeUtils;
+	public static final fun calculateInSampleSize (IIIILcom/seiko/imageloader/option/Scale;)I
+	public static final fun computeDstSize-sMkvCDs (IIJLcom/seiko/imageloader/option/Scale;I)J
+	public static final fun computeSizeMultiplier (DDDDLcom/seiko/imageloader/option/Scale;)D
+	public static final fun computeSizeMultiplier (IIIILcom/seiko/imageloader/option/Scale;)D
 }
 
 public abstract class com/seiko/imageloader/util/ForwardingSink : okio/Sink {

@@ -1,5 +1,3 @@
-@file:Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
-
 package com.seiko.imageloader.component.fetcher
 
 import com.seiko.imageloader.model.ImageSource

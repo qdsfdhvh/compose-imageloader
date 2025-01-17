@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.baselineProfile)
     alias(libs.plugins.poko)
+    alias(libs.plugins.kotlinx.atomicfu)
 }
 
 kotlin {
@@ -22,6 +23,8 @@ kotlin {
                 api(libs.kotlinx.coroutines.core)
                 api(libs.okio)
                 api(libs.uri.kmp)
+
+                implementation(libs.compose.collection)
             }
         }
         commonTest {
@@ -45,11 +48,14 @@ kotlin {
         }
         val noJsAndWasmMain by creating {
             dependsOn(commonMain.get())
-            jvmMain.get().dependsOn(this)
+            commonJvmMain.get().dependsOn(this)
             appleMain.get().dependsOn(this)
-            dependencies {
-                implementation(libs.androidx.collection)
-            }
+        }
+        val noCommonJvmMain by creating {
+            dependsOn(commonMain.get())
+            appleMain.get().dependsOn(this)
+            jsMain.get().dependsOn(this)
+            wasmJsMain.get().dependsOn(this)
         }
     }
 }
@@ -64,10 +70,11 @@ android {
     }
 }
 
+dependencies {
+    baselineProfile(projects.app.android.benchmark)
+}
+
 baselineProfile {
-    mergeIntoMain = true
-    saveInSrc = true
-    from(projects.app.android.benchmark.dependencyProject)
     filter {
         include("com.seiko.imageloader.**")
         exclude("com.seiko.imageloader.demo.**")

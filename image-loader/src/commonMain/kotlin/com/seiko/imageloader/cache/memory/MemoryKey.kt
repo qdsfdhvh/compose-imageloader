@@ -1,3 +1,9 @@
 package com.seiko.imageloader.cache.memory
 
-typealias MemoryKey = String
+import dev.drewhamilton.poko.Poko
+
+@Poko
+class MemoryKey(
+    val key: String,
+    val extra: Map<String, String>,
+)

@@ -1,5 +1,4 @@
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
-import org.jetbrains.kotlin.config.LanguageFeature
 
 plugins {
     id("app.android.library")
@@ -47,7 +46,8 @@ kotlin {
         }
         val desktopTest by getting {
             languageSettings {
-                enableLanguageFeature(LanguageFeature.ContextReceivers.name)
+                // TODO: maybe replace to 'ContextParameters'
+                enableLanguageFeature("ContextReceivers")
             }
             dependencies {
                 implementation(compose.desktop.currentOs)
@@ -61,15 +61,15 @@ kotlin {
         //     }
         // }
     }
-    jvmToolchain(17)
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
 }
 
 android {
     namespace = "com.seiko.imageloader.test.roborazzi"
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
     testOptions {
         unitTests {
             isIncludeAndroidResources = true

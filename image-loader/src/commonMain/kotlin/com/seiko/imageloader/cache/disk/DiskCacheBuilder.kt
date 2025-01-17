@@ -55,7 +55,7 @@ class DiskCacheBuilder internal constructor(private val fileSystem: FileSystem) 
         val directory = checkNotNull(directory) { "directory == null" }
         val maxSize = if (maxSizePercent > 0) {
             try {
-                val size = maxSizePercent * directorySize(directory)
+                val size = maxSizePercent * fileSystem.remainingFreeSpaceBytes(directory)
                 size.toLong().coerceIn(minimumMaxSizeBytes, maximumMaxSizeBytes)
             } catch (_: Exception) {
                 minimumMaxSizeBytes
@@ -75,4 +75,4 @@ class DiskCacheBuilder internal constructor(private val fileSystem: FileSystem) 
 fun DiskCache(fileSystem: FileSystem, block: DiskCacheBuilder.() -> Unit) =
     DiskCacheBuilder(fileSystem).apply(block).build()
 
-internal expect fun directorySize(directory: Path): Long
+internal expect fun FileSystem.remainingFreeSpaceBytes(directory: Path): Long

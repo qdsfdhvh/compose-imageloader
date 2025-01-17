@@ -1,6 +1,5 @@
 package com.seiko.imageloader.cache.disk
 
-import okio.Closeable
 import okio.FileSystem
 import okio.Path
 
@@ -15,7 +14,7 @@ interface DiskCache {
     /** The maximum size of the cache in bytes. */
     val maxSize: Long
 
-    /** The directory where the cache stores its data. */
+    /** The directory that contains the cache's files. */
     val directory: Path
 
     /** The file system that contains the cache's files. */
@@ -46,21 +45,28 @@ interface DiskCache {
      */
     fun remove(key: String): Boolean
 
-    /** Delete all entries in the disk cache. */
+    /**
+     * Delete all entries in the disk cache.
+     */
     fun clear()
+
+    /**
+     * Close any open snapshots, abort all in-progress edits, and close any open system resources.
+     */
+    fun shutdown()
 
     /**
      * A snapshot of the values for an entry.
      *
      * IMPORTANT: You must **only read** [metadata] or [data]. Mutating either file can corrupt the
-     * disk cache. To modify the contents of those files, use [edit].
+     * disk cache. To modify the contents of those files, use [openEditor].
      */
-    interface Snapshot : Closeable {
+    interface Snapshot : AutoCloseable {
 
-        /** Get the metadata for this entry. */
+        /** Get the metadata file path for this entry. */
         val metadata: Path
 
-        /** Get the data for this entry. */
+        /** Get the data file path for this entry. */
         val data: Path
 
         /** Close the snapshot to allow editing. */
@@ -81,10 +87,10 @@ interface DiskCache {
      */
     interface Editor {
 
-        /** Get the metadata for this entry. */
+        /** Get the metadata file path for this entry. */
         val metadata: Path
 
-        /** Get the data for this entry. */
+        /** Get the data file path for this entry. */
         val data: Path
 
         /** Commit the edit so the changes are visible to readers. */

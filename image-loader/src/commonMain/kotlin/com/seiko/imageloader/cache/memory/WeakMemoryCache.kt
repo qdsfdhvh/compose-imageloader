@@ -4,9 +4,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import com.seiko.imageloader.util.WeakReference
 import com.seiko.imageloader.util.firstNotNullOfOrNullIndices
 import com.seiko.imageloader.util.removeIfIndices
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.internal.SynchronizedObject
-import kotlinx.coroutines.internal.synchronized
 
 /**
  * An in-memory cache that holds weak references to [Painter]s.

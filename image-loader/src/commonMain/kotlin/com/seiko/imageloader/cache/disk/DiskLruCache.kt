@@ -1,22 +1,18 @@
 package com.seiko.imageloader.cache.disk
 
 import com.seiko.imageloader.cache.disk.DiskLruCache.Editor
-import com.seiko.imageloader.util.LruHashMap
+import com.seiko.imageloader.util.LruMutableMap
 import com.seiko.imageloader.util.createFile
 import com.seiko.imageloader.util.deleteContents
 import com.seiko.imageloader.util.forEachIndices
-import com.seiko.imageloader.util.getOrPut
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.internal.SynchronizedObject
-import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
 import okio.BufferedSink
-import okio.Closeable
 import okio.EOFException
 import okio.FileSystem
 import okio.ForwardingFileSystem
@@ -70,7 +66,6 @@ import okio.buffer
  * @param valueCount the number of values per cache entry. Must be positive.
  * @param maxSize the maximum number of bytes this cache should use to store.
  */
-@OptIn(ExperimentalCoroutinesApi::class, InternalCoroutinesApi::class)
 internal class DiskLruCache(
     fileSystem: FileSystem,
     private val directory: Path,
@@ -78,7 +73,7 @@ internal class DiskLruCache(
     private val maxSize: Long,
     private val appVersion: Int,
     private val valueCount: Int,
-) : Closeable {
+) : AutoCloseable {
 
     /*
      * This cache uses a journal file named "journal". A typical journal file looks like this:
@@ -128,8 +123,10 @@ internal class DiskLruCache(
     private val journalFile = directory / JOURNAL_FILE
     private val journalFileTmp = directory / JOURNAL_FILE_TMP
     private val journalFileBackup = directory / JOURNAL_FILE_BACKUP
-    private val lruEntries = LruHashMap<String, Entry>(0, 0.75f)
-    private val cleanupScope = CoroutineScope(SupervisorJob() + cleanupDispatcher.limitedParallelism(1))
+    private val lruEntries = LruMutableMap<String, Entry>()
+    private val cleanupScope =
+        CoroutineScope(SupervisorJob() + cleanupDispatcher.limitedParallelism(1))
+    private val lock = SynchronizedObject()
     private var size = 0L
     private var operationsSinceRewrite = 0
     private var journalWriter: BufferedSink? = null
@@ -139,8 +136,6 @@ internal class DiskLruCache(
     private var mostRecentTrimFailed = false
     private var mostRecentRebuildFailed = false
 
-    private val syncObject = SynchronizedObject()
-
     private val fileSystem = object : ForwardingFileSystem(fileSystem) {
         override fun sink(file: Path, mustCreate: Boolean): Sink {
             // Ensure the parent directory exists.
@@ -149,7 +144,7 @@ internal class DiskLruCache(
         }
     }
 
-    fun initialize() = synchronized(syncObject) {
+    fun initialize() = synchronized(lock) {
         if (initialized) return
 
         // If a temporary file exists, delete it.
@@ -223,7 +218,7 @@ internal class DiskLruCache(
                 }
             }
 
-            operationsSinceRewrite = lineCount - lruEntries.entries.size
+            operationsSinceRewrite = lineCount - lruEntries.size
 
             // If we ended on a truncated line, rebuild the journal before appending to it.
             if (!exhausted()) {
@@ -283,20 +278,20 @@ internal class DiskLruCache(
      */
     private fun processJournal() {
         var size = 0L
-        val iterator = lruEntries.entries.iterator()
+        val iterator = lruEntries.values.iterator()
         while (iterator.hasNext()) {
             val entry = iterator.next()
-            if (entry.value.currentEditor == null) {
+            if (entry.currentEditor == null) {
                 for (i in 0 until valueCount) {
-                    size += entry.value.lengths[i]
+                    size += entry.lengths[i]
                 }
             } else {
-                entry.value.currentEditor = null
+                entry.currentEditor = null
                 for (i in 0 until valueCount) {
-                    fileSystem.delete(entry.value.cleanFiles[i])
-                    fileSystem.delete(entry.value.dirtyFiles[i])
+                    fileSystem.delete(entry.cleanFiles[i])
+                    fileSystem.delete(entry.dirtyFiles[i])
                 }
-                lruEntries.remove(entry.key)
+                iterator.remove()
             }
         }
         this.size = size
@@ -305,7 +300,7 @@ internal class DiskLruCache(
     /**
      * Writes [lruEntries] to a new journal file. This replaces the current journal if it exists.
      */
-    private fun writeJournal() = synchronized(syncObject) {
+    private fun writeJournal() = synchronized(lock) {
         journalWriter?.close()
 
         fileSystem.write(journalFileTmp) {
@@ -315,8 +310,8 @@ internal class DiskLruCache(
             writeDecimalLong(valueCount.toLong()).writeByte('\n'.code)
             writeByte('\n'.code)
 
-            for (entry in lruEntries.entries) {
-                if (entry.value.currentEditor != null) {
+            for (entry in lruEntries.values) {
+                if (entry.currentEditor != null) {
                     writeUtf8(DIRTY)
                     writeByte(' '.code)
                     writeUtf8(entry.key)
@@ -325,7 +320,7 @@ internal class DiskLruCache(
                     writeUtf8(CLEAN)
                     writeByte(' '.code)
                     writeUtf8(entry.key)
-                    entry.value.writeLengths(this)
+                    entry.writeLengths(this)
                     writeByte('\n'.code)
                 }
             }
@@ -349,7 +344,7 @@ internal class DiskLruCache(
      * Returns a snapshot of the entry named [key], or null if it doesn't exist or is not currently
      * readable. If a value is returned, it is moved to the head of the LRU queue.
      */
-    operator fun get(key: String): Snapshot? = synchronized(syncObject) {
+    operator fun get(key: String): Snapshot? = synchronized(lock) {
         checkNotClosed()
         validateKey(key)
         initialize()
@@ -362,6 +357,7 @@ internal class DiskLruCache(
             writeByte(' '.code)
             writeUtf8(key)
             writeByte('\n'.code)
+            flush()
         }
 
         if (journalRewriteRequired()) {
@@ -372,7 +368,7 @@ internal class DiskLruCache(
     }
 
     /** Returns an editor for the entry named [key], or null if another edit is in progress. */
-    fun edit(key: String): Editor? = synchronized(syncObject) {
+    fun edit(key: String): Editor? = synchronized(lock) {
         checkNotClosed()
         validateKey(key)
         initialize()
@@ -412,7 +408,7 @@ internal class DiskLruCache(
 
         if (entry == null) {
             entry = Entry(key)
-            lruEntries.put(key, entry)
+            lruEntries[key] = entry
         }
         val editor = Editor(entry)
         entry.currentEditor = editor
@@ -423,12 +419,12 @@ internal class DiskLruCache(
      * Returns the number of bytes currently being used to store the values in this cache.
      * This may be greater than the max size if a background deletion is pending.
      */
-    fun size(): Long = synchronized(syncObject) {
+    fun size(): Long = synchronized(lock) {
         initialize()
         return size
     }
 
-    private fun completeEdit(editor: Editor, success: Boolean) = synchronized(syncObject) {
+    private fun completeEdit(editor: Editor, success: Boolean) = synchronized(lock) {
         val entry = editor.entry
         check(entry.currentEditor == editor)
 
@@ -504,14 +500,16 @@ internal class DiskLruCache(
      *
      * @return true if an entry was removed.
      */
-    fun remove(key: String): Boolean = synchronized(syncObject) {
+    fun remove(key: String): Boolean = synchronized(lock) {
         checkNotClosed()
         validateKey(key)
         initialize()
 
         val entry = lruEntries[key] ?: return false
         val removed = removeEntry(entry)
-        if (removed && size <= maxSize) mostRecentTrimFailed = false
+        if (removed && size <= maxSize) {
+            mostRecentTrimFailed = false
+        }
         return removed
     }
 
@@ -545,6 +543,7 @@ internal class DiskLruCache(
             writeByte(' '.code)
             writeUtf8(entry.key)
             writeByte('\n'.code)
+            flush()
         }
         lruEntries.remove(entry.key)
 
@@ -560,16 +559,16 @@ internal class DiskLruCache(
     }
 
     /** Closes this cache. Stored values will remain on the filesystem. */
-    override fun close() = synchronized(syncObject) {
+    override fun close() = synchronized(lock) {
         if (!initialized || closed) {
             closed = true
             return
         }
 
         // Copying for concurrent iteration.
-        for (entry in lruEntries.entries.toTypedArray()) {
+        for (entry in lruEntries.values.toTypedArray()) {
             // Prevent the edit from completing normally.
-            entry.value.currentEditor?.detach()
+            entry.currentEditor?.detach()
         }
 
         trimToSize()
@@ -579,7 +578,7 @@ internal class DiskLruCache(
         closed = true
     }
 
-    fun flush() = synchronized(syncObject) {
+    fun flush() = synchronized(lock) {
         if (!initialized) return
 
         checkNotClosed()
@@ -596,9 +595,9 @@ internal class DiskLruCache(
 
     /** Returns true if an entry was removed. This will return false if all entries are zombies. */
     private fun removeOldestEntry(): Boolean {
-        for (toEvict in lruEntries.entries) {
-            if (!toEvict.value.zombie) {
-                removeEntry(toEvict.value)
+        for (toEvict in lruEntries.values) {
+            if (!toEvict.zombie) {
+                removeEntry(toEvict)
                 return true
             }
         }
@@ -618,11 +617,11 @@ internal class DiskLruCache(
      * Deletes all stored values from the cache. In-flight edits will complete normally but their
      * values will not be stored.
      */
-    fun evictAll() = synchronized(syncObject) {
+    fun evictAll() = synchronized(lock) {
         initialize()
         // Copying for concurrent iteration.
-        for (entry in lruEntries.entries.toTypedArray()) {
-            removeEntry(entry.value)
+        for (entry in lruEntries.values.toTypedArray()) {
+            removeEntry(entry)
         }
         mostRecentTrimFailed = false
     }
@@ -632,7 +631,7 @@ internal class DiskLruCache(
      */
     private fun launchCleanup() {
         cleanupScope.launch {
-            synchronized(syncObject) {
+            synchronized(lock) {
                 if (!initialized || closed) return@launch
                 try {
                     trimToSize()
@@ -658,7 +657,7 @@ internal class DiskLruCache(
     }
 
     /** A snapshot of the values for an entry. */
-    inner class Snapshot(val entry: Entry) : Closeable {
+    inner class Snapshot(val entry: Entry) : AutoCloseable {
 
         private var closed = false
 
@@ -670,7 +669,7 @@ internal class DiskLruCache(
         override fun close() {
             if (!closed) {
                 closed = true
-                synchronized(syncObject) {
+                synchronized(lock) {
                     entry.lockingSnapshotCount--
                     if (entry.lockingSnapshotCount == 0 && entry.zombie) {
                         removeEntry(entry)
@@ -680,7 +679,7 @@ internal class DiskLruCache(
         }
 
         fun closeAndEdit(): Editor? {
-            synchronized(syncObject) {
+            synchronized(lock) {
                 close()
                 return edit(entry.key)
             }
@@ -702,7 +701,7 @@ internal class DiskLruCache(
          * This file will become the new value for this index if committed.
          */
         fun file(index: Int): Path {
-            synchronized(syncObject) {
+            synchronized(lock) {
                 check(!closed) { "editor is closed" }
                 written[index] = true
                 return entry.dirtyFiles[index].also(fileSystem::createFile)
@@ -729,7 +728,7 @@ internal class DiskLruCache(
          * Commit the edit and open a new [Snapshot] atomically.
          */
         fun commitAndGet(): Snapshot? {
-            synchronized(syncObject) {
+            synchronized(lock) {
                 commit()
                 return get(entry.key)
             }
@@ -745,7 +744,7 @@ internal class DiskLruCache(
          * Complete this edit either successfully or unsuccessfully.
          */
         private fun complete(success: Boolean) {
-            synchronized(syncObject) {
+            synchronized(lock) {
                 check(!closed) { "editor is closed" }
                 if (entry.currentEditor == this) {
                     completeEdit(this, success)
@@ -827,7 +826,8 @@ internal class DiskLruCache(
                     // (i.e. the cache size).
                     try {
                         removeEntry(this)
-                    } catch (_: IOException) {}
+                    } catch (_: IOException) {
+                    }
                     return null
                 }
             }
@@ -846,6 +846,6 @@ internal class DiskLruCache(
         private const val DIRTY = "DIRTY"
         private const val REMOVE = "REMOVE"
         private const val READ = "READ"
-        private val LEGAL_KEY_PATTERN = "[a-z\\d_-]{1,120}".toRegex()
+        private val LEGAL_KEY_PATTERN = "[a-z0-9_-]{1,120}".toRegex()
     }
 }

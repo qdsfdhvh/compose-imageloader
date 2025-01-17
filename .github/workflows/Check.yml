@@ -23,83 +23,82 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: Check spotless
+      - name: Check Spotless
         run: ./gradlew spotlessCheck --stacktrace
 
-  lint:
-    needs: spotless
+  api-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Check API
+        run: ./gradlew apiCheck --stacktrace
+
+  lint:
+    needs: [ spotless, api-check ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Lint
         run: ./gradlew lint --stacktrace
 
-  api-check:
-    needs: spotless
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: Lint
-        run: ./gradlew apiCheck --stacktrace
-
   test:
-    needs: spotless
+    needs: [ spotless, api-check ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
 
       - name: Test
         run: ./gradlew test --stacktrace
@@ -111,77 +110,65 @@ jobs:
           path: '**/build/reports'
 
   assemble:
-    needs: spotless
+    needs: [ spotless, api-check ]
     runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      #      - name: Setup Gradle
-      #        uses: gradle/gradle-build-action@v2
-      #        with:
-      #          gradle-home-cache-cleanup: true
-      #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
-      # Cleans managed device if previously settle and space currently is not available
-      #      - name: Clean Managed Devices
-      #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Assemble
         run: |
-          ./gradlew kotlinUpgradeYarnLock \
-            :image-loader:assemble \
-            :extension:imageio:assemble \
-            :extension:moko-resources:assemble \
-            --stacktrace -PnoAppApple \
-            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          ./gradlew \
+          :image-loader:assemble \
+          :image-loader-singleton:assemble \
+          :extension:compose-resources:assemble \
+          :extension:imageio:assemble \
+          :extension:ktor-network:assemble \
+          :extension:moko-resources:assemble \
+          :extension:nine-patch:assemble \
+          :extension:svg:assemble \
+          --stacktrace
 
   build:
-    needs: spotless
+    needs: [ spotless, api-check ]
     runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      #      - name: Setup Gradle
-      #        uses: gradle/gradle-build-action@v2
-      #        with:
-      #          gradle-home-cache-cleanup: true
-      #          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
-      # Cleans managed device if previously settle and space currently is not available
-      #      - name: Clean Managed Devices
-      #        run: ./gradlew cleanManagedDevices --unused-only
 
       - name: Build
         run: |
           ./gradlew kotlinUpgradeYarnLock \
-            :image-loader:build \
-            :extension:imageio:build \
-            :extension:moko-resources:build \
-            --stacktrace -PnoAppApple \
-            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          :image-loader:build \
+          :image-loader-singleton:build \
+          :extension:compose-resources:build \
+          :extension:imageio:build \
+          :extension:ktor-network:build \
+          :extension:moko-resources:build \
+          :extension:nine-patch:build \
+          :extension:svg:build \
+          --stacktrace
