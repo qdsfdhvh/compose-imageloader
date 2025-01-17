@@ -15,17 +15,17 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-+                api("io.github.qdsfdhvh:image-loader:1.9.0")
++                api("io.github.qdsfdhvh:image-loader:1.10.0")
                 // optional - Moko Resources Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.9.0")
++                api("io.github.qdsfdhvh:image-loader-extension-moko-resources:1.10.0")
                 // optional - Blur Interceptor (only support bitmap)
-+                api("io.github.qdsfdhvh:image-loader-extension-blur:1.9.0")
++                api("io.github.qdsfdhvh:image-loader-extension-blur:1.10.0")
             }
         }
         val jvmMain by getting {
             dependencies {
                 // optional - ImageIO Decoder
-+                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.9.0")
++                api("io.github.qdsfdhvh:image-loader-extension-imageio:1.10.0")
             }
         }
     }
@@ -38,7 +38,7 @@ Copy the following snippets if you are using [gradle version catalog](https://do
 
 ```xml title="libs.versions.toml"
 [versions]
-image-loader = "1.9.0"
+image-loader = "1.10.0"
 
 [libraries]
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
