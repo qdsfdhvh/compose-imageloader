@@ -1,4 +1,4 @@
-# Compose ImageLoader
+ # Compose ImageLoader
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.qdsfdhvh/image-loader/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.qdsfdhvh/image-loader)
 
 Compose Image library for Kotlin Multiplatform.
@@ -100,7 +100,7 @@ fun generateImageLoader(): ImageLoader {
             androidContext(applicationContext)
         }
         components {
-            setupDefaultComponents()
+            setupDefaultComponents(context)
         }
         interceptor {
             // cache 25% memory bitmap
