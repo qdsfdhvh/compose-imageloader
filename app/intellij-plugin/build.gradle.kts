@@ -4,7 +4,7 @@ plugins {
     id("java")
     id("app.kotlin.jvm")
     id("app.compose.multiplatform")
-    id("org.jetbrains.intellij.platform") version "2.2.1"
+    id("org.jetbrains.intellij.platform") version "2.20.1"
 }
 
 repositories {
